@@ -19,6 +19,6 @@ import NavigationWrapper from '@/components/NavigationWrapper'; /* @ == root */
     components: {NavigationWrapper}
 })
 export default class HeaderWrapper extends Vue {
-HEADSET LEER
+
 }
 </script>
