@@ -8,6 +8,7 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
+import languages from '@/language' /* import language.js and use exported objects under name "languages" */
 
 export default {
   name: 'Home',
