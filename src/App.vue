@@ -4,7 +4,15 @@
             <a id="anchor_back_to_top_wrapper"></a>
             <!-- begin outer_wrapper -->
             <div class="grid-main-container" id="outer_wrapper">
+
                 <header-wrapper />
+                <inner-wrapper />
+                <footer-wrapper />
+                <!-- begin copyright DO NOT REMOVE -->
+                <div class="grid-main-item_copyright-wrapper">
+                    <a href="http://www.comand-cms.com" target="_blank" lang="en" title="CoManD-Website">&copy; CoManD-OnePager</a>
+                </div>
+                <!-- end copyright -->
                 <!-- begin back_to_top_wrapper -->
                 <a id="back_to_top_wrapper" href="#anchor_back_to_top_wrapper" title="" class="icon-arrow_close" style="display: none;"></a>
                 <!-- end back_to_top_wrapper -->
@@ -16,11 +24,18 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import HeaderWrapper from '@/components/HeaderWrapper'; /* @ == root */
+import HeaderWrapper from '@/components/HeaderWrapper.vue'; /* @ == root */
+import InnerWrapper from '@/components/InnerWrapper.vue';
+import FooterWrapper from '@/components/FooterWrapper.vue';
 
 @Component ({
-    components: {HeaderWrapper}
+    components: {
+        HeaderWrapper,
+        InnerWrapper,
+        FooterWrapper
+        }
 })
+
 export default class App extends Vue {
 
 }
