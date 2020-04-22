@@ -1,0 +1,10 @@
+{
+      "widgetClass": "address",
+      "widgetHeadline": "Contact",
+      "address": "Your Street No.<br />12345 Your City",
+      "telephone": "+1 (0)1234/56789",
+      "fax": "+1 (0)1234/567810",
+      "email": "youremail@provider.com"
+}
+
+

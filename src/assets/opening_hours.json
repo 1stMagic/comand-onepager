@@ -1,0 +1,34 @@
+{
+      "widgetClass": "opening-hours",
+      "widgetHeadline": "Opening hours",
+      "days":
+            [{
+                  "day": "monday",
+                  "fromTime": "08.00h",
+                  "tillTime": "17.00"
+            },
+            {
+                  "day": "tuesday",
+                  "fromTime": "08.00h",
+                  "tillTime": "17.00"
+            },
+            {
+                  "day": "wednesday",
+                  "fromTime": "08.00h",
+                  "tillTime": "17.30"
+            },
+
+            {
+                  "day": "thursday",
+                  "fromTime": "08.00h",
+                  "tillTime": "17.00"
+            },
+            {
+                  "day": "friday",
+                  "fromTime": "08.00h",
+                  "tillTime": "15.00"
+            }]
+}
+
+
+

@@ -13,7 +13,7 @@
                                 <h1></h1>
                         </section>
                     </div>
-                    <content-section v-for="section in sections" :key="section.id" v-bind:id="section.id" v-bind:headline="section.headline" v-bind:content="section.content"></content-section>
+                    <content-section v-for="section in sections" v-bind:key="section.id" v-bind:id="section.id" v-bind:headline="section.headline" v-bind:content="section.content"></content-section>
                     <div class="section_wrapper">
                         <a id="anchor_section2"></a>
                         <section>
@@ -77,9 +77,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import ContactForm from '@/components/ContactForm.vue';
 import ContentSection from '@/components/ContentSection.vue';
 import sectionContent from '@/assets/content_sections.json';
-
-console.table(sectionContent);
-
 
 @Component ({
     components: {

@@ -9,7 +9,7 @@
             <input-message />
             <data-privacy />
         </div>
-        <form-submit />
+        <form-submit v-on:click="submitForm" />
     </form>
 </template>
 
@@ -34,7 +34,10 @@ import FormSubmit               from '@/components/forms/FormSubmit.vue';
 })
 
 export default class ContactForm extends Vue {
+    /*submitForm() {
 
+    }
+    */
 }
 </script>
 
