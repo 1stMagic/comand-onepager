@@ -4,7 +4,6 @@
             <a id="anchor_back_to_top_wrapper"></a>
             <!-- begin outer_wrapper -->
             <div class="grid-main-container" id="outer_wrapper">
-
                 <header-wrapper />
                 <inner-wrapper />
                 <footer-wrapper />
@@ -18,6 +17,7 @@
                 <!-- end back_to_top_wrapper -->
             </div>
             <!-- end outer_wrapper -->
+            <fancy-box />
        </div>
         <!-- end page_wrapper -->
 </template>
@@ -27,17 +27,20 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import HeaderWrapper from '@/components/HeaderWrapper.vue'; /* @ == root */
 import InnerWrapper from '@/components/InnerWrapper.vue';
 import FooterWrapper from '@/components/FooterWrapper.vue';
+import FancyBox from '@/components/FancyBox.vue';
 
 @Component ({
     components: {
         HeaderWrapper,
         InnerWrapper,
-        FooterWrapper
+        FooterWrapper,
+        FancyBox
         }
 })
-
 export default class App extends Vue {
-
+    created(): void {
+        this.$store.dispatch('loadSections');
+    }
 }
 
 </script>

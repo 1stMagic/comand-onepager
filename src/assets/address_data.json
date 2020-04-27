@@ -1,7 +1,7 @@
 {
       "widgetClass": "address",
       "widgetHeadline": "Contact",
-      "address": "Your Street No.<br />12345 Your City",
+      "address": "Your Street No.<br /><span class=\"postal-code\">12345</span>&nbsp;<span class=\"locality\">Your City</span>",
       "telephone": "+1 (0)1234/56789",
       "fax": "+1 (0)1234/567810",
       "email": "youremail@provider.com"

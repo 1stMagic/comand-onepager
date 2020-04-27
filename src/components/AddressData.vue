@@ -1,11 +1,11 @@
 <template>
     <div v-bind:class="'grid-item_' + widgetClass">
          <h4>{{ widgetHeadline }}</h4>
-         <dl>
-            <dt v-if="address">Anschrift:</dt><dd v-if="address"><a v-bind:href="'mailto:' + email" title="E-Mail schreiben">{{ email }}</a></dd>
-            <dt v-if="telephone">Telephone:</dt><dd v-if="telephone"><a v-bind:href="'mailto:' + email" title="E-Mail schreiben">{{ email }}</a></dd>
-            <dt v-if="fax">Fax:</dt><dd v-if="fax"><a v-bind:href="'mailto:' + email" title="E-Mail schreiben">{{ email }}</a></dd>
-            <dt v-if="email">E-Mail:</dt><dd v-if="email"><a v-bind:href="'mailto:' + email" title="E-Mail schreiben">{{ email }}</a></dd>
+         <dl class="vard">
+            <dt v-if="address">Address:</dt><dd class="street-address" v-if="address" v-html="address">{{ address }}</dd>
+            <dt v-if="telephone">Telephone:</dt><dd v-if="telephone"><a v-bind:href="'tel:' + telephone" title="Call number">{{ telephone }}</a></dd>
+            <dt v-if="fax">Fax:</dt><dd v-if="fax">{{ fax }}</dd>
+            <dt v-if="email">E-Mail:</dt><dd class="email" v-if="email"><a v-bind:href="'mailto:' + email" title="Send E-Mail">{{ email }}</a></dd>
         </dl>
     </div>
 </template>
@@ -17,16 +17,18 @@
     @Component
     export default class AddressData extends Vue {
         /* initialize class variables to use inside template above */
-        headline = "";
+        widgetHeadline = "";
+        widgetClass = "";
         addressClass = "";
         address = "";
         telephone = "";
         fax = "";
         email = "";
 
-        /* asign values from json file to class variables */
+        /* assign values from json file to class variables */
         created(): void {
-            this.headline = address.headline;
+            this.widgetHeadline = address.widgetHeadline;
+            this.widgetClass = address.widgetClass;
             this.addressClass = address.addressClass;
             this.address = address.address;
             this.telephone = address.telephone;

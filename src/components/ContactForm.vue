@@ -9,7 +9,7 @@
             <input-message />
             <data-privacy />
         </div>
-        <form-submit v-on:click="submitForm" />
+        <form-submit />
     </form>
 </template>
 
