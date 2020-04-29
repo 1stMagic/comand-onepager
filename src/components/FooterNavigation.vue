@@ -28,8 +28,7 @@ export default class FooterNavigation extends Vue {
         }
 
         openFancybox(link) {
-            this.$store.commit('setFancybox', link.fancybox); // call mutation in /store/index.ts
-            this.$store.dispatch('loadFancyboxContent', link); // call action in /store/index.ts
+            this.$store.dispatch('loadFancyboxContent', {url: link.fancyboxContentURL, img: false}); // call action in /store/index.ts
         }
 }
 </script>

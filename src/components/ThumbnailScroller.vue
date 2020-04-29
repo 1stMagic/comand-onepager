@@ -1,19 +1,25 @@
 <template>
     <div class="thumbnail-scroller gallery-scroller">
-        <a href="#" class="switch_button_previous icon-single_arrow_left" title="Previous"></a>
-        <ul data-fancybox-element="image-scroller">
-            <li v-for="(image, index) in thumbnailImages" v-bind:key="index">
-                <a href="#" v-on:click="fancybox = true">
+        <a href="#" v-on:click.prevent="previous" class="switch_button_previous icon-single_arrow_left" title="Previous"></a>
+        <transition-group name="slide" tag="ul">
+            <li v-for="(image, index) in thumbnails" v-bind:key="image.imgId">
+                <a href="#" v-on:click.prevent="openFancybox(index)">
                     <figure>
                         <img v-bind:src="image.imgPath" v-bind:alt="image.alt" />
                         <figcaption>{{ image.figcaption }}</figcaption>
                     </figure>
                 </a>
             </li>
-        </ul>
-        <a href="#" class="switch_button_next icon-single_arrow_right" title="Next"></a>
+        </transition-group>
+        <a href="#" v-on:click.prevent="next" class="switch_button_next icon-single_arrow_right" title="Next"></a>
     </div>
 </template>
+
+<style scoped>
+    .slide-move {
+        transition: transform 1s ease-in-out;
+    }
+</style>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
@@ -23,5 +29,27 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class ThumbnailScroller extends Vue {
         /* initialize class variables to use inside template above */
         @Prop() thumbnailImages; // allow component to receive thumbnailImages as property via v-bind:thumbnail-images attribute
+
+        thumbnails = [...this.thumbnailImages]; // create copy of thumbnailImages and asign this.thumbnailImages array entries
+
+        next() {
+            const thumbnail = this.thumbnails.shift(); // remove first element of array
+            if (thumbnail) {
+                this.thumbnails.push(thumbnail);
+            }
+        }
+
+        previous() {
+            const thumbnail = this.thumbnails.pop(); // remove last element of array
+            if (thumbnail) {
+                this.thumbnails.unshift(thumbnail);
+            }
+        }
+
+        openFancybox(index) {
+            this.$store.dispatch('loadFancyboxContent', { urls: this.thumbnails, img: true, imgIndex: index}); // call action in /store/index.ts
+        }
 }
+
+
 </script>

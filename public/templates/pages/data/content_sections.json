@@ -19,29 +19,52 @@
     "navEntry": "Section 3",
     "images": [
       {
+        "imgId": 1,
         "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
         "alt": "Alternative Text 1",
         "figcaption": "Figcaption 1"
       },
       {
+        "imgId": 2,
         "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
         "alt": "Alternative Text 2",
         "figcaption": "Figcaption 2"
       },
       {
+        "imgId": 3,
         "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
         "alt": "Alternative Text 3",
         "figcaption": "Figcaption 3"
       },
       {
+        "imgId": 4,
         "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
         "alt": "Alternative Text 4",
         "figcaption": "Figcaption 4"
       },
       {
+        "imgId": 5,
         "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
         "alt": "Alternative Text 5",
         "figcaption": "Figcaption 5"
+      },
+      {
+        "imgId": 6,
+        "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
+        "alt": "Alternative Text 6",
+        "figcaption": "Figcaption 6"
+      },
+      {
+        "imgId": 7,
+        "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
+        "alt": "Alternative Text 7",
+        "figcaption": "Figcaption 7"
+      },
+      {
+        "imgId": 8,
+        "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
+        "alt": "Alternative Text 8",
+        "figcaption": "Figcaption 8"
       }
     ],
     "headline": "Headline Section 3",
