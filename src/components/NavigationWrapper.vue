@@ -15,13 +15,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import Languages from '@/language.ts'
-import hours from '@/assets/opening_hours.json';
 
 @Component
 export default class NavigationWrapper extends Vue {
     navActive = "";
-    setNavActive(id) {
+    setNavActive(id: string) {
         this.navActive = id;
     }
 }

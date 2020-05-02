@@ -1,26 +1,25 @@
 <template>
     <label class="inline" for="salutation">
-        <span>Anrede<sup>*</sup>:</span>
+        <span>{{ label('salutation') }}<sup>*</sup>:</span>
         <div class="input_wrapper">
             <label for="male">
-                <input type="radio" name="salutation" id="male" value="0" checked="checked" />
-                <span>Herr</span>
+                <input type="radio" id="male" value="M" v-on:input="onInput" v-bind:checked="value === 'M'" />
+                <span>{{ label('salutation_male') }}</span>
             </label>
             <label for="female">
-                <input type="radio" name="salutation" id="female" value="1" />
-                <span>Frau</span>
+                <input type="radio" id="female" value="F" @input="onInput" :checked="value === 'F'" />
+                <span>{{ label('salutation_female') }}</span>
             </label>
         </div>
     </label>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-//import Languages from '@/language'
+import { Component } from 'vue-property-decorator';
+import BaseFormControl from "@/components/forms/base/BaseFormControl";
 
 @Component
-export default class InputSalutation extends Vue {
-
+export default class InputSalutation extends BaseFormControl {
 }
 
 </script>

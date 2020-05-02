@@ -5,7 +5,7 @@
         <div id="content_wrapper"><!-- no row allowed -->
             <!-- begin content -->
             <main class="grid-item_main">
-                <slideshow-wrapper v-bind:full-width="true" />
+                <slideshow-wrapper v-bind:full-width="true" v-bind:autoplay="true" />
                 <!-- begin main content -->
                 <div class="grid-item_page-content" id="page_content">
                     <main-headline />
@@ -20,7 +20,7 @@
                         <a id="anchor_section4"></a>
                         <section>
                             <h2>Headline Section 4</h2>
-                            <contact-form />
+                            <contact-form form-action="#" />
                         </section>
                     </div>
                 </div>

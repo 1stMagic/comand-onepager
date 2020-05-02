@@ -12,9 +12,7 @@
                     <a href="http://www.comand-cms.com" target="_blank" lang="en" title="CoManD-Website">&copy; CoManD-OnePager</a>
                 </div>
                 <!-- end copyright -->
-                <!-- begin back_to_top_wrapper -->
-                <a id="back_to_top_wrapper" href="#anchor_back_to_top_wrapper" title="" class="icon-arrow_close" style="display: none;"></a>
-                <!-- end back_to_top_wrapper -->
+                <back-to-top />
             </div>
             <!-- end outer_wrapper -->
             <fancy-box />
@@ -28,17 +26,20 @@ import HeaderWrapper from '@/components/HeaderWrapper.vue'; /* @ == root */
 import InnerWrapper from '@/components/InnerWrapper.vue';
 import FooterWrapper from '@/components/FooterWrapper.vue';
 import FancyBox from '@/components/FancyBox.vue';
+import BackToTop from '@/components/BackToTop.vue';
 
 @Component ({
     components: {
         HeaderWrapper,
         InnerWrapper,
         FooterWrapper,
-        FancyBox
+        FancyBox,
+        BackToTop
         }
 })
 export default class App extends Vue {
     created(): void {
+        this.$store.dispatch('loadLabels');
         this.$store.dispatch('loadSections');
     }
 }

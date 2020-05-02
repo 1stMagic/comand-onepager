@@ -25,7 +25,7 @@ export default class FancyBox extends Vue {
     index = 0;
 
     @Watch('$store.state.fancybox.status')
-    onStatusChange(oldStatus, newStatus) {
+    onStatusChange() {
         this.index = this.$store.state.fancybox.imgIndex;
     }
 

@@ -11,12 +11,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import {FooterNavigationLink} from '@/types';
 import footerNavigation from '@/assets/footer_navigation.json';
 
 @Component
 export default class FooterNavigation extends Vue {
         /* initialize class variables to use inside template above */
-        links = [];
+        links: FooterNavigationLink[] = [];
         widgetClass = "";
         widgetHeadline = "";
 
@@ -27,7 +28,7 @@ export default class FooterNavigation extends Vue {
             this.widgetHeadline = footerNavigation.widgetHeadline;
         }
 
-        openFancybox(link) {
+        openFancybox(link: FooterNavigationLink) {
             this.$store.dispatch('loadFancyboxContent', {url: link.fancyboxContentURL, img: false}); // call action in /store/index.ts
         }
 }

@@ -1,16 +1,15 @@
 <template>
-    <label for="name"><span>Nachname<sup>*</sup>:</span>
-        <input name="name" id="name" type="text" value="" tabindex="3" autofocus required minlength="2" maxlength="50" data-input-required="Das Feld darf nicht leer sein!" data-error-message="Das Feld darf nur Buchstaben und Bindestriche enthalten!" placeholder="Nachname" title="Ungültige Zeichen: (keine)" pattern="^[A-Za-züöäÜÖÄßáéíóàèìòêîôÁÉÍÓÀÈÌÒÂÊÎÔ '-]*$">
+    <label for="name"><span>{{ label('last_name') }}<sup>*</sup>:</span>
+        <input id="name" type="text" autofocus title="Ungültige Zeichen: (keine)" v-bind:placeholder="label('last_name')" v-bind:value="value" v-on:input="onInput" v-on:blur="onBlur">
+        <span v-if="error">{{ errorMessage }}</span>
     </label>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-//import Languages from '@/language'
+    import {Component} from 'vue-property-decorator';
+    import BaseFormControl from "@/components/forms/base/BaseFormControl";
 
-@Component
-export default class InputSurname extends Vue {
-
-}
-
+    @Component
+    export default class InputSurname extends BaseFormControl {
+    }
 </script>

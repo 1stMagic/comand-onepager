@@ -1,29 +1,32 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import Home from '../views/Home.vue'
+import store from '@/store/index'
 
 Vue.use(VueRouter)
 
-  const routes: Array<RouteConfig> = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+const routes: Array<RouteConfig> = [
+    {
+        path: '/:lang',
+        name: 'home'
+    }
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes
 })
+
+router.beforeEach((to, from, next) => {
+    if (to.params.lang) {
+        store.commit('currentLanguage', to.params.lang);
+        next();
+        return;
+    }
+    if (!store.state.currentLanguage) {
+        store.commit('currentLanguage', 'de');
+    }
+    next({name: 'home', params:{lang: store.state.currentLanguage}});
+});
 
 export default router

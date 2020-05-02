@@ -1,17 +1,16 @@
 <template>
     <label for="data_privacy">
-        <input name="data_privacy" id="data_privacy" type="checkbox" tabindex="13">
+        <input id="data_privacy" type="checkbox" v-bind:value="value" v-on:input="onInput">
         <span>Ich stimme der Verarbeitung und Speicherung von personenbezogenen Daten gemäß  <a href="#" data-fancybox-content-url="/content/datenschutzerklaerung.html #page_content" class="fancybox" data-fancybox="#fancybox" data-fancybox-controls="close,print">Datenschutzerklärung</a> zu.</span>
+        <span v-if="error">{{ errorMessage }}</span>
     </label>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-//import Languages from '@/language'
+    import {Component} from 'vue-property-decorator';
+    import BaseFormControl from "@/components/forms/base/BaseFormControl";
 
-@Component
-export default class DataPrivacy extends Vue {
-
-}
-
+    @Component
+    export default class DataPrivacy extends BaseFormControl {
+    }
 </script>

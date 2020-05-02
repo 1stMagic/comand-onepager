@@ -12,12 +12,13 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
+    import {OpeningHoursDay} from '@/types';
     import openingHours from '@/assets/opening_hours.json';
 
     @Component
     export default class OpeningHours extends Vue {
         /* initialize class variables to use inside template above */
-        days = [];
+        days: OpeningHoursDay[] = [];
         widgetClass = "";
         widgetHeadline = "";
 

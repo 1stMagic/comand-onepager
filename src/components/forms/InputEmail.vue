@@ -1,16 +1,15 @@
 <template>
-     <label for="email"><span>E-Mail<sup>*</sup>:</span>
-         <input pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9._%+-]+\.[A-Za-z]{2,}$" name="email" id="email" type="email" value="" tabindex="9" required minlength="6" maxlength="50" data-input-required="Das Feld darf nicht leer sein!" data-error-message="Bitte geben Sie eine gültige E-Mail-Adresse an!" placeholder="E-Mail" title="Ungültige Zeichen: alle außer a-z, A-Z, -, _, @, .">
+     <label for="email"><span>{{ label('email') }}<sup>*</sup>:</span>
+         <input id="email" type="email" minlength="6" maxlength="50" title="Ungültige Zeichen: alle außer a-z, A-Z, -, _, @, ." v-bind:value="value" v-on:input="onInput" v-on:blur="onBlur" v-bind:placeholder="label('email')">
+         <span v-if="error">{{ errorMessage }}</span>
      </label>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-//import Languages from '@/language'
+    import {Component} from 'vue-property-decorator';
+    import BaseFormControl from "@/components/forms/base/BaseFormControl";
 
-@Component
-export default class InputEmail extends Vue {
-
-}
-
+    @Component
+    export default class InputEmail extends BaseFormControl {
+    }
 </script>

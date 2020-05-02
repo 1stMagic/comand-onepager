@@ -33,11 +33,11 @@ import ThumbnailScroller from '@/components/ThumbnailScroller.vue';
           })
 
 export default class ContentSection extends Vue {
-    @Prop() id;
-    @Prop() headline;
-    @Prop() imgpath;
-    @Prop() images;
-    @Prop() content;
+    @Prop() id!: string;
+    @Prop() headline!: string;
+    @Prop() imgpath!: string;
+    @Prop() images!: string[];
+    @Prop() content!: string;
 }
 
 </script>

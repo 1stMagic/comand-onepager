@@ -1,0 +1,17 @@
+{
+  "de": {
+    "last_name": "Nachname",
+    "first_name": "Vorname",
+    "email": "E-Mail",
+    "copyright": "© CoManD-OnePager",
+    "form_error_empty": "Das Feld darf nicht leer sein!",
+    "form_error_invalid_surname": "Das Feld darf nur Buchstaben und Bindestriche enthalten!",
+    "form_error_invalid_email": "Bitte geben Sie eine gültige E-Mail-Adresse an!"
+  },
+  "en": {
+    "last_name": "Last name",
+    "first_name": "First name",
+    "email": "E-mail",
+    "copyright": "© CoManD-OnePager"
+  }
+}

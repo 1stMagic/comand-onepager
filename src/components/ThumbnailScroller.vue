@@ -23,14 +23,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import {ContentSectionImage} from '@/types';
 
 @Component
-
 export default class ThumbnailScroller extends Vue {
         /* initialize class variables to use inside template above */
-        @Prop() thumbnailImages; // allow component to receive thumbnailImages as property via v-bind:thumbnail-images attribute
+        @Prop() thumbnailImages!: ContentSectionImage[]; // allow component to receive thumbnailImages as property via v-bind:thumbnail-images attribute
 
-        thumbnails = [...this.thumbnailImages]; // create copy of thumbnailImages and asign this.thumbnailImages array entries
+        thumbnails: ContentSectionImage[] = [...this.thumbnailImages]; // create copy of thumbnailImages and asign this.thumbnailImages array entries
 
         next() {
             const thumbnail = this.thumbnails.shift(); // remove first element of array
@@ -46,7 +46,7 @@ export default class ThumbnailScroller extends Vue {
             }
         }
 
-        openFancybox(index) {
+        openFancybox(index: number) {
             this.$store.dispatch('loadFancyboxContent', { urls: this.thumbnails, img: true, imgIndex: index}); // call action in /store/index.ts
         }
 }

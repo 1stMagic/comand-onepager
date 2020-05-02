@@ -19,7 +19,6 @@
         /* initialize class variables to use inside template above */
         widgetHeadline = "";
         widgetClass = "";
-        addressClass = "";
         address = "";
         telephone = "";
         fax = "";
@@ -29,7 +28,6 @@
         created(): void {
             this.widgetHeadline = address.widgetHeadline;
             this.widgetClass = address.widgetClass;
-            this.addressClass = address.addressClass;
             this.address = address.address;
             this.telephone = address.telephone;
             this.fax = address.fax;

@@ -1,19 +1,17 @@
 <template>
     <div class="button_wrapper">
-     <small><sup>*</sup>Pflichtangaben</small>
-     <button type="submit" name="send_message" id="send_message_4">
-         <span class="icon-send_message"></span><span>Abschicken</span>
+     <small><sup>*</sup>{{ label('mandatory') }}</small>
+     <button type="submit">
+         <span class="icon-send_message"></span><span>{{ label('send') }}</span>
      </button>
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-//import Languages from '@/language'
+    import {Component} from 'vue-property-decorator';
+    import BaseI18nComponent from "@/components/base/BaseI18nComponent";
 
-@Component
-export default class FormSubmit extends Vue {
-
-}
-
+    @Component
+    export default class FormSubmit extends BaseI18nComponent {
+    }
 </script>
