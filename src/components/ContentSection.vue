@@ -14,8 +14,11 @@
             <div v-else-if="images" v-bind:class="{'grid-container-create-columns': images.length < 5}">
                 <thumbnail-scroller v-if="images.length > 4" v-bind:thumbnail-images="images" />
                 <div v-else v-for="(image, index) in images" v-bind:key="index" class="grid-small-item">
-                    <img v-bind:src="image.imgPath" v-bind:alt="image.alt" />
-                </div >
+                    <figure>
+                        <img v-bind:src="image.imgPath" v-bind:alt="image.alt" />
+                        <figcaption v-if="image.figcaption">{{ image.figcaption }}</figcaption>
+                    </figure>
+                </div>
             </div>
             <div v-else v-html="content"></div>
         </section>

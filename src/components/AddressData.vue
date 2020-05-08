@@ -1,6 +1,6 @@
 <template>
     <div v-bind:class="'grid-item_' + widgetClass">
-         <h4>{{ widgetHeadline }}</h4>
+         <h4>{{ label('headline_address') }}</h4>
          <dl class="vard">
             <dt v-if="address">Address:</dt><dd class="street-address" v-if="address" v-html="address">{{ address }}</dd>
             <dt v-if="telephone">Telephone:</dt><dd v-if="telephone"><a v-bind:href="'tel:' + telephone" title="Call number">{{ telephone }}</a></dd>
@@ -12,10 +12,11 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
+    import BaseI18nComponent from "@/components/base/BaseI18nComponent";
     import address from '@/assets/address_data.json';
 
     @Component
-    export default class AddressData extends Vue {
+    export default class AddressData extends BaseI18nComponent {
         /* initialize class variables to use inside template above */
         widgetHeadline = "";
         widgetClass = "";

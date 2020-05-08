@@ -1,17 +1,40 @@
 {
   "de": {
-    "last_name": "Nachname",
-    "first_name": "Vorname",
-    "email": "E-Mail",
-    "copyright": "© CoManD-OnePager",
-    "form_error_empty": "Das Feld darf nicht leer sein!",
-    "form_error_invalid_surname": "Das Feld darf nur Buchstaben und Bindestriche enthalten!",
-    "form_error_invalid_email": "Bitte geben Sie eine gültige E-Mail-Adresse an!"
+      "salutation": "Anrede",
+      "salutation_male": "Herr",
+      "salutation_female": "Frau",
+      "last_name": "Nachname",
+      "first_name": "Vorname",
+      "email": "E-Mail",
+      "message": "Nachricht",
+      "copyright": "© CoManD-OnePager",
+      "form_error_empty": "Das Feld darf nicht leer sein!",
+      "form_error_invalid_surname": "Das Feld darf nur Buchstaben und Bindestriche enthalten!",
+      "form_error_invalid_email": "Bitte geben Sie eine gültige E-Mail-Adresse an!",
+      "data_privacy": "Ich stimme der Verarbeitung und Speicherung von personenbezogenen Daten gemäß  <a href='#' data-fancybox-content-url='/content/datenschutzerklaerung.html #page_content' class='fancybox' data-fancybox='fancybox'>Datenschutzerklärung</a> zu.",
+      "send": "Nachricht versenden",
+      "mandatory": "Pflichtfelder",
+      "headline_links": "Links",
+      "headline_opening_hours": "Öffnungszeiten",
+      "headline_address": "Kontakt"
   },
   "en": {
+    "salutation":"Salutation",
+    "salutation_male": "Mr.",
+    "salutation_female": "Mrs.",
     "last_name": "Last name",
     "first_name": "First name",
     "email": "E-mail",
-    "copyright": "© CoManD-OnePager"
+    "message": "Message",
+    "copyright": "© CoManD-OnePager",
+    "form_error_empty": "Input may not be empty!",
+    "form_error_invalid_surname": "Input may only concern letters and dashes!",
+    "form_error_invalid_email": "Please type in a valid e-mail-address!",
+    "data_privacy": "I accept handling and saving of my personal data a mentioned in the <a href='#' data-fancybox-content-url='/content/datenschutzerklaerung.html #page_content' class='fancybox' data-fancybox='fancybox'>private policy</a>.",
+    "send": "Send message",
+    "mandatory": "Mandatory fields",
+    "headline_links": "Links",
+    "headline_opening_hours": "Opening hours",
+    "headline_address": "Contact"
   }
 }

@@ -1,6 +1,6 @@
 <template>
      <label for="email"><span>{{ label('email') }}<sup>*</sup>:</span>
-         <input id="email" type="email" minlength="6" maxlength="50" title="Ungültige Zeichen: alle außer a-z, A-Z, -, _, @, ." v-bind:value="value" v-on:input="onInput" v-on:blur="onBlur" v-bind:placeholder="label('email')">
+         <input id="email" type="email" minlength="6" maxlength="50" v-bind:value="value" v-on:input="onInput" v-on:blur="onBlur" v-bind:placeholder="label('email')">
          <span v-if="error">{{ errorMessage }}</span>
      </label>
 </template>

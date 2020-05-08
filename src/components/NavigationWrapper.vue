@@ -1,15 +1,18 @@
 <template>
-    <div class="grid-item_navigation" id="navigation_wrapper">
-        <nav id="main-navigation">
-            <ul data-editmode="settings" data-editmode-controller-url="//praxisklinik-grevenbroich.de/editmode/controller.php?controller=navigation">
-                <li class="close_nav"><a href="#"><span class="icon-single_arrow_left"></span><span>Navigation schließen</span></a></li>
-                <li v-for="section in $store.state.sections" v-bind:key="section.id" @click="setNavActive(section.id)" v-bind:class="{nav_active: navActive == section.id}">
-                    <a v-bind:href="'#anchor_' + section.id">
-                        <span v-bind:class="'icon-' + section.iconClass"></span><span>{{ section.navEntry }}</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+    <div class="grid-item_navigation">
+        <div id="navigation_wrapper" v-bind:class="{active: isActive}" >
+            <nav id="main-navigation">
+                <ul data-editmode="settings" data-editmode-controller-url="//praxisklinik-grevenbroich.de/editmode/controller.php?controller=navigation">
+                    <li class="close_nav"><a href="#" @click.prevent="isActive = false"><span>Navigation schließen</span><span class="icon-single_arrow_right"></span></a></li>
+                    <li v-for="section in $store.state.sections" v-bind:key="section.id" @click="setNavActive(section.id)" v-bind:class="{nav_active: navActive == section.id}">
+                        <a v-bind:href="'#anchor_' + section.id">
+                            <span v-bind:class="'icon-' + section.iconClass"></span><span>{{ section.navEntry }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <a href="#" class="button icon-bars" id="toggle_offcanvas" @click.prevent="isActive = !isActive"></a>
     </div>
 </template>
 
@@ -18,9 +21,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class NavigationWrapper extends Vue {
+    isActive = false;
     navActive = "";
     setNavActive(id: string) {
         this.navActive = id;
     }
+
 }
 </script>

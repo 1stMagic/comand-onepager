@@ -30,7 +30,7 @@ export default class ThumbnailScroller extends Vue {
         /* initialize class variables to use inside template above */
         @Prop() thumbnailImages!: ContentSectionImage[]; // allow component to receive thumbnailImages as property via v-bind:thumbnail-images attribute
 
-        thumbnails: ContentSectionImage[] = [...this.thumbnailImages]; // create copy of thumbnailImages and asign this.thumbnailImages array entries
+        thumbnails: ContentSectionImage[] = [...this.thumbnailImages]; // create copy of thumbnailImages and assign this.thumbnailImages array entries
 
         next() {
             const thumbnail = this.thumbnails.shift(); // remove first element of array
