@@ -1,6 +1,6 @@
 <template>
     <div class="thumbnail-scroller gallery-scroller">
-        <a href="#" v-on:click.prevent="previous" class="switch_button_previous icon-single_arrow_left" title="Previous"></a>
+        <a href="#" v-on:click.prevent="previous" class="switch_button_previous icon-single_arrow_left" :title="label('previous')"></a>
         <transition-group name="slide" tag="ul">
             <li v-for="(image, index) in thumbnails" v-bind:key="image.imgId">
                 <a href="#" v-on:click.prevent="openFancybox(index)">
@@ -11,7 +11,7 @@
                 </a>
             </li>
         </transition-group>
-        <a href="#" v-on:click.prevent="next" class="switch_button_next icon-single_arrow_right" title="Next"></a>
+        <a href="#" v-on:click.prevent="next" class="switch_button_next icon-single_arrow_right" :title="label('next')"></a>
     </div>
 </template>
 
@@ -22,11 +22,12 @@
 </style>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import {ContentSectionImage} from '@/types';
+import BaseI18nComponent from "@/components/base/BaseI18nComponent";
 
 @Component
-export default class ThumbnailScroller extends Vue {
+export default class ThumbnailScroller extends BaseI18nComponent {
         /* initialize class variables to use inside template above */
         @Prop() thumbnailImages!: ContentSectionImage[]; // allow component to receive thumbnailImages as property via v-bind:thumbnail-images attribute
 

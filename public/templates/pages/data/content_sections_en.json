@@ -1,0 +1,75 @@
+[{
+      "id": "section1",
+      "iconClass": "home",
+      "navEntry": "Section 1",
+      "headline": "Headline Section 1",
+      "content": "<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.</p><p> Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugia a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. <br />Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.</p>"
+   },
+{
+   "id": "section2",
+  "iconClass": "info",
+   "navEntry": "Section 2",
+    "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
+   "headline": "Headline Section 2",
+   "content": "<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.</p><p> Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugia a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. <br />Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.</p>"
+},
+  {
+    "id": "section3",
+    "iconClass": "info",
+    "navEntry": "Section 3",
+    "images": [
+      {
+        "imgId": 1,
+        "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
+        "alt": "Alternative Text 1",
+        "figcaption": "Figcaption EN 1"
+      },
+      {
+        "imgId": 2,
+        "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
+        "alt": "Alternative Text 2",
+        "figcaption": "Figcaption EN 2"
+      },
+      {
+        "imgId": 3,
+        "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
+        "alt": "Alternative Text 3",
+        "figcaption": "Figcaption EN 3"
+      },
+      {
+        "imgId": 4,
+        "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
+        "alt": "Alternative Text 4",
+        "figcaption": "Figcaption EN 4"
+      },
+      {
+        "imgId": 5,
+        "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
+        "alt": "Alternative Text 5",
+        "figcaption": "Figcaption EN 5"
+      },
+      {
+        "imgId": 6,
+        "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
+        "alt": "Alternative Text 6",
+        "figcaption": "Figcaption EN 6"
+      },
+      {
+        "imgId": 7,
+        "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
+        "alt": "Alternative Text 7",
+        "figcaption": "Figcaption EN 7"
+      },
+      {
+        "imgId": 8,
+        "imgPath": "/media/images/content_images/logo_business_edition_landscape.jpg",
+        "alt": "Alternative Text 8",
+        "figcaption": "Figcaption EN 8"
+      }
+    ],
+    "headline": "Headline Section 3",
+    "content": "<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.</p><p> Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugia a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. <br />Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.</p>"
+  }
+]
+
+

@@ -1,7 +1,7 @@
 <template>
     <!-- begin switch language -->
     <div class="grid-item_language-support">
-        <router-link v-for="language in languages" v-bind:to="{name: 'home', params: {lang: language}}" v-bind:key="language" active-class="active" v-bind:class="['flag', language]" v-on:click.prevent="formData.error = false"></router-link>
+        <router-link v-for="language in languages" v-bind:to="{name: 'home', params: {lang: language}}" v-bind:key="language" active-class="active" v-bind:class="['flag', language]" v-on:click.native="changeLanguage"></router-link>
     </div>
     <!-- end switch language -->
 </template>
@@ -12,5 +12,8 @@
 
     @Component
     export default class SwitchLanguage extends BaseI18nComponent {
+        changeLanguage() {
+            this.$store.dispatch("loadSections"); // load action from store
+        }
     }
 </script>

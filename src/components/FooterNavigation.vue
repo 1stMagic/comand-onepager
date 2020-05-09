@@ -3,7 +3,7 @@
         <h4>{{ label('headline_links') }}</h4>
         <ul>
             <template v-for="(link, index) in links">
-                <li v-bind:key="index"><a v-bind:href="link.href" v-bind:target="link.target" v-on:click.prevent="openFancybox(link)">{{ link.name }}</a></li>
+                <li v-bind:key="index"><a v-bind:href="link.href" v-bind:target="link.target" v-on:click.prevent="openFancybox(link)">{{ label(link.name) }}</a></li>
             </template>
         </ul>
     </div>

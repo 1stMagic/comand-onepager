@@ -1,6 +1,6 @@
 <template>
-    <label class="textarea" for="message"><span>{{ label('message') }}<sup>*</sup>:</span>
-        <textarea id="message" minlength="2" maxlength="500" title="Ungültige Zeichen: (keine)" v-bind:value="value" v-on:input="onInput" v-on:blur="onBlur" v-bind:placeholder="label('message')"></textarea>
+    <label class="textarea" for="message" :class="{error: error}"><span>{{ label('message') }}<sup>*</sup>:</span>
+        <textarea :class="{error: error}" id="message" minlength="2" maxlength="500" v-bind:value="value" v-on:input="onInput" v-on:blur="onBlur" v-bind:placeholder="label('message')"></textarea>
         <span v-if="error">{{ errorMessage }}</span>
     </label>
 </template>

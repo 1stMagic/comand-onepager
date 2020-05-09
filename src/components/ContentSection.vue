@@ -28,6 +28,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ThumbnailScroller from '@/components/ThumbnailScroller.vue';
+import BaseI18nComponent from "@/components/base/BaseI18nComponent";
 
 @Component ({
               components: {

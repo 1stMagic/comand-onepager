@@ -1,26 +1,16 @@
 <template>
     <div class="section_wrapper" id="headline_wrapper">
-        <a v-bind:id="'anchor_' + id"></a>
         <section>
-                <h1>{{ headline }}</h1>
+                <h1>{{ label('title') }}</h1>
         </section>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import mainHeadline from '@/assets/main_headline.json';
+import BaseI18nComponent from "@/components/base/BaseI18nComponent";
 
 @Component
-export default class MainHeadline extends Vue {
-        /* initialize class variables to use inside template above */
-        id = "";
-        headline = "";
-
-        /* assign values from json file to class variables */
-        created(): void {
-            this.id = mainHeadline.id;
-            this.headline = mainHeadline.headline;
-        }
+export default class MainHeadline extends BaseI18nComponent {
 }
 </script>

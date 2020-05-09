@@ -2,20 +2,20 @@
       "widgetClass": "footer-navigation",
       "links":
             [{
-                  "name": "Contact",
+                  "name": "link_contact",
                   "href": "#anchor_section4",
                   "target": "",
                   "fancybox": false
             },
             {
-                  "name": "Datenschutzerklärung",
+                  "name": "link_private_policy",
                   "href": "",
                   "target": "",
                   "fancybox": true,
                   "fancyboxContentURL": "/templates/pages/data/private_policy.json"
             },
             {
-                  "name": "Imprint",
+                  "name": "link_imprint",
                   "href": "",
                   "target": "",
                   "fancybox": true,
@@ -23,7 +23,7 @@
             },
 
             {
-                  "name": "CoManD-CMS",
+                  "name": "link_website",
                   "href": "http://www.comand-cms.com",
                   "target": "_blank",
                   "fancybox": false

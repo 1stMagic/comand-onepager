@@ -2,7 +2,7 @@
     <div class="grid-item_navigation">
         <div id="navigation_wrapper" v-bind:class="{active: isActive}" >
             <nav id="main-navigation">
-                <ul data-editmode="settings" data-editmode-controller-url="//praxisklinik-grevenbroich.de/editmode/controller.php?controller=navigation">
+                <ul>
                     <li class="close_nav"><a href="#" @click.prevent="isActive = false"><span>Navigation schließen</span><span class="icon-single_arrow_right"></span></a></li>
                     <li v-for="section in $store.state.sections" v-bind:key="section.id" @click="setNavActive(section.id)" v-bind:class="{nav_active: navActive == section.id}">
                         <a v-bind:href="'#anchor_' + section.id">

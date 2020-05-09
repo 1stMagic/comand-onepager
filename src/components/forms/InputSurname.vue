@@ -1,6 +1,6 @@
 <template>
-    <label for="name"><span>{{ label('last_name') }}<sup>*</sup>:</span>
-        <input id="name" type="text" autofocus title="Ungültige Zeichen: (keine)" v-bind:placeholder="label('last_name')" v-bind:value="value" v-on:input="onInput" v-on:blur="onBlur">
+    <label for="name" :class="{error: error}"><span>{{ label('last_name') }}<sup>*</sup>:</span>
+        <input :class="{error: error}" id="name" type="text" v-bind:placeholder="label('last_name')" v-bind:value="value" v-on:input="onInput" v-on:blur="onBlur">
         <span v-if="error">{{ errorMessage }}</span>
     </label>
 </template>

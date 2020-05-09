@@ -3,7 +3,7 @@
         <div class="section_wrapper slideshow" @mouseenter="pause = true" @mouseleave="pause = false">
             <section>
                 <div class="slideshow_wrapper">
-                    <a href="#" v-on:click.prevent="showPrevItem" class="switch_button_previous icon-single_arrow_left" title="Previous image"></a>
+                    <a href="#" v-on:click.prevent="showPrevItem" class="switch_button_previous icon-single_arrow_left" :title="label('previous')"></a>
                     <transition name="slideshow-transition">
                         <figure v-if="currentItem" v-bind:key="index" class="slideshow_item">
                             <a v-if="currentItem.href" v-bind:href="currentItem.href" v-bind:title="currentItem.title">
@@ -16,7 +16,7 @@
                             </template>
                         </figure>
                     </transition>
-                    <a href="#" v-on:click.prevent="showNextItem" class="switch_button_next icon-single_arrow_right" title="Next image"></a>
+                    <a href="#" v-on:click.prevent="showNextItem" class="switch_button_next icon-single_arrow_right" :title="label('next')"></a>
                     <ol>
                         <li v-for="(item, i) in items" v-bind:key="i" v-bind:class="{active: i == index }"><a href="#" v-on:click.prevent="index = i"></a></li>
                     </ol>
@@ -27,12 +27,13 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Prop, Watch } from 'vue-property-decorator';
     import {SlideshowItem, SlideshowImage} from '@/types';
     import {imageSliderClient} from '@/api/SlideshowClient';
+    import BaseI18nComponent from "@/components/base/BaseI18nComponent";
 
     @Component
-    export default class SlideshowWrapper extends Vue {
+    export default class SlideshowWrapper extends BaseI18nComponent {
         private static readonly NOT_YET_PRELOADED_IMAGE = (image: SlideshowImage) => !image.loaded;
         private static readonly NOT_YET_PRELOADED_IMAGES = (item: SlideshowItem) => item.images && item.images.find(SlideshowWrapper.NOT_YET_PRELOADED_IMAGE);
 
@@ -49,7 +50,7 @@
 
         /* assign values from json file to class variables */
         private created(): void {
-            imageSliderClient.getItems()
+            imageSliderClient.getItems(this.$store.state.currentLanguage)
                 .then(this.setupSlider)
                 .catch(e => console.error('Error loading slideshow images', e));
         }
@@ -124,6 +125,13 @@
                 }
             }
             return item.images.length ? item.images[0] : null;
+        }
+
+        @Watch('$store.state.currentLanguage')
+        private languageChanged(newLanguage: string) {
+            imageSliderClient.getItems(newLanguage)
+                .then(this.setupSlider)
+                .catch(e => console.error('Error loading slideshow images', e));
         }
     }
 

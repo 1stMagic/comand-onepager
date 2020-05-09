@@ -1,12 +1,12 @@
 <template>
     <div v-bind:class="'grid-item_' + widgetClass">
         <h4>{{ label('headline_opening_hours') }}</h4>
-        <dl data-not-shorten="1">
+        <dl>
             <template v-for="day in days">
-                <dt v-bind:key="day.day + '_dt'">{{ day.day }}:</dt><dd v-bind:key="day.day + '_dd'">{{ day.fromTime }}&ndash;{{ day.tillTime }}</dd>
+                <dt v-bind:key="day.day + '_dt'">{{ label(day.day) }}:</dt><dd v-bind:key="day.day + '_dd'">{{ day.fromTime }}&ndash;{{ day.tillTime }}</dd>
             </template>
         </dl>
-        <p>samstags, sonntags und feiertags geschlossen!</p>
+        <p>{{ label('opening_hours_exceptions') }}</p>
     </div>
 </template>
 
@@ -21,13 +21,11 @@
         /* initialize class variables to use inside template above */
         days: OpeningHoursDay[] = [];
         widgetClass = "";
-        widgetHeadline = "";
 
         /* assign values from json file to class variables */
         created(): void {
             this.days = openingHours.days;
             this.widgetClass = openingHours.widgetClass;
-            this.widgetHeadline = openingHours.widgetHeadline;
         }
     }
 </script>

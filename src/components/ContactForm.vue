@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop } from 'vue-property-decorator';
+    import { Component, Prop, Watch } from 'vue-property-decorator';
     import InputSalutation          from '@/components/forms/InputSalutation.vue';
     import InputSurname             from '@/components/forms/InputSurname.vue';
     import InputEmail               from '@/components/forms/InputEmail.vue';
@@ -71,6 +71,17 @@ Form submit:
 
         private onValidate(): void {
             this.formData = Object.assign({}, this.validator.validate(this.formData));
+        }
+
+        @Watch('$store.state.currentLanguage')
+        private languageChanged(): void {
+            this.formData = Object.assign({}, {
+              salutation: 'M',
+              surname: {value: ''},
+              email: {value: ''},
+              message: {value: ''},
+              privacy: {value: false}
+          });
         }
     }
 </script>

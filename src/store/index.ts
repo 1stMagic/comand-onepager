@@ -51,7 +51,7 @@ export default new Vuex.Store({
   },
   actions: {
     loadSections(store) {
-        axios.get(process.env.BASE_URL + 'templates/pages/data/content_sections.json')
+        axios.get(process.env.BASE_URL + 'templates/pages/data/content_sections_' + store.state.currentLanguage + '.json')
             .then(response => store.commit('setSections', response.data))
             .catch(error => store.commit('setSections', []));
     },

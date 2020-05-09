@@ -8,8 +8,8 @@ class ImageSliderClient extends BaseClient {
         {maxWidth: 1023, path: 'medium'}
     ];
 
-    public async getItems(): Promise<SlideshowItem[]> {
-        const response = await axios.get(this.getUrl('/slideshow_wrapper.json'));
+    public async getItems(language): Promise<SlideshowItem[]> {
+        const response = await axios.get(this.getUrl('/slideshow_wrapper_' + language +'.json'));
         const items: SlideshowItem[] = response.data;
         items.forEach(item => this.prepareImages(item));
         return items;
