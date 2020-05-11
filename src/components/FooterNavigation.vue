@@ -3,20 +3,21 @@
         <h4>{{ label('headline_links') }}</h4>
         <ul>
             <template v-for="(link, index) in links">
-                <li v-bind:key="index"><a v-bind:href="link.href" v-bind:target="link.target" v-on:click.prevent="openFancybox(link)">{{ label(link.name) }}</a></li>
+                <li v-bind:key="index"><a v-bind:href="link.href" v-bind:target="link.target"
+                                          v-on:click.prevent="openFancybox(link)">{{ label(link.name) }}</a></li>
             </template>
         </ul>
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop } from 'vue-property-decorator';
-import {FooterNavigationLink} from '@/types';
-import BaseI18nComponent from "@/components/base/BaseI18nComponent";
-import footerNavigation from '@/assets/footer_navigation.json';
+    import {Component} from 'vue-property-decorator';
+    import {FooterNavigationLink} from '@/types';
+    import BaseI18nComponent from "@/components/base/BaseI18nComponent";
+    import footerNavigation from '@/assets/footer_navigation.json';
 
-@Component
-export default class FooterNavigation extends BaseI18nComponent {
+    @Component
+    export default class FooterNavigation extends BaseI18nComponent {
         /* initialize class variables to use inside template above */
         links: FooterNavigationLink[] = [];
         widgetClass = "";
@@ -30,5 +31,5 @@ export default class FooterNavigation extends BaseI18nComponent {
         openFancybox(link: FooterNavigationLink) {
             this.$store.dispatch('loadFancyboxContent', {url: link.fancyboxContentURL, img: false}); // call action in /store/index.ts
         }
-}
+    }
 </script>

@@ -1,25 +1,24 @@
 <template>
-     <div class="grid-main-item_header-wrapper editmode_wrapper" id="header_wrapper">
-           <header class="grid-container-create-columns">
-                <div class="grid-item_logo">
-                    <a id="logo" href="./" title="To homepage">
-                        <img src="../assets/logo.svg" alt="Company logo" />
-                    </a>
-                </div>
-                <navigation-wrapper />
-           </header>
-     </div>
+    <div class="grid-main-item_header-wrapper editmode_wrapper" id="header_wrapper">
+        <header class="grid-container-create-columns">
+            <div class="grid-item_logo">
+                <a id="logo" href="./" title="To homepage">
+                    <img src="../assets/logo.svg" alt="Company logo"/>
+                </a>
+            </div>
+            <navigation-wrapper/>
+        </header>
+    </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import NavigationWrapper from '@/components/NavigationWrapper.vue'; /* @ == root */
+    import {Component, Vue} from 'vue-property-decorator';
+    import NavigationWrapper from '@/components/NavigationWrapper.vue'; /* @ == root */
 
-@Component ({
-    components: {NavigationWrapper}
-})
+    @Component({
+        components: {NavigationWrapper}
+    })
+    export default class HeaderWrapper extends Vue {
 
-export default class HeaderWrapper extends Vue {
-
-}
+    }
 </script>

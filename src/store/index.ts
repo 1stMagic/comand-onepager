@@ -53,14 +53,14 @@ export default new Vuex.Store({
     loadSections(store) {
         axios.get(process.env.BASE_URL + 'templates/pages/data/content_sections_' + store.state.currentLanguage + '.json')
             .then(response => store.commit('setSections', response.data))
-            .catch(error => store.commit('setSections', []));
+            .catch(() => store.commit('setSections', []));
     },
 
     loadFancyboxContent(store, content) {
         if (!content.img) {
             axios.get(content.url)
                 .then(response => store.commit('setFancybox', {status: true, img: false, content: response.data})) // if success
-                .catch(error => store.commit('setFancybox', {status: false, img: false})); // if error
+                .catch(() => store.commit('setFancybox', {status: false, img: false})); // if error
             }  else {
                 store.commit('setFancybox', {status: true, img: true, images: content.urls, imgIndex: content.imgIndex});
         }

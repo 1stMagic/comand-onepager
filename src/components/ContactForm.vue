@@ -87,7 +87,7 @@ Form submit:
               email: {value: ''},
               message: {value: ''},
               privacy: {value: false}
-          });
+          } as ContactFormData);
         }
     }
 </script>

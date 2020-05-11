@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop } from 'vue-property-decorator';
+    import {Component} from 'vue-property-decorator';
     import {OpeningHoursDay} from '@/types';
     import BaseI18nComponent from "@/components/base/BaseI18nComponent";
     import openingHours from '@/assets/opening_hours.json';

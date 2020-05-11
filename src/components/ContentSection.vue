@@ -5,17 +5,17 @@
             <h2>{{ headline }}</h2>
             <div v-if="imgpath" class="grid-container-create-columns">
                 <div class="grid-small-item">
-                    <img v-bind:src="imgpath" alt="image 1" />
-                </div >
+                    <img v-bind:src="imgpath" alt="image 1"/>
+                </div>
                 <div class="grid-large-item">
                     <div v-html="content"></div>
                 </div>
             </div>
             <div v-else-if="images" v-bind:class="{'grid-container-create-columns': images.length < 5}">
-                <thumbnail-scroller v-if="images.length > 4" v-bind:thumbnail-images="images" />
+                <thumbnail-scroller v-if="images.length > 4" v-bind:thumbnail-images="images"/>
                 <div v-else v-for="(image, index) in images" v-bind:key="index" class="grid-small-item">
                     <figure>
-                        <img v-bind:src="image.imgPath" v-bind:alt="image.alt" />
+                        <img v-bind:src="image.imgPath" v-bind:alt="image.alt"/>
                         <figcaption v-if="image.figcaption">{{ image.figcaption }}</figcaption>
                     </figure>
                 </div>
@@ -26,22 +26,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import ThumbnailScroller from '@/components/ThumbnailScroller.vue';
-import BaseI18nComponent from "@/components/base/BaseI18nComponent";
+    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import ThumbnailScroller from '@/components/ThumbnailScroller.vue';
 
-@Component ({
-              components: {
-                  ThumbnailScroller
-              }
-          })
+    @Component({
+        components: {
+            ThumbnailScroller
+        }
+    })
 
-export default class ContentSection extends Vue {
-    @Prop() id!: string;
-    @Prop() headline!: string;
-    @Prop() imgpath!: string;
-    @Prop() images!: string[];
-    @Prop() content!: string;
-}
+    export default class ContentSection extends Vue {
+        @Prop() id!: string;
+        @Prop() headline!: string;
+        @Prop() imgpath!: string;
+        @Prop() images!: string[];
+        @Prop() content!: string;
+    }
 
 </script>
