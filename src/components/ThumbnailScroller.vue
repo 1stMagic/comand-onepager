@@ -31,7 +31,18 @@ export default class ThumbnailScroller extends BaseI18nComponent {
         /* initialize class variables to use inside template above */
         @Prop() thumbnailImages!: ContentSectionImage[]; // allow component to receive thumbnailImages as property via v-bind:thumbnail-images attribute
 
-        thumbnails: ContentSectionImage[] = [...this.thumbnailImages]; // create copy of thumbnailImages and assign this.thumbnailImages array entries
+        //thumbnails: ContentSectionImage[] = [...this.thumbnailImages]; // create copy of thumbnailImages and assign this.thumbnailImages array entries
+        thumbnails!: ContentSectionImage[];
+
+        created(): void {
+        console.log('Created: ' + this.thumbnailImages[0].figcaption);
+            this.thumbnails = [...this.thumbnailImages];
+        }
+
+        updated(): void {
+        console.log('Updated: ' + this.thumbnailImages[0].figcaption);
+            this.thumbnails = [...this.thumbnailImages];
+        }
 
         next() {
             const thumbnail = this.thumbnails.shift(); // remove first element of array
@@ -51,6 +62,4 @@ export default class ThumbnailScroller extends BaseI18nComponent {
             this.$store.dispatch('loadFancyboxContent', { urls: this.thumbnails, img: true, imgIndex: index}); // call action in /store/index.ts
         }
 }
-
-
 </script>

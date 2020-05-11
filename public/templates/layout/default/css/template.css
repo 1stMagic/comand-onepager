@@ -452,9 +452,14 @@ nav > ul > li:last-child {
     padding-right: 0;
 }
 
+#headline_wrapper {
+    padding: calc(var(--default-padding) * 5) 0;
+}
+
 #headline_wrapper h1 {
-    font-size: 4rem;
+    font-size: 5rem;
     text-align: center;
+    text-transform: uppercase;
 }
 
 @media only screen and (max-width: 1023px) {

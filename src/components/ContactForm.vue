@@ -1,16 +1,22 @@
 <template>
-    <form v-bind:action="formAction" v-on:submit="onSubmit">
-        <div class="fieldset grid-container-create-columns">
-            <input-salutation v-model="formData.salutation" />
-            <div class="grid-container-create-columns" data-columns-large="2">
-                <input-surname v-model="formData.surname.value" :error="formData.surname.error" :error-message="formData.surname.errorMessage" @validate="onValidate" />
-                <input-email v-model="formData.email.value" :error="formData.email.error" :error-message="formData.email.errorMessage" @validate="onValidate" />
-            </div>
-            <input-message v-model="formData.message.value" :error="formData.message.error" :error-message="formData.message.errorMessage" @validate="onValidate" />
-            <data-privacy v-model="formData.privacy.value" :error="formData.privacy.error" :error-message="formData.privacy.errorMessage" @validate="onValidate" />
-        </div>
-        <form-submit />
-    </form>
+    <div class="section_wrapper">
+        <a id="anchor_section4"></a>
+        <section>
+            <h2>{{ label('form_headline') }}</h2>
+            <form v-bind:action="formAction" v-on:submit="onSubmit">
+                <div class="fieldset grid-container-create-columns">
+                    <input-salutation v-model="formData.salutation" />
+                    <div class="grid-container-create-columns" data-columns-large="2">
+                        <input-surname v-model="formData.surname.value" :error="formData.surname.error" :error-message="formData.surname.errorMessage" @validate="onValidate" />
+                        <input-email v-model="formData.email.value" :error="formData.email.error" :error-message="formData.email.errorMessage" @validate="onValidate" />
+                    </div>
+                    <input-message v-model="formData.message.value" :error="formData.message.error" :error-message="formData.message.errorMessage" @validate="onValidate" />
+                    <data-privacy v-model="formData.privacy.value" :error="formData.privacy.error" :error-message="formData.privacy.errorMessage" @validate="onValidate" />
+                </div>
+                <form-submit />
+            </form>
+        </section>
+    </div>
 </template>
 
 <script lang="ts">

@@ -16,13 +16,8 @@
                         v-bind:content="section.content"
                         v-bind:imgpath="section.imgPath"
                         v-bind:images="section.images" />
-                    <div class="section_wrapper">
-                        <a id="anchor_section4"></a>
-                        <section>
-                            <h2>Headline Section 4</h2>
-                            <contact-form form-action="#" />
-                        </section>
-                    </div>
+
+                        <contact-form form-action="#" />
                 </div>
                 <!-- end main content -->
             </main>
