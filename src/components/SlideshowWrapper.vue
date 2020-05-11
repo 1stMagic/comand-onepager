@@ -95,7 +95,7 @@
         private setupSlider(items: SlideshowItem[]): void {
             this.items = items;
             this.preload();
-            if (this.autoplay) {
+            if (this.autoplay && this.hnd === null) {
                 this.hnd = window.setInterval(() => this.pause || this.showNextItem(), this.autoplayInterval);
             }
         }
