@@ -15,7 +15,7 @@
     "form_error_invalid_email": "Please type in a valid e-mail-address!",
     "form_error_invalid_message": "Please type in your message!",
     "no_private_policy": "You have to accept the private policy to send the message!",
-    "data_privacy": "I accept handling and saving of my personal data a mentioned in the <a href='#' data-fancybox-content-url='/content/datenschutzerklaerung.html #page_content' class='fancybox' data-fancybox='fancybox'>private policy</a>.",
+    "data_privacy": "I accept handling and saving of my personal data a mentioned in the <a href='/content/data-privacy-en.html' class='fancybox'>private policy</a>.",
     "send": "Send message",
     "mandatory": "Mandatory fields",
     "headline_links": "Links",
@@ -37,7 +37,8 @@
     "previous": "Previous",
     "next": "Next",
     "print_in_color": "Print in color",
-    "print_in_grayscale": "Print in grayscale"
+    "print_in_grayscale": "Print in grayscale",
+    "submit": "Submit"
   },
   "de": {
     "title": "Titel",
@@ -55,7 +56,7 @@
     "form_error_invalid_email": "Bitte geben Sie eine gültige E-Mail-Adresse an!",
     "form_error_invalid_message": "Bitte geben Sie Ihre Nachricht ein!",
     "no_private_policy": "Sie müssen der Datenschutzbestimmung zustimmen, um die Nachricht zu senden!",
-    "data_privacy": "Ich stimme der Verarbeitung und Speicherung von personenbezogenen Daten gemäß  <a href='#' data-fancybox-content-url='/content/datenschutzerklaerung.html #page_content' class='fancybox' data-fancybox='fancybox'>Datenschutzerklärung</a> zu.",
+    "data_privacy": "Ich stimme der Verarbeitung und Speicherung von personenbezogenen Daten gemäß  <a href='/content/data-privacy-de.html' class='fancybox'>Datenschutzerklärung</a> zu.",
     "send": "Nachricht versenden",
     "mandatory": "Pflichtfelder",
     "headline_links": "Links",
@@ -77,6 +78,7 @@
     "previous": "Zurück",
     "next": "Weiter",
     "print_in_color": "In Farbe drucken",
-    "print_in_grayscale": "In Graustufen drucken"
+    "print_in_grayscale": "In Graustufen drucken",
+    "submit": "Senden"
   }
 }

@@ -1,19 +1,65 @@
 <template>
-    <div class="section_wrapper">
-        <a id="anchor_section4"></a>
+    <div class="section-wrapper">
+        <a id="anchor-section4"></a>
         <section>
             <h2>{{ label('form_headline') }}</h2>
-            <form v-bind:action="formAction" v-on:submit="onSubmit">
+            <form :action="formAction" v-on:submit="onSubmit" novalidate="novalidate">
                 <div class="fieldset grid-container-create-columns">
-                    <input-salutation v-model="formData.salutation" />
-                    <div class="grid-container-create-columns" data-columns-large="2">
-                        <input-surname v-model="formData.surname.value" :error="formData.surname.error" :error-message="formData.surname.errorMessage" @validate="onValidate" />
-                        <input-email v-model="formData.email.value" :error="formData.email.error" :error-message="formData.email.errorMessage" @validate="onValidate" />
+                    <div class="input-wrapper">
+                        <CmdFormElement element="input" type="radio"
+                                     :labelText="label('salutation_male')"
+                                     name="salutation"
+                                     inputValue="M"
+                                     v-model="formData.salutation"
+                                     @validate="onValidate" />
+
+                        <CmdFormElement element="input" type="radio"
+                                     :labelText="label('salutation_female')"
+                                     name="salutation"
+                                     v-model="formData.salutation"
+                                     @validate="onValidate" />
                     </div>
-                    <input-message v-model="formData.message.value" :error="formData.message.error" :error-message="formData.message.errorMessage" @validate="onValidate" />
-                    <data-privacy v-model="formData.privacy.value" :error="formData.privacy.error" :error-message="formData.privacy.errorMessage" @validate="onValidate" />
+                    <div class="flex-container-with-gap">
+                        <CmdFormElement element="input" type="text"
+                                        iconClass="icon-user-profile"
+                                      :labelText="label('last_name')"
+                                      :tooltipText="formData.surname.error ? formData.surname.errorMessage :  'Type your surname!'"
+                                      required="required"
+                                      :placeholder="label('last_name')"
+                                      v-model="formData.surname.value"
+                                      :status="formData.surname.error ? 'error' : ''"
+                                      @validate="onValidate" />
+
+                        <CmdFormElement element="input" type="email"
+                                        iconClass="icon-mail"
+                                      :labelText="label('email')"
+                                      :placeholder="label('email')"
+                                      required="required"
+                                      v-model="formData.email.value"
+                                      :status="formData.email.error ? 'error' : ''"
+                                      :tooltipText="formData.email.error ? formData.email.errorMessage :  'Type your email!'"
+                                      @validate="onValidate" />
+                    </div>
+                    <CmdFormElement element="textarea"
+                                  :labelText="label('message')"
+                                  :placeholder="label('message')"
+                                  required="required"
+                                  v-model="formData.message.value"
+                                  :status="formData.message.error ? 'error' : ''"
+                                    :tooltipText="formData.message.error ? formData.message.errorMessage :  'Type your message!'"
+                                  @validate="onValidate" />
+
+                    <CmdFormElement element="input" type="checkbox"
+                                  v-model="formData.privacy.value"
+                                  :status="formData.privacy.error ? 'error' : ''"
+                                 @validate="onValidate">
+                        <span v-html="label('data_privacy')"></span>
+                        <!-- I accept handling and saving of my personal data a mentioned in the <a href="/content/data-privacy-en.html" @click.prevent="openDataPrivacy($event.target.href)">private policy</a>.-->
+                    </CmdFormElement>
                 </div>
-                <form-submit />
+                <div class="button-wrapper">
+                    <CmdFormElement element="button" type="submit" :buttonText="label('submit')" :buttonIcon="{iconClass : 'icon-check', iconPosition: 'before'}" />
+                </div>
             </form>
         </section>
     </div>
@@ -21,24 +67,15 @@
 
 <script lang="ts">
     import { Component, Prop, Watch } from 'vue-property-decorator';
-    import InputSalutation          from '@/components/forms/InputSalutation.vue';
-    import InputSurname             from '@/components/forms/InputSurname.vue';
-    import InputEmail               from '@/components/forms/InputEmail.vue';
-    import InputMessage             from '@/components/forms/InputMessage.vue';
-    import DataPrivacy              from '@/components/forms/DataPrivacy.vue';
-    import FormSubmit               from '@/components/forms/FormSubmit.vue';
+    import { CmdFormElement } from 'comand-ui-kit'
     import BaseI18nComponent from "@/components/base/BaseI18nComponent";
     import {ContactFormData} from "@/types";
     import {ContactFormValidator} from "@/util/ContactFormValidator";
+    import { openFancyBox } from 'comand-ui-kit'
 
     @Component ({
         components: {
-            InputSalutation,
-            InputSurname,
-            InputEmail,
-            InputMessage,
-            DataPrivacy,
-            FormSubmit
+            CmdFormElement
         }
     })
     export default class ContactForm extends BaseI18nComponent {
@@ -53,11 +90,15 @@
             privacy: {value: false}
         };
 
+        private mounted() {
+            this.labelsChanged()
+        }
+
         private onSubmit(e: Event): void {
             this.onValidate();
 
             this.formData = Object.assign({}, this.validator.validatePrivacy(this.formData));
-
+    console.log(this.formData)
             if (this.formData.error) {
                 e.preventDefault();
                 return;
@@ -79,6 +120,10 @@ Form submit:
             this.formData = Object.assign({}, this.validator.validate(this.formData));
         }
 
+        private openDataPrivacy (url: string): void {
+            openFancyBox({url})
+        }
+
         @Watch('$store.state.currentLanguage')
         private languageChanged(): void {
             this.formData = Object.assign({}, {
@@ -87,7 +132,18 @@ Form submit:
               email: {value: ''},
               message: {value: ''},
               privacy: {value: false}
-          } as ContactFormData);
+            } as ContactFormData);
+            this.labelsChanged()
+        }
+
+        @Watch('$store.state.labels')
+        private labelsChanged(): void {
+            this.$nextTick(() => {
+                this.$el.querySelectorAll('.fancybox').forEach(link => link.addEventListener('click', e => {
+                    e.preventDefault()
+                    this.openDataPrivacy(link.getAttribute('href'))
+                }))
+            })
         }
     }
 </script>

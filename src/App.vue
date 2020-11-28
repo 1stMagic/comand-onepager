@@ -1,48 +1,55 @@
 <template>
-    <!-- begin page_wrapper -->
-    <div id="page_wrapper">
-        <a id="anchor_back_to_top_wrapper"></a>
-        <!-- begin outer_wrapper -->
-        <div class="grid-main-container" id="outer_wrapper">
-            <header-wrapper/>
-            <inner-wrapper/>
-            <footer-wrapper/>
-            <!-- begin copyright DO NOT REMOVE -->
-            <div class="grid-main-item_copyright-wrapper">
-                <a href="http://www.comand-cms.com" target="_blank" lang="en" title="CoManD-Website">&copy;
-                    CoManD-OnePager</a>
-            </div>
-            <!-- end copyright -->
-            <back-to-top/>
+    <!-- begin page-wrapper -->
+    <div id="page-wrapper">
+        <a id="anchor-back-to-top"></a>
+        <!-- begin outer-wrapper -->
+        <div class="grid-main-container" id="outer-wrapper">
+            <SiteHeader :navigationData="navigationData" />
+            <InnerWrapper />
+            <SiteFooter />
+            <!-- begin copyright-wrapper DO NOT REMOVE -->
+            <CopyrightWrapper htmlClass="grid-main-item-copyright-wrapper" />
+            <!-- end copyright-wrapper DO NOT REMOVE -->
+            <CmdBackToTopButton href="#anchor-back-to-top" iconClass="icon-arrow_up" tooltip="Back to top" />
         </div>
-        <!-- end outer_wrapper -->
-        <fancy-box/>
+        <!-- end outer-wrapper -->
     </div>
-    <!-- end page_wrapper -->
+    <!-- end page-wrapper -->
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import HeaderWrapper from '@/components/HeaderWrapper.vue'; /* @ == root */
+    import SiteHeader from '@/components/SiteHeader.vue';
     import InnerWrapper from '@/components/InnerWrapper.vue';
-    import FooterWrapper from '@/components/FooterWrapper.vue';
-    import FancyBox from '@/components/FancyBox.vue';
-    import BackToTop from '@/components/BackToTop.vue';
+    import SiteFooter from '@/components/SiteFooter.vue';
+    import CopyrightWrapper from '@/components/CopyrightWrapper.vue';
+    import {CmdFancyBox} from 'comand-ui-kit'
+    import {CmdBackToTopButton} from 'comand-ui-kit'
+
+    import navigationData from '@/assets/data/navigation-data.json';
 
     @Component({
         components: {
-            HeaderWrapper,
+            SiteHeader,
             InnerWrapper,
-            FooterWrapper,
-            FancyBox,
-            BackToTop
+            SiteFooter,
+            CopyrightWrapper,
+            CmdFancyBox,
+            CmdBackToTopButton
+        },
+        data() {
+            return {
+                navigationData
+            }
         }
     })
+
     export default class App extends Vue {
+        private sf = false
+
         created(): void {
             this.$store.dispatch('loadLabels');
             this.$store.dispatch('loadSections');
         }
     }
-
 </script>

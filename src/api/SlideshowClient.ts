@@ -9,7 +9,7 @@ class SlideshowClient extends BaseClient {
     ];
 
     public async getItems(language: string): Promise<SlideshowItem[]> {
-        const response = await axios.get(this.getUrl('/slideshow_wrapper_' + language +'.json'));
+        const response = await axios.get(this.getUrl('/slideshow-wrapper-' + language +'.json'));
         const items: SlideshowItem[] = response.data;
         items.forEach(item => this.prepareImages(item));
         return items;

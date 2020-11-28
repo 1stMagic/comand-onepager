@@ -1,11 +1,13 @@
 type LanguageLabels = { [key: string]: string };
 type Labels = { [key: string]: LanguageLabels };
+type FooterNavigationLinks = { [key: string]: FooterNavigationLink[] };
 type Gender = 'M' | 'F';
 type ValidationResult = [boolean, string];
 
 interface ContentSectionImage {
     imgId: number;
-    imgPath: string;
+    srcImageSmall: string;
+    srcImageLarge: string;
     alt: string;
     figcaption: string;
 }
@@ -112,5 +114,6 @@ export {
     OpeningHoursDay,
     ContactData,
     FooterNavigationType,
+    FooterNavigationLinks,
     FooterNavigationLink
 };

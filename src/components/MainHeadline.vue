@@ -1,5 +1,5 @@
 <template>
-    <div class="section_wrapper" id="headline_wrapper">
+    <div class="section-wrapper" id="main-headline">
         <section>
             <h1>{{ label('title') }}</h1>
         </section>
@@ -14,3 +14,16 @@
     export default class MainHeadline extends BaseI18nComponent {
     }
 </script>
+
+<style lang="scss">
+#main-headline{
+    padding: calc(var(--default-padding) * 5) 0;
+
+    h1 {
+        font-size: 5rem;
+        text-align: center;
+        text-transform: uppercase;
+        margin-bottom: 0;
+    }
+}
+</style>

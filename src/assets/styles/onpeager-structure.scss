@@ -1,0 +1,288 @@
+@import "comand-ui-kit/src/assets/styles/variables.scss";
+
+/* begin table of contents --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/*
+- VARIABLES ------------------------
+
+- BASIC STRUCTURE ------------------------
+	- page containers
+	- css-grid
+	- header
+	- main
+	- footer
+	- hyperlinks
+
+- MEDIA QUERIES ------------------------
+  - styles for medium screens
+  - styles for small screens
+  - styles for print only
+*/
+/* end table of contents --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* ---------------------------------------------- BEGIN VARIABLES -------------------------------------------------- */
+html {
+	--grid-small-span: 4; /* default column span smaller part */
+	--grid-large-span: 8; /* default column span larger part */
+}
+/* ---------------------------------------------- END VARIABLES -------------------------------------------------- */
+
+/* ---------------------------------------------- BEGIN BASIC STRUCTURE -------------------------------------------------- */
+/* begin page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
+#header-wrapper header, nav, .section-wrapper:not(#page-content) section, .main-headline, #site-footer footer, #main-headline {
+	max-width: 128rem;
+	margin: 0 auto;
+	padding-left: var(--default-padding);
+    padding-right: var(--default-padding);
+}
+
+#navigation-wrapper {
+	grid-column: span var(--grid-large-span);
+	display: flex;
+	justify-content: flex-end;
+
+	nav {
+		margin-right: 0;
+
+		> ul {
+			li:not(:first-child) {
+				margin-left: var(--default-margin);
+			}
+		}
+	}
+}
+
+#page-wrapper {
+	height: 100%;
+}
+
+#outer-wrapper {
+	min-height: 100%;
+}
+
+#content-wrapper {
+	min-width: 0; /* required to avoid grid expand by its children (i.e. thumbnail-scroller) */
+}
+
+.section-wrapper {
+	&:not(#main-headline) {
+		padding: calc(var(--default-padding) * 6) 0;
+	}
+}
+/* end page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin css-grid --------------------------------------------------------------------------------------------------------------------------------------------------- */
+.grid-main-container {
+    grid-template-areas:
+    	"header-wrapper"
+    	"inner-wrapper"
+    	"footer-wrapper"
+		"copyright-wrapper";
+	grid-template-rows:
+		min-content
+		auto
+		min-content
+		min-content;
+}
+
+.grid-main-item-inner-wrapper {
+	grid-area: inner-wrapper;
+	display: grid;
+}
+
+.grid-main-item-footer-wrapper {
+	grid-area: footer-wrapper;
+}
+
+.grid-main-item-copyright-wrapper {
+	grid-area: copyright-wrapper;
+}
+
+#breadcrumb-wrapper + .section-wrapper, #main-headline {
+	padding: var(--default-padding) 0;
+	width: 100%;
+}
+
+/* begin header --------------------------------------------------------------------------------------------------------------------------------------------------- */
+#header-wrapper  {
+	header {
+		grid-template-areas:
+		"logo navigation";
+	}
+}
+/* end header --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin main --------------------------------------------------------------------------------------------------------------------------------------------------- */
+.grid-item-page-content {
+	grid-area: page-content;
+}
+
+main {
+	ul, ol {
+		list-style-position: inside; /* list-style-position for all list in main */
+	}
+}
+/* end main --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin footer --------------------------------------------------------------------------------------------------------------------------------------------------- */
+.grid-item-language-support {
+	grid-area: language-support;
+}
+
+.grid-item-footer-navigation {
+	grid-area: footer-navigation;
+    order: 1;
+}
+
+footer .grid-item-opening-hours {
+	grid-area: opening-hours;
+    order: 2;
+}
+
+.grid-item-opening-hours p:last-child {
+	margin: 0;
+}
+
+.grid-item-address {
+	grid-area: address;
+    order: 3;
+}
+
+#site-footer {
+	padding: var(--grid-gap) 0;
+
+	footer {
+		grid-template-areas:
+				"footer-navigation opening-hours address";
+
+		&.language-support {
+			grid-template-areas:
+				"language-support language-support language-support"
+				"footer-navigation opening-hours address";
+		}
+
+	}
+}
+/* end footer --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
+a {
+	& > span[class*="icon"] {
+		& ~ span {
+			margin-left: calc(var(--default-margin) / 2);
+		}
+	}
+}
+/* end hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------- END BASIC STRUCTURE -------------------------------------------------- */
+
+/* begin styles for smedium screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
+@media only screen and (max-width: $medium-max-width) {
+
+	html {
+		--grid-small-span: 3; /* default column span smaller part */
+		--grid-large-span: 3; /* default column span larger part */
+	}
+
+	#header-wrapper header {
+		grid-template-areas: "logo navigation";
+		grid-auto-rows: auto; /* items should be as large as their content */
+	}
+	
+	#header-wrapper {
+		padding-bottom: var(--grid-gap);
+	}
+
+	.grid-item-opening-hours-open-text {
+		align-self: center;
+	}
+
+	#site-footer [class*="grid-item"] {
+		grid-row-start: auto;
+	}
+
+	#site-footer footer {
+		grid-template-areas:
+			"footer-navigation opening-hours"
+			"address address";
+	}
+
+	footer li {
+    	margin-bottom: calc(var(--default-margin) * 2);
+	}
+}
+/* end styles for smedium screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin styles for ssmall screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
+@media only screen and (max-width: $small-max-width) {
+	html {
+		--grid-small-span: 4; /* default column span smaller part */
+		--grid-large-span: 4; /* default column span larger part */
+	}
+
+	#header-wrapper header {
+		grid-template-areas:
+			"logo logo"
+			"navigation box-site-search";
+	}
+
+	#logo img {
+		max-width: 80%;
+	}
+
+	body, html {
+		height: auto;
+	}
+
+	.section-wrapper {
+		padding: calc(var(--default-padding) * 2) 0;
+	}
+	
+	#site-footer a {
+		text-decoration: underline;
+	}
+	
+	#site-footer a:active {
+		text-decoration: none;
+	}
+
+	#site-footer footer {
+		grid-template-areas:
+		"footer-navigation"
+		"opening-hours"
+		"address";
+	}
+	
+	.grid-item-address dd {
+		margin-bottom: var(--default-margin);
+	}
+
+    #logo {
+    	margin: 0 auto; /* center logo for small devices */
+    }
+
+	.grid-item-news-text-wrapper a.link-to-content {
+		align-self: center;
+	}
+
+    a[href^="tel"] {
+        text-decoration: underline;
+    }
+}
+/* end styles for small screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin styles for print only --------------------------------------------------------------------------------------------------------------------------------------------------- */
+@media only print {
+    #header-wrapper, #navigation-wrapper, #slideshow-wrapper, #breadcrumbs-wrapper, .button, #back-to-top-button, #site-footer, #copyright-wrapper {
+        display: none !important;
+    }
+
+    #content {
+        width: 180mm;
+    }
+	
+	body, .section-wrapper {
+		background: none !important;
+	}
+}
+/* end styles for print only --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------- END MEDIA QUERIES AND BROWSER SPECIFIC STYLES -------------------------------------------------- */
