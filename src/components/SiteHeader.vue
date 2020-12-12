@@ -1,7 +1,8 @@
 <template>
-    <div class="grid-main-item-header-wrapper sticky" id="header-wrapper">
+    <div :class="['grid-main-item-header-wrapper', 'sticky', {'top-header-navigation': topHeaderNavigationData}]" id="header-wrapper">
+        <CmdTopHeaderNavigation :topHeaderNavigationData="topHeaderNavigationData" v-if="topHeaderNavigationData" />
         <header class="grid-container-create-columns">
-            <Logo />
+            <CmdLogo tooltip="To homepage" altText="Company logo" :pathLogo="require('@/assets/images/logo.svg')" />
             <CmdMainNavigation :navigationEntries="navigationData"
                             :closeOffcanvas="{'text': 'Close navigation', 'iconClass': 'icon-cancel'}" />
         </header>
@@ -10,13 +11,18 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import Logo from '@/components/Logo.vue'
+    import {CmdLogo} from 'comand-ui-kit'
+    import {CmdTopHeaderNavigation} from 'comand-ui-kit'
     import {CmdMainNavigation} from 'comand-ui-kit'
+
+    import topHeaderNavigationData from '@/assets/data/top-header-navigation-data.json';
+    import navigationData from "@/assets/data/navigation-data.json";
 
     @Component({
         components: {
-            Logo,
-            CmdMainNavigation
+            CmdLogo,
+            CmdMainNavigation,
+            CmdTopHeaderNavigation
         },
         props: {
             navigationData: {
@@ -26,7 +32,12 @@
         }
     })
     export default class SiteHeader extends Vue {
-
+        data() {
+            return {
+                navigationData,
+                topHeaderNavigationData
+            }
+        }
     }
 </script>
 
@@ -46,6 +57,10 @@
         right: 0;
         top: 0;
         padding: calc(var(--default-padding) * 2) 0;
+    }
+
+    &.top-header-navigation {
+        padding-top: 0;
     }
 
     header {

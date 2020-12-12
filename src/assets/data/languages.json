@@ -1,0 +1,26 @@
+[
+  {
+    "iso2": "de",
+    "name": "Deutsch",
+    "tooltip": "Sprache zu deutsch wechseln",
+    "link": {
+      "type": "router",
+      "name": "home",
+      "params": {
+        "lang": "de"
+      }
+    }
+  },
+  {
+    "iso2": "en",
+    "name": "English",
+    "tooltip": "Switch language to English",
+    "link": {
+      "type": "router",
+      "name": "home",
+      "params": {
+        "lang": "en"
+      }
+    }
+  }
+]

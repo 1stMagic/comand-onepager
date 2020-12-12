@@ -17,6 +17,11 @@
                                      :imgpath="section.imgPath"
                                      :images="section.images"/>
                     <ContactForm form-action="#"/>
+                    <div class="section-wrapper">
+                        <section>
+                            <CmdContentFooter :shareButtons="shareButtons" />
+                        </section>
+                    </div>
                 </div>
                 <!-- end main content -->
             </main>
@@ -36,13 +41,22 @@
     import ContactForm from '@/components/ContactForm.vue';
     import {imageSliderClient} from "@/api/SlideshowClient";
     import {SlideshowItem} from "@/types";
+    import {CmdContentFooter} from 'comand-ui-kit'
+
+    import shareButtons from '@/assets/data/share-buttons.json';
 
     @Component({
         components: {
+            CmdContentFooter,
             CmdSlideshow,
             MainHeadline,
             ContentSection,
             ContactForm
+        },
+        data() {
+            return {
+                shareButtons
+            }
         }
     })
     export default class InnerWrapper extends Vue {

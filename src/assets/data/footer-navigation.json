@@ -1,48 +1,23 @@
-{
-  "widgetClass": "footer-navigation",
-  "links": {
-    "de": [
-      {
-        "name": "link_contact",
-        "href": "#anchor-section4",
-        "target": "",
-        "fancybox": false
-      },
-      {
-        "name": "link_private_policy",
-        "href": "/content/data-privacy-de.html",
-        "target": "",
-        "fancybox": true
-      },
-      {
-        "name": "link_website",
-        "href": "http://www.comand-cms.com",
-        "target": "_blank",
-        "fancybox": false
-      }
-    ],
-    "en": [
-      {
-        "name": "link_contact",
-        "href": "#anchor-section4",
-        "target": "",
-        "fancybox": false
-      },
-      {
-        "name": "link_private_policy",
-        "href": "/content/data-privacy-en.html",
-        "target": "",
-        "fancybox": true
-      },
-      {
-        "name": "link_website",
-        "href": "http://www.comand-cms.com",
-        "target": "_blank",
-        "fancybox": false
-      }
-    ]
+[
+  {
+    "name": "Contact",
+    "path": "#anchor-section4",
+    "target": "",
+    "fancybox": false
+  },
+  {
+    "name": "Private policy",
+    "path": "/content/data-privacy-en.html",
+    "target": "",
+    "fancybox": true
+  },
+  {
+    "name": "CoManD-Website",
+    "path": "http://www.comand-cms.com",
+    "target": "_blank",
+    "fancybox": false
   }
-}
+]
 
 
 

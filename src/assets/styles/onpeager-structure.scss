@@ -21,14 +21,15 @@
 
 /* ---------------------------------------------- BEGIN VARIABLES -------------------------------------------------- */
 html {
-	--grid-small-span: 4; /* default column span smaller part */
-	--grid-large-span: 8; /* default column span larger part */
+	--grid-small-span: 4; /* overwrite from framework.css */
+	--grid-large-span: 8; /* overwrite from framework.css */
+	--box-shadow-color: #333; /* overwrite from framework.css */
 }
 /* ---------------------------------------------- END VARIABLES -------------------------------------------------- */
 
 /* ---------------------------------------------- BEGIN BASIC STRUCTURE -------------------------------------------------- */
 /* begin page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
-#header-wrapper header, nav, .section-wrapper:not(#page-content) section, .main-headline, #site-footer footer, #main-headline {
+#header-wrapper header, .cmd-top-header-navigation > ul, nav, .section-wrapper:not(#page-content) section, .main-headline, #site-footer footer, #main-headline {
 	max-width: 128rem;
 	margin: 0 auto;
 	padding-left: var(--default-padding);
@@ -76,7 +77,7 @@ html {
     	"header-wrapper"
     	"inner-wrapper"
     	"footer-wrapper"
-		"copyright-wrapper";
+		"copyright-information";
 	grid-template-rows:
 		min-content
 		auto
@@ -93,21 +94,14 @@ html {
 	grid-area: footer-wrapper;
 }
 
-.grid-main-item-copyright-wrapper {
-	grid-area: copyright-wrapper;
-}
-
 #breadcrumb-wrapper + .section-wrapper, #main-headline {
 	padding: var(--default-padding) 0;
 	width: 100%;
 }
 
 /* begin header --------------------------------------------------------------------------------------------------------------------------------------------------- */
-#header-wrapper  {
-	header {
-		grid-template-areas:
-		"logo navigation";
-	}
+.cmd-logo {
+	grid-column: span var(--grid-small-span);
 }
 /* end header --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
@@ -124,35 +118,17 @@ main {
 /* end main --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 /* begin footer --------------------------------------------------------------------------------------------------------------------------------------------------- */
-.grid-item-language-support {
-	grid-area: language-support;
-}
-
-.grid-item-footer-navigation {
-	grid-area: footer-navigation;
-    order: 1;
-}
-
-footer .grid-item-opening-hours {
-	grid-area: opening-hours;
-    order: 2;
-}
-
-.grid-item-opening-hours p:last-child {
-	margin: 0;
-}
-
-.grid-item-address {
-	grid-area: address;
-    order: 3;
-}
-
 #site-footer {
 	padding: var(--grid-gap) 0;
 
 	footer {
-		grid-template-areas:
-				"footer-navigation opening-hours address";
+		[class*="cmd-"] {
+			grid-column: span var(--grid-small-span);
+
+			&.cmd-switch-language {
+				grid-column: span var(--grid-columns);
+			}
+		}
 
 		&.language-support {
 			grid-template-areas:
@@ -175,7 +151,7 @@ a {
 /* end hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
 /* ---------------------------------------------- END BASIC STRUCTURE -------------------------------------------------- */
 
-/* begin styles for smedium screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/* begin styles for medium screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
 @media only screen and (max-width: $medium-max-width) {
 
 	html {
@@ -272,7 +248,7 @@ a {
 
 /* begin styles for print only --------------------------------------------------------------------------------------------------------------------------------------------------- */
 @media only print {
-    #header-wrapper, #navigation-wrapper, #slideshow-wrapper, #breadcrumbs-wrapper, .button, #back-to-top-button, #site-footer, #copyright-wrapper {
+    #header-wrapper, #navigation-wrapper, #slideshow-wrapper, #breadcrumbs-wrapper, .button, #back-to-top-button, #site-footer, #copyright-information {
         display: none !important;
     }
 

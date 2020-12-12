@@ -2,10 +2,10 @@
     <!-- begin footer -->
     <div class="grid-main-item-footer-wrapper" id="site-footer">
         <footer class="grid-container-create-columns">
-            <switch-language />
-            <footer-navigation/>
-            <opening-hours/>
-            <address-data/>
+            <cmd-switch-language :languages="languages" @click="changeLanguage" />
+            <cmd-footer-navigation :footerNavigation="footerNavigation" headline="Links" />
+            <cmd-opening-hours :openingHours="openingHours" headline="Opening hours" textOpenClosed="Momentan geschlossen!" textHolidaysClosed="Feiertags geschlossen" textMiscInfo="Sonstige Angaben kommen hierhin" />
+            <cmd-address-data :addressData="addressData" headline="Contact" />
         </footer>
     </div>
     <!-- end footer -->
@@ -13,29 +13,40 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import SwitchLanguage from '@/components/SwitchLanguage.vue';
-    import FooterNavigation from '@/components/FooterNavigation.vue';
-    import OpeningHours from '@/components/OpeningHours.vue';
-    import AddressData from '@/components/AddressData.vue';
-    import {ContactData} from '@/types';
-    import contactData from '@/assets/data/address-data.json';
+    import {CmdSwitchLanguage} from 'comand-ui-kit'
+    import {CmdFooterNavigation} from 'comand-ui-kit'
+    import {CmdOpeningHours} from 'comand-ui-kit'
+    import {CmdAddressData} from 'comand-ui-kit'
+
+    import languages from '@/assets/data/languages.json';
+    import footerNavigation from '@/assets/data/footer-navigation.json';
+    import addressData from '@/assets/data/address-data.json';
+    import openingHours from '@/assets/data/opening-hours.json';
 
     /* used components */
     @Component({
         components: {
-            SwitchLanguage,
-            FooterNavigation,
-            OpeningHours,
-            AddressData
+            CmdSwitchLanguage,
+            CmdFooterNavigation,
+            CmdOpeningHours,
+            CmdAddressData
+        },
+        data () {
+            return {
+                languages,
+                footerNavigation,
+                openingHours,
+                addressData
+            }
+        },
+        methods: {
+            changeLanguage() {
+                this.$store.dispatch("loadSections"); // load action from store
+            }
         }
     })
     /* export class */
     export default class FooterWrapper extends Vue {
-        data!: ContactData;
-
-        created(): void {
-            this.data = contactData as ContactData;
-        }
     }
 </script>
 
