@@ -29,13 +29,6 @@ html {
 
 /* ---------------------------------------------- BEGIN BASIC STRUCTURE -------------------------------------------------- */
 /* begin page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
-#header-wrapper header, .cmd-top-header-navigation > ul, nav, .section-wrapper:not(#page-content) section, .main-headline, #site-footer footer, #main-headline {
-	max-width: 128rem;
-	margin: 0 auto;
-	padding-left: var(--default-padding);
-    padding-right: var(--default-padding);
-}
-
 #navigation-wrapper {
 	grid-column: span var(--grid-large-span);
 	display: flex;
@@ -99,12 +92,6 @@ html {
 	width: 100%;
 }
 
-/* begin header --------------------------------------------------------------------------------------------------------------------------------------------------- */
-.cmd-logo {
-	grid-column: span var(--grid-small-span);
-}
-/* end header --------------------------------------------------------------------------------------------------------------------------------------------------- */
-
 /* begin main --------------------------------------------------------------------------------------------------------------------------------------------------- */
 .grid-item-page-content {
 	grid-area: page-content;
@@ -117,29 +104,6 @@ main {
 }
 /* end main --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
-/* begin footer --------------------------------------------------------------------------------------------------------------------------------------------------- */
-#site-footer {
-	padding: var(--grid-gap) 0;
-
-	footer {
-		[class*="cmd-"] {
-			grid-column: span var(--grid-small-span);
-
-			&.cmd-switch-language {
-				grid-column: span var(--grid-columns);
-			}
-		}
-
-		&.language-support {
-			grid-template-areas:
-				"language-support language-support language-support"
-				"footer-navigation opening-hours address";
-		}
-
-	}
-}
-/* end footer --------------------------------------------------------------------------------------------------------------------------------------------------- */
-
 /* begin hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
 a {
 	& > span[class*="icon"] {
@@ -149,76 +113,24 @@ a {
 	}
 }
 /* end hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
-/* ---------------------------------------------- END BASIC STRUCTURE -------------------------------------------------- */
 
-/* begin styles for medium screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
-@media only screen and (max-width: $medium-max-width) {
+/* begin main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
+#main-headline {
+	padding: calc(var(--default-padding) * 5) 0;
 
-	html {
-		--grid-small-span: 3; /* default column span smaller part */
-		--grid-large-span: 3; /* default column span larger part */
-	}
-
-	#header-wrapper header {
-		grid-template-areas: "logo navigation";
-		grid-auto-rows: auto; /* items should be as large as their content */
-	}
-	
-	#header-wrapper {
-		padding-bottom: var(--grid-gap);
-	}
-
-	.grid-item-opening-hours-open-text {
-		align-self: center;
-	}
-
-	#site-footer [class*="grid-item"] {
-		grid-row-start: auto;
-	}
-
-	#site-footer footer {
-		grid-template-areas:
-			"footer-navigation opening-hours"
-			"address address";
-	}
-
-	footer li {
-    	margin-bottom: calc(var(--default-margin) * 2);
+	h1 {
+		margin-bottom: 0;
 	}
 }
-/* end styles for smedium screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/* end main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------- END BASIC STRUCTURE -------------------------------------------------- */
 
-/* begin styles for ssmall screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/* begin styles for small screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
 @media only screen and (max-width: $small-max-width) {
-	html {
-		--grid-small-span: 4; /* default column span smaller part */
-		--grid-large-span: 4; /* default column span larger part */
-	}
-
 	#header-wrapper header {
 		grid-template-areas:
 			"logo logo"
 			"navigation box-site-search";
-	}
-
-	#logo img {
-		max-width: 80%;
-	}
-
-	body, html {
-		height: auto;
-	}
-
-	.section-wrapper {
-		padding: calc(var(--default-padding) * 2) 0;
-	}
-	
-	#site-footer a {
-		text-decoration: underline;
-	}
-	
-	#site-footer a:active {
-		text-decoration: none;
 	}
 
 	#site-footer footer {
@@ -227,14 +139,6 @@ a {
 		"opening-hours"
 		"address";
 	}
-	
-	.grid-item-address dd {
-		margin-bottom: var(--default-margin);
-	}
-
-    #logo {
-    	margin: 0 auto; /* center logo for small devices */
-    }
 
 	.grid-item-news-text-wrapper a.link-to-content {
 		align-self: center;

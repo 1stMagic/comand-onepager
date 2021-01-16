@@ -1,10 +1,9 @@
 <template>
-    <div :class="['grid-main-item-header-wrapper', 'sticky', {'top-header-navigation': topHeaderNavigationData}]" id="header-wrapper">
+    <div :class="['grid-main-item-header-wrapper', 'sticky', {'top-header-navigation': topHeaderNavigationData}]" id="site-header">
         <CmdTopHeaderNavigation :topHeaderNavigationData="topHeaderNavigationData" v-if="topHeaderNavigationData" />
         <header class="grid-container-create-columns">
             <CmdLogo tooltip="To homepage" altText="Company logo" :pathLogo="require('@/assets/images/logo.svg')" />
-            <CmdMainNavigation :navigationEntries="navigationData"
-                            :closeOffcanvas="{'text': 'Close navigation', 'iconClass': 'icon-cancel'}" />
+            <CmdMainNavigation :navigationEntries="navigationData" :closeOffcanvas="{'text': 'Close navigation', 'iconClass': 'icon-cancel'}" />
         </header>
     </div>
 </template>
@@ -23,12 +22,6 @@
             CmdLogo,
             CmdMainNavigation,
             CmdTopHeaderNavigation
-        },
-        props: {
-            navigationData: {
-                type: Array,
-                required: false
-            }
         }
     })
     export default class SiteHeader extends Vue {
@@ -40,41 +33,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-#header-wrapper {
-    z-index: 100;
-    border-bottom: var(--default-border);
-    background: var(--pure-white);
-
-    &.grid-main-item-header-wrapper {
-        grid-area: header-wrapper;
-    }
-
-    &.sticky {
-        position: sticky;
-        left: 0;
-        right: 0;
-        top: 0;
-        padding: calc(var(--default-padding) * 2) 0;
-    }
-
-    &.top-header-navigation {
-        padding-top: 0;
-    }
-
-    header {
-        nav {
-            padding: 0;
-        }
-
-        #main-navigation, nav ul li, #navigation-wrapper {
-            background: none;
-        }
-
-        #navigation-wrapper {
-            align-self: center;
-        }
-    }
-}
-</style>

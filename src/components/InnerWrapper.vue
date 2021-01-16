@@ -8,7 +8,11 @@
                 <CmdSlideshow :slideshow-items="slideshowData" :full-width="true" :autoplay="true"/>
                 <!-- begin main content -->
                 <div class="grid-item-page-content" id="page-content">
-                    <MainHeadline />
+                    <div class="section-wrapper" id="main-headline">
+                        <section>
+                            <h1>{{ label('title') }}</h1>
+                        </section>
+                    </div>
                     <ContentSection v-for="section in $store.state.sections"
                                      :key="section.id"
                                      :id="section.id"
@@ -36,32 +40,27 @@
     import {Component, Vue, Watch} from 'vue-property-decorator';
     /* import used components */
     import { CmdSlideshow } from 'comand-ui-kit'
-    import MainHeadline from '@/components/MainHeadline.vue';
     import ContentSection from '@/components/ContentSection.vue';
     import ContactForm from '@/components/ContactForm.vue';
     import {imageSliderClient} from "@/api/SlideshowClient";
-    import {SlideshowItem} from "@/types";
+    import {SlideshowItem, ShareButton} from "@/types";
     import {CmdContentFooter} from 'comand-ui-kit'
 
     import shareButtons from '@/assets/data/share-buttons.json';
+    import BaseI18nComponent from "@/components/base/BaseI18nComponent";
 
     @Component({
         components: {
             CmdContentFooter,
             CmdSlideshow,
-            MainHeadline,
             ContentSection,
             ContactForm
-        },
-        data() {
-            return {
-                shareButtons
-            }
         }
     })
-    export default class InnerWrapper extends Vue {
+    export default class InnerWrapper extends BaseI18nComponent {
 
         private slideshowData: SlideshowItem[] = [];
+        private shareButtons: ShareButton[] = shareButtons;
 
         @Watch('$store.state.currentLanguage', {immediate: true})
         private languageChanged(): void {

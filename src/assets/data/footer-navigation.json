@@ -1,20 +1,26 @@
 [
   {
     "name": "Contact",
-    "path": "#anchor-section4",
-    "target": "",
+    "link": {
+      "path": "#anchor-section4",
+      "target": ""
+    },
     "fancybox": false
   },
   {
     "name": "Private policy",
-    "path": "/content/data-privacy-en.html",
-    "target": "",
+    "link": {
+      "path": "/content/data-privacy-en.html",
+      "target": ""
+    },
     "fancybox": true
   },
   {
     "name": "CoManD-Website",
-    "path": "http://www.comand-cms.com",
-    "target": "_blank",
+    "link": {
+      "path": "http://www.comand-cms.com",
+      "target": "_blank"
+    },
     "fancybox": false
   }
 ]

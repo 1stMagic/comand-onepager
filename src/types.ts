@@ -53,6 +53,14 @@ interface SlideshowItem {
     images?: SlideshowImage[];
 }
 
+interface ShareButton {
+    id: string;
+    path: string;
+    tooltip: string
+    iconClass: string;
+    linkName: string;
+}
+
 interface SlideshowImage {
     maxWidth?: number;
     imgPath: string;
@@ -115,5 +123,6 @@ export {
     ContactData,
     FooterNavigationType,
     FooterNavigationLinks,
-    FooterNavigationLink
+    FooterNavigationLink,
+    ShareButton
 };
