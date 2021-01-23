@@ -14,7 +14,7 @@ import 'comand-ui-kit/src/assets/styles/comand-component-library-structure.scss'
 import 'comand-ui-kit/dist/comand-ui-kit.css'
 
 /* import css for onepager */
-import '@/assets/styles/onpeager-structure.scss'
+import '@/assets/styles/onepager-structure.scss'
 import '@/assets/styles/onepager-layout.scss'
 
 Vue.config.productionTip = false

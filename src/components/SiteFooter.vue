@@ -1,6 +1,6 @@
 <template>
     <!-- begin footer -->
-    <div class="grid-main-item-footer-wrapper" id="site-footer">
+    <div class="width-limitation-wrapper grid-main-item-footer-wrapper" id="site-footer">
         <footer class="grid-container-create-columns">
             <cmd-switch-language :languages="languages" @click="changeLanguage" />
             <cmd-footer-navigation :footerNavigation="footerNavigation" headline="Links" />

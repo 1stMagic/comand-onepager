@@ -8,7 +8,7 @@
                 <CmdSlideshow :slideshow-items="slideshowData" :full-width="true" :autoplay="true"/>
                 <!-- begin main content -->
                 <div class="grid-item-page-content" id="page-content">
-                    <div class="section-wrapper" id="main-headline">
+                    <div class="width-limitation-wrapper" id="main-headline">
                         <section>
                             <h1>{{ label('title') }}</h1>
                         </section>
@@ -21,7 +21,7 @@
                                      :imgpath="section.imgPath"
                                      :images="section.images"/>
                     <ContactForm form-action="#"/>
-                    <div class="section-wrapper">
+                    <div class="width-limitation-wrapper">
                         <section>
                             <CmdContentFooter :shareButtons="shareButtons" />
                         </section>

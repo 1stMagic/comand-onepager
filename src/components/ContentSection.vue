@@ -1,5 +1,5 @@
 <template>
-    <div class="section-wrapper">
+    <div class="width-limitation-wrapper">
         <a :id="'anchor-' + id"></a>
         <section>
             <h2>{{ headline }}</h2>

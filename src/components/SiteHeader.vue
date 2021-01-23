@@ -1,5 +1,5 @@
 <template>
-    <div :class="['grid-main-item-header-wrapper', 'sticky', {'top-header-navigation': topHeaderNavigationData}]" id="site-header">
+    <div :class="['width-limitation-wrapper', 'grid-main-item-header-wrapper', 'sticky', {'top-header-navigation': topHeaderNavigationData}]" id="site-header">
         <CmdTopHeaderNavigation :topHeaderNavigationData="topHeaderNavigationData" v-if="topHeaderNavigationData" />
         <header class="grid-container-create-columns">
             <CmdLogo tooltip="To homepage" altText="Company logo" :pathLogo="require('@/assets/images/logo.svg')" />

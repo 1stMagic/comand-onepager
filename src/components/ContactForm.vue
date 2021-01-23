@@ -1,5 +1,5 @@
 <template>
-    <div class="section-wrapper">
+    <div class="width-limitation-wrapper">
         <a id="anchor-section4"></a>
         <section>
             <h2>{{ label('form_headline') }}</h2>
