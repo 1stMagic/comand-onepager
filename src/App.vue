@@ -6,11 +6,13 @@
         <div class="grid-main-container" id="outer-wrapper">
             <SiteHeader :navigationData="navigationData" />
             <InnerWrapper />
-            <SiteFooter />
+            <CmdWidthLimitationWrapper class="grid-main-item-footer-wrapper" id="site-footer" inner-class="grid-container-create-columns">
+                <SiteFooter />
+            </CmdWidthLimitationWrapper>
             <!-- begin copyright-information DO NOT REMOVE -->
             <CmdCopyrightInformation />
             <!-- end copyright-information DO NOT REMOVE -->
-            <CmdBackToTopButton href="#anchor-back-to-top" iconClass="icon-arrow-up" tooltip="Back to top" />
+            <CmdBackToTopButton href="#anchor-back-to-top" iconClass="icon-single-arrow-up" tooltip="Back to top" />
         </div>
         <!-- end outer-wrapper -->
         <CmdCookieDisclaimer headline="Datenschutzeinstellungen" buttonLabelAcceptAllCookies="" buttonLabelAcceptCurrentSettings="Akzeptieren" @currentSettings="saveCurrentSettings" v-if="!onepagerPrivacySettingsAccepted">
@@ -28,27 +30,32 @@
 </template>
 
 <script lang="ts">
+    /* import used components */
     import {Component, Vue} from 'vue-property-decorator'
-    import SiteHeader from '@/components/SiteHeader.vue'
-    import InnerWrapper from '@/components/InnerWrapper.vue'
-    import SiteFooter from '@/components/SiteFooter.vue'
-    import {CmdCopyrightInformation} from 'comand-ui-kit'
-    import {CmdFancyBox} from 'comand-ui-kit'
-    import {CmdBackToTopButton} from 'comand-ui-kit'
-    import {CmdCookieDisclaimer} from 'comand-ui-kit'
-    import { openFancyBox } from 'comand-ui-kit'
+    import {CmdBackToTopButton} from 'comand-component-library'
+    import {CmdCookieDisclaimer} from 'comand-component-library'
+    import {CmdCopyrightInformation} from 'comand-component-library'
+    import {CmdFancyBox} from 'comand-component-library'
+    import {CmdWidthLimitationWrapper} from 'comand-component-library'
+    import { openFancyBox } from 'comand-component-library'
 
+    import InnerWrapper from '@/components/InnerWrapper.vue'
+    import SiteHeader from '@/components/SiteHeader.vue'
+    import SiteFooter from '@/components/SiteFooter.vue'
+
+    /* import used data */
     import navigationData from '@/assets/data/navigation-data.json'
 
     @Component({
         components: {
-            SiteHeader,
-            InnerWrapper,
-            SiteFooter,
+            CmdBackToTopButton,
+            CmdCookieDisclaimer,
             CmdCopyrightInformation,
             CmdFancyBox,
-            CmdBackToTopButton,
-            CmdCookieDisclaimer
+            CmdWidthLimitationWrapper,
+            InnerWrapper,
+            SiteHeader,
+            SiteFooter
         }
     })
 

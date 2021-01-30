@@ -8,10 +8,11 @@ import 'comand-frontend-framework/src/assets/css/normalize.css'
 import 'comand-frontend-framework/src/assets/css/framework.css'
 import 'comand-frontend-framework/src/assets/css/framework-iconfont.css'
 
-/* import css from comand-ui-kit */
-import 'comand-ui-kit/src/assets/styles/variables.scss'
-import 'comand-ui-kit/src/assets/styles/comand-component-library-structure.scss'
-import 'comand-ui-kit/dist/comand-ui-kit.css'
+/* import css from comand-component-library */
+import 'comand-component-library/src/assets/styles/variables.scss'
+import 'comand-component-library/src/assets/styles/logos-iconfont.css'
+import 'comand-component-library/src/assets/styles/comand-component-library-structure.scss'
+import 'comand-component-library/dist/comand-component-library.css'
 
 /* import css for onepager */
 import '@/assets/styles/onepager-structure.scss'

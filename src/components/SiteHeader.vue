@@ -9,13 +9,12 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import {CmdLogo} from 'comand-ui-kit'
-    import {CmdTopHeaderNavigation} from 'comand-ui-kit'
-    import {CmdMainNavigation} from 'comand-ui-kit'
+    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {CmdLogo} from 'comand-component-library'
+    import {CmdTopHeaderNavigation} from 'comand-component-library'
+    import {CmdMainNavigation} from 'comand-component-library'
 
     import topHeaderNavigationData from '@/assets/data/top-header-navigation-data.json';
-    import navigationData from "@/assets/data/navigation-data.json";
 
     @Component({
         components: {
@@ -25,11 +24,7 @@
         }
     })
     export default class SiteHeader extends Vue {
-        data() {
-            return {
-                navigationData,
-                topHeaderNavigationData
-            }
-        }
+        @Prop() private navigationData
+        private topHeaderNavigationData = topHeaderNavigationData
     }
 </script>

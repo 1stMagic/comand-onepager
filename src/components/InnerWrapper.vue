@@ -8,11 +8,9 @@
                 <CmdSlideshow :slideshow-items="slideshowData" :full-width="true" :autoplay="true"/>
                 <!-- begin main content -->
                 <div class="grid-item-page-content" id="page-content">
-                    <div class="width-limitation-wrapper" id="main-headline">
-                        <section>
-                            <h1>{{ label('title') }}</h1>
-                        </section>
-                    </div>
+                    <CmdWidthLimitationWrapper id="main-headline">
+                        <h1>{{ label('title') }}</h1>
+                    </CmdWidthLimitationWrapper>
                     <ContentSection v-for="section in $store.state.sections"
                                      :key="section.id"
                                      :id="section.id"
@@ -20,12 +18,12 @@
                                      :content="section.content"
                                      :imgpath="section.imgPath"
                                      :images="section.images"/>
-                    <ContactForm form-action="#"/>
-                    <div class="width-limitation-wrapper">
-                        <section>
-                            <CmdContentFooter :shareButtons="shareButtons" />
-                        </section>
-                    </div>
+                    <CmdWidthLimitationWrapper>
+                        <ContactForm form-action="#"/>
+                    </CmdWidthLimitationWrapper>
+                    <CmdWidthLimitationWrapper>
+                        <CmdShareButtons :shareButtons="shareButtons" />
+                    </CmdWidthLimitationWrapper>
                 </div>
                 <!-- end main content -->
             </main>
@@ -38,21 +36,25 @@
 
 <script lang="ts">
     import {Component, Vue, Watch} from 'vue-property-decorator';
+
     /* import used components */
-    import { CmdSlideshow } from 'comand-ui-kit'
+    import { CmdShareButtons } from 'comand-component-library'
+    import { CmdSlideshow } from 'comand-component-library'
+    import { CmdWidthLimitationWrapper } from 'comand-component-library'
     import ContentSection from '@/components/ContentSection.vue';
     import ContactForm from '@/components/ContactForm.vue';
     import {imageSliderClient} from "@/api/SlideshowClient";
     import {SlideshowItem, ShareButton} from "@/types";
-    import {CmdContentFooter} from 'comand-ui-kit'
 
+    /* import used data */
     import shareButtons from '@/assets/data/share-buttons.json';
     import BaseI18nComponent from "@/components/base/BaseI18nComponent";
 
     @Component({
         components: {
-            CmdContentFooter,
+            CmdShareButtons,
             CmdSlideshow,
+            CmdWidthLimitationWrapper,
             ContentSection,
             ContactForm
         }

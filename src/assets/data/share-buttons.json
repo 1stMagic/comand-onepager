@@ -10,7 +10,7 @@
     "id": "share-link-twitter",
     "path": "https://twitter.com/home?status=http%3A%2F%2Fdevelopment.comand-cms.com%2Fmodule%2Fteam.html",
     "tooltip": "Diese Seite auf Twitter teilen",
-    "iconClass": "icon-twiiter",
+    "iconClass": "icon-twitter",
     "linkName": "Teilen"
   },
   {

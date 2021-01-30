@@ -1,22 +1,20 @@
 <template>
     <!-- begin footer -->
-    <div class="width-limitation-wrapper grid-main-item-footer-wrapper" id="site-footer">
-        <footer class="grid-container-create-columns">
-            <cmd-switch-language :languages="languages" @click="changeLanguage" />
-            <cmd-footer-navigation :footerNavigation="footerNavigation" headline="Links" />
-            <cmd-opening-hours :openingHours="openingHours" headline="Opening hours" textOpenClosed="Momentan geschlossen!" textHolidaysClosed="Feiertags geschlossen" textMiscInfo="Sonstige Angaben kommen hierhin" />
-            <cmd-address-data :addressData="addressData" headline="Contact" />
-        </footer>
-    </div>
+    <footer class="grid-container-create-columns">
+        <cmd-switch-language :languages="languages" @click="changeLanguage" />
+        <cmd-footer-navigation :footerNavigation="footerNavigation" headline="Links" />
+        <cmd-opening-hours :openingHours="openingHours" headline="Opening hours" textOpenClosed="Momentan geschlossen!" textHolidaysClosed="Feiertags geschlossen" textMiscInfo="Sonstige Angaben kommen hierhin" />
+        <cmd-address-data :addressData="addressData" headline="Contact" />
+    </footer>
     <!-- end footer -->
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {CmdSwitchLanguage} from 'comand-ui-kit'
-    import {CmdFooterNavigation} from 'comand-ui-kit'
-    import {CmdOpeningHours} from 'comand-ui-kit'
-    import {CmdAddressData} from 'comand-ui-kit'
+    import {CmdSwitchLanguage} from 'comand-component-library'
+    import {CmdFooterNavigation} from 'comand-component-library'
+    import {CmdOpeningHours} from 'comand-component-library'
+    import {CmdAddressData} from 'comand-component-library'
 
     import languages from '@/assets/data/languages.json';
     import footerNavigation from '@/assets/data/footer-navigation.json';
