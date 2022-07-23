@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Contact",
+    "link": {
+      "path": "#anchor-section4",
+      "target": ""
+    },
+    "fancybox": false
+  },
+  {
+    "name": "Private policy",
+    "link": {
+      "path": "/content/data-privacy-en.html",
+      "target": ""
+    },
+    "fancybox": true
+  },
+  {
+    "name": "CoManD-Website",
+    "link": {
+      "path": "http://www.comand-cms.com",
+      "target": "_blank"
+    },
+    "fancybox": false
+  }
+]
+
+
+

@@ -1,0 +1,168 @@
+@import "comand-component-library/src/assets/styles/variables.scss";
+
+/* begin table of contents --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/*
+- VARIABLES ------------------------
+
+- BASIC STRUCTURE ------------------------
+	- page containers
+	- css-grid
+	- header
+	- main
+	- footer
+	- hyperlinks
+
+- MEDIA QUERIES ------------------------
+  - styles for medium screens
+  - styles for small screens
+  - styles for print only
+*/
+/* end table of contents --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* ---------------------------------------------- BEGIN VARIABLES -------------------------------------------------- */
+html {
+	--grid-small-span: 4; /* overwrite from framework.css */
+	--grid-large-span: 8; /* overwrite from framework.css */
+	--box-shadow-color: #333; /* overwrite from framework.css */
+}
+/* ---------------------------------------------- END VARIABLES -------------------------------------------------- */
+
+/* ---------------------------------------------- BEGIN BASIC STRUCTURE -------------------------------------------------- */
+/* begin page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
+#navigation-wrapper {
+	grid-column: span var(--grid-large-span);
+	display: flex;
+	justify-content: flex-end;
+
+	nav {
+		margin-right: 0;
+
+		> ul {
+			li:not(:first-child) {
+				margin-left: var(--default-margin);
+			}
+		}
+	}
+}
+
+#page-wrapper {
+	height: 100%;
+}
+
+#outer-wrapper {
+	min-height: 100%;
+}
+
+#content-wrapper {
+	min-width: 0; /* required to avoid grid expand by its children (i.e. thumbnail-scroller) */
+}
+
+.section-wrapper {
+	&:not(#main-headline) {
+		padding: calc(var(--default-padding) * 6) 0;
+	}
+}
+/* end page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin css-grid --------------------------------------------------------------------------------------------------------------------------------------------------- */
+.grid-main-container {
+    grid-template-areas:
+    	"header-wrapper"
+    	"inner-wrapper"
+    	"footer-wrapper"
+		"copyright-information";
+	grid-template-rows:
+		min-content
+		auto
+		min-content
+		min-content;
+}
+
+.grid-main-item-inner-wrapper {
+	grid-area: inner-wrapper;
+	display: grid;
+}
+
+.grid-main-item-footer-wrapper {
+	grid-area: footer-wrapper;
+}
+
+#breadcrumb-wrapper + .section-wrapper, #main-headline {
+	padding: var(--default-padding) 0;
+	width: 100%;
+}
+
+/* begin main --------------------------------------------------------------------------------------------------------------------------------------------------- */
+.grid-item-page-content {
+	grid-area: page-content;
+}
+
+main {
+	ul, ol {
+		list-style-position: inside; /* list-style-position for all list in main */
+	}
+}
+/* end main --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
+a {
+	& > span[class*="icon"] {
+		& ~ span {
+			margin-left: calc(var(--default-margin) / 2);
+		}
+	}
+}
+/* end hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
+#main-headline {
+	padding: calc(var(--default-padding) * 5) 0;
+
+	h1 {
+		margin-bottom: 0;
+	}
+}
+/* end main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------- END BASIC STRUCTURE -------------------------------------------------- */
+
+/* begin styles for small screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
+@media only screen and (max-width: $small-max-width) {
+	#header-wrapper header {
+		grid-template-areas:
+			"logo logo"
+			"navigation box-site-search";
+	}
+
+	#site-footer footer {
+		grid-template-areas:
+		"footer-navigation"
+		"opening-hours"
+		"address";
+	}
+
+	.grid-item-news-text-wrapper a.link-to-content {
+		align-self: center;
+	}
+
+    a[href^="tel"] {
+        text-decoration: underline;
+    }
+}
+/* end styles for small screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin styles for print only --------------------------------------------------------------------------------------------------------------------------------------------------- */
+@media only print {
+    #header-wrapper, #navigation-wrapper, #slideshow-wrapper, #breadcrumbs-wrapper, .button, #back-to-top-button, #site-footer, #copyright-information {
+        display: none !important;
+    }
+
+    #content {
+        width: 180mm;
+    }
+	
+	body, .section-wrapper {
+		background: none !important;
+	}
+}
+/* end styles for print only --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------- END MEDIA QUERIES AND BROWSER SPECIFIC STYLES -------------------------------------------------- */

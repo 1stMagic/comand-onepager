@@ -1,0 +1,131 @@
+@import "comand-component-library/src/assets/styles/variables.scss";
+
+/* begin table of contents --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/*
+- VARIABLES ------------------------
+
+- BASIC STRUCTURE ------------------------
+	- page containers
+	- footer
+
+- MEDIA QUERIES ------------------------
+  - styles for medium screens
+  - styles for browser-dark-mode
+*/
+/* end table of contents --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* ---------------------------------------------- BEGIN VARIABLES -------------------------------------------------- */
+html {
+	--primary-color: rgba(2, 129, 195, 1);
+}
+/* ---------------------------------------------- END VARIABLES -------------------------------------------------- */
+
+/* ---------------------------------------------- BEGIN BASIC STRUCTURE -------------------------------------------------- */
+/* begin page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
+body, #page-wrapper, #inner-wrapper {
+	background: var(--pure-white);
+}
+
+.section-wrapper {
+	&:nth-child(even) {
+		background: var(--default-background-color);
+	}
+}
+/* end page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin navigation --------------------------------------------------------------------------------------------------------------------------------------------------- */
+#navigation-wrapper {
+	background: none;
+
+	nav {
+		> ul {
+			border: 0;
+
+			li {
+				border: inherit;
+
+				a {
+					font-size: 2rem;
+				}
+
+				&:hover, &:active, &:focus {
+					background: none;
+
+					a {
+						background: none;
+						border: 0;
+
+						span, span[class*="icon-"] {
+							color: var(--primary-color);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+/* end navigation  --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin footer --------------------------------------------------------------------------------------------------------------------------------------------------- */
+.cmd-width-limitation-wrapper#site-footer {
+	background: var(--text-color);
+	border-bottom: var(--default-border);
+
+	footer {
+	 	a span, :not(.opening-hours-open-text)  {
+			color: var(--pure-white);
+		}
+	}
+}
+/* end footer --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
+a:hover, a:active, a:focus, a.active, a:hover span, a:active span, a:focus span, a.active span .link-icon span {
+	text-decoration: none;
+	color: var(--hyperlink-color-highlighted);
+}
+/* end hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
+#main-headline {
+	h1 {
+		font-size: 5rem;
+		text-align: center;
+		text-transform: uppercase;
+	}
+}
+/* end main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------- END BASIC STRUCTURE -------------------------------------------------- */
+
+/* ---------------------------------------------- BEGIN MEDIA QUERIES AND BROWSER SPECIFIC STYLES -------------------------------------------------- */
+/* begin styles for medium screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
+@media only screen and (max-width: $medium-max-width) {
+    #header-wrapper  {
+		.grid-item-logo {
+			a {
+				max-width: 80%;
+
+				img {
+					margin: 0;
+				}
+			}
+		}
+
+		header {
+			grid-template-areas: "logo" "navigation";
+
+			#navigation-wrapper {
+				grid-column: span var(--grid-small-span);
+
+				#main-navigation {
+					background: var(--default-background-color);
+				}
+			}
+		}
+    }
+
+	#toggle-offcanvas {
+		margin-right: auto;
+	}
+}
+/* end styles for medium screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
