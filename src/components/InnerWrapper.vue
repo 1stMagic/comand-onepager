@@ -18,7 +18,7 @@
                                      :content="section.content"
                                      :imgpath="section.imgPath"
                                      :images="section.images"/>
-                    <CmdWidthLimitationWrapper>
+                    <CmdWidthLimitationWrapper anchor-id="anchor-section4">
                         <ContactForm form-action="#"/>
                     </CmdWidthLimitationWrapper>
                     <CmdWidthLimitationWrapper>

@@ -14,7 +14,7 @@
     import {CmdTopHeaderNavigation} from 'comand-component-library'
     import {CmdMainNavigation} from 'comand-component-library'
 
-    import topHeaderNavigationData from '@/assets/data/top-header-navigation-data.json';
+    import topHeaderNavigationData from '@/assets/data/top-header-navigation.json';
 
     @Component({
         components: {

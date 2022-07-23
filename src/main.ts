@@ -12,6 +12,7 @@ import 'comand-frontend-framework/src/assets/css/framework-iconfont.css'
 import 'comand-component-library/src/assets/styles/variables.scss'
 import 'comand-component-library/src/assets/styles/logos-iconfont.css'
 import 'comand-component-library/src/assets/styles/comand-component-library-structure.scss'
+import 'comand-component-library/src/assets/styles/comand-component-library-layout.scss'
 import 'comand-component-library/dist/comand-component-library.css'
 
 /* import css for onepager */
