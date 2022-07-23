@@ -86,12 +86,6 @@ html {
 .grid-main-item-footer-wrapper {
 	grid-area: footer-wrapper;
 }
-
-#breadcrumb-wrapper + .section-wrapper, #main-headline {
-	padding: var(--default-padding) 0;
-	width: 100%;
-}
-
 /* begin main --------------------------------------------------------------------------------------------------------------------------------------------------- */
 .grid-item-page-content {
 	grid-area: page-content;
@@ -103,16 +97,6 @@ main {
 	}
 }
 /* end main --------------------------------------------------------------------------------------------------------------------------------------------------- */
-
-/* begin hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
-a {
-	& > span[class*="icon"] {
-		& ~ span {
-			margin-left: calc(var(--default-margin) / 2);
-		}
-	}
-}
-/* end hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 /* begin main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
 #main-headline {
@@ -133,13 +117,6 @@ a {
 			"navigation box-site-search";
 	}
 
-	#site-footer footer {
-		grid-template-areas:
-		"footer-navigation"
-		"opening-hours"
-		"address";
-	}
-
 	.grid-item-news-text-wrapper a.link-to-content {
 		align-self: center;
 	}
@@ -152,7 +129,7 @@ a {
 
 /* begin styles for print only --------------------------------------------------------------------------------------------------------------------------------------------------- */
 @media only print {
-    #header-wrapper, #navigation-wrapper, #slideshow-wrapper, #breadcrumbs-wrapper, .button, #back-to-top-button, #site-footer, #copyright-information {
+    .cmd-site-header, .cmd-main-navigation, .cmd-slideshow, .button, .cmd-back-to-top-button, .cmd-site-footer, .cmd-copyright-information {
         display: none !important;
     }
 

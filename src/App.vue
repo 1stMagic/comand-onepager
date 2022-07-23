@@ -4,83 +4,137 @@
         <a id="anchor-back-to-top"></a>
         <!-- begin outer-wrapper -->
         <div class="grid-main-container" id="outer-wrapper">
+            <!-- begin cmd-site-header -->
             <CmdSiteHeader :cmd-main-navigation="{navigationEntries: mainNavigationData}">
                 <template v-slot:top-header>
+                    <!-- begin cmd-list-of-links (for top-header-navigation) -->
                     <CmdListOfLinks
                         v-if="topHeaderNavigationData"
                         :links="topHeaderNavigationData"
                         orientation="horizontal"
                         align="right"
                     />
+                    <!-- end cmd-list-of-links (for top-header-navigation) -->
                 </template>
                 <template v-slot:logo>
+                    <!-- begin cmd-company-logo -->
                     <CmdCompanyLogo
                         link="/"
                         altText="CoManD Logo"
                         :pathDefaultLogo="defaultLogo"
                         :pathDarkmodeLogo="darkmodeLogo"
                     />
+                    <!-- end cmd-company-logo -->
                 </template>
             </CmdSiteHeader>
+            <!-- end cmd-site-header -->
+
+            <!-- begin inner-wrapper -->
             <InnerWrapper />
+            <!-- end inner-wrapper -->
+
+            <!-- begin cmd-site-footer -->
             <CmdSiteFooter>
-                <cmd-switch-language :languages="languagesData" @click="changeLanguage" />
-                <CmdListOfLinks :links="footerNavigationData" headline="Links" />
-                <cmd-opening-hours :openingHours="openingHoursData" headline="Opening hours" textOpenClosed="Momentan geschlossen!" textHolidaysClosed="Feiertags geschlossen" textMiscInfo="Sonstige Angaben kommen hierhin" />
-                <cmd-address-data :addressData="addressData" headline="Contact" />
+                <div class="flex-container">
+                    <!-- begin cmd-switch-language -->
+                    <CmdSwitchLanguage
+                        :languages="languagesData"
+                        @click="changeLanguage"
+                    />
+                    <!-- end cmd-switch-language -->
+
+                    <!-- begin cmd-toggle-dark-mode -->
+                    <CmdToggleDarkMode :showLabel="true" />
+                    <!-- end cmd-toggle-dark-mode -->
+                </div>
+
+                <!-- begin cmd-list-of-links (for footer-navigation) -->
+                <CmdListOfLinks
+                    :links="footerNavigationData"
+                    :cmdHeadline="{headlineText: 'Links', headlineLevel: 6}"
+                />
+                <!-- end cmd-list-of-links (for footer-navigation) -->
+
+                <!-- begin cmd-opening-hours -->
+                <CmdOpeningHours
+                    :openingHours="openingHoursData"
+                    :cmdHeadline="{headlineText: 'Opening hours', headlineLevel: 6}"
+                    textOpenClosed="Momentan geschlossen!"
+                    textHolidaysClosed="Feiertags geschlossen"
+                    textMiscInfo="Sonstige Angaben kommen hierhin"
+                />
+                <!-- end cmd-opening-hours -->
+
+                <!-- begin cmd-address-data -->
+                <CmdAddressData
+                    :addressData="{}"
+                    :cmdHeadline="{headlineText: 'Contact', headlineLevel: 6}"
+                />
+                <!-- end cmd-address-data -->
             </CmdSiteFooter>
-            <!-- begin copyright-information DO NOT REMOVE -->
+            <!-- end cmd-site-footer -->
+
+            <!-- begin cmd-copyright-information DO NOT REMOVE -->
             <CmdCopyrightInformation />
-            <!-- end copyright-information DO NOT REMOVE -->
-            <CmdBackToTopButton href="#anchor-back-to-top" iconClass="icon-single-arrow-up" tooltip="Back to top" />
+            <!-- end cmd-copyright-information DO NOT REMOVE -->
+
+            <!-- begin cmd-back-to-top-button -->
+            <CmdBackToTopButton href="#anchor-back-to-top" />
+            <!-- end cmd-back-to-top-button -->
         </div>
         <!-- end outer-wrapper -->
-        <CmdCookieDisclaimer
-            headline="Datenschutzeinstellungen"
-            buttonLabelAcceptAllCookies=""
-            buttonLabelAcceptCurrentSettings="Akzeptieren"
-            @currentSettings="saveCurrentSettings"
-            :cookieOptions="{}"
-            v-if="!onepagerPrivacySettingsAccepted">
-            <template #privacy-text>
-                <p>
-                    <strong>
-                        Durch die Nutzung der Website stimmen Sie der Verwendung und Speicherung anonymisierter Daten zu! <br />
-                        Für mehr Details lesen Sie bitte die <a href="/content/data-privacy-de.html" @click.prevent="openFancybox">Datenschutzerklärung</a>.
-                    </strong>
-                </p>
-            </template>
-        </CmdCookieDisclaimer>
+
+        <!-- begin cmd-fancy-box -->
+        <CmdFancyBox :show="fancyBoxCookieDisclaimer" :fancyboxOptions="{}" :allowEscapeKey="false">
+            <!-- begin cmd-cookie-disclaimer -->
+            <CmdCookieDisclaimer
+                buttonLabelAcceptAllCookies="Accept all cookies"
+                buttonLabelAcceptCurrentSettings="Accept current settings"
+                @closeCookieDisclaimer="closeCookieDisclaimer"
+                :cookieOptions="{}">
+                <template #privacy-text>
+                    <p>
+                        <strong>
+                            Durch die Nutzung der Website stimmen Sie der Verwendung und Speicherung anonymisierter Daten zu! <br />
+                            Für mehr Details lesen Sie bitte die <a href="/content/data-privacy-de.html" @click.prevent="openFancybox">Datenschutzerklärung</a>.
+                        </strong>
+                    </p>
+                </template>
+            </CmdCookieDisclaimer>
+            <!-- end cmd-cookie-disclaimer -->
+        </CmdFancyBox>
+        <!-- end cmd-fancy-box -->
     </div>
     <!-- end page-wrapper -->
 </template>
 
 <script>
-/* import components from comand-component-library */
+// import components from comand-component-library
 import {CmdAddressData} from 'comand-component-library'
 import {CmdBackToTopButton} from 'comand-component-library'
+import {CmdCompanyLogo} from 'comand-component-library'
 import {CmdCookieDisclaimer} from 'comand-component-library'
 import {CmdCopyrightInformation} from 'comand-component-library'
 import {CmdFancyBox} from 'comand-component-library'
-import {CmdCompanyLogo} from 'comand-component-library'
-import {CmdOpeningHours} from 'comand-component-library'
-import {CmdSiteHeader} from 'comand-component-library'
-import {CmdSiteFooter} from 'comand-component-library'
-import {CmdSwitchLanguage} from 'comand-component-library'
 import {CmdListOfLinks} from 'comand-component-library'
+import {CmdOpeningHours} from 'comand-component-library'
+import {CmdSiteFooter} from 'comand-component-library'
+import {CmdSiteHeader} from 'comand-component-library'
+import {CmdSwitchLanguage} from 'comand-component-library'
+import {CmdToggleDarkMode} from 'comand-component-library'
 import {CmdWidthLimitationWrapper} from 'comand-component-library'
 import { openFancyBox } from 'comand-component-library'
 
-// import components from onepager
+// import components from comand-onepager
 import InnerWrapper from './components/InnerWrapper.vue'
 
-/* import used data */
-import languagesData from './assets/data/languages.json'
+// import used data
+import addressDataData from './assets/data/address-data.json'
 import footerNavigationData from './assets/data/footer-navigation.json'
-import addressData from './assets/data/address.json'
+import languagesData from './assets/data/languages.json'
+import mainNavigationData from './assets/data/main-navigation.json'
 import openingHoursData from './assets/data/opening-hours.json'
 import topHeaderNavigationData from './assets/data/top-header-navigation.json'
-import mainNavigationData from './assets/data/main-navigation.json'
 
 // import graphics
 import defaultLogo from "comand-component-library/src/assets/images/logo.svg"
@@ -88,48 +142,49 @@ import darkmodeLogo from "comand-component-library/src/assets/images/logo-darkmo
 
 export default {
     components: {
-        CmdListOfLinks,
+        CmdAddressData,
         CmdBackToTopButton,
+        CmdCompanyLogo,
         CmdCookieDisclaimer,
         CmdCopyrightInformation,
         CmdFancyBox,
-        CmdCompanyLogo,
-        CmdWidthLimitationWrapper,
+        CmdListOfLinks,
         InnerWrapper,
+        CmdOpeningHours,
+        CmdSiteFooter,
         CmdSiteHeader,
         CmdSwitchLanguage,
-        CmdSiteFooter,
-        CmdOpeningHours,
-        CmdAddressData
+        CmdToggleDarkMode,
+        CmdWidthLimitationWrapper
     },
     data() {
         return {
-            sf: false,
-            onepagerPrivacySettingsAccepted: false,
+            fancyBoxCookieDisclaimer: true,
             defaultLogo,
             darkmodeLogo,
-            languagesData,
+            addressDataData,
             footerNavigationData,
+            languagesData,
+            mainNavigationData,
             openingHoursData,
-            addressData,
-            topHeaderNavigationData,
-            mainNavigationData
+            topHeaderNavigationData
         }
     },
-    created() {
-        //this.$store.dispatch('loadLabels');
-        //this.$store.dispatch('loadSections');
-        this.onepagerPrivacySettingsAccepted = localStorage.getItem('onepagerPrivacySettingsAccepted') === "true";
-    },
+    // created() {
+    //     //this.$store.dispatch('loadLabels');
+    //     //this.$store.dispatch('loadSections');
+    //     this.onepagerPrivacySettingsAccepted = localStorage.getItem('onepagerPrivacySettingsAccepted') === "true";
+    // },
     methods: {
         changeLanguage() {
             // this.$store.dispatch("loadSections"); // load action from store
         },
-        openFancybox (event) {
+        openFancybox(event) {
             openFancyBox({url: event.target.href})
         },
-        saveCurrentSettings () {
-            localStorage.setItem("onepagerPrivacySettingsAccepted", "true");
+        closeCookieDisclaimer() {
+            this.fancyBoxCookieDisclaimer = false
+            // localStorage.setItem("onepagerPrivacySettingsAccepted", "true");
         }
     }
 }

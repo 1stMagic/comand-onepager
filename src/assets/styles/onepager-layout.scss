@@ -8,22 +8,13 @@
 	- page containers
 	- footer
 
-- MEDIA QUERIES ------------------------
-  - styles for medium screens
-  - styles for browser-dark-mode
 */
 /* end table of contents --------------------------------------------------------------------------------------------------------------------------------------------------- */
-
-/* ---------------------------------------------- BEGIN VARIABLES -------------------------------------------------- */
-html {
-	--primary-color: rgba(2, 129, 195, 1);
-}
-/* ---------------------------------------------- END VARIABLES -------------------------------------------------- */
 
 /* ---------------------------------------------- BEGIN BASIC STRUCTURE -------------------------------------------------- */
 /* begin page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
 body, #page-wrapper, #inner-wrapper {
-	background: var(--pure-white);
+	background: var(--color-scheme-background-color);
 }
 
 .section-wrapper {
@@ -66,26 +57,6 @@ body, #page-wrapper, #inner-wrapper {
 }
 /* end navigation  --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
-/* begin footer --------------------------------------------------------------------------------------------------------------------------------------------------- */
-.cmd-width-limitation-wrapper#site-footer {
-	background: var(--text-color);
-	border-bottom: var(--default-border);
-
-	footer {
-	 	a span, :not(.opening-hours-open-text)  {
-			color: var(--pure-white);
-		}
-	}
-}
-/* end footer --------------------------------------------------------------------------------------------------------------------------------------------------- */
-
-/* begin hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
-a:hover, a:active, a:focus, a.active, a:hover span, a:active span, a:focus span, a.active span .link-icon span {
-	text-decoration: none;
-	color: var(--hyperlink-color-highlighted);
-}
-/* end hyperlinks --------------------------------------------------------------------------------------------------------------------------------------------------- */
-
 /* begin main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
 #main-headline {
 	h1 {
@@ -96,36 +67,3 @@ a:hover, a:active, a:focus, a.active, a:hover span, a:active span, a:focus span,
 }
 /* end main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
 /* ---------------------------------------------- END BASIC STRUCTURE -------------------------------------------------- */
-
-/* ---------------------------------------------- BEGIN MEDIA QUERIES AND BROWSER SPECIFIC STYLES -------------------------------------------------- */
-/* begin styles for medium screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
-@media only screen and (max-width: $medium-max-width) {
-    #header-wrapper  {
-		.grid-item-logo {
-			a {
-				max-width: 80%;
-
-				img {
-					margin: 0;
-				}
-			}
-		}
-
-		header {
-			grid-template-areas: "logo" "navigation";
-
-			#navigation-wrapper {
-				grid-column: span var(--grid-small-span);
-
-				#main-navigation {
-					background: var(--default-background-color);
-				}
-			}
-		}
-    }
-
-	#toggle-offcanvas {
-		margin-right: auto;
-	}
-}
-/* end styles for medium screens --------------------------------------------------------------------------------------------------------------------------------------------------- */

@@ -1,0 +1,32 @@
+{
+      "company": {
+            "iconClass": "icon-home",
+            "value": "Your company name"
+      },
+      "address": {
+            "iconClass": "icon-home",
+            "streetNo": "Your Street/No",
+            "zip": "Your zip",
+            "city": "Your city",
+            "country": "Your country",
+            "longitude": "0.0",
+            "latitude": "0.0",
+            "location": ""
+      },
+      "telephone": {
+            "iconClass": "icon-phone",
+            "value": "Your phone number"
+      },
+      "mobilephone": {
+            "iconClass": "icon-device-smartphone",
+            "value": "Your mobile phone number"
+      },
+      "fax": {
+            "iconClass": "icon-fax",
+            "value": "Your fax number"
+      },
+      "email": {
+            "iconClass": "icon-mail",
+            "value": "Your email address"
+      }
+}
