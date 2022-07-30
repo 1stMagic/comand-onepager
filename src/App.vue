@@ -91,16 +91,7 @@
                 buttonLabelAcceptAllCookies="Accept all cookies"
                 buttonLabelAcceptCurrentSettings="Accept current settings"
                 @closeCookieDisclaimer="closeCookieDisclaimer"
-                :cookieOptions="{}">
-                <template #privacy-text>
-                    <p>
-                        <strong>
-                            Durch die Nutzung der Website stimmen Sie der Verwendung und Speicherung anonymisierter Daten zu! <br />
-                            Für mehr Details lesen Sie bitte die <a href="/content/data-privacy-de.html" @click.prevent="openFancybox">Datenschutzerklärung</a>.
-                        </strong>
-                    </p>
-                </template>
-            </CmdCookieDisclaimer>
+                :cookieOptions="cookieDisclaimerData" />
             <!-- end cmd-cookie-disclaimer -->
         </CmdFancyBox>
         <!-- end cmd-fancy-box -->
@@ -130,6 +121,7 @@ import InnerWrapper from './components/InnerWrapper.vue'
 
 // import used data
 import addressDataData from './assets/data/address-data.json'
+import cookieDisclaimerData from './assets/data/cookie-disclaimer.json'
 import footerNavigationData from './assets/data/footer-navigation.json'
 import languagesData from './assets/data/languages.json'
 import mainNavigationData from './assets/data/main-navigation.json'
@@ -167,6 +159,7 @@ export default {
             defaultLogo,
             darkmodeLogo,
             addressDataData,
+            cookieDisclaimerData,
             footerNavigationData,
             languagesData,
             mainNavigationData,
