@@ -20,7 +20,7 @@
                     <!-- end cmd-width-limitations-wrapper -->
 
                     <ContentSection
-                        v-for="section in []"
+                        v-for="section in sections"
                         :key="section.id"
                         :id="section.id"
                         :headline="section.headline"
@@ -68,6 +68,9 @@ import {imageSliderClient} from "../api/SlideshowClient"
 import shareButtons from '../assets/data/share-buttons.json'
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
 
+import {mapState} from "pinia"
+import {usePiniaStore} from "../stores/pinia"
+
 export default {
     data() {
         return {
@@ -90,6 +93,9 @@ export default {
     mounted() {
         console.log("mounted")
         this.languageChanged()
+    },
+    computed: {
+        ...mapState(usePiniaStore, ["sections"])
     },
     methods: {
         languageChanged() {

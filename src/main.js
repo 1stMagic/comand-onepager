@@ -12,8 +12,10 @@ import 'comand-frontend-framework/src/assets/css/breakpoints.css'
 import 'comand-frontend-framework/src/assets/css/framework-iconfont.css'
 /* end imports css from comand-frontend-framework ---------------------------------------------------------------------------------------- */
 
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue"
+import { createPinia } from "pinia"
+import App from "./App.vue"
+import router from "./router"
 
 /* import directives */
 // directive to format telephone- and fax-number
@@ -41,5 +43,9 @@ import 'comand-component-library/src/assets/styles/template.css'
 import './assets/styles/onepager-structure.scss'
 import './assets/styles/onepager-layout.scss'
 
-
-createApp(App).mount('#app')
+createApp(App)
+    .use(createPinia())
+    //.use(router)
+    .directive('telephone', directiveTelephone)
+    .directive('focus', directiveFocus)
+    .mount('#app')

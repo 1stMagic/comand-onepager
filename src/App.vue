@@ -67,7 +67,7 @@
 
                 <!-- begin cmd-address-data -->
                 <CmdAddressData
-                    :addressData="{}"
+                    :addressData="addressDataData"
                     :cmdHeadline="{headlineText: 'Contact', headlineLevel: 6}"
                 />
                 <!-- end cmd-address-data -->
@@ -140,6 +140,10 @@ import topHeaderNavigationData from './assets/data/top-header-navigation.json'
 import defaultLogo from "comand-component-library/src/assets/images/logo.svg"
 import darkmodeLogo from "comand-component-library/src/assets/images/logo-darkmode.svg"
 
+import {mapActions, mapState} from "pinia"
+import {usePiniaStore} from "./stores/pinia"
+import {loadMetaData} from "./utils/metaData.js"
+
 export default {
     components: {
         CmdAddressData,
@@ -170,21 +174,32 @@ export default {
             topHeaderNavigationData
         }
     },
-    // created() {
-    //     //this.$store.dispatch('loadLabels');
-    //     //this.$store.dispatch('loadSections');
-    //     this.onepagerPrivacySettingsAccepted = localStorage.getItem('onepagerPrivacySettingsAccepted') === "true";
-    // },
+    created() {
+        // load meta-data for current language by default
+        loadMetaData(this.currentLanguage)
+
+        // load labels and section-content from store
+        this.loadLabels()
+        this.loadSections()
+
+        // save privacy settings
+        this.onepagerPrivacySettingsAccepted = localStorage.getItem('onepagerPrivacySettingsAccepted') === "true"
+    },
+    computed: {
+      ...mapState(usePiniaStore, ["currentLanguage"])
+    },
     methods: {
+        ...mapActions(usePiniaStore, ["loadLabels", "loadSections"]),
+
         changeLanguage() {
-            // this.$store.dispatch("loadSections"); // load action from store
+            this.loadSections()
         },
         openFancybox(event) {
             openFancyBox({url: event.target.href})
         },
         closeCookieDisclaimer() {
             this.fancyBoxCookieDisclaimer = false
-            // localStorage.setItem("onepagerPrivacySettingsAccepted", "true");
+            localStorage.setItem("onepagerPrivacySettingsAccepted", "true")
         }
     }
 }

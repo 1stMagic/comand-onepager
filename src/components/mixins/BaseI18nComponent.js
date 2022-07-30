@@ -1,14 +1,9 @@
+import {mapState} from "pinia"
+import {usePiniaStore} from "../../stores/pinia"
+
 export default {
     computed: {
-        labels() {
-            return {} //this.$store.getters.labels
-        },
-        languages() {
-            return [] //this.$store.state.languages
-        },
-        currentLanguage() {
-            return "de" //this.$store.state.currentLanguage
-        }
+        ...mapState(usePiniaStore, ["labels", "languages", "currentLanguage"])
     },
     methods: {
         label(name) {
