@@ -19,7 +19,7 @@
                 <template v-slot:logo>
                     <!-- begin cmd-company-logo -->
                     <CmdCompanyLogo
-                        link="/"
+                        :link="{type: 'router', path: '/'}"
                         altText="CoManD Logo"
                         :pathDefaultLogo="defaultLogo"
                         :pathDarkmodeLogo="darkmodeLogo"
@@ -176,7 +176,7 @@ export default {
         this.loadSections()
 
         // save privacy settings
-        this.onepagerPrivacySettingsAccepted = localStorage.getItem('onepagerPrivacySettingsAccepted') === "true"
+        this.fancyBoxCookieDisclaimer = localStorage.getItem('onepagerPrivacySettingsAccepted') !== "true"
     },
     computed: {
       ...mapState(usePiniaStore, ["currentLanguage"])
