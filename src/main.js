@@ -45,7 +45,7 @@ import './assets/styles/onepager-layout.scss'
 
 createApp(App)
     .use(createPinia())
-    //.use(router)
+    .use(router)
     .directive('telephone', directiveTelephone)
     .directive('focus', directiveFocus)
     .mount('#app')
