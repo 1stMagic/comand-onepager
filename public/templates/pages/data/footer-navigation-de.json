@@ -1,0 +1,24 @@
+[
+  {
+    "iconClass": "icon-user-profile",
+    "type": "href",
+    "text": "",
+    "path": "#",
+    "tooltip": "Link ohne Text, aber mit Tooltip"
+  },
+  {
+    "type": "href",
+    "text": "Interner Link",
+    "path": "/content/fancybox-content.html",
+    "tooltip": "Lokale Datei in FancyBox öffnen",
+    "fancybox": true
+  },
+  {
+    "iconClass": "icon-export",
+    "type": "href",
+    "text": "Externer ink",
+    "path": "http://www.comand-cms.com",
+    "target": "_blank",
+    "tooltip": "CoManD-Website in neuem Tab öffnen"
+  }
+]

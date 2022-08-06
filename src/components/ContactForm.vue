@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>{{ label('form_headline') }}</h2>
-        <CmdForm :action="formAction" @submit="onSubmit" novalidate="novalidate" textLegend="Send mail">
+        <CmdForm :action="formAction" @submit="onSubmit" novalidate="novalidate" :textLegend="label('contact_form.legend')">
             <div class="flex-container no-flex">
                 <!-- begin cmd-form-element -->
                 <CmdFormElement
@@ -76,6 +76,7 @@
                 type="checkbox"
                 v-model="formData.privacy.value"
                 :status="formData.privacy.error ? 'error' : ''"
+                :labelText="label('data_privacy')"
                 @validate="onValidate">
                 <span v-html="label('data_privacy')"></span>
                 <!-- I accept handling and saving of my personal data a mentioned in the <a href="/content/data-privacy-en.html" @click.prevent="openDataPrivacy($event.target.href)">private policy</a>.-->

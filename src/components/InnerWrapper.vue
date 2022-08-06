@@ -65,7 +65,7 @@ import ContactForm from './ContactForm.vue'
 import {imageSliderClient} from "../api/SlideshowClient"
 
 // import used data
-import shareButtons from '../assets/data/share-buttons.json'
+import shareButtons from '../assets/data/share-buttons'
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
 
 import {mapState} from "pinia"
@@ -87,32 +87,25 @@ export default {
         ContentSection,
         ContactForm
     },
-    created() {
-        console.log("created")
-    },
-    mounted() {
-        console.log("mounted")
-        this.languageChanged()
-    },
     computed: {
-        ...mapState(usePiniaStore, ["sections"])
+        ...mapState(usePiniaStore, ["sections", "currentLanguage"])
     },
     methods: {
         languageChanged() {
-            imageSliderClient.getItems("de")
+            imageSliderClient.getItems(this.currentLanguage)
                 .then(items => {
                     this.slideshowData = items
                 })
                 .catch(e => console.error('Error loading slideshow images', e))
         }
+    },
+    watch: {
+        currentLanguage: {
+            handler() {
+                this.languageChanged()
+            },
+            immediate: true
+        }
     }
 }
-
-    // @Watch('$store.state.currentLanguage', {immediate: true})
-    // private languageChanged(): void {
-    //     imageSliderClient.getItems(this.$store.state.currentLanguage)
-    //         .then(items => this.slideshowData = items)
-    //         .catch(e => console.error('Error loading slideshow images', e));
-    // }
-
 </script>

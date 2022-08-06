@@ -1,27 +1,27 @@
 [
       {
-            "day": "Mo",
+            "day": "day_mo",
             "fromTime": "08:00h",
             "tillTime": "17:00h"
       },
       {
-            "day": "Tu",
+            "day": "day_tu",
             "fromTime": "08:00h",
             "tillTime": "17:00h"
       },
       {
-            "day": "We",
+            "day": "day_we",
             "fromTime": "08:00h",
             "tillTime": "17:30h"
       },
 
       {
-            "day": "Th",
+            "day": "day_th",
             "fromTime": "08:00h",
             "tillTime": "17:00h"
       },
       {
-            "day": "Fr",
+            "day": "day_fr",
             "fromTime": "08:00h",
             "tillTime": "15:00h"
       }

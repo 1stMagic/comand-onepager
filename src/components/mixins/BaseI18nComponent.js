@@ -6,8 +6,11 @@ export default {
         ...mapState(usePiniaStore, ["labels", "languages", "currentLanguage"])
     },
     methods: {
-        label(name) {
+        label(name, defaultValue) {
             if (this.labels[name] === undefined) {
+                if(defaultValue != null) {
+                    return defaultValue
+                }
                 return `labels.${name}`
             }
             return this.labels[name]
