@@ -1,13 +1,16 @@
 <template>
     <div>
-        <h2>{{ label('form_headline') }}</h2>
+        <!-- begin cmd-headline -->
+        <CmdHeadline :headlineText="label('contact_form.headline')" :headlineLevel="2"/>
+        <!-- end cmd-headline -->
+
         <CmdForm :action="formAction" @submit="onSubmit" novalidate="novalidate" :textLegend="label('contact_form.legend')">
             <div class="flex-container no-flex">
                 <!-- begin cmd-form-element -->
                 <CmdFormElement
                     element="input"
                     type="radio"
-                    :labelText="label('salutation_male')"
+                    :labelText="label('contact_form.salutation_male')"
                     name="salutation"
                     inputValue="M"
                     v-model="formData.salutation"
@@ -19,7 +22,7 @@
                 <CmdFormElement
                     element="input"
                     type="radio"
-                    :labelText="label('salutation_female')"
+                    :labelText="label('contact_form.salutation_female')"
                     name="salutation"
                     v-model="formData.salutation"
                     @validate="onValidate"
@@ -32,10 +35,10 @@
                     element="input"
                     type="text"
                     iconClass="icon-user-profile"
-                    :labelText="label('last_name')"
+                    :labelText="label('contact_form.last_name')"
                     :tooltipText="formData.surname.error ? formData.surname.errorMessage :  'Type your surname!'"
                     required="required"
-                    :placeholder="label('last_name')"
+                    :placeholder="label('contact_form.last_name')"
                     v-model="formData.surname.value"
                     :status="formData.surname.error ? 'error' : ''"
                     @validate="onValidate
@@ -47,8 +50,8 @@
                     element="input"
                     type="email"
                     iconClass="icon-mail"
-                    :labelText="label('email')"
-                    :placeholder="label('email')"
+                    :labelText="label('contact_form.email')"
+                    :placeholder="label('contact_form.email')"
                     required="required"
                     v-model="formData.email.value"
                     :status="formData.email.error ? 'error' : ''"
@@ -60,12 +63,13 @@
             <!-- begin cmd-form-element -->
             <CmdFormElement
                 element="textarea"
-                :labelText="label('message')"
-                :placeholder="label('message')"
+                :labelText="label('contact_form.message')"
+                :placeholder="label('contact_form.message')"
                 required="required"
                 v-model="formData.message.value"
                 :status="formData.message.error ? 'error' : ''"
                 :tooltipText="formData.message.error ? formData.message.errorMessage :  'Type your message!'"
+                :textCharacters="label('contact_form.characters')"
                 @validate="onValidate"
             />
             <!-- end cmd-form-element -->
@@ -74,12 +78,13 @@
             <CmdFormElement
                 element="input"
                 type="checkbox"
+                :required="true"
                 v-model="formData.privacy.value"
                 :status="formData.privacy.error ? 'error' : ''"
-                :labelText="label('data_privacy')"
                 @validate="onValidate">
-                <span v-html="label('data_privacy')"></span>
-                <!-- I accept handling and saving of my personal data a mentioned in the <a href="/content/data-privacy-en.html" @click.prevent="openDataPrivacy($event.target.href)">private policy</a>.-->
+                <template v-slot:labeltext>sdfsfd
+                    <span v-html="label('contact_form.data_privacy')"></span>
+                </template>
             </CmdFormElement>
             <!-- end cmd-form-element -->
 
@@ -88,7 +93,7 @@
                 <CmdFormElement
                     element="button"
                     type="submit"
-                    :nativeButton="nativeButton"
+                    :nativeButton="nativeButtonTranslated"
                 />
                 <!-- end cmd-form-element -->
             </div>
@@ -100,15 +105,20 @@
 // import components from comand-component-library
 import {CmdForm} from 'comand-component-library'
 import {CmdFormElement} from 'comand-component-library'
+import {CmdHeadline} from 'comand-component-library'
 
-//import {openFancyBox} from 'comand-component-library'
-import BaseI18nComponent from "./mixins/BaseI18nComponent"
+// import functions
 import {ContactFormValidator} from "../utils/ContactFormValidator"
+
+//import mixins
+import BaseI18nComponent from "./mixins/BaseI18nComponent"
+
 
 export default {
     components: {
         CmdForm,
-        CmdFormElement
+        CmdFormElement,
+        CmdHeadline
     },
     mixins: [
         BaseI18nComponent
@@ -132,9 +142,14 @@ export default {
             }
         }
     },
-    // mounted() {
-    //     this.labelsChanged()
-    // },
+    computed: {
+        nativeButtonTranslated() {
+            return {
+                icon: this.nativeButton.icon,
+                text: this.label("contact_form.send_message")
+            }
+        }
+    },
     props: {
         formAction: {
             type: String,

@@ -7,13 +7,10 @@
 - BASIC STRUCTURE ------------------------
 	- page containers
 	- css-grid
-	- header
 	- main
-	- footer
-	- hyperlinks
+	- main-headline
 
 - MEDIA QUERIES ------------------------
-  - styles for medium screens
   - styles for small screens
   - styles for print only
 */
@@ -21,30 +18,14 @@
 
 /* ---------------------------------------------- BEGIN VARIABLES -------------------------------------------------- */
 html {
-	--grid-small-span: 4; /* overwrite from framework.css */
-	--grid-large-span: 8; /* overwrite from framework.css */
-	--box-shadow-color: #333; /* overwrite from framework.css */
+	--grid-small-span: 4; /* overwrite framework.css */
+	--grid-large-span: 8; /* overwrite framework.css */
+	--box-shadow-color: #333; /* overwrite framework.css */
 }
 /* ---------------------------------------------- END VARIABLES -------------------------------------------------- */
 
 /* ---------------------------------------------- BEGIN BASIC STRUCTURE -------------------------------------------------- */
 /* begin page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
-#navigation-wrapper {
-	grid-column: span var(--grid-large-span);
-	display: flex;
-	justify-content: flex-end;
-
-	nav {
-		margin-right: 0;
-
-		> ul {
-			li:not(:first-child) {
-				margin-left: var(--default-margin);
-			}
-		}
-	}
-}
-
 #page-wrapper {
 	height: 100%;
 }
@@ -57,9 +38,14 @@ html {
 	min-width: 0; /* required to avoid grid expand by its children (i.e. thumbnail-scroller) */
 }
 
-.section-wrapper {
-	&:not(#main-headline) {
-		padding: calc(var(--default-padding) * 6) 0;
+.cmd-width-limitation-wrapper:not(#main-headline) {
+	section {
+		padding-top: calc(var(--default-padding) * 6);
+		padding-bottom: calc(var(--default-padding) * 6);
+	}
+
+	&:nth-child(even) {
+		background: var(--default-background-color);
 	}
 }
 /* end page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
@@ -86,6 +72,8 @@ html {
 .grid-main-item-footer-wrapper {
 	grid-area: footer-wrapper;
 }
+/* end css-grid --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
 /* begin main --------------------------------------------------------------------------------------------------------------------------------------------------- */
 .grid-item-page-content {
 	grid-area: page-content;
@@ -109,6 +97,7 @@ main {
 /* end main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
 /* ---------------------------------------------- END BASIC STRUCTURE -------------------------------------------------- */
 
+/* ---------------------------------------------- BEGIN MEDIA QUERIES -------------------------------------------------- */
 /* begin styles for small screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
 @media only screen and (max-width: $small-max-width) {
 	#header-wrapper header {
@@ -142,4 +131,4 @@ main {
 	}
 }
 /* end styles for print only --------------------------------------------------------------------------------------------------------------------------------------------------- */
-/* ---------------------------------------------- END MEDIA QUERIES AND BROWSER SPECIFIC STYLES -------------------------------------------------- */
+/* ---------------------------------------------- END MEDIA QUERIES -------------------------------------------------- */

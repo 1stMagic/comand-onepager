@@ -5,7 +5,7 @@
         <!-- begin outer-wrapper -->
         <div class="grid-main-container" id="outer-wrapper">
             <!-- begin cmd-site-header -->
-            <CmdSiteHeader :cmd-main-navigation="{navigationEntries: mainNavigationData}">
+            <CmdSiteHeader :cmd-main-navigation="{navigationEntries: mainNavigation}">
                 <template v-slot:top-header>
                     <!-- begin cmd-list-of-links (for top-header-navigation) -->
                     <CmdListOfLinks
@@ -43,14 +43,19 @@
                     <!-- end cmd-switch-language -->
 
                     <!-- begin cmd-toggle-dark-mode -->
-                    <CmdToggleDarkMode :showLabel="true" :useStyledLayout="true" />
+                    <CmdToggleDarkMode
+                        :showLabel="true"
+                        :useStyledLayout="true"
+                        :labelTextDarkMode="label('toggle_dark_mode.label_text.dark_mode_enabled')"
+                        :labelTextLightMode="label('toggle_dark_mode.label_text.light_mode_enabled')"
+                    />
                     <!-- end cmd-toggle-dark-mode -->
                 </div>
 
                 <!-- begin cmd-list-of-links (for footer-navigation) -->
                 <CmdListOfLinks
                     :links="footerNavigationData"
-                    :cmdHeadline="{headlineText: 'Links', headlineLevel: 6}"
+                    :cmdHeadline="{headlineText: label('list_of_links-footer_navigation.headline'), headlineLevel: 6}"
                 />
                 <!-- end cmd-list-of-links (for footer-navigation) -->
 
@@ -67,7 +72,8 @@
                 <!-- begin cmd-address-data -->
                 <CmdAddressData
                     :addressData="addressData"
-                    :cmdHeadline="{headlineText: 'Contact', headlineLevel: 6}"
+                    :cmdHeadline="{headlineText: label('address_data.headline'), headlineLevel: 6}"
+                    :i18n="labels"
                 />
                 <!-- end cmd-address-data -->
             </CmdSiteFooter>
@@ -78,7 +84,7 @@
             <!-- end cmd-copyright-information DO NOT REMOVE -->
 
             <!-- begin cmd-back-to-top-button -->
-            <CmdBackToTopButton href="#anchor-back-to-top"/>
+            <CmdBackToTopButton href="#anchor-back-to-top" :iconBackToTop="iconBackToTop"/>
             <!-- end cmd-back-to-top-button -->
         </div>
         <!-- end outer-wrapper -->
@@ -122,17 +128,19 @@ import InnerWrapper from './components/InnerWrapper.vue'
 import addressDataData from './assets/data/address-data.json'
 import cookieDisclaimerData from './assets/data/cookie-disclaimer.json'
 import languagesData from './assets/data/languages.json'
-import mainNavigationData from './assets/data/main-navigation.json'
 import openingHoursData from './assets/data/opening-hours.json'
 
 // import graphics
 import defaultLogo from "comand-component-library/src/assets/images/logo.svg"
 import darkmodeLogo from "comand-component-library/src/assets/images/logo-darkmode.svg"
 
+// import functions
 import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "./stores/pinia"
 import {loadMetaData} from "./utils/metaData"
 import {listOfLinksClient} from "./api/ListOfLinksClient"
+
+// import mixins
 import BaseI18nComponent from "./components/mixins/BaseI18nComponent"
 
 export default {
@@ -152,31 +160,62 @@ export default {
         CmdToggleDarkMode,
         CmdWidthLimitationWrapper
     },
-    mixins: [BaseI18nComponent],
+    mixins: [
+        BaseI18nComponent
+    ],
     data() {
         return {
-            fancyBoxCookieDisclaimer: true,
-            defaultLogo,
-            darkmodeLogo,
             addressDataData,
             cookieDisclaimerData,
+            defaultLogo,
+            darkmodeLogo,
+            fancyBoxCookieDisclaimer: true,
             footerNavigationData: [],
             languagesData,
-            mainNavigationData,
             openingHoursData,
-            topHeaderNavigationData: []
+            topHeaderNavigationData: [],
+            currentUrlHash: location.hash
         }
     },
     created() {
+        // register event-listener to check if location.hash has changed, so 'active'-class for navigation can be set correctly
+        addEventListener("hashchange", this.onLocationHashChanged)
+
         // load labels and section-content from store
         this.loadLabels()
 
         // save privacy settings
         this.fancyBoxCookieDisclaimer = localStorage.getItem('onepagerPrivacySettingsAccepted') !== "true"
     },
+    beforeUnmount() {
+        removeEventListener("hashchange", this.onLocationHashChanged)
+    },
     computed: {
+        mainNavigation() {
+            const navigationEntries = []
+            for(let i = 0; i < this.sections.length; i++) {
+                const path = "#anchor-" + this.sections[i].id
+                const entry = {
+                    iconClass: this.sections[i].iconClass,
+                    text: this.sections[i].navEntry,
+                    path: path,
+                    type: "href",
+                    active: this.currentUrlHash === path // compare url from hash with path from store to set 'active'-class
+                }
+                navigationEntries.push(entry)
+            }
+            return navigationEntries
+        },
+
+        iconBackToTop() {
+            return {
+                iconClass: "icon-single-arrow-up",
+                tooltip: this.label("back_to_top_button.tooltip")
+            }
+        },
+
         // create reference "currentLanguage" from store as computed property
-        ...mapState(usePiniaStore, ["currentLanguage"]),
+        ...mapState(usePiniaStore, ["currentLanguage", "sections"]),
 
         addressData() {
            const addressDataTranslated = JSON.parse(JSON.stringify(this.addressDataData))
@@ -192,7 +231,7 @@ export default {
                 const weekday = {...this.openingHoursData[i]}
 
                 // assign label from BaseI18n (or the value set in json-file)
-                weekday.day = this.label(weekday.day, weekday.day)
+                weekday.day = this.label('opening_hours.' + weekday.day, weekday.day)
 
                 openingHoursTranslated.push(weekday)
             }
@@ -202,6 +241,11 @@ export default {
         }
     },
     methods: {
+        // update data-property on url/hash-change to trigger update of mainNavigation-computed-property
+        onLocationHashChanged() {
+            this.currentUrlHash = location.hash
+        },
+
         ...mapActions(usePiniaStore, ["loadLabels", "loadSections"]),
 
         openFancybox(event) {

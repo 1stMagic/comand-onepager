@@ -1,7 +1,11 @@
 <template>
     <CmdWidthLimitationWrapper>
         <a :id="'anchor-' + id"></a>
-        <h2>{{ headline }}</h2>
+
+        <!-- begin cmd-headline (headline is required in section) -->
+        <CmdHeadline :headlineText="headline" :headlineLevel="1"/>
+        <!-- end cmd-headline -->
+
         <div v-if="imgpath" class="grid-container-create-columns">
             <div class="grid-small-item">
                 <img :src="imgpath" alt="image 1" />
@@ -10,7 +14,16 @@
                 <div v-html="content"></div>
             </div>
         </div>
-        <CmdThumbnailScroller v-else-if="images && images.length > 4" :thumbnailScrollerItems="images" />
+
+        <!-- begin cmd-thumbnail-scroller -->
+        <CmdThumbnailScroller
+            v-else-if="images && images.length > 4"
+            :thumbnailScrollerItems="images"
+            :cmdSlideButtons="cmdSlideButtons"
+            :fullWidth="true"
+        />
+        <!-- end cmd-thumbnail-scroller -->
+
         <div v-else-if="images && images.length < 5" class="grid-container-create-columns">
             <div v-for="(image, index) in images" :key="index" class="grid-small-item">
                 <figure>
@@ -24,36 +37,64 @@
 </template>
 
 <script>
-    /* import used components */
-    import { CmdThumbnailScroller } from 'comand-component-library'
-    import { CmdWidthLimitationWrapper } from 'comand-component-library'
+/* import components from comand-component-library */
+import { CmdHeadline } from 'comand-component-library'
+import { CmdThumbnailScroller } from 'comand-component-library'
+import { CmdWidthLimitationWrapper } from 'comand-component-library'
 
-    export default {
-        props: {
-            id: {
-                type: String,
-                required: false
-            },
-            headline: {
-                type: String,
-                required: false
-            },
-            imgpath: {
-                type: String,
-                required: false
-            },
-            images: {
-                type: Array,
-                required: false
-            },
-            content: {
-                type: String,
-                required: false
-            }
+// import mixins
+import BaseI18nComponent from "./mixins/BaseI18nComponent"
+
+export default {
+    components: {
+        CmdHeadline,
+        CmdThumbnailScroller,
+        CmdWidthLimitationWrapper
+    },
+    mixins: [
+        BaseI18nComponent
+    ],
+    props: {
+        id: {
+            type: String,
+            required: false
         },
-        components: {
-            CmdThumbnailScroller,
-            CmdWidthLimitationWrapper
+        headline: {
+            type: String,
+            required: false
+        },
+        imgpath: {
+            type: String,
+            required: false
+        },
+        images: {
+            type: Array,
+            required: false
+        },
+        content: {
+            type: String,
+            required: false
+        }
+    },
+    computed: {
+        cmdSlideButtons() {
+            return {
+                next: {
+                    next: {
+                        type: "next",
+                        iconClass: "icon-single-arrow-right",
+                        tooltip: this.label("slidebutton_next.tooltip")
+                    }
+                },
+                prev: {
+                    prev: {
+                        type: "prev",
+                        iconClass: "icon-single-arrow-left",
+                        tooltip: this.label("slidebutton_previous.tooltip")
+                    }
+                }
+            }
         }
     }
+}
 </script>

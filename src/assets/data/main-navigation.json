@@ -1,20 +1,23 @@
 [
   {
-    "name": "Section 1",
-    "href": "#anchor-section1",
+    "text": "Section 1",
+    "path": "#anchor-section1",
     "target": "",
-    "subentries": []
+    "subentries": [],
+    "type": "href"
   },
   {
-    "name": "Section 2",
-    "href": "#anchor-section2",
+    "text": "Section 2",
+    "path": "#anchor-section2",
     "target": "",
-    "subentries": []
+    "subentries": [],
+    "type": "href"
   },
   {
-    "name": "Section 3",
-    "href": "#anchor-section3",
+    "text": "Section 3",
+    "path": "#anchor-section3",
     "target": "",
-    "subentries": []
+    "subentries": [],
+    "type": "router"
   }
 ]

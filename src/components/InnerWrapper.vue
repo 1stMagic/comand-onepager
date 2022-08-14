@@ -6,19 +6,25 @@
             <!-- begin content -->
             <main class="grid-item-main">
                 <!-- begin cmd-slideshow -->
-                <CmdSlideshow :slideshow-items="slideshowData" :full-width="true" :autoplay="true"/>
-                <!-- begin cmd-slideshow -->
+                <CmdSlideshow
+                    :slideshow-items="slideshowData"
+                    :full-width="true"
+                    :autoplay="true"
+                    :cmdSlideButtons="cmdSlideButtons"
+                />
+                <!-- end cmd-slideshow -->
 
                 <!-- begin main content -->
                 <div class="grid-item-page-content" id="page-content">
                     <!-- begin cmd-width-limitations-wrapper -->
                     <CmdWidthLimitationWrapper id="main-headline">
                         <!-- begin cmd-headline -->
-                        <CmdHeadline :headlineText="label('title')" :headlineLevel="1" />
+                        <CmdHeadline :headlineText="label('headline.title')" :headlineLevel="1"/>
                         <!-- end cmd-headline -->
                     </CmdWidthLimitationWrapper>
                     <!-- end cmd-width-limitations-wrapper -->
 
+                    <!-- begin content sections -->
                     <ContentSection
                         v-for="section in sections"
                         :key="section.id"
@@ -28,6 +34,7 @@
                         :imgpath="section.imgPath"
                         :images="section.images"
                     />
+                    <!-- end content sections -->
 
                     <!-- begin cmd-width-limitations-wrapper -->
                     <CmdWidthLimitationWrapper anchor-id="anchor-section4">
@@ -38,14 +45,14 @@
                     <!-- begin cmd-width-limitations-wrapper -->
                     <CmdWidthLimitationWrapper>
                         <!-- begin cmd-share-buttons -->
-                        <CmdShareButtons :shareButtons="shareButtons" />
-                        <!-- begin cmd-share-buttons -->
+                        <CmdShareButtons :shareButtons="shareButtons" :appendPage="true"/>
+                        <!-- end cmd-share-buttons -->
                     </CmdWidthLimitationWrapper>
                     <!-- end cmd-width-limitations-wrapper -->
                 </div>
                 <!-- end main content -->
             </main>
-            <!-- content end -->
+            <!-- end content -->
         </div>
         <!-- end content-wrapper end -->
     </div>
@@ -54,10 +61,10 @@
 
 <script>
 // import components from comand-component-library
-import { CmdHeadline } from 'comand-component-library'
-import { CmdShareButtons } from 'comand-component-library'
-import { CmdSlideshow } from 'comand-component-library'
-import { CmdWidthLimitationWrapper } from 'comand-component-library'
+import {CmdHeadline} from 'comand-component-library'
+import {CmdShareButtons} from 'comand-component-library'
+import {CmdSlideshow} from 'comand-component-library'
+import {CmdWidthLimitationWrapper} from 'comand-component-library'
 
 // import components from comand-onepager
 import ContentSection from './ContentSection.vue'
@@ -70,15 +77,18 @@ import BaseI18nComponent from "./mixins/BaseI18nComponent"
 
 import {mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia"
+import {shareButtonsClient} from "../api/ShareButtonsClient"
 
 export default {
     data() {
         return {
             slideshowData: [],
-            shareButtons: shareButtons
+            shareButtons: [],
         }
     },
-    mixins: [BaseI18nComponent],
+    mixins: [
+        BaseI18nComponent
+    ],
     components: {
         CmdHeadline,
         CmdShareButtons,
@@ -88,21 +98,36 @@ export default {
         ContactForm
     },
     computed: {
-        ...mapState(usePiniaStore, ["sections", "currentLanguage"])
-    },
-    methods: {
-        languageChanged() {
-            imageSliderClient.getItems(this.currentLanguage)
-                .then(items => {
-                    this.slideshowData = items
-                })
-                .catch(e => console.error('Error loading slideshow images', e))
+        ...mapState(usePiniaStore, ["sections", "currentLanguage"]),
+
+        cmdSlideButtons() {
+            return {
+                next: {
+                    iconClass: "icon-single-arrow-right",
+                    tooltip: this.label("slidebutton_next.tooltip")
+                },
+                prev: {
+                    iconClass: "icon-single-arrow-left",
+                    tooltip: this.label("slidebutton_previous.tooltip")
+                }
+            }
         }
     },
     watch: {
         currentLanguage: {
             handler() {
-                this.languageChanged()
+                // getItems-functions from listOfLinksClient (loads links async) and assign to data-property after data is received
+                shareButtonsClient.getItems(this.currentLanguage, "share-buttons")
+                .then(items => {
+                    this.shareButtons = items
+                })
+                .catch(e => console.error("Error loading share-buttons-data", e))
+
+                imageSliderClient.getItems(this.currentLanguage)
+                .then(items => {
+                    this.slideshowData = items
+                })
+                .catch(e => console.error('Error loading slideshow images', e))
             },
             immediate: true
         }
