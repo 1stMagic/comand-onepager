@@ -1,62 +1,54 @@
 <template>
-    <!-- begin inner-wrapper -->
-    <div class="grid-main-item-inner-wrapper" id="inner-wrapper">
-        <!-- begin content-wrapper -->
-        <div id="content-wrapper"><!-- no row allowed -->
-            <!-- begin content -->
-            <main class="grid-item-main">
-                <!-- begin cmd-slideshow -->
-                <CmdSlideshow
-                    :slideshow-items="slideshowData"
-                    :full-width="true"
-                    :autoplay="true"
-                    :cmdSlideButtons="cmdSlideButtons"
-                />
-                <!-- end cmd-slideshow -->
+    <!-- begin content -->
+    <main>
+        <!-- begin cmd-slideshow -->
+        <CmdSlideshow
+            :slideshow-items="slideshowData"
+            :full-width="true"
+            :autoplay="true"
+            :cmdSlideButtons="cmdSlideButtons"
+        />
+        <!-- end cmd-slideshow -->
 
-                <!-- begin main content -->
-                <div class="grid-item-page-content" id="page-content">
-                    <!-- begin cmd-width-limitations-wrapper -->
-                    <CmdWidthLimitationWrapper id="main-headline">
-                        <!-- begin cmd-headline -->
-                        <CmdHeadline :headlineText="label('headline.title')" :headlineLevel="1"/>
-                        <!-- end cmd-headline -->
-                    </CmdWidthLimitationWrapper>
-                    <!-- end cmd-width-limitations-wrapper -->
+        <!-- begin main content -->
+        <div id="page-content">
+            <!-- begin cmd-width-limitations-wrapper -->
+            <CmdWidthLimitationWrapper id="main-headline">
+                <!-- begin cmd-headline -->
+                <CmdHeadline :headlineText="label('headline.title')" :headlineLevel="1"/>
+                <!-- end cmd-headline -->
+            </CmdWidthLimitationWrapper>
+            <!-- end cmd-width-limitations-wrapper -->
 
-                    <!-- begin content sections -->
-                    <ContentSection
-                        v-for="section in sections"
-                        :key="section.id"
-                        :id="section.id"
-                        :headline="section.headline"
-                        :content="section.content"
-                        :imgpath="section.imgPath"
-                        :images="section.images"
-                    />
-                    <!-- end content sections -->
+            <!-- begin content sections -->
+            <ContentSection
+                v-for="section in sections"
+                :key="section.id"
+                :id="section.id"
+                :headline="section.headline"
+                :content="section.content"
+                :imgpath="section.imgPath"
+                :images="section.images"
+            />
+            <!-- end content sections -->
 
-                    <!-- begin cmd-width-limitations-wrapper -->
-                    <CmdWidthLimitationWrapper anchor-id="anchor-section4">
-                        <ContactForm form-action="#"/>
-                    </CmdWidthLimitationWrapper>
-                    <!-- end cmd-width-limitations-wrapper -->
+            <!-- begin cmd-width-limitations-wrapper -->
+            <CmdWidthLimitationWrapper anchor-id="anchor-section4">
+                <ContactForm form-action="#"/>
+            </CmdWidthLimitationWrapper>
+            <!-- end cmd-width-limitations-wrapper -->
 
-                    <!-- begin cmd-width-limitations-wrapper -->
-                    <CmdWidthLimitationWrapper>
-                        <!-- begin cmd-share-buttons -->
-                        <CmdShareButtons :shareButtons="shareButtons" :appendPage="true"/>
-                        <!-- end cmd-share-buttons -->
-                    </CmdWidthLimitationWrapper>
-                    <!-- end cmd-width-limitations-wrapper -->
-                </div>
-                <!-- end main content -->
-            </main>
-            <!-- end content -->
+            <!-- begin cmd-width-limitations-wrapper -->
+            <CmdWidthLimitationWrapper>
+                <!-- begin cmd-share-buttons -->
+                <CmdShareButtons :shareButtons="shareButtons" :appendPage="true"/>
+                <!-- end cmd-share-buttons -->
+            </CmdWidthLimitationWrapper>
+            <!-- end cmd-width-limitations-wrapper -->
         </div>
-        <!-- end content-wrapper end -->
-    </div>
-    <!-- end inner-wrapper -->
+        <!-- end main content -->
+    </main>
+    <!-- end content -->
 </template>
 
 <script>
@@ -72,7 +64,6 @@ import ContactForm from './ContactForm.vue'
 import {imageSliderClient} from "../api/SlideshowClient"
 
 // import used data
-import shareButtons from '../assets/data/share-buttons'
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
 
 import {mapState} from "pinia"
@@ -118,16 +109,16 @@ export default {
             handler() {
                 // getItems-functions from listOfLinksClient (loads links async) and assign to data-property after data is received
                 shareButtonsClient.getItems(this.currentLanguage, "share-buttons")
-                .then(items => {
-                    this.shareButtons = items
-                })
-                .catch(e => console.error("Error loading share-buttons-data", e))
+                    .then(items => {
+                        this.shareButtons = items
+                    })
+                    .catch(e => console.error("Error loading share-buttons-data", e))
 
                 imageSliderClient.getItems(this.currentLanguage)
-                .then(items => {
-                    this.slideshowData = items
-                })
-                .catch(e => console.error('Error loading slideshow images', e))
+                    .then(items => {
+                        this.slideshowData = items
+                    })
+                    .catch(e => console.error('Error loading slideshow images', e))
             },
             immediate: true
         }

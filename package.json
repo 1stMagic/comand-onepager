@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
-    "comand-component-library": "^3.1.86",
-    "comand-frontend-framework": "^3.2.68",
+    "comand-component-library": "^3.1.92",
+    "comand-frontend-framework": "^3.2.77",
     "pinia": "^2.0.17",
     "vue": "^3.2.37",
     "vue-router": "^4.1.3"

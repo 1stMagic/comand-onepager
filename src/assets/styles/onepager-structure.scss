@@ -16,28 +16,8 @@
 */
 /* end table of contents --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
-/* ---------------------------------------------- BEGIN VARIABLES -------------------------------------------------- */
-html {
-	--grid-small-span: 4; /* overwrite framework.css */
-	--grid-large-span: 8; /* overwrite framework.css */
-	--box-shadow-color: #333; /* overwrite framework.css */
-}
-/* ---------------------------------------------- END VARIABLES -------------------------------------------------- */
-
 /* ---------------------------------------------- BEGIN BASIC STRUCTURE -------------------------------------------------- */
 /* begin page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
-#page-wrapper {
-	height: 100%;
-}
-
-#outer-wrapper {
-	min-height: 100%;
-}
-
-#content-wrapper {
-	min-width: 0; /* required to avoid grid expand by its children (i.e. thumbnail-scroller) */
-}
-
 .cmd-width-limitation-wrapper:not(#main-headline) {
 	section {
 		padding-top: calc(var(--default-padding) * 6);
@@ -50,35 +30,7 @@ html {
 }
 /* end page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
-/* begin css-grid --------------------------------------------------------------------------------------------------------------------------------------------------- */
-.grid-main-container {
-    grid-template-areas:
-    	"header-wrapper"
-    	"inner-wrapper"
-    	"footer-wrapper"
-		"copyright-information";
-	grid-template-rows:
-		min-content
-		auto
-		min-content
-		min-content;
-}
-
-.grid-main-item-inner-wrapper {
-	grid-area: inner-wrapper;
-	display: grid;
-}
-
-.grid-main-item-footer-wrapper {
-	grid-area: footer-wrapper;
-}
-/* end css-grid --------------------------------------------------------------------------------------------------------------------------------------------------- */
-
 /* begin main --------------------------------------------------------------------------------------------------------------------------------------------------- */
-.grid-item-page-content {
-	grid-area: page-content;
-}
-
 main {
 	ul, ol {
 		list-style-position: inside; /* list-style-position for all list in main */
@@ -100,16 +52,6 @@ main {
 /* ---------------------------------------------- BEGIN MEDIA QUERIES -------------------------------------------------- */
 /* begin styles for small screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
 @media only screen and (max-width: $small-max-width) {
-	#header-wrapper header {
-		grid-template-areas:
-			"logo logo"
-			"navigation box-site-search";
-	}
-
-	.grid-item-news-text-wrapper a.link-to-content {
-		align-self: center;
-	}
-
     a[href^="tel"] {
         text-decoration: underline;
     }

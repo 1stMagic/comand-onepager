@@ -2,8 +2,6 @@
     <!-- begin page-wrapper -->
     <div id="page-wrapper">
         <a id="anchor-back-to-top"></a>
-        <!-- begin outer-wrapper -->
-        <div class="grid-main-container" id="outer-wrapper">
             <!-- begin cmd-site-header -->
             <CmdSiteHeader :cmd-main-navigation="{navigationEntries: mainNavigation}">
                 <template v-slot:top-header>
@@ -86,8 +84,6 @@
             <!-- begin cmd-back-to-top-button -->
             <CmdBackToTopButton href="#anchor-back-to-top" :iconBackToTop="iconBackToTop"/>
             <!-- end cmd-back-to-top-button -->
-        </div>
-        <!-- end outer-wrapper -->
 
         <!-- begin cmd-fancy-box -->
         <CmdFancyBox :show="fancyBoxCookieDisclaimer" :fancyboxOptions="{}" :allowEscapeKey="false">

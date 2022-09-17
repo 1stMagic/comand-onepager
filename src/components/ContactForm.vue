@@ -82,7 +82,7 @@
                 v-model="formData.privacy.value"
                 :status="formData.privacy.error ? 'error' : ''"
                 @validate="onValidate">
-                <template v-slot:labeltext>sdfsfd
+                <template v-slot:labeltext>
                     <span v-html="label('contact_form.data_privacy')"></span>
                 </template>
             </CmdFormElement>
