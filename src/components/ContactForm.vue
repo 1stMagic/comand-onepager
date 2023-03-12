@@ -83,7 +83,7 @@
                 :status="formData.privacy.error ? 'error' : ''"
                 @validate="onValidate">
                 <template v-slot:labeltext>
-                    <span v-html="label('contact_form.data_privacy')"></span>
+                    <span ref="dataPrivacy" v-html="label('contact_form.data_privacy')"></span>
                 </template>
             </CmdFormElement>
             <!-- end cmd-form-element -->
@@ -109,10 +109,12 @@ import {CmdHeadline} from 'comand-component-library'
 
 // import functions
 import {ContactFormValidator} from "../utils/ContactFormValidator"
+import {openFancyBox} from 'comand-component-library'
+
+import {usePiniaStore} from "../stores/pinia"
 
 //import mixins
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
-
 
 export default {
     components: {
@@ -141,6 +143,16 @@ export default {
                 text: "Send"
             }
         }
+    },
+    mounted() {
+        usePiniaStore().$subscribe(() => {
+            this.$nextTick(() => {
+                this.$refs.dataPrivacy.querySelector('.fancybox')?.addEventListener('click', event => {
+                    event.preventDefault()
+                    openFancyBox({url: event.target.getAttribute('href')})
+                })
+            })
+        })
     },
     computed: {
         nativeButtonTranslated() {
@@ -179,6 +191,12 @@ export default {
         },
         onValidate() {
             this.formData = Object.assign({}, this.validator.validate(this.formData));
+        },
+        executeLink(link, event) {
+            if (link.fancybox) {
+                event.preventDefault()
+                openFancyBox({url: link})
+            }
         }
         // openDataPrivacy(url) {
         //     openFancyBox({url})

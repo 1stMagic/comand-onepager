@@ -1,0 +1,38 @@
+{
+  "orientation": "horizontal",
+  "components": [
+    {
+      "name": "CmdListOfLinks",
+      "props": {
+        "cmdHeadline": {
+          "headlineText": "",
+          "headlineLevel": ""
+        },
+        "link": [
+          {
+            "iconClass": "icon-user-profile",
+            "type": "href",
+            "text": "",
+            "path": "#",
+            "tooltip": "Link without text, but tooltip"
+          },
+          {
+            "type": "href",
+            "text": "Internal link",
+            "path": "/content/fancybox-content.html",
+            "tooltip": "Open local file in fancybox",
+            "fancybox": true
+          },
+          {
+            "iconClass": "icon-export",
+            "type": "href",
+            "text": "External link",
+            "path": "http://www.comand-cms.com",
+            "target": "_blank",
+            "tooltip": "Open CoManD-Website in new tab"
+          }
+        ]
+      }
+    }
+  ]
+}

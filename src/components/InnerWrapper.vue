@@ -3,9 +3,10 @@
     <main>
         <!-- begin cmd-slideshow -->
         <CmdSlideshow
-            :slideshow-items="slideshowData"
+            v-if="slideshow.slideshowItems?.length"
+            :slideshow-items="slideshow.slideshowItems"
             :full-width="true"
-            :autoplay="true"
+            :autoplay="false"
             :cmdSlideButtons="cmdSlideButtons"
         />
         <!-- end cmd-slideshow -->
@@ -13,37 +14,63 @@
         <!-- begin main content -->
         <div id="page-content">
             <!-- begin cmd-width-limitations-wrapper -->
-            <CmdWidthLimitationWrapper id="main-headline">
+            <CmdWidthLimitationWrapper v-if="mainHeadline || editMode" id="main-headline">
+                <EditContentWrapper
+                    v-if="editMode"
+                    @delete="deleteComponent('mainHeadline')"
+                    @add="addComponent('mainHeadline')"
+                    :componentExists="mainHeadline">
+                    <CmdHeadline v-if="mainHeadline" :headlineText="label('headline.title')" :headlineLevel="1"/>
+                </EditContentWrapper>
+
                 <!-- begin cmd-headline -->
-                <CmdHeadline :headlineText="label('headline.title')" :headlineLevel="1"/>
+                <CmdHeadline v-else :headlineText="label('headline.title')" :headlineLevel="1"/>
                 <!-- end cmd-headline -->
             </CmdWidthLimitationWrapper>
             <!-- end cmd-width-limitations-wrapper -->
 
-            <!-- begin content sections -->
-            <ContentSection
-                v-for="section in sections"
-                :key="section.id"
-                :id="section.id"
-                :headline="section.headline"
-                :content="section.content"
-                :imgpath="section.imgPath"
-                :images="section.images"
-            />
-            <!-- end content sections -->
+            <CmdWidthLimitationWrapper v-if="editMode">
+                <EditContentWrapper :componentExists="false" @add="addComponent('contentSection')"/>
+            </CmdWidthLimitationWrapper>
+
+            <template v-if="editMode">
+                <EditContentWrapper
+                    v-for="(section, index) in sections" :key="index" :id="section.id"
+                    @delete="deleteComponent('contentSection')"
+                    :sectionShowLinkInMainNavigation="section.showLinkInMainNavigation"
+                    :sectionLinkIconClass="section.iconClass"
+                    :sectionLinkText="section.navEntry"
+                    :sectionId="section.id"
+                >
+                    <!-- begin content sections -->
+                    <template v-slot="slotProps">
+                        <ContentSection
+                            :components="section.components"
+                            :sectionId="section.id"
+                            :headlineText="section.headline"
+                            :editContent="slotProps.editContent"
+                            :editModeEvents="slotProps.editModeEvents"
+                        />
+                    </template>
+                    <!-- end content sections -->
+                </EditContentWrapper>
+            </template>
+
+            <template v-else>
+                <!-- begin content sections -->
+                <ContentSection
+                    v-for="(section, index) in site.main?.sections || []" :key="index"
+                    :id="section.id"
+                    :headlineText="section.headline"
+                    :components="section.components"
+                />
+                <!-- end content sections -->
+            </template>
 
             <!-- begin cmd-width-limitations-wrapper -->
-            <CmdWidthLimitationWrapper anchor-id="anchor-section4">
-                <ContactForm form-action="#"/>
-            </CmdWidthLimitationWrapper>
-            <!-- end cmd-width-limitations-wrapper -->
-
-            <!-- begin cmd-width-limitations-wrapper -->
-            <CmdWidthLimitationWrapper>
-                <!-- begin cmd-share-buttons -->
-                <CmdShareButtons :shareButtons="shareButtons" :appendPage="true"/>
-                <!-- end cmd-share-buttons -->
-            </CmdWidthLimitationWrapper>
+<!--            <CmdWidthLimitationWrapper anchor-id="anchor-section4">-->
+<!--                <ContactForm form-action="#"/>-->
+<!--            </CmdWidthLimitationWrapper>-->
             <!-- end cmd-width-limitations-wrapper -->
         </div>
         <!-- end main content -->
@@ -52,21 +79,12 @@
 </template>
 
 <script>
-// import components from comand-component-library
-import {CmdHeadline} from 'comand-component-library'
-import {CmdShareButtons} from 'comand-component-library'
-import {CmdSlideshow} from 'comand-component-library'
-import {CmdWidthLimitationWrapper} from 'comand-component-library'
-
-// import components from comand-onepager
-import ContentSection from './ContentSection.vue'
-import ContactForm from './ContactForm.vue'
 import {imageSliderClient} from "../api/SlideshowClient"
 
 // import used data
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
 
-import {mapState} from "pinia"
+import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia"
 import {shareButtonsClient} from "../api/ShareButtonsClient"
 
@@ -74,22 +92,31 @@ export default {
     data() {
         return {
             slideshowData: [],
-            shareButtons: [],
+            shareButtons: []
         }
     },
     mixins: [
         BaseI18nComponent
     ],
-    components: {
-        CmdHeadline,
-        CmdShareButtons,
-        CmdSlideshow,
-        CmdWidthLimitationWrapper,
-        ContentSection,
-        ContactForm
+    methods: {
+        deleteComponent(componentName, sectionId) {
+            if (componentName === "mainHeadline") {
+                this.updateMainHeadlineState(false)
+            } else if (componentName === "contentSection") {
+                this.deleteContentSection(sectionId)
+            }
+        },
+        addComponent(componentName) {
+            if (componentName === "mainHeadline") {
+                this.updateMainHeadlineState(true)
+            } else if (componentName === "contentSection") {
+                this.addContentSection()
+            }
+        },
+        ...mapActions(usePiniaStore, ["updateMainHeadlineState", "deleteContentSection", "addContentSection"])
     },
     computed: {
-        ...mapState(usePiniaStore, ["sections", "currentLanguage"]),
+        ...mapState(usePiniaStore, ["site", "currentLanguage", "editMode", "mainHeadline", "slideshow"]),
 
         cmdSlideButtons() {
             return {

@@ -1,5 +1,4 @@
 @import "comand-component-library/src/assets/styles/variables.scss";
-
 /* begin table of contents --------------------------------------------------------------------------------------------------------------------------------------------------- */
 /*
 - BASIC STRUCTURE ------------------------
@@ -65,3 +64,25 @@ body, #page-wrapper {
 }
 /* end main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
 /* ---------------------------------------------- END BASIC STRUCTURE -------------------------------------------------- */
+
+
+/* begin hotfix for fancybox-behavior */
+body.avoid-scrolling {
+	height: 100%;
+}
+
+.cmd-fancybox {
+	position: fixed;
+}
+/* end hotfix for fancybox-behavior */
+
+/*
+#page-wrapper {
+	scroll-padding-top: 162px;
+	overflow: auto;
+}
+
+.cmd-site-header {
+	height: 162px;
+}
+*/

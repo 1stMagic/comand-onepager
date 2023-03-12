@@ -30,21 +30,28 @@ import 'comand-component-library/src/assets/styles/logos-iconfont.css'
 import 'comand-component-library/src/assets/styles/global-styles.scss'
 
 /* import css for global transitions */
-import 'comand-component-library/src/assets/styles/transitions.scss'
+//import 'comand-component-library/src/assets/styles/transitions.scss'
 
 /* import generated css from components */
-import 'comand-component-library/dist/comand-component-library.css'
+import 'comand-component-library/dist/style.css'
 
 /* import css for your custom styles */
 import 'comand-component-library/src/assets/styles/template.css'
-
 
 /* import css for onepager */
 import './assets/styles/onepager-structure.scss'
 import './assets/styles/onepager-layout.scss'
 
-createApp(App)
-    .use(createPinia())
+import * as components from "comand-component-library"
+import ContactForm from "./components/ContactForm.vue"
+
+const app = createApp(App)
+
+app.component("ContactForm", ContactForm)
+Object.entries(components).forEach((component) => {
+    app.component(component[0], component[1])
+})
+app.use(createPinia())
     .use(router)
     .directive('telephone', directiveTelephone)
     .directive('focus', directiveFocus)
