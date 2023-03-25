@@ -55,7 +55,7 @@ body, #page-wrapper {
 /* end navigation  --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 /* begin main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
-#main-headline {
+#section-wrapper-main-headline {
 	h1 {
 		font-size: 5rem;
 		text-align: center;
@@ -76,13 +76,9 @@ body.avoid-scrolling {
 }
 /* end hotfix for fancybox-behavior */
 
-/*
 #page-wrapper {
-	scroll-padding-top: 162px;
-	overflow: auto;
+	scroll-snap-type: y mandatory;
+	overflow-y: scroll;
+	height: 100vh;
+	scroll-behavior: smooth; /* let container scroll smoothly to anchors */
 }
-
-.cmd-site-header {
-	height: 162px;
-}
-*/

@@ -1,5 +1,5 @@
 <template>
-    <CmdWidthLimitationWrapper>
+    <CmdWidthLimitationWrapper :id="'section-wrapper-' + id">
         <a :id="'anchor-' + id"></a>
         <div class="flex-container vertical">
             <!-- begin cmd-headline (headline is required in section) -->

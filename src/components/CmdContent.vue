@@ -5,7 +5,13 @@
                 :is="component.name"
                 v-bind="component.props"
                 :editContent="editContent"
-            />
+            >
+                <component
+                    v-for="(childComponent, childComponentIndex) in component.components || []"
+                    :key="childComponentIndex" :is="childComponent.name"
+                    v-bind="childComponent.props"
+                    :editContent="childComponent.editContent" />
+            </component>
         </CmdContentItem>
     </div>
 </template>

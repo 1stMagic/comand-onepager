@@ -1,9 +1,9 @@
 <template>
     <!-- begin page-wrapper -->
-    <div :class="{'edit-mode': editMode}" id="page-wrapper">
+    <div :class="{'edit-mode': editMode}" id="page-wrapper" :style="{'scroll-padding-top': heightSiteHeader + 'px'}">
         <a id="anchor-back-to-top"></a>
             <!-- begin cmd-site-header -->
-            <CmdSiteHeader :cmd-main-navigation="{navigationEntries: mainNavigation}">
+            <CmdSiteHeader :cmd-main-navigation="{navigationEntries: mainNavigation, closeOffcanvas: { iconClass: 'icon-cancel', text: 'Close nase', showText: true}}" :navigationInline="site.siteHeader?.navigationInline">
                 <template v-slot:top-header>
                     <!-- begin cmd-list-of-links (for top-header-navigation) -->
                     <CmdListOfLinks
@@ -37,7 +37,15 @@
                     v-for="(component, index) in site.siteFooter?.components || []" :key="index"
                     :is="component.name"
                     v-bind="component.props"
-                />
+                    v-on="handlers(component)"
+                >
+                    <component
+                        v-for="(childComponent, childComponentIndex) in component.components || []"
+                        :key="childComponentIndex" :is="childComponent.name"
+                        v-bind="childComponent.props"
+                        v-on="handlers(childComponent)"
+                        :editContent="childComponent.editContent" />
+                </component>
             </CmdSiteFooter>
             <!-- end cmd-site-footer -->
 
@@ -46,7 +54,7 @@
             <!-- end cmd-copyright-information DO NOT REMOVE -->
 
             <!-- begin cmd-back-to-top-button -->
-            <CmdBackToTopButton href="#anchor-back-to-top" :iconBackToTop="iconBackToTop"/>
+            <CmdBackToTopButton href="#anchor-back-to-top" :iconBackToTop="iconBackToTop" parent-selector="#page-wrapper"/>
             <!-- end cmd-back-to-top-button -->
 
         <!-- begin cmd-fancy-box -->
@@ -96,7 +104,8 @@ export default {
             languagesData,
             openingHoursData,
             topHeaderNavigationData: [],
-            currentUrlHash: location.hash
+            currentUrlHash: location.hash,
+            heightSiteHeader: 150
         }
     },
     created() {
@@ -108,6 +117,16 @@ export default {
 
         // save privacy settings
         this.fancyBoxCookieDisclaimer = localStorage.getItem('onepagerPrivacySettingsAccepted') !== "true"
+    },
+    mounted() {
+        const siteHeader = document.getElementsByClassName("cmd-site-header")
+
+        const resizeObserver = new ResizeObserver(entries => {
+            // get height of seit header to set scroll-padding on #page-wrapper
+            this.heightSiteHeader = entries[0].target.offsetHeight
+        })
+
+        resizeObserver.observe(siteHeader[0])
     },
     beforeUnmount() {
         removeEventListener("hashchange", this.onLocationHashChanged)
@@ -170,6 +189,26 @@ export default {
         }
     },
     methods: {
+        handlers(component) {
+            if(component.handlers === "toggleSection") {
+                return {
+                    "click": this.toggleSection
+                }
+            }
+            return {}
+        },
+        toggleSection(event) {
+            console.log("event", event)
+            if(event.link.sectionId) {
+               event.originalEvent.preventDefault()
+               const sectionToToggle = this.site.main?.sections.find(section => {
+                    return section.id === event.link.sectionId
+                })
+                if(sectionToToggle) {
+                    sectionToToggle.show = !sectionToToggle.show
+                }
+            }
+        },
         // update data-property on url/hash-change to trigger update of mainNavigation-computed-property
         onLocationHashChanged() {
             this.currentUrlHash = location.hash

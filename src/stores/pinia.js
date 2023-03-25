@@ -6,7 +6,6 @@ import {createUuid} from "comand-component-library"
 export const usePiniaStore = defineStore("pinia", {
     state: () => ({
         site: {},
-        sections: [],
         fancybox: {
             status: false,
             img: false,
@@ -18,7 +17,8 @@ export const usePiniaStore = defineStore("pinia", {
         languageLabels: {},
         currentLanguage: 'de',
         editMode: false,
-        mainHeadline: true
+        mainHeadline: true,
+        authToken: ""
     }),
     getters: {
         labels(state) {
@@ -40,9 +40,23 @@ export const usePiniaStore = defineStore("pinia", {
                 return state.site.siteHeader?.propsLogo
             }
             return {}
+        },
+        sections(state) {
+            return state.site.main?.sections.filter(section => {
+                if(section.show !== false) {
+                    return true
+                }
+                return false
+            }) || []
         }
     },
     actions: {
+        setAuthToken(token) {
+            this.authToken = token
+        },
+        deleteAuthToken() {
+            this.authToken = ""
+        },
         loadLabels() {
             i18nClient.getLanguagesAndLabels()
                 .then(([languages, labels]) => {

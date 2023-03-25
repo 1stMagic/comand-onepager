@@ -44,10 +44,12 @@ import './assets/styles/onepager-layout.scss'
 
 import * as components from "comand-component-library"
 import ContactForm from "./components/ContactForm.vue"
+import LoginArea from "./components/LoginArea.vue"
 
 const app = createApp(App)
 
 app.component("ContactForm", ContactForm)
+app.component("LoginArea", LoginArea)
 Object.entries(components).forEach((component) => {
     app.component(component[0], component[1])
 })

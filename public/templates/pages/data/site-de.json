@@ -98,6 +98,18 @@
     },
     "sections": [
       {
+        "id": "main-headline",
+        "components": [
+          {
+          "name": "CmdHeadline",
+          "props":
+          {
+            "headlineText": "Hauptüberschrift",
+            "headlineLevel": 1
+          }
+          }]
+      },
+      {
         "id": "section1",
         "iconClass": "icon-home",
         "showLinkInMainNavigation": true,
@@ -360,7 +372,27 @@
         ]
       },
       {
-        "id": "section6",
+        "id": "section-login",
+        "showLinkInMainNavigation": false,
+        "headline": "Login Area",
+        "show": false,
+        "components": [
+          {
+            "name": "LoginArea",
+            "props": {
+              "cmdForm": {
+                "textLegend": "Login",
+                "showLegend": false
+              },
+              "passwordLabelText": "Passwort",
+              "submitButtonText": "Anmelden",
+              "baseUrl": "http://localhost:42000"
+            }
+          }
+        ]
+      },
+      {
+        "id": "section-social-networks",
         "showLinkInMainNavigation": false,
         "components": [
           {
@@ -406,37 +438,53 @@
     "orientation": "horizontal",
     "components": [
       {
-        "name": "CmdListOfLinks",
+        "name": "div",
         "props": {
-          "cmdHeadline": {
-            "headlineText": "",
-            "headlineLevel": ""
-          },
-          "links": [
-            {
-              "iconClass": "icon-user-profile",
-              "type": "href",
-              "text": "",
-              "path": "#",
-              "tooltip": "Link without text, but tooltip"
-            },
-            {
-              "type": "href",
-              "text": "Data privacy",
-              "path": "/content/data-privacy-de.html",
-              "tooltip": "Open local file in fancybox",
-              "fancybox": true
-            },
-            {
-              "iconClass": "icon-export",
-              "type": "href",
-              "text": "External link",
-              "path": "http://www.comand-cms.com",
-              "target": "_blank",
-              "tooltip": "Open CoManD-Website in new tab"
+          "class": ""
+        },
+        "components": [
+          {
+            "name": "CmdListOfLinks",
+            "handlers": "toggleSection",
+            "props": {
+              "cmdHeadline": {
+                "headlineText": "",
+                "headlineLevel": ""
+              },
+              "links": [
+                {
+                  "iconClass": "icon-user-profile",
+                  "type": "href",
+                  "text": "",
+                  "path": "#",
+                  "tooltip": "Link without text, but tooltip"
+                },
+                {
+                  "type": "href",
+                  "text": "Data privacy",
+                  "path": "/content/data-privacy-de.html",
+                  "tooltip": "Open local file in fancybox",
+                  "fancybox": true
+                },
+                {
+                  "iconClass": "icon-export",
+                  "type": "href",
+                  "text": "External link",
+                  "path": "http://www.comand-cms.com",
+                  "target": "_blank",
+                  "tooltip": "Open CoManD-Website in new tab"
+                },
+                {
+                  "iconClass": "icon-security-settings",
+                  "type": "href",
+                  "text": "Login",
+                  "path": "#",
+                  "sectionId": "section-login"
+                }
+              ]
             }
-          ]
-        }
+          }
+        ]
       },
       {
         "name": "CmdOpeningHours",

@@ -11,7 +11,7 @@ export default {
                 if(defaultValue != null) {
                     return defaultValue
                 }
-                return `labels.${name}`
+                return ""
             }
             return this.labels[name]
         }

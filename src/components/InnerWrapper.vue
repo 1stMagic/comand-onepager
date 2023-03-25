@@ -13,22 +13,6 @@
 
         <!-- begin main content -->
         <div id="page-content">
-            <!-- begin cmd-width-limitations-wrapper -->
-            <CmdWidthLimitationWrapper v-if="mainHeadline || editMode" id="main-headline">
-                <EditContentWrapper
-                    v-if="editMode"
-                    @delete="deleteComponent('mainHeadline')"
-                    @add="addComponent('mainHeadline')"
-                    :componentExists="mainHeadline">
-                    <CmdHeadline v-if="mainHeadline" :headlineText="label('headline.title')" :headlineLevel="1"/>
-                </EditContentWrapper>
-
-                <!-- begin cmd-headline -->
-                <CmdHeadline v-else :headlineText="label('headline.title')" :headlineLevel="1"/>
-                <!-- end cmd-headline -->
-            </CmdWidthLimitationWrapper>
-            <!-- end cmd-width-limitations-wrapper -->
-
             <CmdWidthLimitationWrapper v-if="editMode">
                 <EditContentWrapper :componentExists="false" @add="addComponent('contentSection')"/>
             </CmdWidthLimitationWrapper>
@@ -59,19 +43,13 @@
             <template v-else>
                 <!-- begin content sections -->
                 <ContentSection
-                    v-for="(section, index) in site.main?.sections || []" :key="index"
+                    v-for="(section, index) in sections" :key="index"
                     :id="section.id"
                     :headlineText="section.headline"
                     :components="section.components"
                 />
                 <!-- end content sections -->
             </template>
-
-            <!-- begin cmd-width-limitations-wrapper -->
-<!--            <CmdWidthLimitationWrapper anchor-id="anchor-section4">-->
-<!--                <ContactForm form-action="#"/>-->
-<!--            </CmdWidthLimitationWrapper>-->
-            <!-- end cmd-width-limitations-wrapper -->
         </div>
         <!-- end main content -->
     </main>
@@ -116,7 +94,7 @@ export default {
         ...mapActions(usePiniaStore, ["updateMainHeadlineState", "deleteContentSection", "addContentSection"])
     },
     computed: {
-        ...mapState(usePiniaStore, ["site", "currentLanguage", "editMode", "mainHeadline", "slideshow"]),
+        ...mapState(usePiniaStore, ["site", "currentLanguage", "editMode", "mainHeadline", "slideshow", "sections"]),
 
         cmdSlideButtons() {
             return {
