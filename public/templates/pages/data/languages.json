@@ -1,6 +1,6 @@
 {
   "en": {
-    "headline.title": "Title",
+    "main_navigation.close_navigation": "Close navigation",
     "address_data.headline": "Contact",
     "cmdaddressdata.labeltext.company": "Company:",
     "cmdaddressdata.labeltext.address": "Address:",
@@ -31,6 +31,9 @@
     "contact_form.data_privacy": "I accept handling and saving of my personal data a mentioned in the <a href='/content/data-privacy-en.html' class='fancybox'>private policy</a>.",
     "contact_form.send_message": "Send message",
     "contact_form.mandatory": "Mandatory fields",
+    "login_area.please_enter_password": "Please enter password!",
+    "login_area.wrong_password": "Wrong password!",
+    "login_area.an_error_occurred": "An unknown error occurred!",
     "copyright": "© CoManD-OnePager",
     "list_of_links-footer_navigation.headline": "Links",
     "slidebutton_next.tooltip": "Next",
@@ -50,7 +53,7 @@
     "opening_hours.misc_info": "Miscellaneous information"
   },
   "de": {
-    "headline.title": "Titel",
+    "main_navigation.close_navigation": "Navigation schließen",
     "address_data.headline": "Kontakt",
     "cmdaddressdata.labeltext.company": "Firma:",
     "cmdaddressdata.labeltext.address": "Anschrift:",
@@ -81,6 +84,9 @@
     "contact_form.data_privacy": "Ich stimme der Verarbeitung und Speicherung von personenbezogenen Daten gemäß  <a href='/content/data-privacy-de.html' class='fancybox'>Datenschutzerklärung</a> zu.",
     "contact_form.send_message": "Nachricht versenden",
     "contact_form.mandatory": "Pflichtfelder",
+    "login_area.please_enter_password": "Bitte geben Sie ein Passwort ein!",
+    "login_area.wrong_password": "Passwort falsch!",
+    "login_area.an_error_occurred": "Es ist ein unbekannter Fehler aufgetreten!",
     "copyright": "© CoManD-OnePager",
     "list_of_links-footer_navigation.headline": "Links",
     "slidebutton_next.tooltip": "Vor",

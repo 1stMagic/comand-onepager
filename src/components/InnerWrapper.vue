@@ -57,14 +57,11 @@
 </template>
 
 <script>
-import {imageSliderClient} from "../api/SlideshowClient"
-
 // import used data
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
 
 import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia"
-import {shareButtonsClient} from "../api/ShareButtonsClient"
 
 export default {
     data() {
@@ -107,25 +104,6 @@ export default {
                     tooltip: this.label("slidebutton_previous.tooltip")
                 }
             }
-        }
-    },
-    watch: {
-        currentLanguage: {
-            handler() {
-                // getItems-functions from listOfLinksClient (loads links async) and assign to data-property after data is received
-                shareButtonsClient.getItems(this.currentLanguage, "share-buttons")
-                    .then(items => {
-                        this.shareButtons = items
-                    })
-                    .catch(e => console.error("Error loading share-buttons-data", e))
-
-                imageSliderClient.getItems(this.currentLanguage)
-                    .then(items => {
-                        this.slideshowData = items
-                    })
-                    .catch(e => console.error('Error loading slideshow images', e))
-            },
-            immediate: true
         }
     }
 }

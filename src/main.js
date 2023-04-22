@@ -24,7 +24,7 @@ import directiveTelephone from "comand-component-library/src/directives/telephon
 import directiveFocus from "comand-component-library/src/directives/focus"
 
 /* import additional iconfont containing company-logos */
-import 'comand-component-library/src/assets/styles/logos-iconfont.css'
+//import 'comand-component-library/src/assets/styles/logos-iconfont.css'
 
 /* import css for global-styles */
 import 'comand-component-library/src/assets/styles/global-styles.scss'

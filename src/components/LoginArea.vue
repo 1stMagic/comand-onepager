@@ -1,4 +1,7 @@
 <template>
+    <!-- begin cmd-headline (headline is required in section) -->
+    <CmdHeadline v-if="cmdHeadlide?.headlineText" :headlineText="cmdHeadlide?.headlineText" :headlineLevel="cmdHeadlide?.headlineLevel"/>
+    <!-- end cmd-headline -->
     <CmdForm v-if="!loginStatus" @submit="login" :textLegend="cmdForm.login" :showLegend="cmdForm.showLegend">
         <CmdSystemMessage v-if="error && systemMessage" :systemMessage="systemMessage" validationStatus="error" />
         <CmdFormElement element="input" type="password" :labelText="passwordLabelText" :placeholder="passwordLabelText" v-model="password" />
@@ -9,16 +12,28 @@
     <div v-else>
         <h2>Downloads</h2>
         <ul>
-            <li><a href="#" data-filename="test.pdf" @click.prevent="downloadFile" target="_blank">PDF</a></li>
+            <li v-for="(file, index) in filesToDownload">
+                <a href="#" :data-filename="file.name" @click.prevent="downloadFile" :target="file.target">{{file.text}}</a>
+            </li>
         </ul>
+        <!-- begin link logout -->
+        <a v-if="linkLogout.show" :href="linkLogout.path" :title="linkLogout.tooltip" @click.prevent="logout">
+            <span v-if="linkLogout.iconClass" :class="linkLogout.iconClass"></span>
+            <span v-if="linkLogout.text">{{ linkLogout.text }}</span>
+        </a>
+        <!-- end link logout -->
     </div>
 </template>
 
 <script>
 import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia"
+
+// import mixins
+import BaseI18nComponent from "../components/mixins/BaseI18nComponent"
 export default {
     name: "LoginArea",
+    mixins: [BaseI18nComponent],
     data() {
         return {
             loginStatus: false,
@@ -28,6 +43,26 @@ export default {
         }
     },
     props: {
+        linkLogout: {
+            type: Object,
+            default() {
+                return {
+                    show: true,
+                    path: "#",
+                    iconClass: "icon-logout",
+                    text: "Logout",
+                    tooltip: ""
+                }
+            }
+        },
+        loginArea: {
+            type: Object,
+            default: {}
+        },
+        filesToDownload: {
+          type: Array,
+          default: []
+        },
         baseUrl: {
             type: String,
             required: true
@@ -48,6 +83,10 @@ export default {
         submitButtonText: {
             type: String,
             default: "Login"
+        },
+        cmdHeadline: {
+            type: Object,
+            required: false
         }
     },
     computed: {
@@ -57,6 +96,12 @@ export default {
         ...mapActions(usePiniaStore, ["setAuthToken", "deleteAuthToken"]),
 
         login() {
+            if(!this.password) {
+                this.error = true
+                this.systemMessage = this.label("login_area.please_enter_password")
+                return
+            }
+
             const formData = new FormData()
             formData.set("username", "admin")
             formData.set("password", this.password)
@@ -72,7 +117,7 @@ export default {
                     if (response.ok) {
                         return response.text()
                     }
-                    throw new Error(response.status + " " + response.statusText)
+                    throw new Error(this.label("login_area.wrong_password"))
                 })
                 .then(token => {
                     this.setAuthToken(token)
@@ -96,12 +141,28 @@ export default {
             const fileInfo = {}
             fetch(url.href, options)
                 .then(response => {
-                    fileInfo.fileName = response.headers.get("x-op-filename")
-                    return response.blob()
+                    if (response.ok) {
+                        fileInfo.fileName = response.headers.get("x-op-filename")
+                        return response.blob()
+                    }
+                    if (response.status === 401) {
+                        throw new Error("")
+                    }
+                    throw new Error(this.label("login_area.an_error_occurred"))
                 })
                 .then(data => new File([data], fileInfo.fileName))
                 .then(file => open(URL.createObjectURL(file)))
-                .catch(error => console.error(error))
+                .catch(error => {
+                    if (error) {
+                        this.error = true
+                        this.systemMessage = error
+                    }
+                    this.logout()
+                })
+        },
+        logout() {
+            this.deleteAuthToken()
+            this.loginStatus = false
         }
     }
 }

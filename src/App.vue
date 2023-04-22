@@ -1,9 +1,14 @@
 <template>
     <!-- begin page-wrapper -->
-    <div :class="{'edit-mode': editMode}" id="page-wrapper" :style="{'scroll-padding-top': heightSiteHeader + 'px'}">
+    <div :class="{'edit-mode': editMode, 'overflow-hidden': offCanvasOpen}" id="page-wrapper" :style="{'scroll-padding-top': heightSiteHeader + 'px'}">
         <a id="anchor-back-to-top"></a>
             <!-- begin cmd-site-header -->
-            <CmdSiteHeader :cmd-main-navigation="{navigationEntries: mainNavigation, closeOffcanvas: { iconClass: 'icon-cancel', text: 'Close nase', showText: true}}" :navigationInline="site.siteHeader?.navigationInline">
+            <CmdSiteHeader
+                :cmd-main-navigation="{navigationEntries: mainNavigation}"
+                :closeOffcanvas="{ iconClass: 'icon-cancel', text: label('main_navigation.close_navigation'), showText: true}"
+                :navigationInline="site.siteHeader?.navigationInline"
+                @offcanvas="offcanvasToggled"
+            >
                 <template v-slot:top-header>
                     <!-- begin cmd-list-of-links (for top-header-navigation) -->
                     <CmdListOfLinks
@@ -54,20 +59,36 @@
             <!-- end cmd-copyright-information DO NOT REMOVE -->
 
             <!-- begin cmd-back-to-top-button -->
-            <CmdBackToTopButton href="#anchor-back-to-top" :iconBackToTop="iconBackToTop" parent-selector="#page-wrapper"/>
+            <CmdBackToTopButton href="#anchor-back-to-top" :iconBackToTop="iconBackToTop" scroll-container="#page-wrapper"/>
             <!-- end cmd-back-to-top-button -->
 
-        <!-- begin cmd-fancy-box -->
-        <CmdFancyBox :show="fancyBoxCookieDisclaimer" :fancyboxOptions="{}" :allowEscapeKey="false">
-            <!-- begin cmd-cookie-disclaimer -->
+        <!-- begin fancy-box ------------------------------------------------------------------------------------------------------------------------------------------------------->
+        <CmdFancyBox
+                :show="fancyBoxCookieDisclaimer"
+                :fancyboxOptions="{}"
+                :allowEscapeKey="false"
+                :cmdHeadline="{show: true, headlineText: 'Cookie Disclaimer', headlineLevel: 2}"
+                ariaLabelText="Cookie Disclaimer"
+        >
+            <!-- begin cookie-disclaimer ------------------------------------------------------------------------------------------------------------------------------------------------------->
             <CmdCookieDisclaimer
-                buttonLabelAcceptAllCookies="Accept all cookies"
-                buttonLabelAcceptCurrentSettings="Accept current settings"
-                @closeCookieDisclaimer="closeCookieDisclaimer"
-                :cookieOptions="cookieDisclaimerData"/>
-            <!-- end cmd-cookie-disclaimer -->
+                    :cookieOptions="cookieDisclaimerData"
+                    buttonLabelAcceptAllCookies="Accept all cookies"
+                    buttonLabelAcceptCurrentSettings="Accept current settings"
+                    @closeCookieDisclaimer="closeCookieDisclaimer"
+                    v-model="acceptedCookies"
+                    :cmdHeadlineCookieDisclaimer="{ show: false }">
+                <template #privacy-text>
+                    <p>
+                        <strong>
+                            By browsing this web site you accept the usage and saving of anonymous data!
+                        </strong>
+                    </p>
+                </template>
+            </CmdCookieDisclaimer>
+            <!-- end cookie-disclaimer ------------------------------------------------------------------------------------------------------------------------------------------------------->
         </CmdFancyBox>
-        <!-- end cmd-fancy-box -->
+        <!-- end fancy-box ------------------------------------------------------------------------------------------------------------------------------------------------------->
     </div>
     <!-- end page-wrapper -->
 </template>
@@ -105,7 +126,8 @@ export default {
             openingHoursData,
             topHeaderNavigationData: [],
             currentUrlHash: location.hash,
-            heightSiteHeader: 150
+            heightSiteHeader: 150,
+            offCanvasOpen: false
         }
     },
     created() {
@@ -222,6 +244,9 @@ export default {
         closeCookieDisclaimer() {
             this.fancyBoxCookieDisclaimer = false
             localStorage.setItem("onepagerPrivacySettingsAccepted", "true")
+        },
+        offcanvasToggled(event) {
+            this.offCanvasOpen = event.open
         }
     },
     watch: {
@@ -233,19 +258,19 @@ export default {
                 // load imported meta-data-function if language is changed (in store)
                 loadMetaData(this.currentLanguage)
 
-                // getItems-functions from listOfLinksClient (loads links async) and assign to data-property after data is received for top-header-navigation
-                listOfLinksClient.getItems(this.currentLanguage, "top-header-navigation")
-                .then(items => {
-                    this.topHeaderNavigationData = items
-                })
-                .catch(e => console.error("Error loading top-header-navigation-data", e))
-
-                // getItems-functions from listOfLinksClient (loads links async) and assign to data-property after data is received for footer-navigation
-                listOfLinksClient.getItems(this.currentLanguage, "footer-navigation")
-                .then(items => {
-                    this.footerNavigationData = items
-                })
-                .catch(e => console.error("Error loading footer-navigation-data", e))
+                // // getItems-functions from listOfLinksClient (loads links async) and assign to data-property after data is received for top-header-navigation
+                // listOfLinksClient.getItems(this.currentLanguage, "top-header-navigation")
+                // .then(items => {
+                //     this.topHeaderNavigationData = items
+                // })
+                // .catch(e => console.error("Error loading top-header-navigation-data", e))
+                //
+                // // getItems-functions from listOfLinksClient (loads links async) and assign to data-property after data is received for footer-navigation
+                // listOfLinksClient.getItems(this.currentLanguage, "footer-navigation")
+                // .then(items => {
+                //     this.footerNavigationData = items
+                // })
+                // .catch(e => console.error("Error loading footer-navigation-data", e))
             },
             immediate: true
         }

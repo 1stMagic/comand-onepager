@@ -5,6 +5,15 @@
       "pathDefaultLogo": "/media/images/logos/logo.svg",
       "pathDarkmodeLogo": "/media/images/logos/logo-darkmode.svg",
       "altText": "Company Logo"
+    },
+    "props": {
+      "cmdMainNavigation": {
+        "closeOffcanvas": {
+          "iconClass": "icon-cancel",
+          "text": "Navigation schließen",
+          "showText": false
+        }
+      }
     }
   },
   "main": {
@@ -101,13 +110,13 @@
         "id": "main-headline",
         "components": [
           {
-          "name": "CmdHeadline",
-          "props":
-          {
-            "headlineText": "Hauptüberschrift",
-            "headlineLevel": 1
+            "name": "CmdHeadline",
+            "props": {
+              "headlineText": "Hauptüberschrift",
+              "headlineLevel": 1
+            }
           }
-          }]
+        ]
       },
       {
         "id": "section1",
@@ -374,19 +383,32 @@
       {
         "id": "section-login",
         "showLinkInMainNavigation": false,
-        "headline": "Login Area",
         "show": false,
         "components": [
           {
             "name": "LoginArea",
             "props": {
+              "cmdHeadline": {
+                "headlineText": "Loginbereich",
+                "headlineLevel": 2
+              },
               "cmdForm": {
                 "textLegend": "Login",
                 "showLegend": false
               },
               "passwordLabelText": "Passwort",
               "submitButtonText": "Anmelden",
-              "baseUrl": "http://localhost:42000"
+              "baseUrl": "http://localhost:42000",
+              "filesToDownload": [
+                {
+                  "iconClass": "icon-file-pdf",
+                  "type": "href",
+                  "target": "_blank",
+                  "text": "Test",
+                  "name": "test.pdf",
+                  "tooltip": "PDF in neuem Tab öffnen"
+                }
+              ]
             }
           }
         ]
@@ -400,28 +422,28 @@
             "props": {
               "networks": [
                 {
-                  "id": "share-link-facebook",
+                  "id": "social-network-facebook",
                   "path": "https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fdevelopment.comand-cms.com%2Fmodule%2Fteam.html",
                   "tooltip": "Share this page on facebook",
                   "iconClass": "icon-facebook",
                   "linkText": "Share"
                 },
                 {
-                  "id": "share-link-twitter",
+                  "id": "social-network-twitter",
                   "path": "https://twitter.com/home?status=http%3A%2F%2Fdevelopment.comand-cms.com%2Fmodule%2Fteam.html",
                   "tooltip": "Share this page on twitter",
                   "iconClass": "icon-twitter",
                   "linkText": "Share"
                 },
                 {
-                  "id": "share-link-xing",
+                  "id": "social-network-xing",
                   "path": "https://www.xing.com/spi/shares/new?sc_p=b7910_cb&amp;url=http%3A%2F%2Fdevelopment.comand-cms.com%2Fmodule%2Fteam.html",
                   "tooltip": "Share this page on xing",
                   "iconClass": "icon-xing",
                   "linkText": "Share"
                 },
                 {
-                  "id": "share-link-linkedin",
+                  "id": "social-network-linkedin",
                   "path": "https://www.linkedin.com/cws/share?url=http%3A%2F%2Fdevelopment.comand-cms.com%2Fmodule%2Fteam.html",
                   "tooltip": "Share this page on linkedin",
                   "iconClass": "icon-linkedin",
@@ -440,17 +462,13 @@
       {
         "name": "div",
         "props": {
-          "class": ""
+          "class": "flex-container vertical"
         },
         "components": [
           {
             "name": "CmdListOfLinks",
             "handlers": "toggleSection",
             "props": {
-              "cmdHeadline": {
-                "headlineText": "",
-                "headlineLevel": ""
-              },
               "links": [
                 {
                   "iconClass": "icon-user-profile",
@@ -483,16 +501,23 @@
                 }
               ]
             }
+          },
+          {
+            "name": "CmdToggleDarkMode",
+            "props": {
+              "showLabel": true,
+              "labelTextDarkMode": "Dark Mode aktiviert",
+              "labelTextLightMode": "Light Mode aktiviert"
+            }
           }
         ]
       },
       {
         "name": "CmdOpeningHours",
         "props": {
-          "cmdHeadline": {},
           "textHolidaysClosed": "",
           "textMiscInfo": "",
-          "openingHours":[
+          "openingHours": [
             {
               "day": "Mo",
               "fromTime": "08:00",
@@ -508,7 +533,6 @@
               "fromTime": "08:00",
               "tillTime": "17:30"
             },
-
             {
               "day": "Th",
               "fromTime": "08:00",
@@ -535,7 +559,6 @@
       {
         "name": "CmdAddressData",
         "props": {
-          "cmdHeadline": {},
           "linkGoogleMaps": false,
           "addressData": [
             {
