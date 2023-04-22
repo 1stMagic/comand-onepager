@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import { resolve } from "path"
 import vue from '@vitejs/plugin-vue'
 import Components from "unplugin-vue-components/vite"
 
@@ -11,5 +12,20 @@ export default defineConfig({
           from: "comand-component-library"
         }
       }
-    }]})]
+    }]})],
+    build: {
+        lib: {
+            entry: resolve(__dirname, "src/index.js"),
+            name: "comand-onepager",
+            fileName: "comand-onepager"
+        },
+        rollupOptions: {
+            external: ["vue"],
+            output: {
+                globals: {
+                    vue: "Vue"
+                }
+            }
+        }
+    }
 })

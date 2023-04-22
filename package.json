@@ -8,6 +8,8 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "main": "./dist/comand-onepager.umd.cjs",
+  "module": "./dist/comand-onepager.js",
   "dependencies": {
     "axios": "^0.27.2",
     "comand-component-library": "^3.3.63",
