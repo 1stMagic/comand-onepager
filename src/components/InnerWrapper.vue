@@ -30,7 +30,7 @@
                     <template v-slot="slotProps">
                         <ContentSection
                             :components="section.components"
-                            :sectionId="section.id"
+                            :id="section.id"
                             :headlineText="section.headline"
                             :editContent="slotProps.editContent"
                             :editModeEvents="slotProps.editModeEvents"

@@ -5,6 +5,8 @@
                 :is="component.name"
                 v-bind="component.props"
                 :editContent="editContent"
+                :editModeEvents="editModeEvents"
+                @save="onComponentSave($event, component, index)"
             >
                 <component
                     v-for="(childComponent, childComponentIndex) in component.components || []"
@@ -37,6 +39,9 @@ export default {
         editContent: {
             type: Boolean,
             default: false
+        },
+        sectionId: {
+            type: String
         },
         images: {
             type: Array,
@@ -132,7 +137,10 @@ export default {
     //     this.editModeEvents.off("save", this.onSave)
     // },
     methods: {
-        ...mapActions(usePiniaStore, ["updateContentSection"]),
+        ...mapActions(usePiniaStore, ["updateSectionComponent"]),
+        onComponentSave(componentData, component, componentIndex) {
+            this.updateSectionComponent(this.sectionId, componentIndex, componentData)
+        },
         onSave() {
             const sectionData = {
                 content: this.editableHtmlContent,

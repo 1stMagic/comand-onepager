@@ -64,6 +64,7 @@
 
         <!-- begin fancy-box ------------------------------------------------------------------------------------------------------------------------------------------------------->
         <CmdFancyBox
+                v-if="cookieDisclaimerData"
                 :show="fancyBoxCookieDisclaimer"
                 :fancyboxOptions="{}"
                 :allowEscapeKey="false"
@@ -109,8 +110,14 @@ export default {
     mixins: [
         BaseI18nComponent
     ],
+    props: {
+        cookieDisclaimerData: {
+            type: Object
+        }
+    },
     data() {
         return {
+            acceptedCookies: [],
             fancyBoxCookieDisclaimer: true,
             footerNavigationData: [],
             topHeaderNavigationData: [],

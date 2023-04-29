@@ -5,10 +5,9 @@
 - VARIABLES ------------------------
 
 - BASIC STRUCTURE ------------------------
-	- page containers
-	- css-grid
-	- main
-	- main-headline
+	- page-structure
+	- main-container
+	-hotfix for fancybox-behavior
 
 - MEDIA QUERIES ------------------------
   - styles for small screens
@@ -17,39 +16,62 @@
 /* end table of contents --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 /* ---------------------------------------------- BEGIN BASIC STRUCTURE -------------------------------------------------- */
+/* begin page-structure --------------------------------------------------------------------------------------------------------------------------------------------------- */
 body {
 	overflow: hidden; /* avoids-scrolling on body to enable scrolling (incl- scroll-padding on #page-wrapper) */
-}
-/* begin page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
-.cmd-width-limitation-wrapper:not(#main-headline) {
-	section {
-		padding-top: calc(var(--default-padding) * 6);
-		padding-bottom: calc(var(--default-padding) * 6);
-	}
 
-	&:nth-child(even) {
-		background: var(--default-background-color);
+	&.avoid-scrolling {
+		height: 100%;
 	}
 }
-/* end page containers --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
-/* begin main --------------------------------------------------------------------------------------------------------------------------------------------------- */
+body, #page-wrapper {
+	background: var(--color-scheme-background-color);
+}
+
+#page-wrapper {
+	scroll-snap-type: y mandatory;
+	overflow-y: scroll;
+	height: 100vh;
+	scroll-behavior: smooth; /* let container scroll smoothly to anchors */
+}
+/* end page-structure --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin main-container --------------------------------------------------------------------------------------------------------------------------------------------------- */
 main {
 	ul, ol {
 		list-style-position: inside; /* list-style-position for all list in main */
 	}
-}
-/* end main --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
-/* begin main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
-#main-headline {
-	padding: calc(var(--default-padding) * 5) 0;
+	.cmd-width-limitation-wrapper:not(#main-headline) {
+		section {
+			padding-top: calc(var(--default-padding) * 6);
+			padding-bottom: calc(var(--default-padding) * 6);
+		}
 
-	h1 {
-		margin-bottom: 0;
+		&:nth-child(even) {
+			background: var(--default-background-color);
+		}
+	}
+
+	#section-wrapper-main-headline {
+		padding: calc(var(--default-padding) * 5) 0;
+
+		h1 {
+			font-size: 5rem;
+			text-align: center;
+			text-transform: uppercase;
+			margin-bottom: 0;
+		}
 	}
 }
-/* end main-headline --------------------------------------------------------------------------------------------------------------------------------------------------- */
+/* end main-container  --------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* begin hotfix for fancybox-behavior */
+.cmd-fancybox {
+	position: fixed;
+}
+/* end hotfix for fancybox-behavior */
 /* ---------------------------------------------- END BASIC STRUCTURE -------------------------------------------------- */
 
 /* ---------------------------------------------- BEGIN MEDIA QUERIES -------------------------------------------------- */

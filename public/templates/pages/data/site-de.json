@@ -125,7 +125,7 @@
         "navEntry": "Section 1",
         "components": [
           {
-            "name": "CmdTextBlock",
+            "name": "TextBlock",
             "props": {
               "cmdHeadline": {
                 "headlineText": "Überschrift Section 1",
@@ -144,7 +144,7 @@
         "alignImage": "right",
         "components": [
           {
-            "name": "CmdTextBlock",
+            "name": "TextBlock",
             "props": {
               "cmdHeadline": {
                 "headlineText": "Überschrift Section 2",

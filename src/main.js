@@ -13,15 +13,7 @@ import 'comand-frontend-framework/src/assets/css/framework-iconfont.css'
 /* end imports css from comand-frontend-framework ---------------------------------------------------------------------------------------- */
 
 import { createApp } from "vue"
-import { createPinia } from "pinia"
 import App from "./App.vue"
-import router from "./router"
-
-/* import directives */
-// directive to format telephone- and fax-number
-import directiveTelephone from "comand-component-library/src/directives/telephone"
-// directive to set focus on specific form-elements
-import directiveFocus from "comand-component-library/src/directives/focus"
 
 /* import additional iconfont containing company-logos */
 //import 'comand-component-library/src/assets/styles/logos-iconfont.css'
@@ -39,22 +31,10 @@ import 'comand-component-library/dist/style.css'
 import 'comand-component-library/src/assets/styles/template.css'
 
 /* import css for onepager */
-import './assets/styles/onepager-structure.scss'
-import './assets/styles/onepager-layout.scss'
+import './assets/styles/onepager.scss'
 
-import * as components from "comand-component-library"
-import ContactForm from "./components/ContactForm.vue"
-import LoginArea from "./components/LoginArea.vue"
+import {bootstrap} from "./index.js";
 
 const app = createApp(App)
 
-app.component("ContactForm", ContactForm)
-app.component("LoginArea", LoginArea)
-Object.entries(components).forEach((component) => {
-    app.component(component[0], component[1])
-})
-app.use(createPinia())
-    .use(router)
-    .directive('telephone', directiveTelephone)
-    .directive('focus', directiveFocus)
-    .mount('#app')
+bootstrap(app).mount('#app')

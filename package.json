@@ -1,7 +1,7 @@
 {
   "name": "comand-onepager",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,9 +10,21 @@
   },
   "main": "./dist/comand-onepager.umd.cjs",
   "module": "./dist/comand-onepager.js",
+  "exports": {
+    ".": {
+      "import": "./dist/comand-onepager.js",
+      "require": "./dist/comand-onepager.umd.cjs"
+    },
+    "./style/components": {
+      "import": "./dist/style.css"
+    },
+    "./style/structure": {
+      "import": "./src/assets/styles/onepager.scss"
+    }
+  },
   "dependencies": {
     "axios": "^0.27.2",
-    "comand-component-library": "^3.3.63",
+    "comand-component-library": "^3.3.69",
     "comand-frontend-framework": "^3.3.30",
     "mitt": "^3.0.0",
     "pinia": "^2.0.17",

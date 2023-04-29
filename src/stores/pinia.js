@@ -16,7 +16,7 @@ export const usePiniaStore = defineStore("pinia", {
         languages: [],
         languageLabels: {},
         currentLanguage: 'de',
-        editMode: false,
+        editMode: true,
         mainHeadline: true,
         authToken: ""
     }),
@@ -82,6 +82,12 @@ export const usePiniaStore = defineStore("pinia", {
         },
         updateMainHeadlineState(showMainHeadline) {
             this.mainHeadline = showMainHeadline
+        },
+        updateSectionComponent(sectionId, componentIndex, componentData) {
+            const section = this.sections.find(section => section.id === sectionId)
+            if (section && section.components?.length > componentIndex) {
+                section.components[componentIndex].props = {...section.components[componentIndex].props, ...componentData}
+            }
         },
         updateContentSection(sectionId, sectionData) {
             // find index of section to update in sections-array/-state
