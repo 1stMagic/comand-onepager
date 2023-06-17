@@ -18,7 +18,8 @@ export const usePiniaStore = defineStore("pinia", {
         currentLanguage: 'de',
         editMode: true,
         mainHeadline: true,
-        authToken: ""
+        authToken: "",
+        componentIdentifier: ""
     }),
     getters: {
         labels(state) {
@@ -51,11 +52,20 @@ export const usePiniaStore = defineStore("pinia", {
         }
     },
     actions: {
+        activateEditMode() {
+            this.editMode = true
+        },
+        deactivateEditMode() {
+            this.editMode = false
+        },
         setAuthToken(token) {
             this.authToken = token
         },
         deleteAuthToken() {
             this.authToken = ""
+        },
+        setComponentIdentifier(componentIdentifier) {
+            this.componentIdentifier = componentIdentifier
         },
         loadLabels() {
             i18nClient.getLanguagesAndLabels()
@@ -83,10 +93,10 @@ export const usePiniaStore = defineStore("pinia", {
         updateMainHeadlineState(showMainHeadline) {
             this.mainHeadline = showMainHeadline
         },
-        updateSectionComponent(sectionId, componentIndex, componentData) {
+        updateSectionComponent(sectionId, componentIndex, updateProps) {
             const section = this.sections.find(section => section.id === sectionId)
             if (section && section.components?.length > componentIndex) {
-                section.components[componentIndex].props = {...section.components[componentIndex].props, ...componentData}
+                updateProps(section.components[componentIndex].props)
             }
         },
         updateContentSection(sectionId, sectionData) {

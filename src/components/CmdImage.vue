@@ -1,37 +1,44 @@
 <template>
-    <figure v-if="editContent" :class="['cmd-image flex-container vertical', getTextAlign]">
+    <!-- begin edit-mode -->
+    <figure v-if="editModeContext?.editing" :class="['cmd-image flex-container vertical', getTextAlign]">
         <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            labelText="Show figcaption"
-            v-model="editableShowFigcaption"
+                element="input"
+                type="checkbox"
+                :toggleSwitch="true"
+                labelText="Show figcaption"
+                v-model="editableShowFigcaption"
         />
         <CmdFormElement
-            element="select"
-            labelText="Figcaption Position"
-            :selectOptions="positionOptions"
-            :disabled="!showFigcaption"
-            v-model="editableFigcaptionPosition"
+                element="select"
+                labelText="Figcaption Position"
+                :selectOptions="positionOptions"
+                :disabled="!showFigcaption"
+                v-model="editableFigcaptionPosition"
         />
         <CmdFormElement
-            element="select"
-            labelText="Figcaption text alignment"
-            :selectOptions="textAlignOptions"
-            :disabled="!showFigcaption"
-            v-model="editableFigcaptionTextAlign"
+                element="select"
+                labelText="Figcaption text alignment"
+                :selectOptions="textAlignOptions"
+                :disabled="!showFigcaption"
+                v-model="editableFigcaptionTextAlign"
         />
+        <CmdFormElement element="input" type="text" :required="true" labelText="Alternative Text"
+                        v-model="editableAlternativeText"/>
+        <CmdFormElement element="input" type="text" :required="false" labelText="Tooltip" v-model="editableTooltip"/>
+
         <template v-if="figcaption?.position === 'top'">
-            <CmdFormElement element="input" type="text" :required="true" labelText="Text figcaption" v-model="editableFigcaptionText"/>
+            <CmdFormElement element="input" type="text" :required="true" labelText="Text figcaption"
+                            v-model="editableFigcaptionText"/>
         </template>
-        <div :class="['box drop-area flex-container vertical', { 'allow-drop': allowDrop }]" v-on="dragAndDropHandler">
-            <img ref="contentImage" :src="image.src" :alt="image.alt" :title="image.tooltip" />
+        <div :class="['box drop-area flex-container vertical', { 'allow-drop': allowDrop }]" v-on="dragAndDropHandler" title="Drag new image to this area to replace old one!">
+            <span class="icon-image"></span>
+            <img ref="contentImage" :src="image.src" :alt="image.alt" :title="image.tooltip"/>
         </div>
         <button
-            type="button"
-            :class="['button upload primary', { disabled: uploadInitiated }]"
-            :disabled="uploadInitiated"
-            @click="selectFiles()"
+                type="button"
+                :class="['button upload primary', { disabled: uploadInitiated }]"
+                :disabled="uploadInitiated"
+                @click="selectFiles()"
         >
             <!-- begin CmdIcon -->
             <CmdIcon iconClass="icon-loop"/>
@@ -39,22 +46,30 @@
             <span>Select image</span>
         </button>
         <template v-if="figcaption?.position !== 'top'">
-            <CmdFormElement element="input" type="text" :required="true" labelText="Text figcaption" v-model="editableFigcaptionText"/>
+            <CmdFormElement
+                    element="input"
+                    type="text"
+                    :class="getTextAlign"
+                    :required="true"
+                    labelText="Text figcaption"
+                    v-model="editableFigcaptionText"
+            />
         </template>
     </figure>
 
     <!-- begin CmdFormElement -->
     <CmdFormElement
-        v-if="editContent"
-        class="hidden"
-        element="input"
-        type="file"
-        labelText="Select file"
-        :disabled="uploadInitiated"
-        @change="fileSelected"
-        ref="formElement"
+            v-if="editModeContext?.editing"
+            class="hidden"
+            element="input"
+            type="file"
+            labelText="Select file"
+            :disabled="uploadInitiated"
+            @change="fileSelected"
+            ref="formElement"
     />
     <!-- end CmdFormElement -->
+    <!-- end edit-mode -->
 
     <figure v-else :class="['cmd-image', getTextAlign]">
         <figcaption v-if="figcaption?.show && figcaption?.position === 'top'">{{ figcaption?.text }}</figcaption>
@@ -71,6 +86,11 @@ import {getFileExtension} from "comand-component-library/src/utils/getFileExtens
 
 export default {
     name: "CmdImage",
+    inject: {
+        editModeContext: {
+            default: null
+        }
+    },
     components: {
         CmdFormElement,
         CmdIcon
@@ -83,6 +103,8 @@ export default {
             showFigcaption: true,
             figcaptionPosition: null,
             figcaptionTextAlign: null,
+            tooltip: null,
+            alternativeText: null,
             positionOptions: [
                 {
                     text: "Above image",
@@ -110,7 +132,13 @@ export default {
             figcaptionText: null
         }
     },
+    mounted() {
+        this.editModeContext?.addSaveHandler(this.onSave)
+    },
     props: {
+        editModeContextData: {
+            type: Object
+        },
         /**
          * image-object including source, alternative text, tooltip (not required)
          */
@@ -124,11 +152,6 @@ export default {
         figcaption: {
             type: Object,
             required: false
-        },
-        editModeEvents: {},
-        editContent: {
-            type: Boolean,
-            default: false
         },
         /**
          * max file size (in bytes) for file to upload
@@ -157,6 +180,22 @@ export default {
                 return "text-" + this.figcaption.textAlign
             }
             return ''
+        },
+        editableAlternativeText: {
+            get() {
+                return this.alternativeText == null ? this.image.alt : this.alternativeText
+            },
+            set(value) {
+                this.alternativeText = value
+            }
+        },
+        editableTooltip: {
+            get() {
+                return this.tooltip == null ? this.image.tooltip : this.tooltip
+            },
+            set(value) {
+                this.tooltip = value
+            }
         },
         editableShowFigcaption: {
             get() {
@@ -239,42 +278,75 @@ export default {
                 this.checkAndUploadFile(event.dataTransfer.files[0])
             }
         },
+        onSave() {
+            const data = {
+                image: {
+                    alt: this.editableAlternativeText,
+                    tooltip: this.editableTooltip
+                },
+                figcaption: {
+                    position: this.editableFigcaptionPosition,
+                    textAlign: this.editableFigcaptionTextAlign,
+                    text: this.editableFigcaptionText,
+                    show: this.editableShowFigcaption
+                }
+            }
+            return {
+                editModeContextData: this.editModeContextData,
+                ...data,
+                update(props) {
+                    console.log("CmdImage.update", props)
+                    if (!props.image) {
+                        props.image = {}
+                    }
+                    props.image.alt = data.image.alt
+                    props.image.tooltip = data.image.tooltip
+                    if (!props.figcaption) {
+                        props.figcaption = {}
+                    }
+                    props.figcaption.position = data.figcaption.position
+                    props.figcaption.textAlign = data.figcaption.textAlign
+                    props.figcaption.text = data.figcaption.text
+                    props.figcaption.show = data.figcaption.show
+                }
+            }
+        },
         checkAndUploadFile(file) {
             const errorMessages = []
 
-                // check size for current file
-                if (file.size > this.maxFileUploadSize) {
-                    errorMessages.push("file too large")
-                }
+            // check size for current file
+            if (file.size > this.maxFileUploadSize) {
+                errorMessages.push("file too large")
+            }
 
-                // check if current file has allowed file-type
-                if (!this.allowedFileExtensions.includes(getFileExtension(file.name))) {
-                    errorMessages.push("disallowed file extension")
-                }
+            // check if current file has allowed file-type
+            if (!this.allowedFileExtensions.includes(getFileExtension(file.name))) {
+                errorMessages.push("disallowed file extension")
+            }
 
-                if(errorMessages.length) {
-                    alert(errorMessages)
-                    return
-                }
+            if (errorMessages.length) {
+                alert(errorMessages)
+                return
+            }
 
-                // check for min dimensions
-                const image = new Image()
+            // check for min dimensions
+            const image = new Image()
 
-                image.onload = () => {
-                    if(image.width < this.minImageWidth) {
-                        // errorMessages.push("width (" + image.width + " px) too small - at least " + this.minImageWidth + " px required!")
-                        const confirmUpload = confirm("width (" + image.width + " px) too small - at least " + this.minImageWidth + " px required! Use trotzdem!")
-                        if(!confirmUpload) {
-                            alert("Abbruch")
-                            return
-                        }
+            image.onload = () => {
+                if (image.width < this.minImageWidth) {
+                    // errorMessages.push("width (" + image.width + " px) too small - at least " + this.minImageWidth + " px required!")
+                    const confirmUpload = confirm("width (" + image.width + " px) too small - at least " + this.minImageWidth + " px required! Use trotzdem!")
+                    if (!confirmUpload) {
+                        alert("Abbruch")
+                        return
                     }
-                    // revoke URL to clean memory
-                    URL.revokeObjectURL(image.src)
-
-                    // show preview-image by assigning image.src (containing image date (not its path) to do existing contentImage source
-                    this.$refs.contentImage.src = image.src
                 }
+                // revoke URL to clean memory
+                URL.revokeObjectURL(image.src)
+
+                // show preview-image by assigning image.src (containing image date (not its path) to do existing contentImage source
+                this.$refs.contentImage.src = image.src
+            }
             // create data-url (contains content of a file (not its path))
             image.src = URL.createObjectURL(file)
         }
@@ -285,22 +357,45 @@ export default {
 <style lang="scss">
 /* begin cmd-image ------------------------------------------------------------------------------------------ */
 .cmd-image {
-    &.text-center {
-        figcaption {
-            text-align: center;
-        }
+  &.text-center {
+    figcaption {
+      text-align: center;
+    }
+  }
+
+  &.text-right {
+    figcaption {
+      text-align: right;
+    }
+  }
+
+  .drop-area {
+    border: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+
+    > [class*="icon"] {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      font-size: 10rem;
+      color: var(--pure-white);
+      text-shadow: var(--text-shadow);
+      z-index: 10;
     }
 
-    &.text-right {
-        figcaption {
-            text-align: right;
-        }
-    }
+    img {
+      opacity: .7;
+      transition: var(--default-transition);
 
-    .drop-area {
-        align-items: center;
-        justify-content: center;
+      &:hover, :active, :focus {
+        opacity: 1;
+        transition: var(--default-transition);
+      }
     }
+  }
 }
 
 /* end cmd-image ------------------------------------------------------------------------------------------ */

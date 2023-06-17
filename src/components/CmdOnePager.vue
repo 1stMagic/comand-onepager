@@ -1,6 +1,10 @@
 <template>
   <!-- begin page-wrapper -->
     <div :class="{'edit-mode': editMode, 'overflow-hidden': offCanvasOpen}" id="page-wrapper" :style="{'scroll-padding-top': heightSiteHeader + 'px'}">
+        <div v-if="editMode" class="system-message info" id="edit-mode-message">
+            <p>You are in EditMode. You can simply edit components by clicking on them and selecting one of the actions-buttons at the top-right corner of that component.</p>
+            <a href="#" @click.prevent="deactivateEditMode">&nbsp;Leave EditMode</a>
+        </div>
         <a id="anchor-back-to-top"></a>
         <!-- begin cmd-site-header -->
         <CmdSiteHeader
@@ -232,7 +236,7 @@ export default {
             this.currentUrlHash = location.hash
         },
 
-        ...mapActions(usePiniaStore, ["loadLabels", "loadSite"]),
+        ...mapActions(usePiniaStore, ["loadLabels", "loadSite", "deactivateEditMode"]),
 
         openFancybox(event) {
             openFancyBox({url: event.target.href})
@@ -243,6 +247,11 @@ export default {
         },
         offcanvasToggled(event) {
             this.offCanvasOpen = event.open
+        },
+        deactivateEditMode() {
+            if(confirm('Really leave EditMode? (All unsaved changes will be lost!)')) {
+                this.deactivateEditMode()
+            }
         }
     },
     watch: {
@@ -259,3 +268,16 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+#edit-mode-message {
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  text-align: center;
+
+  > * {
+    margin: 0;
+  }
+}
+</style>

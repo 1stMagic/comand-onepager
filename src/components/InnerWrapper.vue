@@ -32,8 +32,6 @@
                             :components="section.components"
                             :id="section.id"
                             :headlineText="section.headline"
-                            :editContent="slotProps.editContent"
-                            :editModeEvents="slotProps.editModeEvents"
                         />
                     </template>
                     <!-- end content sections -->

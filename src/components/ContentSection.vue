@@ -9,8 +9,6 @@
             <CmdContent
                 :sectionId="id"
                 :components="components"
-                :editContent="editContent"
-                :editModeEvents="editModeEvents"
             />
         </div>
     </CmdWidthLimitationWrapper>
@@ -54,12 +52,7 @@ export default {
         content: {
             type: String,
             required: false
-        },
-        editContent: {
-            type: Boolean,
-            default: false
-        },
-        editModeEvents: {}
+        }
     },
     computed: {
         cmdSlideButtons() {

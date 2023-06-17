@@ -158,10 +158,11 @@
             "props": {
               "image": {
                 "src": "/media/images/gallery-images/landscape-05.jpg",
-                "alt": "alternative text"
+                "alt": "alternative text",
+                "tooltip": "tooltip"
               },
               "figcaption": {
-                "text": "ficaption",
+                "text": "figcaption",
                 "position": "bottom",
                 "textAlign": "center",
                 "show": true
@@ -175,11 +176,15 @@
         "iconClass": "icon-user-profile",
         "showLinkInMainNavigation": true,
         "navEntry": "Section 3",
-        "headline": "Überschrift Section 3",
+        "headline": "Überschrift für Section 3",
         "components": [
           {
             "name": "CmdImageGallery",
             "props": {
+              "cmdHeadline": {
+                "headlineText": "Überschrift für Komponente",
+                "headlineLevel": 3
+              },
               "images": [
                 {
                   "image": {

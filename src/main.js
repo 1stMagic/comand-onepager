@@ -16,7 +16,7 @@ import { createApp } from "vue"
 import App from "./App.vue"
 
 /* import additional iconfont containing company-logos */
-//import 'comand-component-library/src/assets/styles/logos-iconfont.css'
+import 'comand-component-library/src/assets/styles/logos-iconfont.css'
 
 /* import css for global-styles */
 import 'comand-component-library/src/assets/styles/global-styles.scss'
@@ -31,7 +31,7 @@ import 'comand-component-library/dist/style.css'
 import 'comand-component-library/src/assets/styles/template.css'
 
 /* import css for onepager */
-import './assets/styles/onepager.scss'
+import './assets/styles/onepager-global-styles.scss'
 
 import {bootstrap} from "./index.js";
 

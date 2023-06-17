@@ -18,14 +18,14 @@
     "./style/components": {
       "import": "./dist/style.css"
     },
-    "./style/structure": {
-      "import": "./src/assets/styles/onepager.scss"
+    "./style/global-styles": {
+      "import": "./src/assets/styles/onepager-global-styles.scss"
     }
   },
   "dependencies": {
     "axios": "^0.27.2",
-    "comand-component-library": "^3.3.69",
-    "comand-frontend-framework": "^3.3.30",
+    "comand-component-library": "^3.3.75",
+    "comand-frontend-framework": "^3.3.43",
     "mitt": "^3.0.0",
     "pinia": "^2.0.17",
     "vue": "^3.2.37",

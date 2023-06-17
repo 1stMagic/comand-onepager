@@ -1,32 +1,6 @@
 <template>
     <div class="edit-mode">
         <template v-if="componentExists">
-            <!-- begin action-buttons -->
-            <ul class="flex-container">
-                <li>
-                    <a href="#" @click.prevent="deleteComponent" title="Delete this component (and its content)">
-                        <CmdIcon iconClass="icon-trash" />
-                    </a>
-                </li>
-                <li>
-                    <a href="#" @click.prevent="cancelComponent" title="Cancel editing (changes will not be saved)">
-                        <CmdIcon iconClass="icon-cancel" />
-                    </a>
-                </li>
-                <li>
-                    <a v-if="editContent" href="#" @click.prevent="saveComponent" title="Save content of this component">
-                        <CmdIcon iconClass="icon-check" />
-                    </a>
-                    <a v-else href="#" @click.prevent="editComponent" title="Edit content of this component">
-                        <CmdIcon iconClass="icon-edit" />
-                    </a>
-                </li>
-                <li>
-                    <a href="#" @click.prevent="editSettings" title="Edit settings of this component">
-                        <CmdIcon iconClass="icon-cog" />
-                    </a>
-                </li>
-            </ul>
             <div v-if="showSettings && sectionId">
                 <CmdFormElement
                     element="input"
@@ -66,10 +40,10 @@
                 />
 
                 <div class="button-wrapper">
-                    <button @click="saveSettings">
+                    <button>
                         <span class="icon-check"></span><span>Save</span>
                     </button>
-                    <button @click="cancelSettings">
+                    <button>
                         <span class="icon-cancel"></span><span>Cancel</span>
                     </button>
                 </div>
@@ -92,8 +66,9 @@ import {CmdFormElement} from 'comand-component-library'
 import {CmdIcon} from 'comand-component-library'
 
 import mitt from "mitt"
-import {mapActions} from "pinia";
-import {usePiniaStore} from "../../stores/pinia.js";
+import {mapActions} from "pinia"
+import {usePiniaStore} from "../../stores/pinia.js"
+import {useEditModeContext} from "../../editmode/editModeContext.js"
 
 export default {
     name: "EditContentWrapper",
@@ -103,6 +78,7 @@ export default {
     },
     data() {
         return {
+            context: useEditModeContext(null, { sectionId: this.sectionId }, this.onSave),
             contentArrangement: "columns",
             numberOfItems: 3,
             editContent: false,
@@ -111,6 +87,11 @@ export default {
             showLinkInMainNavigation: true,
             linkIconClass: null,
             linkText: null
+        }
+    },
+    provide() {
+        return {
+            editModeContext: this.context
         }
     },
     props: {
@@ -140,44 +121,12 @@ export default {
         }
     },
     methods: {
-        ...mapActions(usePiniaStore, ["updateContentSection"]),
-        deleteComponent() {
-            if (confirm("Delete this component and its content?")) {
-                this.$emit("delete")
+        ...mapActions(usePiniaStore, ["updateSectionComponent"]),
+        onSave(data) {
+            if (data) {
+                const modifications = Array.isArray(data) ? data : [data]
+                modifications.forEach(modification => this.updateSectionComponent(this.sectionId, modification.editModeContextData.componentIndex, modification.update))
             }
-        },
-        addComponent() {
-            this.$emit("add")
-        },
-        cancelComponent() {
-            this.editContent = false
-            this.$emit("cancel")
-        },
-        editComponent() {
-            this.editContent = true
-            this.$emit("edit")
-        },
-        saveComponent() {
-            this.editContent = false
-            this.$emit("save")
-            this.editModeEvents.emit("save")
-        },
-        editSettings() {
-            this.showSettings = !this.showSettings
-        },
-        cancelSettings() {
-            this.showLinkInMainNavigation = this.sectionShowLinkInMainNavigation
-            this.linkIconClass = this.sectionLinkIconClass
-            this.linkText = this.sectionLinkText
-            this.showSettings = false
-        },
-        saveSettings() {
-            this.updateContentSection(this.sectionId,{
-                showLinkInMainNavigation: this.showLinkInMainNavigation,
-                iconClass: this.linkIconClass,
-                navEntry: this.linkText
-            })
-            this.showSettings = false
         }
     },
     watch: {
@@ -206,7 +155,11 @@ export default {
 <style lang="scss">
 main {
     div.edit-mode {
+        border: var(--default-border);
+        border-color: transparent;
+
         &:hover, &:active, &:focus {
+            background: hsl(0deg, 0%, 98%);
             border: var(--default-border);
             border-style: dashed;
         }
@@ -249,6 +202,8 @@ main {
 
     input, textarea {
         &.edit-mode {
+            padding: 0;
+            height: auto;
             background: none;
             width: 100%;
             border-style: dashed;
@@ -258,12 +213,48 @@ main {
             }
         }
 
-        &.headline {
-            margin-bottom: var(--default-margin);
-            font-size: 2.6rem;
+        &[class*="headline"] {
             font-weight: var(--headline-font-weight);
+
+          &.h1 {
+            font-size: 3rem; /* font-size for h1 */
+          }
+
+          &.h2 {
+            font-size: 2.6rem; /* font-size for h2 */
+          }
+
+          &.h3 {
+            font-size: 2.2rem; /* font-size for h3 */
+          }
+
+          &.h4 {
+            font-size: 2rem; /* font-size for h4 */
+          }
+
+          &.h5 {
+            font-size: 1.8rem; /* font-size for h5 */
+          }
+
+          &.h6 {
+            font-size: 1.6rem; /* font-size for h6 */
+          }
         }
     }
+
+  #section-wrapper-main-headline {
+    input.edit-mode {
+      &[class*="headline"] {
+        font-weight: var(--headline-font-weight);
+
+        &.h1 {
+          font-size: 5rem;
+          text-align: center;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
 
     a.add-content {
         display: block;

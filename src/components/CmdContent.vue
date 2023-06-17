@@ -1,29 +1,33 @@
 <template>
     <div :class="['cmd-content flex-container', {'reverse': alignImage === 'right'}]">
-        <CmdContentItem v-for="(component, index) in components" :key="index">
+        <EditComponentWrapper v-for="(component, componentIndex) in components" :key="componentIndex"
+                              :componentIdentifier="`${sectionId}.${componentIndex}`">
             <component
-                :is="component.name"
-                v-bind="component.props"
-                :editContent="editContent"
-                :editModeEvents="editModeEvents"
-                @save="onComponentSave($event, component, index)"
+                    :is="component.name"
+                    v-bind="component.props"
+                    :editModeContextData="{componentIndex: componentIndex}"
             >
-                <component
-                    v-for="(childComponent, childComponentIndex) in component.components || []"
-                    :key="childComponentIndex" :is="childComponent.name"
-                    v-bind="childComponent.props"
-                    :editContent="childComponent.editContent" />
+                <EditComponentWrapper
+                        v-for="(childComponent, childComponentIndex) in component.components || []"
+                        :key="childComponentIndex" :is="childComponent.name"
+                        :componentIdentifier="`${sectionId}.${componentIndex}.${childComponentIndex}`"
+                >
+                    <component
+                            v-bind="childComponent.props"
+                            :editModeContextData="{parentComponentIndex: componentIndex, componentIndex: childComponentIndex}"
+                    />
+                </EditComponentWrapper>
             </component>
-        </CmdContentItem>
+        </EditComponentWrapper>
     </div>
 </template>
 
 <script>
-import {mapActions} from "pinia"
-import {usePiniaStore} from "../stores/pinia"
+import EditComponentWrapper from "./editmode/EditComponentWrapper.vue"
 
 export default {
     name: "CmdContent",
+    components: {EditComponentWrapper},
     data() {
         return {
             savedHtmlHeadline: null,
@@ -35,13 +39,9 @@ export default {
         }
     },
     props: {
-        editModeEvents: {},
-        editContent: {
-            type: Boolean,
-            default: false
-        },
         sectionId: {
-            type: String
+            type: String,
+            required: true
         },
         images: {
             type: Array,
@@ -129,42 +129,14 @@ export default {
                 this.savedImgFigcaption = value
             }
         }
-    },
-    // mounted() {
-    //     this.editModeEvents.on("save", this.onSave)
-    // },
-    // beforeUnmount() {
-    //     this.editModeEvents.off("save", this.onSave)
-    // },
-    methods: {
-        ...mapActions(usePiniaStore, ["updateSectionComponent"]),
-        onComponentSave(componentData, component, componentIndex) {
-            this.updateSectionComponent(this.sectionId, componentIndex, componentData)
-        },
-        onSave() {
-            const sectionData = {
-                content: this.editableHtmlContent,
-                contentTop: this.editableHtmlContentTop,
-                contentBottom: this.editableHtmlContentBottom
-            }
-
-            if (this.images?.length) {
-                sectionData.images = [this.$refs.image.getImage()]
-                // sectionData.images = JSON.parse(JSON.stringify(this.images))
-                // sectionData.images[0].alt = this.imgAltText
-                // sectionData.images[0].figcaption = this.imgFigcaption
-            }
-
-            //this.updateContentSection(this.sectionId, sectionData)
-        }
     }
 }
 </script>
 
 <style lang="scss">
 .cmd-content {
-    &.reverse {
-        flex-direction: row-reverse;
-    }
+  &.reverse {
+    flex-direction: row-reverse;
+  }
 }
 </style>
