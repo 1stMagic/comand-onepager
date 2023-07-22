@@ -6,20 +6,25 @@
 
         <div v-if="preHeadlineText">
             <span class="pre-headline-text">{{ preHeadlineText }}</span>
-            <component :is="getHeadlineTag">
+            <component v-if="headlineText" :is="headlineTag">
                 <!-- being slot -->
                 <slot>{{ headlineText }}</slot>
                 <!-- end slot -->
             </component>
         </div>
-        <component v-else :is="getHeadlineTag">
+        <component v-else-if="headlineText" :is="headlineTag">
             <!-- being slot -->
             <slot>{{ headlineText }}</slot>
             <!-- end slot -->
         </component>
     </div>
     <!-- begin edit-mode -->
-    <input v-else type="text" :class="['edit-mode', 'headline', 'h'+ headlineLevel]" v-model="editableHeadlineText" />
+    <input v-else
+           type="text"
+           :class="['edit-mode', 'headline', 'h'+ headlineLevel]"
+           placeholder="Headline"
+           v-model="editableHeadlineText"
+    />
     <!-- end edit-mode -->
 </template>
 
@@ -49,7 +54,7 @@ export default {
          */
         headlineLevel: {
             type: [String, Number],
-            required: true
+            default: "2"
         },
         /**
          * small pre-headline-text above main-headline
@@ -82,7 +87,7 @@ export default {
         this.editModeContext?.addSaveHandler(this.onSave)
     },
     computed: {
-        getHeadlineTag() {
+        headlineTag() {
             if(this.headlineLevel) {
                 return "h" + this.headlineLevel
             }

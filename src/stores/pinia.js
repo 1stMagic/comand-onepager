@@ -19,7 +19,13 @@ export const usePiniaStore = defineStore("pinia", {
         editMode: true,
         mainHeadline: true,
         authToken: "",
-        componentIdentifier: ""
+        componentIdentifier: "",
+        componentEditMode: false,
+        editModeComponentName: "",
+        editModeComponentProps: {},
+        showEditModeComponentSettings: false,
+        persistHandler: null,
+        editModeContextData: {}
     }),
     getters: {
         labels(state) {
@@ -52,6 +58,16 @@ export const usePiniaStore = defineStore("pinia", {
         }
     },
     actions: {
+        toggleComponentEditModeSettings(componentName, componentProps, persistHandler, editModeContextData) {
+            this.showEditModeComponentSettings = !this.showEditModeComponentSettings
+            this.editModeComponentName = componentName
+            this.editModeComponentProps = componentProps
+            this.persistHandler = persistHandler
+            this.editModeContextData = editModeContextData
+        },
+        closeEditModeComponentSettings() {
+            this.showEditModeComponentSettings = false
+        },
         activateEditMode() {
             this.editMode = true
         },
@@ -97,6 +113,17 @@ export const usePiniaStore = defineStore("pinia", {
             const section = this.sections.find(section => section.id === sectionId)
             if (section && section.components?.length > componentIndex) {
                 updateProps(section.components[componentIndex].props)
+            }
+        },
+        deleteSectionComponent(sectionId, componentIndex, deleteProps) {
+            console.log("deleteSectionComponent", sectionId, componentIndex)
+            const section = this.sections.find(section => section.id === sectionId)
+            if (section && section.components?.length > componentIndex) {
+                if (deleteProps) {
+                    deleteProps(section.components[componentIndex].props)
+                } else {
+                    section.components.splice(componentIndex, 1)
+                }
             }
         },
         updateContentSection(sectionId, sectionData) {

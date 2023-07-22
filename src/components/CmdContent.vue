@@ -1,29 +1,59 @@
 <template>
     <div :class="['cmd-content flex-container', {'reverse': alignImage === 'right'}]">
-        <EditComponentWrapper v-for="(component, componentIndex) in components" :key="componentIndex"
-                              :componentIdentifier="`${sectionId}.${componentIndex}`">
+        <template v-if="editMode">
+            <EditComponentWrapper v-for="(component, componentIndex) in components"
+                                  :key="componentIndex"
+                                  :componentName="component.name"
+                                  :componentProps="component.props"
+                                  :editModeContextData="{componentIndex: componentIndex}"
+                                  :componentIdentifier="`${sectionId}.${componentIndex}`">
+                <component
+                        :is="component.name"
+                        v-bind="component.props"
+                        :editModeContextData="{componentIndex: componentIndex}"
+                >
+                    <EditComponentWrapper
+                            v-for="(childComponent, childComponentIndex) in component.components || []"
+                            :key="childComponentIndex"
+                            :is="childComponent.name"
+                            :componentName="component.name"
+                            :componentProps="component.props"
+                            :editModeContextData="{parentComponentIndex: componentIndex, componentIndex: childComponentIndex}"
+                            :componentIdentifier="`${sectionId}.${componentIndex}.${childComponentIndex}`"
+                    >
+                        <component
+                                v-bind="childComponent.props"
+                                :editModeContextData="{parentComponentIndex: componentIndex, componentIndex: childComponentIndex}"
+                        />
+                    </EditComponentWrapper>
+                </component>
+            </EditComponentWrapper>
+
+        </template>
+
+        <!-- begin default view -->
+        <template v-else>
             <component
+                    v-for="(component, componentIndex) in components"
+                    :key="componentIndex"
                     :is="component.name"
                     v-bind="component.props"
-                    :editModeContextData="{componentIndex: componentIndex}"
             >
-                <EditComponentWrapper
-                        v-for="(childComponent, childComponentIndex) in component.components || []"
-                        :key="childComponentIndex" :is="childComponent.name"
-                        :componentIdentifier="`${sectionId}.${componentIndex}.${childComponentIndex}`"
-                >
-                    <component
-                            v-bind="childComponent.props"
-                            :editModeContextData="{parentComponentIndex: componentIndex, componentIndex: childComponentIndex}"
-                    />
-                </EditComponentWrapper>
+                <component
+                    v-for="(childComponent, childComponentIndex) in component.components || []"
+                    :key="childComponentIndex"
+                    v-bind="childComponent.props"
+                />
             </component>
-        </EditComponentWrapper>
+        </template>
+        <!-- end default view -->
     </div>
 </template>
 
 <script>
 import EditComponentWrapper from "./editmode/EditComponentWrapper.vue"
+import {mapState} from "pinia"
+import {usePiniaStore} from "../stores/pinia.js"
 
 export default {
     name: "CmdContent",
@@ -81,6 +111,10 @@ export default {
         }
     },
     computed: {
+        // provide states from store as computed-properties inside this component
+        ...mapState(usePiniaStore, {
+            editMode: "editMode"
+        }),
         editableHtmlHeadline: {
             get() {
                 return this.savedHtmlHeadline || this.htmlHeadline
@@ -135,8 +169,8 @@ export default {
 
 <style lang="scss">
 .cmd-content {
-  &.reverse {
-    flex-direction: row-reverse;
-  }
+    &.reverse {
+        flex-direction: row-reverse;
+    }
 }
 </style>

@@ -2,9 +2,8 @@
     <div class="grid-container-create-columns cmd-image-gallery">
         <!-- begin cmd-headline -->
         <CmdHeadline
-             v-if="cmdHeadline"
-             :headlineText="cmdHeadline.headlineText"
-             :headlineLevel="cmdHeadline.headlineLevel"
+             v-if="cmdHeadline?.headlineText || editModeContext?.editing"
+             v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
 
@@ -21,13 +20,22 @@
             <!-- end images linked to fancybox -->
 
             <!-- begin images not linked to fancybox -->
-            <CmdImage v-else :image="image.image" :figcaption="image.figcaption"/>
+            <div v-else v-for="(image, index) in images" :key="`i${index}`" class="image-wrapper">
+                <CmdImage :image="image.image" :figcaption="image.figcaption"/>
+            </div>
             <!-- end images not linked to fancybox -->
         </template>
         <!-- end default view -->
 
         <!-- begin edit-mode view -->
-        <EditComponentWrapper class="image-wrapper" v-else v-for="(image, index) in images" :key="'x' + index" :componentIdentifier="componentIdentifier(index)">
+        <EditComponentWrapper v-else
+          class="image-wrapper"
+          v-for="(image, index) in images" :key="'x' + index"
+          componentName="CmdImage"
+          :componentProps="image"
+          :editModeContextData="{imageIndex: index}"
+          :componentIdentifier="componentIdentifier(index)"
+        >
             <CmdImage
                     :image="image.image"
                     :figcaption="image.figcaption"
@@ -99,7 +107,7 @@ export default {
     },
     data() {
         return {
-            context: useEditModeContext(this.editModeContext, {}, this.onSave)
+            context: useEditModeContext(this.editModeContext, {}, this.onSave, this.onDelete)
         }
     },
     methods: {
@@ -139,6 +147,19 @@ export default {
                     }
                 }
             }
+        },
+        onDelete(data) {
+            console.log("CmdImageGallery.onDelete", data)
+            const result = {
+                editModeContextData: {
+                    ...(this.editModeContextData || {})
+                }
+            }
+            if (data && data.length > 0) {
+                const imageIndex = data[0].editModeContextData.imageIndex
+                result.delete = (props) => props.images.splice(imageIndex, 1)
+            }
+            return result
         }
     }
 }

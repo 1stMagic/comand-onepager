@@ -10,7 +10,7 @@
       "cmdMainNavigation": {
         "closeOffcanvas": {
           "iconClass": "icon-cancel",
-          "text": "Navigation schließen",
+          "text": "Close navigation",
           "showText": false
         }
       }
@@ -113,7 +113,7 @@
             "name": "CmdHeadline",
             "props": {
               "headlineText": "Hauptüberschrift",
-              "headlineLevel": 1
+              "headlineLevel": "1"
             }
           }
         ]
@@ -125,11 +125,11 @@
         "navEntry": "Section 1",
         "components": [
           {
-            "name": "TextBlock",
+            "name": "CmdTextImageBlock",
             "props": {
               "cmdHeadline": {
                 "headlineText": "Überschrift Section 1",
-                "headlineLevel": 2
+                "headlineLevel": "2"
               },
               "htmlContent": "<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.</p><p> Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugia a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. <br />Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.</p>"
             }
@@ -144,11 +144,24 @@
         "alignImage": "right",
         "components": [
           {
-            "name": "TextBlock",
+            "name": "CmdTextImageBlock",
             "props": {
               "cmdHeadline": {
                 "headlineText": "Überschrift Section 2",
-                "headlineLevel": 2
+                "headlineLevel": "2"
+              },
+              "cmdImage": {
+                "image": {
+                  "src": "/media/images/gallery-images/landscape-05.jpg",
+                  "alt": "alternative text",
+                  "tooltip": "tooltip"
+                },
+                "figcaption": {
+                  "text": "figcaption",
+                  "position": "bottom",
+                  "textAlign": "center",
+                  "show": true
+                }
               },
               "htmlContent": "<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.</p><p> Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugia a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. <br />Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.</p>"
             }
@@ -183,7 +196,7 @@
             "props": {
               "cmdHeadline": {
                 "headlineText": "Überschrift für Komponente",
-                "headlineLevel": 3
+                "headlineLevel": "3"
               },
               "images": [
                 {
@@ -380,6 +393,11 @@
           {
             "name": "ContactForm",
             "props": {
+              "cmdHeadline": {
+                "headlineText": "Kontakt",
+                "headlineLevel": "2"
+              },
+              "email": "#",
               "formAction": "#"
             }
           }
@@ -395,7 +413,7 @@
             "props": {
               "cmdHeadline": {
                 "headlineText": "Loginbereich",
-                "headlineLevel": 2
+                "headlineLevel": "2"
               },
               "cmdForm": {
                 "textLegend": "Login",

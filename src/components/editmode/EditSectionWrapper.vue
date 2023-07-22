@@ -71,14 +71,14 @@ import {usePiniaStore} from "../../stores/pinia.js"
 import {useEditModeContext} from "../../editmode/editModeContext.js"
 
 export default {
-    name: "EditContentWrapper",
+    name: "EditSectionWrapper",
     components: {
         CmdFormElement,
         CmdIcon
     },
     data() {
         return {
-            context: useEditModeContext(null, { sectionId: this.sectionId }, this.onSave),
+            context: useEditModeContext(null, { sectionId: this.sectionId }, this.onSave, this.onDelete),
             contentArrangement: "columns",
             numberOfItems: 3,
             editContent: false,
@@ -121,11 +121,18 @@ export default {
         }
     },
     methods: {
-        ...mapActions(usePiniaStore, ["updateSectionComponent"]),
+        ...mapActions(usePiniaStore, ["updateSectionComponent", "deleteSectionComponent"]),
         onSave(data) {
             if (data) {
                 const modifications = Array.isArray(data) ? data : [data]
                 modifications.forEach(modification => this.updateSectionComponent(this.sectionId, modification.editModeContextData.componentIndex, modification.update))
+            }
+        },
+        onDelete(data) {
+            console.log("onDelete", this.sectionId, data)
+            if (data) {
+                const modifications = Array.isArray(data) ? data : [data]
+                modifications.forEach(modification => this.deleteSectionComponent(this.sectionId, modification.editModeContextData.componentIndex, modification.delete))
             }
         }
     },

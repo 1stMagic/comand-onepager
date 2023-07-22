@@ -14,11 +14,11 @@
         <!-- begin main content -->
         <div id="page-content">
             <CmdWidthLimitationWrapper v-if="editMode">
-                <EditContentWrapper :componentExists="false" @add="addComponent('contentSection')"/>
+                <EditSectionWrapper :componentExists="false" @add="addComponent('contentSection')"/>
             </CmdWidthLimitationWrapper>
 
             <template v-if="editMode">
-                <EditContentWrapper
+                <EditSectionWrapper
                     v-for="(section, index) in sections" :key="index" :id="section.id"
                     @delete="deleteComponent('contentSection')"
                     :sectionShowLinkInMainNavigation="section.showLinkInMainNavigation"
@@ -35,7 +35,7 @@
                         />
                     </template>
                     <!-- end content sections -->
-                </EditContentWrapper>
+                </EditSectionWrapper>
             </template>
 
             <template v-else>

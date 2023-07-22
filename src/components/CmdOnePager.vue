@@ -1,101 +1,125 @@
 <template>
-  <!-- begin page-wrapper -->
-    <div :class="{'edit-mode': editMode, 'overflow-hidden': offCanvasOpen}" id="page-wrapper" :style="{'scroll-padding-top': heightSiteHeader + 'px'}">
-        <div v-if="editMode" class="system-message info" id="edit-mode-message">
-            <p>You are in EditMode. You can simply edit components by clicking on them and selecting one of the actions-buttons at the top-right corner of that component.</p>
-            <a href="#" @click.prevent="deactivateEditMode">&nbsp;Leave EditMode</a>
-        </div>
-        <a id="anchor-back-to-top"></a>
-        <!-- begin cmd-site-header -->
-        <CmdSiteHeader
-                :cmd-main-navigation="{navigationEntries: mainNavigation}"
-                :closeOffcanvas="{ iconClass: 'icon-cancel', text: label('main_navigation.close_navigation'), showText: true}"
-                :navigationInline="site.siteHeader?.navigationInline"
-                @offcanvas="offcanvasToggled"
-        >
-            <template v-slot:top-header>
-                <!-- begin cmd-list-of-links (for top-header-navigation) -->
-                <CmdListOfLinks
-                        v-if="topHeaderNavigationData"
-                        :links="topHeaderNavigationData"
-                        orientation="horizontal"
-                        align="right"
-                />
-                <!-- end cmd-list-of-links (for top-header-navigation) -->
-            </template>
-            <template v-slot:logo>
-                <!-- begin cmd-company-logo -->
-                <CmdCompanyLogo
-                        v-if="companyLogo.pathDefaultLogo"
-                        :altText="companyLogo.altText"
-                        :pathDefaultLogo="companyLogo.pathDefaultLogo"
-                        :pathDarkmodeLogo="companyLogo.pathDarkmodeLogo"
-                />
-                <!-- end cmd-company-logo -->
-            </template>
-        </CmdSiteHeader>
-        <!-- end cmd-site-header -->
+    <!-- begin page-wrapper -->
+    <div :id="templateId">
+        <div :class="{'edit-mode': editMode, 'overflow-hidden': offCanvasOpen}" id="page-wrapper"
+             :style="{'scroll-padding-top': heightSiteHeader + 'px'}">
+            <div v-if="editMode" class="system-message info" id="edit-mode-message">
+                <div class="flex-container">
+                    <div>
+                    <p>You are in EditMode. You can simply edit components by clicking on them and selecting one of the
+                        actions-buttons at the top-right corner of that component.</p>
+                    <p><a href="#" @click.prevent="leaveEditMode">Leave EditMode</a></p>
+                    </div>
+                        <div>
 
-        <!-- begin inner-wrapper -->
-        <InnerWrapper/>
-        <!-- end inner-wrapper -->
+                        <label for="select-template">
+                            <span class="hidden">Select template</span>
+                            <select id="select-template" v-model="selectedTemplate">
+                                <option value="blank">Blank</option>
+                                <option value="business">Business</option>
+                                <option value="casual">Casual</option>
+                                <option value="dating">Dating</option>
+                                <option value="influencer">Influencer</option>
+                            </select>
+                        </label>
+                    </div>
 
-        <!-- begin cmd-site-footer -->
-        <CmdSiteFooter>
-            <component
-                    v-for="(component, index) in site.siteFooter?.components || []" :key="index"
-                    :is="component.name"
-                    v-bind="component.props"
-                    v-on="handlers(component)"
+                </div>
+            </div>
+      <EditModeComponentSettingsWrapper v-if="editMode && showEditModeComponentSettings" />
+            <a id="anchor-back-to-top"></a>
+            <!-- begin cmd-site-header -->
+            <CmdSiteHeader
+                    :cmd-main-navigation="{navigationEntries: mainNavigation}"
+                    :closeOffcanvas="{ iconClass: 'icon-cancel', text: label('main_navigation.close_navigation'), showText: true}"
+                    :navigationInline="site.siteHeader?.navigationInline"
+                    @offcanvas="offcanvasToggled"
             >
-                <component
-                        v-for="(childComponent, childComponentIndex) in component.components || []"
-                        :key="childComponentIndex" :is="childComponent.name"
-                        v-bind="childComponent.props"
-                        v-on="handlers(childComponent)"
-                        :editContent="childComponent.editContent" />
-            </component>
-        </CmdSiteFooter>
-        <!-- end cmd-site-footer -->
-
-        <!-- begin cmd-copyright-information DO NOT REMOVE -->
-        <CmdCopyrightInformation/>
-        <!-- end cmd-copyright-information DO NOT REMOVE -->
-
-        <!-- begin cmd-back-to-top-button -->
-        <CmdBackToTopButton href="#anchor-back-to-top" :iconBackToTop="iconBackToTop" scroll-container="#page-wrapper"/>
-        <!-- end cmd-back-to-top-button -->
-
-        <!-- begin fancy-box ------------------------------------------------------------------------------------------------------------------------------------------------------->
-        <CmdFancyBox
-                v-if="cookieDisclaimerData"
-                :show="fancyBoxCookieDisclaimer"
-                :fancyboxOptions="{}"
-                :allowEscapeKey="false"
-                :cmdHeadline="{show: true, headlineText: 'Cookie Disclaimer', headlineLevel: 2}"
-                ariaLabelText="Cookie Disclaimer"
-        >
-            <!-- begin cookie-disclaimer ------------------------------------------------------------------------------------------------------------------------------------------------------->
-            <CmdCookieDisclaimer
-                    :cookieOptions="cookieDisclaimerData"
-                    buttonLabelAcceptAllCookies="Accept all cookies"
-                    buttonLabelAcceptCurrentSettings="Accept current settings"
-                    @closeCookieDisclaimer="closeCookieDisclaimer"
-                    v-model="acceptedCookies"
-                    :cmdHeadlineCookieDisclaimer="{ show: false }">
-                <template #privacy-text>
-                    <p>
-                        <strong>
-                            By browsing this web site you accept the usage and saving of anonymous data!
-                        </strong>
-                    </p>
+                <template v-slot:top-header>
+                    <!-- begin cmd-list-of-links (for top-header-navigation) -->
+                    <CmdListOfLinks
+                            v-if="topHeaderNavigationData"
+                            :links="topHeaderNavigationData"
+                            orientation="horizontal"
+                            align="right"
+                    />
+                    <!-- end cmd-list-of-links (for top-header-navigation) -->
                 </template>
-            </CmdCookieDisclaimer>
-            <!-- end cookie-disclaimer ------------------------------------------------------------------------------------------------------------------------------------------------------->
-        </CmdFancyBox>
-        <!-- end fancy-box ------------------------------------------------------------------------------------------------------------------------------------------------------->
-    </div>
-  <!-- end page-wrapper -->
+                <template v-slot:logo>
+                    <!-- begin cmd-company-logo -->
+                    <CmdCompanyLogo
+                            v-if="companyLogo.pathDefaultLogo"
+                            :altText="companyLogo.altText"
+                            :pathDefaultLogo="companyLogo.pathDefaultLogo"
+                            :pathDarkmodeLogo="companyLogo.pathDarkmodeLogo"
+                    />
+                    <!-- end cmd-company-logo -->
+                </template>
+            </CmdSiteHeader>
+            <!-- end cmd-site-header -->
+
+            <!-- begin inner-wrapper -->
+            <InnerWrapper/>
+            <!-- end inner-wrapper -->
+
+            <!-- begin cmd-site-footer -->
+            <CmdSiteFooter>
+                <component
+                        v-for="(component, index) in site.siteFooter?.components || []" :key="index"
+                        :is="component.name"
+                        v-bind="component.props"
+                        v-on="handlers(component)"
+                >
+                    <component
+                            v-for="(childComponent, childComponentIndex) in component.components || []"
+                            :key="childComponentIndex" :is="childComponent.name"
+                            v-bind="childComponent.props"
+                            v-on="handlers(childComponent)"
+                            :editContent="childComponent.editContent"/>
+                </component>
+            </CmdSiteFooter>
+            <!-- end cmd-site-footer -->
+
+            <!-- begin cmd-copyright-information DO NOT REMOVE -->
+            <CmdCopyrightInformation/>
+            <!-- end cmd-copyright-information DO NOT REMOVE -->
+
+            <!-- begin cmd-back-to-top-button -->
+            <CmdBackToTopButton href="#anchor-back-to-top" :iconBackToTop="iconBackToTop"
+                                scroll-container="#page-wrapper"/>
+            <!-- end cmd-back-to-top-button -->
+
+            <!-- begin fancy-box ------------------------------------------------------------------------------------------------------------------------------------------------------->
+            <CmdFancyBox
+                    v-if="cookieDisclaimerData"
+                    :show="fancyBoxCookieDisclaimer"
+                    :fancyboxOptions="{}"
+                    :allowEscapeKey="false"
+                    :cmdHeadline="{show: true, headlineText: 'Cookie Disclaimer', headlineLevel: 2}"
+                    ariaLabelText="Cookie Disclaimer"
+            >
+                <!-- begin cookie-disclaimer ------------------------------------------------------------------------------------------------------------------------------------------------------->
+                <CmdCookieDisclaimer
+                        :cookieOptions="cookieDisclaimerData"
+                        buttonLabelAcceptAllCookies="Accept all cookies"
+                        buttonLabelAcceptCurrentSettings="Accept current settings"
+                        @closeCookieDisclaimer="closeCookieDisclaimer"
+                        v-model="acceptedCookies"
+                        :cmdHeadlineCookieDisclaimer="{ show: false }">
+                    <template #privacy-text>
+                        <p>
+                            <strong>
+                                By browsing this web site you accept the usage and saving of anonymous data!
+                            </strong>
+                        </p>
+                    </template>
+                </CmdCookieDisclaimer>
+                <!-- end cookie-disclaimer ------------------------------------------------------------------------------------------------------------------------------------------------------->
+            </CmdFancyBox>
+            <!-- end fancy-box ------------------------------------------------------------------------------------------------------------------------------------------------------->
+        </div>
+        <!-- end page-wrapper -->
+    </div><!-- end templateId -->
 </template>
 
 <script>
@@ -121,6 +145,7 @@ export default {
     },
     data() {
         return {
+            selectedTemplate: "blank",
             acceptedCookies: [],
             fancyBoxCookieDisclaimer: true,
             footerNavigationData: [],
@@ -154,12 +179,15 @@ export default {
         removeEventListener("hashchange", this.onLocationHashChanged)
     },
     computed: {
-        ...mapState(usePiniaStore, ["editMode", "companyLogo"]),
+        templateId() {
+            return "template-" + this.selectedTemplate
+        },
+        ...mapState(usePiniaStore, ["editMode", "componentEditMode", "showEditModeComponentSettings", "companyLogo"]),
 
         mainNavigation() {
             const navigationEntries = []
             const sections = this.site.main?.sections
-            if(sections) {
+            if (sections) {
                 for (let i = 0; i < sections.length; i++) {
                     if (sections[i].showLinkInMainNavigation) {
                         const path = "#anchor-" + sections[i].id
@@ -196,7 +224,7 @@ export default {
         openingHours() {
             const openingHoursTranslated = []
 
-            for(let i = 0; i < this.openingHoursData.length; i++){
+            for (let i = 0; i < this.openingHoursData.length; i++) {
                 // copy/spread one weekday of openingHoursData to variable
                 const weekday = {...this.openingHoursData[i]}
 
@@ -212,7 +240,7 @@ export default {
     },
     methods: {
         handlers(component) {
-            if(component.handlers === "toggleSection") {
+            if (component.handlers === "toggleSection") {
                 return {
                     "click": this.toggleSection
                 }
@@ -221,12 +249,12 @@ export default {
         },
         toggleSection(event) {
             console.log("event", event)
-            if(event.link.sectionId) {
+            if (event.link.sectionId) {
                 event.originalEvent.preventDefault()
                 const sectionToToggle = this.site.main?.sections.find(section => {
                     return section.id === event.link.sectionId
                 })
-                if(sectionToToggle) {
+                if (sectionToToggle) {
                     sectionToToggle.show = !sectionToToggle.show
                 }
             }
@@ -248,8 +276,8 @@ export default {
         offcanvasToggled(event) {
             this.offCanvasOpen = event.open
         },
-        deactivateEditMode() {
-            if(confirm('Really leave EditMode? (All unsaved changes will be lost!)')) {
+        leaveEditMode() {
+            if (confirm('Really leave EditMode? (All unsaved changes will be lost!)')) {
                 this.deactivateEditMode()
             }
         }
@@ -264,20 +292,53 @@ export default {
                 loadMetaData(this.currentLanguage)
             },
             immediate: true
+        },
+        selectedTemplate() {
+            let linkTag = document.querySelector('link')
+
+            if (linkTag) {
+                linkTag.parentNode.removeChild(linkTag)
+            }
+
+            if (this.selectedTemplate !== "blank") {
+                let newLink = document.createElement('link');
+                newLink.rel = 'stylesheet';
+                newLink.href = 'https://cdn.jsdelivr.net/npm/comand-frontend-framework/dist/templates/' + this.selectedTemplate + '.css';
+
+                document.head.appendChild(newLink);
+            }
         }
     }
 }
 </script>
 
 <style lang="scss">
-#edit-mode-message {
-  position: fixed;
-  z-index: 1000;
-  width: 100%;
-  text-align: center;
+.edit-mode {
+    #edit-mode-message {
+        position: fixed;
+        z-index: 1000;
+        width: 100%;
+        text-align: center;
+        margin: 0;
 
-  > * {
-    margin: 0;
-  }
+        > * {
+            margin: 0 auto;
+        }
+
+        select {
+            color: var(--text-color);
+        }
+    }
+
+
+    .edit-mode-component-settings-wrapper {
+        background: var(--default-background);
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 2000;
+        padding: var(--default-padding);
+        height: 100vh;
+    }
 }
 </style>

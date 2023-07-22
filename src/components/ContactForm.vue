@@ -1,8 +1,11 @@
 <template>
     <div>
-        <!-- begin cmd-headline -->
-        <CmdHeadline :headlineText="label('contact_form.headline')" :headlineLevel="2"/>
-        <!-- end cmd-headline -->
+        <!-- begin CmdHeadline -->
+        <CmdHeadline
+                v-if="cmdHeadline?.headlineText || editModeContext?.editing"
+                v-bind="cmdHeadline || {}"
+        />
+        <!-- end CmdHeadline -->
 
         <CmdForm :action="formAction" @submit="onSubmit" novalidate="novalidate" :textLegend="label('contact_form.legend')">
             <div class="flex-container no-flex">
@@ -125,6 +128,16 @@ export default {
     mixins: [
         BaseI18nComponent
     ],
+    provide() {
+        return {
+            editModeContext: this.context
+        }
+    },
+    inject: {
+        editModeContext: {
+            default: null
+        }
+    },
     data() {
         return {
             validator: new ContactFormValidator(name => this.label(name)),
@@ -141,7 +154,27 @@ export default {
                     iconClass: "icon-message-send",
                 },
                 text: "Send"
-            }
+            },
+            /**
+             * properties for CmdHeadline-component
+             */
+            cmdHeadline: {
+                type: Object,
+                required: false
+            },
+        }
+    },
+    props: {
+        editModeContextData: {
+            type: Object
+        },
+        receiverEmailAddress: {
+            type: String,
+            default: ""
+        },
+        formAction: {
+            type: String,
+            required: true
         }
     },
     mounted() {
@@ -160,12 +193,6 @@ export default {
                 icon: this.nativeButton.icon,
                 text: this.label("contact_form.send_message")
             }
-        }
-    },
-    props: {
-        formAction: {
-            type: String,
-            required: true
         }
     },
     methods: {

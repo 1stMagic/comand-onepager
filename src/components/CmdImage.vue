@@ -1,50 +1,15 @@
 <template>
     <!-- begin edit-mode -->
     <figure v-if="editModeContext?.editing" :class="['cmd-image flex-container vertical', getTextAlign]">
-        <CmdFormElement
-                element="input"
-                type="checkbox"
-                :toggleSwitch="true"
-                labelText="Show figcaption"
-                v-model="editableShowFigcaption"
-        />
-        <CmdFormElement
-                element="select"
-                labelText="Figcaption Position"
-                :selectOptions="positionOptions"
-                :disabled="!showFigcaption"
-                v-model="editableFigcaptionPosition"
-        />
-        <CmdFormElement
-                element="select"
-                labelText="Figcaption text alignment"
-                :selectOptions="textAlignOptions"
-                :disabled="!showFigcaption"
-                v-model="editableFigcaptionTextAlign"
-        />
-        <CmdFormElement element="input" type="text" :required="true" labelText="Alternative Text"
-                        v-model="editableAlternativeText"/>
-        <CmdFormElement element="input" type="text" :required="false" labelText="Tooltip" v-model="editableTooltip"/>
-
         <template v-if="figcaption?.position === 'top'">
             <CmdFormElement element="input" type="text" :required="true" labelText="Text figcaption"
                             v-model="editableFigcaptionText"/>
         </template>
         <div :class="['box drop-area flex-container vertical', { 'allow-drop': allowDrop }]" v-on="dragAndDropHandler" title="Drag new image to this area to replace old one!">
             <span class="icon-image"></span>
-            <img ref="contentImage" :src="image.src" :alt="image.alt" :title="image.tooltip"/>
+            <img :src="imageSource" :alt="image.alt" :title="image.tooltip"/>
         </div>
-        <button
-                type="button"
-                :class="['button upload primary', { disabled: uploadInitiated }]"
-                :disabled="uploadInitiated"
-                @click="selectFiles()"
-        >
-            <!-- begin CmdIcon -->
-            <CmdIcon iconClass="icon-loop"/>
-            <!-- end CmdIcon -->
-            <span>Select image</span>
-        </button>
+
         <template v-if="figcaption?.position !== 'top'">
             <CmdFormElement
                     element="input"
@@ -56,24 +21,11 @@
             />
         </template>
     </figure>
-
-    <!-- begin CmdFormElement -->
-    <CmdFormElement
-            v-if="editModeContext?.editing"
-            class="hidden"
-            element="input"
-            type="file"
-            labelText="Select file"
-            :disabled="uploadInitiated"
-            @change="fileSelected"
-            ref="formElement"
-    />
-    <!-- end CmdFormElement -->
     <!-- end edit-mode -->
 
     <figure v-else :class="['cmd-image', getTextAlign]">
         <figcaption v-if="figcaption?.show && figcaption?.position === 'top'">{{ figcaption?.text }}</figcaption>
-        <img :src="image.src" :alt="image.alt" :title="image.tooltip"/>
+        <img :src="imageSource" :alt="image.alt" :title="image.tooltip"/>
         <figcaption v-if="figcaption?.show && figcaption?.position !== 'top'">{{ figcaption?.text }}</figcaption>
     </figure>
 </template>
@@ -82,7 +34,7 @@
 import {CmdFormElement} from "comand-component-library"
 import {CmdIcon} from "comand-component-library"
 
-import {getFileExtension} from "comand-component-library/src/utils/getFileExtension"
+import {checkAndUploadFile} from "../utils/checkAndUploadFile"
 
 export default {
     name: "CmdImage",
@@ -97,7 +49,10 @@ export default {
     },
     data() {
         return {
-            allowedFileExtensions: ["jpg", "jpeg", "png"],
+            mediumMaxWidth: 1023,
+            smallMaxWidth: 600,
+            currentWindowWidth: window.innerWidth,
+            allowedFileExtensions: ["jpg", "jpeg", "png", "webp"],
             uploadInitiated: false,
             allowDrop: false,
             showFigcaption: true,
@@ -105,6 +60,7 @@ export default {
             figcaptionTextAlign: null,
             tooltip: null,
             alternativeText: null,
+            newImageSource: null,
             positionOptions: [
                 {
                     text: "Above image",
@@ -134,6 +90,7 @@ export default {
     },
     mounted() {
         this.editModeContext?.addSaveHandler(this.onSave)
+        this.editModeContext?.addDeleteHandler(this.onDelete)
     },
     props: {
         editModeContextData: {
@@ -162,18 +119,46 @@ export default {
         },
         minImageWidth: {
             type: Number,
-            default: 1025
+            default: 600
         }
     },
+    created() {
+        // get current window width on window-resize
+        window.addEventListener("resize", this.updateWindowWidth)
+
+        // assign css-breakpoints (as integer to eliminate px-unit) to data-properties to have access to them in vue
+        const computedStyle = getComputedStyle(document.documentElement);
+        this.mediumMaxWidth = parseInt(computedStyle.getPropertyValue("--medium-max-width"))
+        this.smallMaxWidth = parseInt(computedStyle.getPropertyValue("--small-max-width"))
+    },
+    beforeUnmount() {
+        window.removeEventListener("resize", this.updateWindowWidth)
+    },
     computed: {
-        dragAndDropHandler() {
-            // register handlers only if drag-and-drop is enabled
-            return {
-                dragenter: this.dragEnter,
-                dragover: this.dragOver,
-                dragleave: this.dragLeave,
-                drop: this.drop
+        imageSource() {
+            // check if a new image is provided
+            if(this.newImageSource) {
+                return this.newImageSource
             }
+
+            // if only one src exists
+            const imgSrc = this.image.src
+
+            if(typeof imgSrc === "string") {
+                return imgSrc
+            }
+
+            const deviceWidth = this.currentWindowWidth;
+            // return image for small-devices (if exists)
+            if(imgSrc.small && deviceWidth <= this.smallMaxWidth) {
+                return imgSrc.small
+            }
+            // return image for medium-devices (if exists)
+            if (imgSrc.medium && deviceWidth <= this.mediumMaxWidth) {
+                return imgSrc.medium
+            }
+            // else return large (will be used if images for small-and -medium-devices do not exist or if screen resolution is larger than mediumMaxWidth)
+            return imgSrc.large
         },
         getTextAlign() {
             if (this.figcaption?.textAlign) {
@@ -181,44 +166,13 @@ export default {
             }
             return ''
         },
-        editableAlternativeText: {
-            get() {
-                return this.alternativeText == null ? this.image.alt : this.alternativeText
-            },
-            set(value) {
-                this.alternativeText = value
-            }
-        },
-        editableTooltip: {
-            get() {
-                return this.tooltip == null ? this.image.tooltip : this.tooltip
-            },
-            set(value) {
-                this.tooltip = value
-            }
-        },
-        editableShowFigcaption: {
-            get() {
-                return this.showFigcaption == null ? this.figcaption.show : this.showFigcaption
-            },
-            set(value) {
-                this.showFigcaption = value
-            }
-        },
-        editableFigcaptionPosition: {
-            get() {
-                return this.figcaptionPosition == null ? this.figcaption.position : this.figcaptionPosition
-            },
-            set(value) {
-                this.figcaptionPosition = value
-            }
-        },
-        editableFigcaptionTextAlign: {
-            get() {
-                return this.figcaptionTextAlign || this.figcaption.textAlign
-            },
-            set(value) {
-                this.figcaptionTextAlign = value
+        dragAndDropHandler() {
+            // register handlers only if drag-and-drop is enabled
+            return {
+                dragenter: this.dragEnter,
+                dragover: this.dragOver,
+                dragleave: this.dragLeave,
+                drop: this.drop
             }
         },
         editableFigcaptionText: {
@@ -231,6 +185,9 @@ export default {
         }
     },
     methods: {
+        updateWindowWidth() {
+            this.currentWindowWidth = window.innerWidth
+        },
         getImage() {
             return {
                 image: {...this.image},
@@ -241,15 +198,6 @@ export default {
                     text: this.editableFigcaptionText
                 }
             }
-        },
-        fileSelected(event) {
-            if (event.target.files.length > 0) {
-                this.checkAndUploadFile(event.target.files[0])
-            }
-        },
-        selectFiles() {
-            let inputFile = this.$refs.formElement.getDomElement().querySelector("input[type='file']")
-            inputFile.click()
         },
         dragEnter(event) {
             this.dragOver(event)
@@ -275,7 +223,7 @@ export default {
             this.allowDrop = false
             if (event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length > 0) {
                 event.preventDefault()
-                this.checkAndUploadFile(event.dataTransfer.files[0])
+                checkAndUploadFile(event.dataTransfer.files[0], this.allowedFileExtensions, this.minImageWidth, this.maxFileUploadSize, (imageSource) => this.newImageSource = imageSource)
             }
         },
         onSave() {
@@ -311,44 +259,11 @@ export default {
                 }
             }
         },
-        checkAndUploadFile(file) {
-            const errorMessages = []
-
-            // check size for current file
-            if (file.size > this.maxFileUploadSize) {
-                errorMessages.push("file too large")
+        onDelete() {
+            console.log("CmdImage.onDelete()")
+            return {
+                editModeContextData: this.editModeContextData
             }
-
-            // check if current file has allowed file-type
-            if (!this.allowedFileExtensions.includes(getFileExtension(file.name))) {
-                errorMessages.push("disallowed file extension")
-            }
-
-            if (errorMessages.length) {
-                alert(errorMessages)
-                return
-            }
-
-            // check for min dimensions
-            const image = new Image()
-
-            image.onload = () => {
-                if (image.width < this.minImageWidth) {
-                    // errorMessages.push("width (" + image.width + " px) too small - at least " + this.minImageWidth + " px required!")
-                    const confirmUpload = confirm("width (" + image.width + " px) too small - at least " + this.minImageWidth + " px required! Use trotzdem!")
-                    if (!confirmUpload) {
-                        alert("Abbruch")
-                        return
-                    }
-                }
-                // revoke URL to clean memory
-                URL.revokeObjectURL(image.src)
-
-                // show preview-image by assigning image.src (containing image date (not its path) to do existing contentImage source
-                this.$refs.contentImage.src = image.src
-            }
-            // create data-url (contains content of a file (not its path))
-            image.src = URL.createObjectURL(file)
         }
     }
 }
