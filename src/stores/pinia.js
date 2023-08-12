@@ -59,6 +59,7 @@ export const usePiniaStore = defineStore("pinia", {
     },
     actions: {
         toggleComponentEditModeSettings(componentName, componentProps, persistHandler, editModeContextData) {
+            console.log("showSettings", componentName, componentProps, persistHandler, editModeContextData)
             this.showEditModeComponentSettings = !this.showEditModeComponentSettings
             this.editModeComponentName = componentName
             this.editModeComponentProps = componentProps
@@ -113,6 +114,16 @@ export const usePiniaStore = defineStore("pinia", {
             const section = this.sections.find(section => section.id === sectionId)
             if (section && section.components?.length > componentIndex) {
                 updateProps(section.components[componentIndex].props)
+            }
+        },
+        updateFooterComponent(componentIndex, updateProps, parentComponentIndex) {
+            let footer = this.site.siteFooter
+            if (parentComponentIndex != null && footer && footer.components?.length > parentComponentIndex) {
+                footer = footer.components[parentComponentIndex]
+            }
+            if (footer && footer.components?.length > componentIndex) {
+                console.log("updateFooterComponent", componentIndex, parentComponentIndex)
+                updateProps(footer.components[componentIndex].props);
             }
         },
         deleteSectionComponent(sectionId, componentIndex, deleteProps) {

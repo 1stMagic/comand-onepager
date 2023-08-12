@@ -38,6 +38,7 @@ export default {
 
         },
         saveSettings() {
+            console.log("saveSettings", this.$refs.settings)
             const data = this.$refs.settings.save(this.editModeContextData)
             this.persistHandler(data)
             this.closeEditModeComponentSettings()

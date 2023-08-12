@@ -131,6 +131,7 @@ export default {
             return ""
         },
         onSave(data) {
+            console.log("imageGallery.save", data)
             const imageIndex = data[0].editModeContextData.imageIndex
             return {
                 editModeContextData: {

@@ -64,7 +64,10 @@ export function useEditModeContext(parentContext, props, persistHandler, deleteH
         parentContext.addDeleteHandler(deleteComponent)
     }
 
-    watchEffect(() => editing.value = !!parentContext?.editing);
+    watchEffect(() => {
+        console.log("watch", parentContext?.editing)
+        editing.value = !!parentContext?.editing
+    });
 
     return {
         editing,

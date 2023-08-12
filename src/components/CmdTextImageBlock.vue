@@ -3,9 +3,7 @@
         <!-- begin cmdHeadline -->
         <CmdHeadline
                 v-if="(cmdHeadline?.headlineText || editModeContext?.editing) && headlinePosition === 'aboveImage'"
-                :headlineText="cmdHeadline.headlineText"
-                :headlineLevel="cmdHeadline.headlineLevel"
-                :textAlign="cmdHeadline.textAlign"
+                v-bind="cmdHeadline"
         />
         <!-- end cmdHeadline -->
 
@@ -20,9 +18,7 @@
         <!-- begin cmdHeadline -->
         <CmdHeadline
                 v-if="(cmdHeadline?.headlineText || editModeContext?.editing) && headlinePosition === 'belowImage'"
-                 :headlineText="cmdHeadline.headlineText"
-                 :headlineLevel="cmdHeadline.headlineLevel"
-                 :textAlign="cmdHeadline.textAlign"
+                v-bind="cmdHeadline"
         />
         <!-- end cmdHeadline -->
 
@@ -51,7 +47,6 @@ export default {
     data() {
         return {
             context: useEditModeContext(this.editModeContext, {tb: true}, this.onPersist, this.onDelete),
-            editableHtmlHeadline: this.cmdHeadline?.headlineText || "",
             editableHtmlContent: this.htmlContent
         }
     },

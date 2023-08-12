@@ -1,13 +1,30 @@
 <template>
     <!-- begin content -->
     <main>
+        <!-- begin edit-mode -->
+        <EditComponentWrapper v-if="editMode"
+                              componentName="CmdSlideshow"
+                              :componentProps="{}"
+                              componentIdentifier="slideshow"
+            >
+            <!-- begin cmd-slideshow -->
+            <CmdSlideshow
+                    v-if="slideshow.slideshowItems?.length"
+                    :slideshow-items="slideshow.slideshowItems"
+                    :full-width="true"
+                    :autoplay="false"
+                    :cmdSlideButtons="cmdSlideButtons"
+            />
+            <!-- end cmd-slideshow -->
+        </EditComponentWrapper>
+
         <!-- begin cmd-slideshow -->
         <CmdSlideshow
-            v-if="slideshow.slideshowItems?.length"
-            :slideshow-items="slideshow.slideshowItems"
-            :full-width="true"
-            :autoplay="false"
-            :cmdSlideButtons="cmdSlideButtons"
+                v-else-if="!editMode && slideshow.slideshowItems?.length"
+                :slideshow-items="slideshow.slideshowItems"
+                :full-width="true"
+                :autoplay="false"
+                :cmdSlideButtons="cmdSlideButtons"
         />
         <!-- end cmd-slideshow -->
 

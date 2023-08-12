@@ -55,7 +55,7 @@ export default {
                     headlineLevel: headlineData.headlineLevel,
                     textAlign: headlineData.textAlign
                 },
-                emailAddress: this.emailAddressModel
+                // emailAddress: this.emailAddressModel
             }
             return {
                 editModeContextData,
@@ -64,7 +64,7 @@ export default {
                     props.cmdHeadline.headlineText = data.cmdHeadline.headlineText
                     props.cmdHeadline.headlineLevel = data.cmdHeadline.headlineLevel
                     props.cmdHeadline.textAlign = data.cmdHeadline.textAlign
-                    props.emailAddress = data.emailAddress
+                    // props.emailAddress = data.emailAddress
                 }
             }
         }

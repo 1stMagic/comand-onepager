@@ -18,12 +18,16 @@
             <!-- end slot -->
         </component>
     </div>
+
     <!-- begin edit-mode -->
-    <input v-else
-           type="text"
-           :class="['edit-mode', 'headline', 'h'+ headlineLevel]"
-           placeholder="Headline"
-           v-model="editableHeadlineText"
+    <CmdFormElement
+            v-else
+            element="input"
+            type="text"
+            :class="['edit-mode', 'headline', 'h'+ headlineLevel]"
+            labelText="Headline"
+            placeholder="Headline"
+            v-model="editableHeadlineText"
     />
     <!-- end edit-mode -->
 </template>

@@ -121,11 +121,15 @@ export default {
         }
     },
     methods: {
-        ...mapActions(usePiniaStore, ["updateSectionComponent", "deleteSectionComponent"]),
+        ...mapActions(usePiniaStore, ["updateSectionComponent", "updateFooterComponent", "deleteSectionComponent"]),
         onSave(data) {
             if (data) {
                 const modifications = Array.isArray(data) ? data : [data]
-                modifications.forEach(modification => this.updateSectionComponent(this.sectionId, modification.editModeContextData.componentIndex, modification.update))
+                if (this.sectionId == null) {
+                    modifications.forEach(modification => this.updateFooterComponent(modification.editModeContextData.componentIndex, modification.update, modification.editModeContextData.parentComponentIndex))
+                } else {
+                    modifications.forEach(modification => this.updateSectionComponent(this.sectionId, modification.editModeContextData.componentIndex, modification.update))
+                }
             }
         },
         onDelete(data) {

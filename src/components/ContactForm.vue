@@ -16,6 +16,7 @@
                     :labelText="label('contact_form.salutation_male')"
                     name="salutation"
                     inputValue="M"
+                    :replace-input-type="true"
                     v-model="formData.salutation"
                     @validate="onValidate"
                 />
@@ -27,6 +28,7 @@
                     type="radio"
                     :labelText="label('contact_form.salutation_female')"
                     name="salutation"
+                    :replace-input-type="true"
                     v-model="formData.salutation"
                     @validate="onValidate"
                 />
@@ -118,6 +120,7 @@ import {usePiniaStore} from "../stores/pinia"
 
 //import mixins
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
+import {useEditModeContext} from "../editmode/editModeContext.js";
 
 export default {
     components: {
@@ -140,6 +143,7 @@ export default {
     },
     data() {
         return {
+            context: useEditModeContext(this.editModeContext, {}, this.onPersist, this.onDelete),
             validator: new ContactFormValidator(name => this.label(name)),
             formData: {
                 salutation: 'M',
@@ -154,14 +158,7 @@ export default {
                     iconClass: "icon-message-send",
                 },
                 text: "Send"
-            },
-            /**
-             * properties for CmdHeadline-component
-             */
-            cmdHeadline: {
-                type: Object,
-                required: false
-            },
+            }
         }
     },
     props: {
@@ -175,6 +172,13 @@ export default {
         formAction: {
             type: String,
             required: true
+        },
+        /**
+         * properties for CmdHeadline-component
+         */
+        cmdHeadline: {
+            type: Object,
+            required: false
         }
     },
     mounted() {
@@ -223,6 +227,27 @@ export default {
             if (link.fancybox) {
                 event.preventDefault()
                 openFancyBox({url: link})
+            }
+        },
+        onPersist(data) {
+            return {
+                editModeContextData: {
+                    ...(this.editModeContextData || {})
+                },
+                update(props) {
+                    props.cmdHeadline = {
+                        ...(props.cmdHeadline || {}),
+                    }
+                    props.cmdHeadline.headlineText = data[0].headlineText
+                }
+            }
+        },
+        onDelete() {
+            console.log("ContactForm.onDelete()")
+            return {
+                editModeContextData: {
+                    ...(this.editModeContextData || {})
+                }
             }
         }
         // openDataPrivacy(url) {

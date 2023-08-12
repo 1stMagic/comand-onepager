@@ -227,6 +227,7 @@ export default {
             }
         },
         onSave() {
+            console.log("image.save")
             const data = {
                 image: {
                     alt: this.editableAlternativeText,

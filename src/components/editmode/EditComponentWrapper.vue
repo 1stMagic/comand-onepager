@@ -5,6 +5,17 @@
         <ul v-show="storeComponentIdentifier === componentIdentifier"
             class="flex-container no-flex no-gap action-buttons">
             <li>
+                <a v-if="context.editing" class="icon-hexagon button-save" href="#" @click.prevent="saveComponent"
+                   title="Save changes of this component">
+                    <CmdIcon iconClass="icon-check"/>
+                </a>
+                <a v-else :class="['icon-hexagon', {disabled: showEditModeComponentSettings}]" href="#"
+                   @click.prevent="editComponent"
+                   title="Edit content of this component">
+                    <CmdIcon iconClass="icon-edit"/>
+                </a>
+            </li>
+            <li>
                 <a class="icon-hexagon button-delete" href="#" @click.prevent="deleteComponent"
                    title="Delete this component (and its content)">
                     <CmdIcon iconClass="icon-trash"/>
@@ -21,17 +32,6 @@
                    @click.prevent="cancelComponent"
                    title="Cancel editing (changes will not be saved)">
                     <CmdIcon iconClass="icon-cancel"/>
-                </a>
-            </li>
-            <li>
-                <a v-if="context.editing" class="icon-hexagon button-save" href="#" @click.prevent="saveComponent"
-                   title="Save changes of this component">
-                    <CmdIcon iconClass="icon-check"/>
-                </a>
-                <a v-else :class="['icon-hexagon', {disabled: showEditModeComponentSettings}]" href="#"
-                   @click.prevent="editComponent"
-                   title="Edit content of this component">
-                    <CmdIcon iconClass="icon-edit"/>
                 </a>
             </li>
         </ul>
@@ -131,7 +131,7 @@ export default {
         editSettings(event) {
             event.stopPropagation()
 
-            if (!this.componentEditMode) {
+            if (!this.context.editing) {
                 this.toggleComponentEditModeSettings(this.componentName, this.componentProps, this.context.callPersistHandler, this.editModeContextData)
             }
         },

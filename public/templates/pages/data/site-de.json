@@ -483,7 +483,7 @@
     "orientation": "horizontal",
     "components": [
       {
-        "name": "div",
+        "name": "CmdContainer",
         "props": {
           "class": "flex-container vertical"
         },
@@ -538,43 +538,87 @@
       {
         "name": "CmdOpeningHours",
         "props": {
-          "textHolidaysClosed": "",
+          "textHolidays": "",
           "textMiscInfo": "",
           "openingHours": [
             {
-              "day": "Mo",
-              "fromTime": "08:00",
-              "tillTime": "17:00"
+              "day": "Mondays",
+              "am": {
+                "fromTime": "08:00",
+                "tillTime": "12:00",
+                "displayText": "Vormittags offen"
+              },
+              "pm": {
+                "fromTime": "13:00",
+                "tillTime": "18:00",
+                "displayText": "closed"
+              }
             },
             {
               "day": "Tu",
-              "fromTime": "08:00",
-              "tillTime": "17:00"
+              "am": {
+                "fromTime": "08:00",
+                "tillTime": "12:01"
+              },
+              "pm": {
+                "fromTime": "13:00",
+                "tillTime": "18:00"
+              }
             },
             {
               "day": "We",
-              "fromTime": "08:00",
-              "tillTime": "17:30"
+              "am": {
+                "fromTime": "08:00",
+                "tillTime": "12:00"
+              },
+              "pm": {
+                "fromTime": "13:00",
+                "tillTime": "18:00"
+              }
             },
             {
               "day": "Th",
-              "fromTime": "08:00",
-              "tillTime": "17:00"
+              "am": {
+                "fromTime": "08:00",
+                "tillTime": "12:00"
+              },
+              "pm": {
+                "fromTime": "13:00",
+                "tillTime": "18:00"
+              }
             },
             {
               "day": "Fr",
-              "fromTime": "08:00",
-              "tillTime": "15:00"
+              "am": {
+                "fromTime": "08:00",
+                "tillTime": "12:00"
+              },
+              "pm": {
+                "fromTime": "13:00",
+                "tillTime": "18:00"
+              }
             },
             {
               "day": "Sa",
-              "fromTime": "08:00",
-              "tillTime": "17:28"
+              "am": {
+                "fromTime": "08:00",
+                "tillTime": "12:00"
+              },
+              "pm": {
+                "fromTime": "13:00",
+                "tillTime": "18:00"
+              }
             },
             {
               "day": "So",
-              "fromTime": "08:00",
-              "tillTime": "22:22"
+              "am": {
+                "fromTime": "08:00",
+                "tillTime": "12:00"
+              },
+              "pm": {
+                "fromTime": "13:00",
+                "tillTime": "18:00"
+              }
             }
           ]
         }

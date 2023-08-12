@@ -6,11 +6,12 @@
             <div v-if="editMode" class="system-message info" id="edit-mode-message">
                 <div class="flex-container">
                     <div>
-                    <p>You are in EditMode. You can simply edit components by clicking on them and selecting one of the
-                        actions-buttons at the top-right corner of that component.</p>
-                    <p><a href="#" @click.prevent="leaveEditMode">Leave EditMode</a></p>
+                        <p>You are in EditMode. You can simply edit components by clicking on them and selecting one of
+                            the
+                            actions-buttons at the top-right corner of that component.</p>
+                        <p><a href="#" @click.prevent="leaveEditMode">Leave EditMode</a></p>
                     </div>
-                        <div>
+                    <div>
 
                         <label for="select-template">
                             <span class="hidden">Select template</span>
@@ -26,7 +27,7 @@
 
                 </div>
             </div>
-      <EditModeComponentSettingsWrapper v-if="editMode && showEditModeComponentSettings" />
+            <EditModeComponentSettingsWrapper v-if="editMode && showEditModeComponentSettings"/>
             <a id="anchor-back-to-top"></a>
             <!-- begin cmd-site-header -->
             <CmdSiteHeader
@@ -63,7 +64,45 @@
             <!-- end inner-wrapper -->
 
             <!-- begin cmd-site-footer -->
-            <CmdSiteFooter>
+            <template v-if="editMode">
+                <EditSectionWrapper>
+                    <CmdSiteFooter>
+                        <EditComponentWrapper v-for="(component, componentIndex) in site.siteFooter?.components || []"
+                                              :key="componentIndex"
+                                              :componentName="component.name"
+                                              :componentProps="component.props"
+                                              :editModeContextData="{componentIndex: componentIndex}"
+                                              :componentIdentifier="`${componentIndex}`">
+                            <component
+                                    :is="component.name"
+                                    v-bind="component.props"
+                                    :editModeContextData="{componentIndex: componentIndex}"
+                                    v-on="handlers(component)"
+                            >
+                                <EditComponentWrapper
+                                        v-for="(childComponent, childComponentIndex) in component.components || []"
+                                        :key="childComponentIndex"
+                                        :is="childComponent.name"
+                                        :componentName="component.name"
+                                        :componentProps="component.props"
+                                        :editModeContextData="{parentComponentIndex: componentIndex, componentIndex: childComponentIndex}"
+                                        :componentIdentifier="`${componentIndex}.${childComponentIndex}`"
+                                >
+                                    <component
+                                            :is="childComponent.name"
+                                            v-bind="childComponent.props"
+                                            v-on="handlers(childComponent)"
+                                            :editModeContextData="{parentComponentIndex: componentIndex, componentIndex: childComponentIndex}"
+                                            :editContent="childComponent.editContent"
+                                    />
+                                </EditComponentWrapper>
+                            </component>
+                        </EditComponentWrapper>
+                    </CmdSiteFooter>
+                </EditSectionWrapper>
+            </template>
+
+            <CmdSiteFooter v-else>
                 <component
                         v-for="(component, index) in site.siteFooter?.components || []" :key="index"
                         :is="component.name"
