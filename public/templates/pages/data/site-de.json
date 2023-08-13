@@ -189,7 +189,7 @@
         "iconClass": "icon-user-profile",
         "showLinkInMainNavigation": true,
         "navEntry": "Section 3",
-        "headline": "Überschrift für Section 3",
+        "headlineText": "Überschrift für Section 3",
         "components": [
           {
             "name": "CmdImageGallery",
@@ -261,7 +261,7 @@
         "showLinkInMainNavigation": false,
         "iconClass": "icon-user-profile",
         "navEntry": "Section 4",
-        "headline": "Überschrift Section 4",
+        "headlineText": "Überschrift Section 4",
         "components": [
           {
             "name": "CmdThumbnailScroller",
