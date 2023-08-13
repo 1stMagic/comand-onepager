@@ -108,19 +108,15 @@
 
 <script>
 // import components from comand-component-library
-import {CmdForm} from 'comand-component-library'
-import {CmdFormElement} from 'comand-component-library'
-import {CmdHeadline} from 'comand-component-library'
+import {CmdForm, CmdFormElement, CmdHeadline, openFancyBox} from 'comand-component-library'
 
 // import functions
 import {ContactFormValidator} from "../utils/ContactFormValidator"
-import {openFancyBox} from 'comand-component-library'
 
 import {usePiniaStore} from "../stores/pinia"
 
 //import mixins
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
-import {useEditModeContext} from "../editmode/editModeContext.js";
 
 export default {
     components: {
@@ -131,11 +127,6 @@ export default {
     mixins: [
         BaseI18nComponent
     ],
-    provide() {
-        return {
-            editModeContext: this.context
-        }
-    },
     inject: {
         editModeContext: {
             default: null
@@ -143,7 +134,6 @@ export default {
     },
     data() {
         return {
-            context: useEditModeContext(this.editModeContext, {}, this.onPersist, this.onDelete),
             validator: new ContactFormValidator(name => this.label(name)),
             formData: {
                 salutation: 'M',
@@ -162,9 +152,6 @@ export default {
         }
     },
     props: {
-        editModeContextData: {
-            type: Object
-        },
         receiverEmailAddress: {
             type: String,
             default: ""
@@ -229,27 +216,27 @@ export default {
                 openFancyBox({url: link})
             }
         },
-        onPersist(data) {
-            return {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                },
-                update(props) {
-                    props.cmdHeadline = {
-                        ...(props.cmdHeadline || {}),
-                    }
-                    props.cmdHeadline.headlineText = data[0].headlineText
-                }
-            }
-        },
-        onDelete() {
-            console.log("ContactForm.onDelete()")
-            return {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                }
-            }
-        }
+        // onPersist(data) {
+        //     return {
+        //         editModeContextData: {
+        //             ...(this.editModeContextData || {})
+        //         },
+        //         update(props) {
+        //             props.cmdHeadline = {
+        //                 ...(props.cmdHeadline || {}),
+        //             }
+        //             props.cmdHeadline.headlineText = data[0].headlineText
+        //         }
+        //     }
+        // },
+        // onDelete() {
+        //     console.log("ContactForm.onDelete()")
+        //     return {
+        //         editModeContextData: {
+        //             ...(this.editModeContextData || {})
+        //         }
+        //     }
+        // }
         // openDataPrivacy(url) {
         //     openFancyBox({url})
         // }

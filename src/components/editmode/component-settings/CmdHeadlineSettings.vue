@@ -25,6 +25,7 @@
 <script>
 export default {
     name: "CmdHeadlineSettings",
+    inheritAttrs: false,
     data() {
         return {
             editableHeadlineText: null,
@@ -113,20 +114,14 @@ export default {
         }
     },
     methods: {
-        save(editModeContextData) {
-            const data = {
-                headlineText: this.headlineTextModel,
-                headlineLevel: this.headlineLevelModel,
-                textAlign: this.textAlignModel
-            }
-            return {
-                editModeContextData,
-                ...data,
-                update(props) {
-                    props.headlineText = data.headlineText
-                    props.headlineLevel = data.headlineLevel
-                    props.textAlign = data.textAlign
-                }
+        updateCallbackProvider() {
+            const headlineText =  this.headlineTextModel
+            const headlineLevel =  this.headlineLevelModel
+            const textAlign =  this.textAlignModel
+            return props => {
+                props.headlineText = headlineText
+                props.headlineLevel = headlineLevel
+                props.textAlign = textAlign
             }
         }
     }

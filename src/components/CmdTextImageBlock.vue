@@ -2,7 +2,7 @@
     <div class="cmd-text-block flex-container vertical">
         <!-- begin cmdHeadline -->
         <CmdHeadline
-                v-if="(cmdHeadline?.headlineText || editModeContext?.editing) && headlinePosition === 'aboveImage'"
+                v-if="(cmdHeadline?.headlineText || editing) && headlinePosition === 'aboveImage'"
                 v-bind="cmdHeadline"
         />
         <!-- end cmdHeadline -->
@@ -17,36 +17,26 @@
 
         <!-- begin cmdHeadline -->
         <CmdHeadline
-                v-if="(cmdHeadline?.headlineText || editModeContext?.editing) && headlinePosition === 'belowImage'"
+                v-if="(cmdHeadline?.headlineText || editing) && headlinePosition === 'belowImage'"
                 v-bind="cmdHeadline"
         />
         <!-- end cmdHeadline -->
 
         <!-- begin continuous text -->
-        <textarea v-if="editModeContext?.editing" :class="['edit-mode', textAlign]" v-model="editableHtmlContent"></textarea>
+        <textarea v-if="editing" :class="['edit-mode', textAlign]" v-model="editableHtmlContent"></textarea>
         <div v-else-if="htmlContent" v-html="htmlContent" :class="textAlign"></div>
         <!-- end continuous text -->
     </div>
 </template>
 
 <script>
-import {useEditModeContext} from "../editmode/editModeContext.js"
+import EditMode from "./mixins/EditMode.vue"
 
 export default {
     name: "CmdTextImageBlock",
-    provide() {
-        return {
-            editModeContext: this.context
-        }
-    },
-    inject: {
-        editModeContext: {
-            default: null
-        }
-    },
+    mixins: [EditMode],
     data() {
         return {
-            context: useEditModeContext(this.editModeContext, {tb: true}, this.onPersist, this.onDelete),
             editableHtmlContent: this.htmlContent
         }
     },
@@ -101,26 +91,22 @@ export default {
         }
     },
     methods: {
-        onPersist(data) {
+        updateHandlerProvider() {
             const htmlContent = this.editableHtmlContent
+            const children = ["CmdHeadline", "CmdImage"]
             return {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                },
+                name: "CmdTextImageBlock",
                 update(props) {
-                    props.cmdHeadline = {
-                        ...(props.cmdHeadline || {}),
-                    }
-                    props.cmdHeadline.headlineText = data[0].headlineText
                     props.htmlContent = htmlContent
-                }
-            }
-        },
-        onDelete() {
-            console.log("CmdTextImageBlock.onDelete()")
-            return {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
+                },
+                handleChildUpdate(props, childUpdateHandler) {
+                    if (children.includes(childUpdateHandler.name)) {
+                        const prop = childUpdateHandler.name[0].toLowerCase() + childUpdateHandler.name.slice(1)
+                        props[prop] = props[prop] || {}
+                        childUpdateHandler.update(props[prop])
+                        return true
+                    }
+                    return false
                 }
             }
         }

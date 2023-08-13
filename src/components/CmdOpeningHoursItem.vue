@@ -161,7 +161,14 @@ export default {
         abbreviationText: {
             type: String,
             default: "h"
-        }
+        },
+        /**
+         * option to set custom time format by function
+         */
+        timeFormatter: {
+            type: Function,
+            required: false
+        },
     },
     methods: {
         getTime(time) {

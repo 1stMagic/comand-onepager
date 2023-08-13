@@ -17,7 +17,6 @@ export function useEditModeContext(parentContext, props, persistHandler, deleteH
     }
 
     function deleteComponent() {
-        console.log("deleteComponent")
         const data = []
         deleteHandlers.forEach(deleteHandler => {
             const result = deleteHandler();
@@ -65,7 +64,6 @@ export function useEditModeContext(parentContext, props, persistHandler, deleteH
     }
 
     watchEffect(() => {
-        console.log("watch", parentContext?.editing)
         editing.value = !!parentContext?.editing
     });
 

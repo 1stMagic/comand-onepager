@@ -37,6 +37,7 @@
 <script>
 export default {
     name: "CmdListOfLinksSettings",
+    inheritAttrs: false,
     data() {
         return {
             editableLargeIcons: null,

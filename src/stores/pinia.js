@@ -3,6 +3,19 @@ import {i18nClient} from "../api/I18nClient"
 import axios from "axios"
 import {createUuid} from "comand-component-library"
 
+function findComponent(site, componentFinders) {
+    let component = null
+    if (Array.isArray(componentFinders) && componentFinders.length > 0) {
+        for (let i = 0, c = componentFinders.length; i < c; i++) {
+            component = componentFinders[i](component || site)
+            if (component == null) {
+                return null
+            }
+        }
+    }
+    return component
+}
+
 export const usePiniaStore = defineStore("pinia", {
     state: () => ({
         site: {},
@@ -19,13 +32,7 @@ export const usePiniaStore = defineStore("pinia", {
         editMode: true,
         mainHeadline: true,
         authToken: "",
-        componentIdentifier: "",
-        componentEditMode: false,
-        editModeComponentName: "",
-        editModeComponentProps: {},
-        showEditModeComponentSettings: false,
-        persistHandler: null,
-        editModeContextData: {}
+        componentEditMode: false
     }),
     getters: {
         labels(state) {
@@ -49,26 +56,10 @@ export const usePiniaStore = defineStore("pinia", {
             return {}
         },
         sections(state) {
-            return state.site.main?.sections.filter(section => {
-                if(section.show !== false) {
-                    return true
-                }
-                return false
-            }) || []
+            return state.site.main?.sections?.filter(section => section.show !== false) || []
         }
     },
     actions: {
-        toggleComponentEditModeSettings(componentName, componentProps, persistHandler, editModeContextData) {
-            console.log("showSettings", componentName, componentProps, persistHandler, editModeContextData)
-            this.showEditModeComponentSettings = !this.showEditModeComponentSettings
-            this.editModeComponentName = componentName
-            this.editModeComponentProps = componentProps
-            this.persistHandler = persistHandler
-            this.editModeContextData = editModeContextData
-        },
-        closeEditModeComponentSettings() {
-            this.showEditModeComponentSettings = false
-        },
         activateEditMode() {
             this.editMode = true
         },
@@ -80,9 +71,6 @@ export const usePiniaStore = defineStore("pinia", {
         },
         deleteAuthToken() {
             this.authToken = ""
-        },
-        setComponentIdentifier(componentIdentifier) {
-            this.componentIdentifier = componentIdentifier
         },
         loadLabels() {
             i18nClient.getLanguagesAndLabels()
@@ -110,59 +98,6 @@ export const usePiniaStore = defineStore("pinia", {
         updateMainHeadlineState(showMainHeadline) {
             this.mainHeadline = showMainHeadline
         },
-        updateSectionComponent(sectionId, componentIndex, updateProps) {
-            const section = this.sections.find(section => section.id === sectionId)
-            if (section && section.components?.length > componentIndex) {
-                updateProps(section.components[componentIndex].props)
-            }
-        },
-        updateFooterComponent(componentIndex, updateProps, parentComponentIndex) {
-            let footer = this.site.siteFooter
-            if (parentComponentIndex != null && footer && footer.components?.length > parentComponentIndex) {
-                footer = footer.components[parentComponentIndex]
-            }
-            if (footer && footer.components?.length > componentIndex) {
-                console.log("updateFooterComponent", componentIndex, parentComponentIndex)
-                updateProps(footer.components[componentIndex].props);
-            }
-        },
-        deleteSectionComponent(sectionId, componentIndex, deleteProps) {
-            console.log("deleteSectionComponent", sectionId, componentIndex)
-            const section = this.sections.find(section => section.id === sectionId)
-            if (section && section.components?.length > componentIndex) {
-                if (deleteProps) {
-                    deleteProps(section.components[componentIndex].props)
-                } else {
-                    section.components.splice(componentIndex, 1)
-                }
-            }
-        },
-        updateContentSection(sectionId, sectionData) {
-            // find index of section to update in sections-array/-state
-            const sectionIndex = this.sections.findIndex((item) => {
-                return item.id === sectionId
-            })
-
-            if(sectionIndex === -1) {
-                alert("No section found!")
-                return
-            }
-
-            // assign old section-object to new one and overwrite some keys by sectionData
-            this.sections[sectionIndex] = {...this.sections[sectionIndex], ...sectionData}
-        },
-        deleteContentSection(sectionId) {
-            // find index of section to delete in sections-array/-state
-            const sectionIndex = this.sections.findIndex((item) => {
-                return item.id === sectionId
-            })
-
-            if(sectionIndex === -1) {
-                return
-            }
-            // delete section from sections-array/-state
-            this.sections.splice(sectionIndex, 1)
-        },
         addContentSection() {
           this.sections.unshift(
               {
@@ -173,6 +108,38 @@ export const usePiniaStore = defineStore("pinia", {
                   content: "<p>Placeholder</p>"
               }
           )
+        },
+        updateContent(componentFinders, updateHandlers) {
+            const component = findComponent(this.site, componentFinders)
+            if (!component) {
+                return
+            }
+
+            updateHandlers.forEach((updateHandler, index) => invokeUpdateHandler(component, updateHandler, index))
+
+            function invokeUpdateHandler(component, updateHandler, index) {
+                if (updateHandler.processed) {
+                    return
+                }
+                if (typeof updateHandler.update === "function") {
+                    updateHandler.update(component.props || component)
+                }
+                if (typeof updateHandler.handleChildUpdate === "function" && updateHandlers.length > index + 1) {
+                    updateHandlers.slice(index + 1).forEach(childUpdateHandler => invokeChildUpdateHandler(component, updateHandler, childUpdateHandler))
+                }
+            }
+
+            function invokeChildUpdateHandler(component, updateHandler, childUpdateHandler) {
+                if (typeof childUpdateHandler.update === "function") {
+                    childUpdateHandler.processed = !!updateHandler.handleChildUpdate(component.props || component, childUpdateHandler)
+                }
+            }
+        },
+        updateSettings(componentFinders, updateCallback) {
+            const component = findComponent(this.site, componentFinders)
+            if (component) {
+                updateCallback(component.props || component)
+            }
         }
     }
 })

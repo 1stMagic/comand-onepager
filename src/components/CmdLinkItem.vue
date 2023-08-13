@@ -54,9 +54,6 @@ export default {
         }
     },
     props: {
-        editModeContextData: {
-            type: Object
-        },
         /**
          * single link
          */
@@ -65,28 +62,28 @@ export default {
             required: false
         }
     },
-    mounted() {
-        this.editModeContext?.addSaveHandler(this.onSave)
-        this.editModeContext?.addDeleteHandler(this.onDelete)
-    },
-    methods: {
-        onSave() {
-            const data = {
-                link: {
-                    text: this.editableText
-                }
-            }
-            console.log("LinkItem.save()", data)
-            return {
-                editModeContextData: this.editModeContextData,
-                ...data
-            }
-        },
-        onDelete() {
-            return {
-                editModeContextData: this.editModeContextData
-            }
-        }
-    }
+    // mounted() {
+    //     this.editModeContext?.addSaveHandler(this.onSave)
+    //     this.editModeContext?.addDeleteHandler(this.onDelete)
+    // },
+    // methods: {
+    //     onSave() {
+    //         const data = {
+    //             link: {
+    //                 text: this.editableText
+    //             }
+    //         }
+    //         console.log("LinkItem.save()", data)
+    //         return {
+    //             editModeContextData: this.editModeContextData,
+    //             ...data
+    //         }
+    //     },
+    //     onDelete() {
+    //         return {
+    //             editModeContextData: this.editModeContextData
+    //         }
+    //     }
+    // }
 }
 </script>

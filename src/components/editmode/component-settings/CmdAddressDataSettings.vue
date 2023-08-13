@@ -48,6 +48,7 @@
 <script>
 export default {
     name: "CmdAddressDataSettings",
+    inheritAttrs: false,
     data() {
         return {
             editableShowLabels: null,

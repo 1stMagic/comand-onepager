@@ -31,7 +31,6 @@
                                           :key="'x' + index"
                                           componentName="CmdAddressDataItem"
                                           :componentProps="entry"
-                                          :editModeContextData="{linkIndex: index}"
                                           :componentIdentifier="'nase' + index"
                     >
                         <!-- begin labels -->
@@ -156,25 +155,15 @@
 //import I18n from "../mixins/I18n"
 //import DefaultMessageProperties from "../mixins/CmdAddressData/DefaultMessageProperties"
 
-import {useEditModeContext} from "../editmode/editModeContext.js";
-
 export default {
     name: "CmdAddressData",
     //  mixins: [I18n, DefaultMessageProperties],
-    provide() {
-        return {
-            editModeContext: this.context
-        }
-    },
     inject: {
         editModeContext: {
             default: null
         }
     },
     props: {
-        editModeContextData: {
-            type: Object
-        },
         /**
          * activate if you want to use slot instead for given structure
          */
@@ -234,7 +223,6 @@ export default {
     },
     data() {
         return {
-            context: useEditModeContext(this.editModeContext, {}, this.onSave, this.onDelete),
             editableAddressData: []
         }
     },
@@ -244,42 +232,42 @@ export default {
         }
     },
     methods: {
-        onSave(data) {
-            const addressData = this.editableAddressData
-            return {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                },
-                update(props) {
-                    props.cmdHeadline = {
-                        ...(props.cmdHeadline || {}),
-                    }
-                    props.cmdHeadline.headlineText = data[0].headlineText
-                    if (!props.addressData) {
-                        props.addressData = []
-                    }
-                    addressData.forEach((value, index) => {
-                        const item = props.addressData[index]
-                        if (item.name === "address") {
-                            Object.entries(value).forEach(([k, v]) => item[k] = v)
-                        } else {
-                            if (item.href == null) {
-                                item.data = value;
-                            } else {
-                                item.href = value;
-                            }
-                        }
-                    })
-                }
-            }
-        },
-        onDelete() {
-            return {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                }
-            }
-        }
+        // onSave(data) {
+        //     const addressData = this.editableAddressData
+        //     return {
+        //         editModeContextData: {
+        //             ...(this.editModeContextData || {})
+        //         },
+        //         update(props) {
+        //             props.cmdHeadline = {
+        //                 ...(props.cmdHeadline || {}),
+        //             }
+        //             props.cmdHeadline.headlineText = data[0].headlineText
+        //             if (!props.addressData) {
+        //                 props.addressData = []
+        //             }
+        //             addressData.forEach((value, index) => {
+        //                 const item = props.addressData[index]
+        //                 if (item.name === "address") {
+        //                     Object.entries(value).forEach(([k, v]) => item[k] = v)
+        //                 } else {
+        //                     if (item.href == null) {
+        //                         item.data = value;
+        //                     } else {
+        //                         item.href = value;
+        //                     }
+        //                 }
+        //             })
+        //         }
+        //     }
+        // },
+        // onDelete() {
+        //     return {
+        //         editModeContextData: {
+        //             ...(this.editModeContextData || {})
+        //         }
+        //     }
+        // }
     },
     watch: {
 

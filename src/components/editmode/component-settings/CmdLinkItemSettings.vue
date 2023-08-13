@@ -25,6 +25,7 @@
 <script>
 export default {
     name: "CmdLinkItemSettings",
+    inheritAttrs: false,
     data() {
         return {
             editableText: null,
@@ -84,7 +85,6 @@ export default {
     },
     methods: {
         save(editModeContextData) {
-            console.log("linkItemSettings.save()", editModeContextData)
             const data = {
                 text: this.textModel,
                 path: this.pathModel,
@@ -94,7 +94,6 @@ export default {
                 editModeContextData,
                 ...data,
                 update(props) {
-                    console.log("linkItemSettings.update()", props, data)
                     const link = props.links[editModeContextData.linkIndex]
                     link.text = data.text
                     link.path = data.path

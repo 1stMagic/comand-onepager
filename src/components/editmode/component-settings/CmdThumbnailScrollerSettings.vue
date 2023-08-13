@@ -31,6 +31,7 @@
 <script>
 export default {
     name: "CmdImageGallerySettings",
+    inheritAttrs: false,
     data() {
         return {
             orientationOptions: [

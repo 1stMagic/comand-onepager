@@ -38,9 +38,6 @@
                 <EditSectionWrapper
                     v-for="(section, index) in sections" :key="index" :id="section.id"
                     @delete="deleteComponent('contentSection')"
-                    :sectionShowLinkInMainNavigation="section.showLinkInMainNavigation"
-                    :sectionLinkIconClass="section.iconClass"
-                    :sectionLinkText="section.navEntry"
                     :sectionId="section.id"
                 >
                     <!-- begin content sections -->
@@ -48,7 +45,7 @@
                         <ContentSection
                             :components="section.components"
                             :id="section.id"
-                            :headlineText="section.headline"
+                            :headlineText="section.headlineText"
                         />
                     </template>
                     <!-- end content sections -->
@@ -60,7 +57,7 @@
                 <ContentSection
                     v-for="(section, index) in sections" :key="index"
                     :id="section.id"
-                    :headlineText="section.headline"
+                    :headlineText="section.headlineText"
                     :components="section.components"
                 />
                 <!-- end content sections -->

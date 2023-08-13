@@ -19,7 +19,7 @@
             ref="formElement"
     />
     <!-- end CmdFormElement -->
-    <h5>Figcaption</h5>
+    <h5>Figcaption - {{figcaption.show}} / {{ editableShowFigcaption }}</h5>
     <CmdFormElement
             element="input"
             type="checkbox"
@@ -32,14 +32,14 @@
                 element="select"
                 labelText="Position"
                 :selectOptions="positionOptions"
-                :disabled="!showFigcaption"
+                :disabled="!editableShowFigcaption"
                 v-model="editableFigcaptionPosition"
         />
         <CmdFormElement
                 element="select"
                 labelText="Alignment"
                 :selectOptions="textAlignOptions"
-                :disabled="!showFigcaption"
+                :disabled="!editableShowFigcaption"
                 v-model="editableFigcaptionTextAlign"
         />
     </div>
@@ -65,12 +65,13 @@
 import {checkAndUploadFile} from "../../../utils/checkAndUploadFile.js"
 export default {
     name: "CmdImageSettings",
+    inheritAttrs: false,
     data() {
         return {
             allowedFileExtensions: ["jpg", "jpeg", "png"],
             uploadInitiated: false,
             allowDrop: false,
-            showFigcaption: true,
+            showFigcaption: null,
             figcaptionPosition: null,
             figcaptionTextAlign: null,
             tooltip: null,
@@ -175,7 +176,7 @@ export default {
             let inputFile = this.$refs.formElement.getDomElement().querySelector("input[type='file']")
             inputFile.click()
         },
-        save(editModeContextData) {
+        updateCallbackProvider() {
             const data = {
                 image: {
                     alt: this.editableAlternativeText,
@@ -187,22 +188,18 @@ export default {
                     show: this.editableShowFigcaption
                 }
             }
-            return {
-                editModeContextData,
-                ...data,
-                update(props) {
-                    if (!props.image) {
-                        props.image = {}
-                    }
-                    props.image.alt = data.image.alt
-                    props.image.tooltip = data.image.tooltip
-                    if (!props.figcaption) {
-                        props.figcaption = {}
-                    }
-                    props.figcaption.position = data.figcaption.position
-                    props.figcaption.textAlign = data.figcaption.textAlign
-                    props.figcaption.show = data.figcaption.show
+            return props => {
+                if (!props.image) {
+                    props.image = {}
                 }
+                props.image.alt = data.image.alt
+                props.image.tooltip = data.image.tooltip
+                if (!props.figcaption) {
+                    props.figcaption = {}
+                }
+                props.figcaption.position = data.figcaption.position
+                props.figcaption.textAlign = data.figcaption.textAlign
+                props.figcaption.show = data.figcaption.show
             }
         }
     }

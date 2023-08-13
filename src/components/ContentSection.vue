@@ -2,9 +2,15 @@
     <CmdWidthLimitationWrapper :id="'section-wrapper-' + id">
         <a :id="'anchor-' + id"></a>
         <div class="flex-container vertical">
-            <!-- begin cmd-headline (headline is required in section) -->
-            <CmdHeadline v-if="headlineText" :headlineText="headlineText" :headlineLevel="headlineLevel"/>
-            <!-- end cmd-headline -->
+            <EditComponentWrapper
+                componentName="CmdHeadline"
+                :componentProps="{headlineText, headlineLevel}"
+                :componentIdentifier="`${id}.headline`"
+                :componentFinder="componentFinder(id)">
+                <!-- begin cmd-headline (headline is required in section) -->
+                <CmdHeadline :headlineText="headlineText" :headlineLevel="headlineLevel"/>
+                <!-- end cmd-headline -->
+            </EditComponentWrapper>
 
             <CmdContent
                 :sectionId="id"
@@ -16,8 +22,7 @@
 
 <script>
 /* import components from comand-component-library */
-import { CmdHeadline } from 'comand-component-library'
-import { CmdWidthLimitationWrapper } from 'comand-component-library'
+import { CmdHeadline, CmdWidthLimitationWrapper } from 'comand-component-library'
 
 // import mixins
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
@@ -72,6 +77,11 @@ export default {
                     }
                 }
             }
+        }
+    },
+    methods: {
+        componentFinder(sectionId) {
+            return site => site?.main?.sections?.find(section => section.id === sectionId)
         }
     }
 }

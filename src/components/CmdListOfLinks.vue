@@ -23,13 +23,11 @@
                                   :key="'x' + index"
                                   componentName="CmdLinkItem"
                                   :componentProps="link"
-                                  :editModeContextData="{linkIndex: index}"
                                   :componentIdentifier="componentIdentifier(index)"
             >
                 <CmdLinkItem
                     :class="{'active': sectionAnchors && activeSection === index}"
                     :link="link"
-                    :editModeContextData="{linkIndex: index}"
                 />
             </EditComponentWrapper>
             <!-- end edit-mode -->
@@ -39,29 +37,17 @@
 </template>
 
 <script>
-// import functions
-//import {getRoute} from "../utilities.js"
-//import {openFancyBox} from "./CmdFancyBox.vue"
-
-import {useEditModeContext} from "../editmode/editModeContext.js";
+import {createUuid} from "comand-component-library"
 
 export default {
     name: "CmdListOfLinks",
     emits: ["click"],
-    provide() {
-        return {
-            editModeContext: this.context
-        }
-    },
     inject: {
         editModeContext: {
             default: null
         }
     },
     props: {
-        editModeContextData: {
-            type: Object
-        },
         /**
          * activate if component should contain a list of anchors for the section within the page
          */
@@ -140,7 +126,7 @@ export default {
     },
     data() {
         return {
-            context: useEditModeContext(this.editModeContext, {tb: true}, this.onSave, this.onDelete),
+            uuid: createUuid()
         }
     },
     computed: {
@@ -164,49 +150,40 @@ export default {
             this.$emit("click", {link, originalEvent: event})
         },
         componentIdentifier(index) {
-            const identifier = []
-            identifier.push(this.editModeContextData.componentIndex)
-
-            if(this.editModeContextData.childComponentIndex != null) {
-                identifier.push(this.editModeContextData.childComponentIndex)
-            }
-
-            identifier.push(index)
-
-            return identifier.join(".")
+            return `${this.uuid}.${index}`
         },
-        onSave(data) {
-            console.log("ListOfLinks.save()", data)
-            if (!Array.isArray(data)) {
-                data = [data]
-            }
-            const linkIndex = data[0].editModeContextData.linkIndex;
-            return {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                },
-                update(props) {
-                    console.log("ListOfLinks.update()", props)
-                    props.links[linkIndex] = {
-                        ...props.links[linkIndex],
-                        ...data[0].link
-                    }
-                    data.filter(dataItem => typeof dataItem.update === "function").forEach(dataItem => dataItem.update(props))
-                }
-            }
-        },
-        onDelete(data) {
-            const result = {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                }
-            }
-            if (data && data.length > 0) {
-                const linkIndex = data[0].editModeContextData.linkIndex
-                result.delete = (props) => props.links.splice(linkIndex, 1)
-            }
-            return result
-        }
+        // onSave(data) {
+        //     console.log("ListOfLinks.save()", data)
+        //     if (!Array.isArray(data)) {
+        //         data = [data]
+        //     }
+        //     const linkIndex = data[0].editModeContextData.linkIndex;
+        //     return {
+        //         editModeContextData: {
+        //             ...(this.editModeContextData || {})
+        //         },
+        //         update(props) {
+        //             console.log("ListOfLinks.update()", props)
+        //             props.links[linkIndex] = {
+        //                 ...props.links[linkIndex],
+        //                 ...data[0].link
+        //             }
+        //             data.filter(dataItem => typeof dataItem.update === "function").forEach(dataItem => dataItem.update(props))
+        //         }
+        //     }
+        // },
+        // onDelete(data) {
+        //     const result = {
+        //         editModeContextData: {
+        //             ...(this.editModeContextData || {})
+        //         }
+        //     }
+        //     if (data && data.length > 0) {
+        //         const linkIndex = data[0].editModeContextData.linkIndex
+        //         result.delete = (props) => props.links.splice(linkIndex, 1)
+        //     }
+        //     return result
+        // }
     }
 }
 </script>

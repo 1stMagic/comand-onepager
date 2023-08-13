@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!editModeContext?.editing" :class="['cmd-headline', {'has-pre-headline-text': preHeadlineText, 'has-icon': headlineIcon?.iconClass}, getTextAlign]">
+    <div v-if="!editing" :class="['cmd-headline', {'has-pre-headline-text': preHeadlineText, 'has-icon': headlineIcon?.iconClass}, getTextAlign]">
         <!-- begin CmdIcon -->
         <CmdIcon v-if="headlineIcon" :iconClass="headlineIcon?.iconClass" :type="headlineIcon?.iconType" />
         <!-- end CmdIcon -->
@@ -33,13 +33,11 @@
 </template>
 
 <script>
+import EditMode from "./mixins/EditMode.vue"
+
 export default {
     name: "CmdHeadline",
-    inject: {
-        editModeContext: {
-            default: null
-        }
-    },
+    mixins: [EditMode],
     data() {
         return {
             editableHeadlineText: this.headlineText
@@ -82,13 +80,7 @@ export default {
         textAlign: {
             type: String,
             default: null
-        },
-        editModeContextData: {
-            type: Object
         }
-    },
-    mounted() {
-        this.editModeContext?.addSaveHandler(this.onSave)
     },
     computed: {
         headlineTag() {
@@ -105,17 +97,22 @@ export default {
         }
     },
     methods: {
-        onSave() {
+        updateHandlerProvider() {
             const headlineText = this.editableHeadlineText
             return {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                },
-                headlineText,
+                name: "CmdHeadline",
                 update(props) {
                     props.headlineText = headlineText
                 }
             }
+        }
+    },
+    watch: {
+        headlineText: {
+            handler() {
+                this.editableHeadlineText = this.headlineText
+            },
+            immediate: true
         }
     }
 }

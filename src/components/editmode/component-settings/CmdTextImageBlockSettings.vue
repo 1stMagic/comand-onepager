@@ -19,10 +19,9 @@
 </template>
 
 <script>
-import {h} from "vue";
-
 export default {
     name: "CmdTextImageBlockSettings",
+    inheritAttrs: false,
     data() {
         return {
             paragraphAlignmentOptions: [
@@ -67,48 +66,20 @@ export default {
         }
     },
     methods: {
-        save(editModeContextData) {
-            const imageData = this.$refs.imageSettings.save(editModeContextData)
-            const headlineData = this.$refs.headlineSettings.save(editModeContextData)
-            const data = {
-                cmdImage: {
-                    image: imageData.image,
-                    figcaption: imageData.figcaption
-                },
-                cmdHeadline: {
-                    headlineText: headlineData.headlineText,
-                    headlineLevel: headlineData.headlineLevel,
-                    textAlign: headlineData.textAlign
-                },
-                paragraphTextAlign: this.paragraphTextAlignModel
-            }
-            return {
-                editModeContextData,
-                ...data,
-                update(props) {
-                    if (!props.cmdImage) {
-                        props.cmdImage = {}
-                    }
-                    if (!props.cmdImage.image) {
-                        props.cmdImage.image = {}
-                    }
-                    if (!props.cmdImage.figcaption) {
-                        props.cmdImage.figcaption = {}
-                    }
-                    props.cmdImage.image.alt = data.cmdImage.image.alt
-                    props.cmdImage.image.tooltip = data.cmdImage.image.tooltip
-                    props.cmdImage.figcaption.position = data.cmdImage.figcaption.position
-                    props.cmdImage.figcaption.textAlign = data.cmdImage.figcaption.textAlign
-                    props.cmdImage.figcaption.show = data.cmdImage.figcaption.show
-
-                    if (!props.cmdHeadline) {
-                        props.cmdHeadline = {}
-                    }
-                    props.cmdHeadline.headlineText = data.cmdHeadline.headlineText
-                    props.cmdHeadline.headlineLevel = data.cmdHeadline.headlineLevel
-                    props.cmdHeadline.textAlign = data.cmdHeadline.textAlign
-                    props.paragraphTextAlign = data.paragraphTextAlign
+        updateCallbackProvider() {
+            const headlineUpdateCallback = this.$refs.headlineSettings.updateCallbackProvider()
+            const imageUpdateCallback = this.$refs.imageSettings.updateCallbackProvider()
+            const paragraphTextAlign = this.paragraphTextAlignModel
+            return props => {
+                if (!props.cmdHeadline) {
+                    props.cmdHeadline = {}
                 }
+                headlineUpdateCallback(props.cmdHeadline)
+                if (!props.cmdImage) {
+                    props.cmdImage = {}
+                }
+                imageUpdateCallback(props.cmdImage)
+                props.paragraphTextAlign = paragraphTextAlign
             }
         }
     }

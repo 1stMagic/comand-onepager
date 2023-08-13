@@ -18,6 +18,7 @@
 <script>
 export default {
     name: "CmdImageGallerySettings",
+    inheritAttrs: false,
     data() {
         return {
             editableUseFancyboxForLargeImages: null
@@ -44,28 +45,15 @@ export default {
         }
     },
     methods: {
-        save(editModeContextData) {
-            const headlineData = this.$refs.headlineSettings.save(editModeContextData)
-            const data = {
-                cmdHeadline: {
-                    headlineText: headlineData.headlineText,
-                    headlineLevel: headlineData.headlineLevel,
-                    textAlign: headlineData.textAlign
-                },
-                useFancyboxForLargeImages: this.useFancyboxForLargeImagesModel
-            }
-            return {
-                editModeContextData,
-                ...data,
-                update(props) {
-                    if (!props.cmdHeadline) {
-                        props.cmdHeadline = {}
-                    }
-                    props.cmdHeadline.headlineText = data.cmdHeadline.headlineText
-                    props.cmdHeadline.headlineLevel = data.cmdHeadline.headlineLevel
-                    props.cmdHeadline.textAlign = data.cmdHeadline.textAlign
-                    props.useFancyboxForLargeImages = data.useFancyboxForLargeImages
+        updateCallbackProvider() {
+            const headlineUpdateCallback = this.$refs.headlineSettings.updateCallbackProvider()
+            const useFancyboxForLargeImages = this.useFancyboxForLargeImagesModel
+            return props => {
+                if (!props.cmdHeadline) {
+                    props.cmdHeadline = {}
                 }
+                headlineUpdateCallback(props.cmdHeadline)
+                props.useFancyboxForLargeImages = useFancyboxForLargeImages
             }
         }
     }

@@ -1,57 +1,8 @@
 <template>
     <div class="edit-mode">
         <template v-if="componentExists">
-            <div v-if="showSettings && sectionId">
-                <CmdFormElement
-                    element="input"
-                    type="checkbox"
-                    :replaceInputType="true"
-                    labelText="Show entry in main navigation"
-                    v-model="showLinkInMainNavigation"
-                />
-                <CmdFormElement
-                    element="input"
-                    type="text"
-                    labelText="Link icon-class"
-                    v-model="linkIconClass"
-                />
-                <CmdFormElement
-                    element="input"
-                    type="text"
-                    labelText="Link text"
-                    v-model="linkText"
-                />
-                <CmdFormElement
-                    element="input"
-                    type="checkbox"
-                    :toggle-switch="true"
-                    onLabelText="Columns"
-                    offLabelText="Rows"
-                    labelText="Content arrangement"
-                    v-model="contentArrangement"
-                />
-                <CmdFormElement
-                    element="input"
-                    type="number"
-                    min="1"
-                    max="6"
-                    labelText="Columns"
-                    v-model="numberOfItems"
-                />
-
-                <div class="button-wrapper">
-                    <button>
-                        <span class="icon-check"></span><span>Save</span>
-                    </button>
-                    <button>
-                        <span class="icon-cancel"></span><span>Cancel</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- end action-buttons -->
             <!-- begin slot -->
-            <slot :editContent="editContent" :editModeEvents="editModeEvents"></slot>
+            <slot></slot>
             <!-- end slot -->
         </template>
         <a v-else class="add-content" href="#" @click.prevent="addComponent" title="Add content">
@@ -62,37 +13,13 @@
 
 <script>
 // import components from comand-component-library
-import {CmdFormElement} from 'comand-component-library'
-import {CmdIcon} from 'comand-component-library'
-
-import mitt from "mitt"
-import {mapActions} from "pinia"
-import {usePiniaStore} from "../../stores/pinia.js"
-import {useEditModeContext} from "../../editmode/editModeContext.js"
+import {CmdFormElement, CmdIcon} from 'comand-component-library'
 
 export default {
     name: "EditSectionWrapper",
     components: {
         CmdFormElement,
         CmdIcon
-    },
-    data() {
-        return {
-            context: useEditModeContext(null, { sectionId: this.sectionId }, this.onSave, this.onDelete),
-            contentArrangement: "columns",
-            numberOfItems: 3,
-            editContent: false,
-            editModeEvents: new mitt(),
-            showSettings: false,
-            showLinkInMainNavigation: true,
-            linkIconClass: null,
-            linkText: null
-        }
-    },
-    provide() {
-        return {
-            editModeContext: this.context
-        }
     },
     props: {
         componentExists: {
@@ -106,58 +33,6 @@ export default {
         sectionId: {
           type: String,
           required: false
-        },
-        sectionShowLinkInMainNavigation: {
-            type: Boolean,
-            default: true
-        },
-        sectionLinkIconClass: {
-            type: String,
-            required: false
-        },
-        sectionLinkText: {
-            type: String,
-            required: false
-        }
-    },
-    methods: {
-        ...mapActions(usePiniaStore, ["updateSectionComponent", "updateFooterComponent", "deleteSectionComponent"]),
-        onSave(data) {
-            if (data) {
-                const modifications = Array.isArray(data) ? data : [data]
-                if (this.sectionId == null) {
-                    modifications.forEach(modification => this.updateFooterComponent(modification.editModeContextData.componentIndex, modification.update, modification.editModeContextData.parentComponentIndex))
-                } else {
-                    modifications.forEach(modification => this.updateSectionComponent(this.sectionId, modification.editModeContextData.componentIndex, modification.update))
-                }
-            }
-        },
-        onDelete(data) {
-            console.log("onDelete", this.sectionId, data)
-            if (data) {
-                const modifications = Array.isArray(data) ? data : [data]
-                modifications.forEach(modification => this.deleteSectionComponent(this.sectionId, modification.editModeContextData.componentIndex, modification.delete))
-            }
-        }
-    },
-    watch: {
-        sectionShowLinkInMainNavigation: {
-            handler() {
-                this.showLinkInMainNavigation = this.sectionShowLinkInMainNavigation
-            },
-            immediate: true
-        },
-        sectionLinkIconClass: {
-            handler() {
-                this.linkIconClass = this.sectionLinkIconClass
-            },
-            immediate: true
-        },
-        sectionLinkText: {
-            handler() {
-                this.linkText = this.sectionLinkText
-            },
-            immediate: true
         }
     }
 }
@@ -173,13 +48,6 @@ main {
             background: hsl(0deg, 0%, 98%);
             border: var(--default-border);
             border-style: dashed;
-        }
-
-        > ul {
-            display: none;
-        }
-
-        &:hover, &:active, &:focus {
             > ul {
                 display: flex;
                 gap: calc(var(--default-gap) / 2);
@@ -194,6 +62,10 @@ main {
                     margin: 0;
                 }
             }
+        }
+
+        > ul {
+            display: none;
         }
     }
 

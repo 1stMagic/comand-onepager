@@ -5,25 +5,23 @@
                                   :key="componentIndex"
                                   :componentName="component.name"
                                   :componentProps="component.props"
-                                  :editModeContextData="{componentIndex: componentIndex}"
-                                  :componentIdentifier="`${sectionId}.${componentIndex}`">
+                                  :componentIdentifier="`${sectionId}.${componentIndex}`"
+                                  :componentFinder="componentFinder(sectionId, componentIndex)">
                 <component
                         :is="component.name"
                         v-bind="component.props"
-                        :editModeContextData="{componentIndex: componentIndex}"
                 >
                     <EditComponentWrapper
                             v-for="(childComponent, childComponentIndex) in component.components || []"
                             :key="childComponentIndex"
-                            :is="childComponent.name"
-                            :componentName="component.name"
-                            :componentProps="component.props"
-                            :editModeContextData="{parentComponentIndex: componentIndex, componentIndex: childComponentIndex}"
+                            :componentName="childComponent.name"
+                            :componentProps="childComponent.props"
                             :componentIdentifier="`${sectionId}.${componentIndex}.${childComponentIndex}`"
+                            :componentFinder="componentFinder(sectionId, componentIndex, childComponentIndex)"
                     >
                         <component
+                                :is="childComponent.name"
                                 v-bind="childComponent.props"
-                                :editModeContextData="{parentComponentIndex: componentIndex, componentIndex: childComponentIndex}"
                         />
                     </EditComponentWrapper>
                 </component>
@@ -41,6 +39,7 @@
             >
                 <component
                     v-for="(childComponent, childComponentIndex) in component.components || []"
+                    :is="childComponent.name"
                     :key="childComponentIndex"
                     v-bind="childComponent.props"
                 />
@@ -163,7 +162,36 @@ export default {
                 this.savedImgFigcaption = value
             }
         }
+    },
+    methods: {
+        componentFinder(sectionId, ...componentIndexes) {
+            return site => {
+                if (componentIndexes.length > 0) {
+                    const sections = site?.main?.sections
+                    if (sections) {
+                        const section = sections.find(section => section.id === sectionId)
+                        if (section?.components) {
+                            let component = null
+                            componentIndexes.forEach(
+                                componentIndex => component = getArrayItem(
+                                    component,
+                                    componentIndex,
+                                    getArrayItem(section.components, componentIndex)))
+                            return component
+                        }
+                    }
+                }
+                return null
+            }
+        }
     }
+}
+
+function getArrayItem(array, index, defaultValue) {
+    if (Array.isArray(array) && array.length > index) {
+        return array[index]
+    }
+    return defaultValue
 }
 </script>
 

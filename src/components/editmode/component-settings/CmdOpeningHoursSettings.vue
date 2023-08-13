@@ -23,6 +23,7 @@
 <script>
 export default {
     name: "CmdOpeningHoursSettings",
+    inheritAttrs: false,
     data() {
         return {
             separators: [
@@ -121,7 +122,6 @@ export default {
                     props.cmdHeadline.textAlign = data.cmdHeadline.textAlign
                     props.abbreviationText = data.abbreviationText
                     props.separator = data.separator
-                    console.log("props", props)
                 }
             }
         }

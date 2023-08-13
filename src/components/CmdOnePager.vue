@@ -27,7 +27,7 @@
 
                 </div>
             </div>
-            <EditModeComponentSettingsWrapper v-if="editMode && showEditModeComponentSettings"/>
+            <EditModeComponentSettingsWrapper v-if="editMode && context.settings.show()"/>
             <a id="anchor-back-to-top"></a>
             <!-- begin cmd-site-header -->
             <CmdSiteHeader
@@ -71,12 +71,10 @@
                                               :key="componentIndex"
                                               :componentName="component.name"
                                               :componentProps="component.props"
-                                              :editModeContextData="{componentIndex: componentIndex}"
                                               :componentIdentifier="`${componentIndex}`">
                             <component
                                     :is="component.name"
                                     v-bind="component.props"
-                                    :editModeContextData="{componentIndex: componentIndex}"
                                     v-on="handlers(component)"
                             >
                                 <EditComponentWrapper
@@ -85,15 +83,12 @@
                                         :is="childComponent.name"
                                         :componentName="component.name"
                                         :componentProps="component.props"
-                                        :editModeContextData="{parentComponentIndex: componentIndex, componentIndex: childComponentIndex}"
                                         :componentIdentifier="`${componentIndex}.${childComponentIndex}`"
                                 >
                                     <component
                                             :is="childComponent.name"
                                             v-bind="childComponent.props"
                                             v-on="handlers(childComponent)"
-                                            :editModeContextData="{parentComponentIndex: componentIndex, componentIndex: childComponentIndex}"
-                                            :editContent="childComponent.editContent"
                                     />
                                 </EditComponentWrapper>
                             </component>
@@ -172,11 +167,17 @@ import {loadMetaData} from "../utils/metaData"
 
 // import mixins
 import BaseI18nComponent from "../components/mixins/BaseI18nComponent"
+import {useEditModeContext} from "../composables/editModeContext.js"
 
 export default {
     mixins: [
         BaseI18nComponent
     ],
+    provide() {
+        return {
+            editModeContext: this.context
+        }
+    },
     props: {
         cookieDisclaimerData: {
             type: Object
@@ -184,6 +185,7 @@ export default {
     },
     data() {
         return {
+            context: useEditModeContext(),
             selectedTemplate: "blank",
             acceptedCookies: [],
             fancyBoxCookieDisclaimer: true,
@@ -287,7 +289,6 @@ export default {
             return {}
         },
         toggleSection(event) {
-            console.log("event", event)
             if (event.link.sectionId) {
                 event.originalEvent.preventDefault()
                 const sectionToToggle = this.site.main?.sections.find(section => {

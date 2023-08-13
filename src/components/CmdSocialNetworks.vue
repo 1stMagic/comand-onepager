@@ -46,15 +46,8 @@
 </template>
 
 <script>
-import {useEditModeContext} from "../editmode/editModeContext.js";
-
 export default {
     name: "CmdSocialNetworks",
-    provide() {
-        return {
-            editModeContext: this.context
-        }
-    },
     inject: {
         editModeContext: {
             default: null
@@ -62,14 +55,10 @@ export default {
     },
     data() {
         return {
-            context: useEditModeContext(this.editModeContext, {}, this.onPersist),
             dataPrivacyAccepted: false
         }
     },
     props: {
-        editModeContextData: {
-            type: Object
-        },
         /**
          * set default v-model (must be named modelValue in Vue3)
          */

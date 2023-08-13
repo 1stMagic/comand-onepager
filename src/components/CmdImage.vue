@@ -1,6 +1,6 @@
 <template>
     <!-- begin edit-mode -->
-    <figure v-if="editModeContext?.editing" :class="['cmd-image flex-container vertical', getTextAlign]">
+    <figure v-if="editing" :class="['cmd-image flex-container vertical', getTextAlign]">
         <template v-if="figcaption?.position === 'top'">
             <CmdFormElement element="input" type="text" :required="true" labelText="Text figcaption"
                             v-model="editableFigcaptionText"/>
@@ -31,18 +31,13 @@
 </template>
 
 <script>
-import {CmdFormElement} from "comand-component-library"
-import {CmdIcon} from "comand-component-library"
-
+import {CmdFormElement, CmdIcon} from "comand-component-library"
 import {checkAndUploadFile} from "../utils/checkAndUploadFile"
+import EditMode from "./mixins/EditMode.vue"
 
 export default {
     name: "CmdImage",
-    inject: {
-        editModeContext: {
-            default: null
-        }
-    },
+    mixins: [EditMode],
     components: {
         CmdFormElement,
         CmdIcon
@@ -88,14 +83,7 @@ export default {
             figcaptionText: null
         }
     },
-    mounted() {
-        this.editModeContext?.addSaveHandler(this.onSave)
-        this.editModeContext?.addDeleteHandler(this.onDelete)
-    },
     props: {
-        editModeContextData: {
-            type: Object
-        },
         /**
          * image-object including source, alternative text, tooltip (not required)
          */
@@ -177,7 +165,7 @@ export default {
         },
         editableFigcaptionText: {
             get() {
-                return this.figcaptionText || this.figcaption.text
+                return this.figcaptionText == null ? this.figcaption.text : this.figcaptionText
             },
             set(value) {
                 this.figcaptionText = value
@@ -226,44 +214,16 @@ export default {
                 checkAndUploadFile(event.dataTransfer.files[0], this.allowedFileExtensions, this.minImageWidth, this.maxFileUploadSize, (imageSource) => this.newImageSource = imageSource)
             }
         },
-        onSave() {
-            console.log("image.save")
-            const data = {
-                image: {
-                    alt: this.editableAlternativeText,
-                    tooltip: this.editableTooltip
-                },
-                figcaption: {
-                    position: this.editableFigcaptionPosition,
-                    textAlign: this.editableFigcaptionTextAlign,
-                    text: this.editableFigcaptionText,
-                    show: this.editableShowFigcaption
-                }
-            }
+        updateHandlerProvider() {
+            const figcaptionText = this.editableFigcaptionText
             return {
-                editModeContextData: this.editModeContextData,
-                ...data,
+                name: "CmdImage",
                 update(props) {
-                    console.log("CmdImage.update", props)
-                    if (!props.image) {
-                        props.image = {}
-                    }
-                    props.image.alt = data.image.alt
-                    props.image.tooltip = data.image.tooltip
                     if (!props.figcaption) {
                         props.figcaption = {}
                     }
-                    props.figcaption.position = data.figcaption.position
-                    props.figcaption.textAlign = data.figcaption.textAlign
-                    props.figcaption.text = data.figcaption.text
-                    props.figcaption.show = data.figcaption.show
+                    props.figcaption.text = figcaptionText
                 }
-            }
-        },
-        onDelete() {
-            console.log("CmdImage.onDelete()")
-            return {
-                editModeContextData: this.editModeContextData
             }
         }
     }

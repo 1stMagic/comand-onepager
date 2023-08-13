@@ -2,7 +2,7 @@
     <div class="grid-container-create-columns cmd-image-gallery">
         <!-- begin cmd-headline -->
         <CmdHeadline
-             v-if="cmdHeadline?.headlineText || editModeContext?.editing"
+             v-if="cmdHeadline?.headlineText || editing"
              v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
@@ -28,19 +28,17 @@
         <!-- end default view -->
 
         <!-- begin edit-mode view -->
-        <EditComponentWrapper v-else
-          class="image-wrapper"
-          v-for="(image, index) in images" :key="'x' + index"
-          componentName="CmdImage"
-          :componentProps="image"
-          :editModeContextData="{imageIndex: index}"
-          :componentIdentifier="componentIdentifier(index)"
+        <EditComponentWrapper
+            v-else
+            class="image-wrapper"
+            v-for="(image, index) in images"
+            :key="index"
+            componentName="CmdImage"
+            :componentProps="image"
+            :componentIdentifier="componentIdentifier(index)"
+            :componentFinder="componentFinder(index)"
         >
-            <CmdImage
-                    :image="image.image"
-                    :figcaption="image.figcaption"
-                    :editModeContextData="{imageIndex: index}"
-            />
+            <CmdImage :image="image.image" :figcaption="image.figcaption" />
         </EditComponentWrapper>
         <!-- end edit-mode view -->
     </div>
@@ -48,30 +46,18 @@
 
 <script>
 // import functions
-import {openFancyBox} from "comand-component-library"
-import {useEditModeContext} from "../editmode/editModeContext.js"
-
-// import mixins
-//import I18n from "../mixins/I18n"
-//import DefaultMessageProperties from "../mixins/CmdImageGallery/DefaultMessageProperties"
+import {openFancyBox, createUuid} from "comand-component-library"
+import EditMode from "./mixins/EditMode.vue"
 
 export default {
     name: "CmdImageGallery",
-    mixins: [],
-    provide() {
-        return {
-            editModeContext: this.context
-        }
-    },
+    mixins: [EditMode],
     inject: {
         editModeContext: {
             default: null
         }
     },
     props: {
-        editModeContextData: {
-            type: Object
-        },
         /**
          * properties for CmdHeadline-component
          */
@@ -107,22 +93,15 @@ export default {
     },
     data() {
         return {
-            context: useEditModeContext(this.editModeContext, {}, this.onSave, this.onDelete)
+            uuid: createUuid()
         }
     },
     methods: {
         componentIdentifier(index) {
-            const identifier = []
-            identifier.push(this.editModeContext.props.sectionId)
-            identifier.push(this.editModeContextData.componentIndex)
-
-            if(this.editModeContextData.childComponentIndex != null) {
-                identifier.push(this.editModeContextData.childComponentIndex)
-            }
-
-            identifier.push(index)
-
-            return identifier.join(".")
+            return `${this.uuid}.${index}`
+        },
+        componentFinder(index) {
+            return imageGalleryComponent => imageGalleryComponent?.props?.images?.[index]
         },
         showFancyBox(index) {
             openFancyBox({fancyBoxGallery: this.images, defaultGalleryIndex: index})
@@ -130,37 +109,22 @@ export default {
         getMessage() {
             return ""
         },
-        onSave(data) {
-            console.log("imageGallery.save", data)
-            const imageIndex = data[0].editModeContextData.imageIndex
+        updateHandlerProvider() {
+            const htmlContent = this.editableHtmlContent
             return {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                },
+                name: "CmdImageGallery",
                 update(props) {
-                    props.images[imageIndex].image = {
-                        ...props.images[imageIndex].image,
-                        ...data[0].image
+                    props.htmlContent = htmlContent
+                },
+                handleChildUpdate(props, childUpdateHandler) {
+                    if (childUpdateHandler.name === "CmdHeadline") {
+                        props.cmdHeadline = props.cmdHeadline || {}
+                        childUpdateHandler.update(props.cmdHeadline)
+                        return true
                     }
-                    props.images[imageIndex].figcaption = {
-                        ...props.images[imageIndex].figcaption,
-                        ...data[0].figcaption
-                    }
+                    return false
                 }
             }
-        },
-        onDelete(data) {
-            console.log("CmdImageGallery.onDelete", data)
-            const result = {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                }
-            }
-            if (data && data.length > 0) {
-                const imageIndex = data[0].editModeContextData.imageIndex
-                result.delete = (props) => props.images.splice(imageIndex, 1)
-            }
-            return result
         }
     }
 }

@@ -54,6 +54,7 @@
 <script>
 export default {
     name: "CmdSocialNetworksSettings",
+    inheritAttrs: false,
     data() {
         return {
             editableAlign: null,

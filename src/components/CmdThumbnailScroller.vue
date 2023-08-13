@@ -53,7 +53,6 @@
                                           class="image-wrapper"
                                           componentName="CmdImage"
                                           :componentProps="item"
-                                          :editModeContextData="{imageIndex: index}"
                                           :componentIdentifier="componentIdentifier(index)"
                     >
                         <!-- begin CmdImage -->
@@ -61,7 +60,6 @@
                                 v-if="contentType === 'image'"
                                 :image="item.image"
                                 :figcaption="item.figcaption"
-                                :editModeContextData="{imageIndex: index}"
                         />
                         <!-- end CmdImage -->
 
@@ -91,12 +89,11 @@
 
 <script>
 // import functions
-import {openFancyBox} from 'comand-component-library'
+import {createUuid, openFancyBox} from 'comand-component-library'
 
 // import mixins
 import I18n from "./mixins/I18n"
 import DefaultMessageProperties from "./mixins/CmdThumbnailScroller/DefaultMessageProperties"
-import {useEditModeContext} from "../editmode/editModeContext.js";
 
 export default {
     name: "CmdThumbnailScroller",
@@ -105,11 +102,6 @@ export default {
         I18n,
         DefaultMessageProperties
     ],
-    provide() {
-        return {
-            editModeContext: this.context
-        }
-    },
     inject: {
         editModeContext: {
             default: null
@@ -117,15 +109,12 @@ export default {
     },
     data() {
         return {
+            uuid: createUuid(),
             items: [],
-            showSlidebuttons: true,
-            context: useEditModeContext(this.editModeContext, {}, this.onSave, this.onDelete)
+            showSlidebuttons: true
         }
     },
     props: {
-        editModeContextData: {
-            type: Object
-        },
         orientation: {
             type: String,
             default: "horizontal"
@@ -267,17 +256,7 @@ export default {
     },
     methods: {
         componentIdentifier(index) {
-            const identifier = []
-            identifier.push(this.editModeContext.props.sectionId)
-            identifier.push(this.editModeContextData.componentIndex)
-
-            if (this.editModeContextData.childComponentIndex != null) {
-                identifier.push(this.editModeContextData.childComponentIndex)
-            }
-
-            identifier.push(index)
-
-            return identifier.join(".")
+            return `${this.uuid}.${index}`
         },
         toggleSlideButtons(innerListWrapper) {
             this.showSlidebuttons = innerListWrapper.scrollWidth > innerListWrapper.clientWidth
@@ -319,40 +298,40 @@ export default {
                 this.showFancyBox(index)
             }
         },
-        onSave(data) {
-            const result = {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                },
-                update() {
-                }
-            }
-            if (Array.isArray(data) && data.length > 0 && data[0].headlineText != null) {
-                result.update = props => {
-                    props.cmdHeadline = {
-                        ...(props.cmdHeadline || {}),
-                    }
-                    props.cmdHeadline.headlineText = data[0].headlineText
-                }
-            }
-            return result
-        },
-        onDelete(data) {
-            console.log("CmdThumbnailScroller.onDelete", data)
-            const result = {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                }
-            }
-            if (data && data.length > 0) {
-                const imageIndex = data[0].editModeContextData.imageIndex
-                result.delete = (props) => {
-                    console.log("thumbnail items delete", props)
-                    props.thumbnailScrollerItems.splice(imageIndex, 1)
-                }
-            }
-            return result
-        }
+        // onSave(data) {
+        //     const result = {
+        //         editModeContextData: {
+        //             ...(this.editModeContextData || {})
+        //         },
+        //         update() {
+        //         }
+        //     }
+        //     if (Array.isArray(data) && data.length > 0 && data[0].headlineText != null) {
+        //         result.update = props => {
+        //             props.cmdHeadline = {
+        //                 ...(props.cmdHeadline || {}),
+        //             }
+        //             props.cmdHeadline.headlineText = data[0].headlineText
+        //         }
+        //     }
+        //     return result
+        // },
+        // onDelete(data) {
+        //     console.log("CmdThumbnailScroller.onDelete", data)
+        //     const result = {
+        //         editModeContextData: {
+        //             ...(this.editModeContextData || {})
+        //         }
+        //     }
+        //     if (data && data.length > 0) {
+        //         const imageIndex = data[0].editModeContextData.imageIndex
+        //         result.delete = (props) => {
+        //             console.log("thumbnail items delete", props)
+        //             props.thumbnailScrollerItems.splice(imageIndex, 1)
+        //         }
+        //     }
+        //     return result
+        // }
     },
     watch: {
         thumbnailScrollerItems: {

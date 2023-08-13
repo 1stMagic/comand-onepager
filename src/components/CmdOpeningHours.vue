@@ -67,7 +67,6 @@
                               :key="'x' + index"
                               componentName="CmdOpeningHoursItem"
                               :componentProps="day"
-                              :editModeContextData="{linkIndex: index}"
                               :componentIdentifier="'opening-hours' + index"
         >
                 <CmdOpeningHoursItem
@@ -112,8 +111,6 @@
 </template>
 
 <script>
-import {useEditModeContext} from "../editmode/editModeContext.js";
-
 export function localizedTime(language) {
     return (hour, minute) => {
         const now = new Date()
@@ -124,11 +121,6 @@ export function localizedTime(language) {
 
 export default {
     name: "CmdOpeningHours",
-    provide() {
-        return {
-            editModeContext: this.context
-        }
-    },
     inject: {
         editModeContext: {
             default: null
@@ -136,7 +128,6 @@ export default {
     },
     data() {
         return {
-            context: useEditModeContext(this.editModeContext, {tb: true}, this.onPersist, this.onDelete),
             currentTime: new Date(),
             editableOpeningHours: [],
             editableTextOpen: null,
@@ -146,9 +137,6 @@ export default {
         }
     },
     props: {
-        editModeContextData: {
-            type: Object
-        },
         /**
          * set a link to a detail page
          */
@@ -356,50 +344,50 @@ export default {
             return true
         }
     },
-    methods: {
-        onPersist(data) {
-            const textOpen = this.textOpenModel
-            const textClosed = this.textClosedModel
-            const textHolidays = this.textHolidaysModel
-            const textMiscInfo = this.textMiscInfoModel
-            const openingHours = this.editableOpeningHours
-            return {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                },
-                update(props) {
-                    props.cmdHeadline = {
-                        ...(props.cmdHeadline || {}),
-                    }
-                    props.cmdHeadline.headlineText = data[0].headlineText
-                    props.textOpen = textOpen
-                    props.textClosed = textClosed
-                    props.textHolidays = textHolidays
-                    props.textMiscInfo = textMiscInfo
-                    props.openingHours = openingHours.map(item => ({
-                        day: item.day,
-                        am: {
-                            fromTime: item.amFrom,
-                            tillTime: item.amTill,
-                            displayText: item.amClosed ? item.amDisplayText : ""
-                        },
-                        pm: {
-                            fromTime: item.pmFrom,
-                            tillTime: item.pmTill,
-                            displayText: item.pmClosed ? item.pmDisplayText : ""
-                        }
-                    }))
-                }
-            }
-        },
-        onDelete() {
-            return {
-                editModeContextData: {
-                    ...(this.editModeContextData || {})
-                }
-            }
-        }
-    },
+    // methods: {
+    //     onPersist(data) {
+    //         const textOpen = this.textOpenModel
+    //         const textClosed = this.textClosedModel
+    //         const textHolidays = this.textHolidaysModel
+    //         const textMiscInfo = this.textMiscInfoModel
+    //         const openingHours = this.editableOpeningHours
+    //         return {
+    //             editModeContextData: {
+    //                 ...(this.editModeContextData || {})
+    //             },
+    //             update(props) {
+    //                 props.cmdHeadline = {
+    //                     ...(props.cmdHeadline || {}),
+    //                 }
+    //                 props.cmdHeadline.headlineText = data[0].headlineText
+    //                 props.textOpen = textOpen
+    //                 props.textClosed = textClosed
+    //                 props.textHolidays = textHolidays
+    //                 props.textMiscInfo = textMiscInfo
+    //                 props.openingHours = openingHours.map(item => ({
+    //                     day: item.day,
+    //                     am: {
+    //                         fromTime: item.amFrom,
+    //                         tillTime: item.amTill,
+    //                         displayText: item.amClosed ? item.amDisplayText : ""
+    //                     },
+    //                     pm: {
+    //                         fromTime: item.pmFrom,
+    //                         tillTime: item.pmTill,
+    //                         displayText: item.pmClosed ? item.pmDisplayText : ""
+    //                     }
+    //                 }))
+    //             }
+    //         }
+    //     },
+    //     onDelete() {
+    //         return {
+    //             editModeContextData: {
+    //                 ...(this.editModeContextData || {})
+    //             }
+    //         }
+    //     }
+    // },
     beforeUnmount() {
         if (this.$_CmdOpeningHours_intervalId) {
             // remove interval

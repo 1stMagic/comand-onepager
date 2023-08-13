@@ -1,34 +1,47 @@
 <template>
-    <div :class="['edit-component-wrapper', {active: storeComponentIdentifier === componentIdentifier}]" tabindex="0" @click="showActionButtons" :data-identifier="componentIdentifier">
+    <div
+        :class="['edit-component-wrapper', {active}]"
+        tabindex="0"
+        @click="showActionButtons"
+        :data-identifier="componentIdentifier">
+
         <!-- begin action-buttons -->
-        <small v-show="storeComponentIdentifier === componentIdentifier" class="component-name">{{ componentName }}</small>
-        <ul v-show="storeComponentIdentifier === componentIdentifier"
-            class="flex-container no-flex no-gap action-buttons">
+        <small v-show="active" class="component-name">{{ componentName }}</small>
+        <ul v-show="active" class="flex-container no-flex no-gap action-buttons">
             <li>
-                <a v-if="context.editing" class="icon-hexagon button-save" href="#" @click.prevent="saveComponent"
+                <a v-if="editing"
+                   class="icon-hexagon button-save" href="#"
+                   @click.prevent="saveComponent"
                    title="Save changes of this component">
                     <CmdIcon iconClass="icon-check"/>
                 </a>
-                <a v-else :class="['icon-hexagon', {disabled: showEditModeComponentSettings}]" href="#"
+                <a v-else
+                   :class="['icon-hexagon', {disabled: editModeContext.settings.isEditing(componentIdentifier)}]"
+                   href="#"
                    @click.prevent="editComponent"
                    title="Edit content of this component">
                     <CmdIcon iconClass="icon-edit"/>
                 </a>
             </li>
             <li>
-                <a class="icon-hexagon button-delete" href="#" @click.prevent="deleteComponent"
+                <a class="icon-hexagon button-delete"
+                   href="#"
+                   @click.prevent="deleteComponent"
                    title="Delete this component (and its content)">
                     <CmdIcon iconClass="icon-trash"/>
                 </a>
             </li>
             <li>
-                <a :class="['icon-hexagon', {disabled: context.editing}]" :href="context.editing ? null : '#'"
-                   @click.prevent="editSettings" title="Edit settings of this component">
+                <a :class="['icon-hexagon', {disabled: editing}]"
+                   :href="editing ? null : '#'"
+                   @click.prevent="editSettings"
+                   title="Edit settings of this component">
                     <CmdIcon iconClass="icon-cog"/>
                 </a>
             </li>
             <li>
-                <a :class="['icon-hexagon button-cancel', {disabled: !context.editing}]" href="#"
+                <a :class="['icon-hexagon button-cancel', {disabled: !editing}]"
+                   href="#"
                    @click.prevent="cancelComponent"
                    title="Cancel editing (changes will not be saved)">
                     <CmdIcon iconClass="icon-cancel"/>
@@ -44,15 +57,22 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "pinia";
-import {usePiniaStore} from "../../stores/pinia.js";
-import {useEditModeContext} from "../../editmode/editModeContext.js";
+import {mapState} from "pinia"
+import {usePiniaStore} from "../../stores/pinia.js"
 
 export default {
     name: "EditComponentWrapper",
-    data() {
+    inject: {
+        editModeContext: {},
+        componentFinders: {
+            default() {
+                return []
+            }
+        }
+    },
+    provide() {
         return {
-            context: useEditModeContext(this.editModeContext, {ecw: true})
+            componentFinders: buildComponentFinderList(this.componentFinders, this.componentFinder)
         }
     },
     props: {
@@ -63,98 +83,89 @@ export default {
             type: String,
             required: true
         },
+        componentFinder: {
+            type: Function
+        },
         componentName: {
-            type: String,
-            default: ""
+            type: String
         },
         componentProps: {
             type: Object
-        },
-        editModeContextData: {
-            type: Object
         }
     },
-    provide() {
+    data() {
         return {
-            editModeContext: this.context
+
         }
     },
-    inject: {
-        editModeContext: {
-            default: null
-        }
+    created() {
+        this.editModeContext.system.setCurrentComponentGroup(this.componentIdentifier)
     },
     computed: {
         // provide states from store as computed-properties inside this component
-        ...mapState(usePiniaStore, {
-            storeComponentIdentifier: "componentIdentifier",
-            showEditModeComponentSettings: "showEditModeComponentSettings",
-            componentEditMode: "componentEditMode"
-        })
+        ...mapState(usePiniaStore, ["updateContent", "updateSettings"]),
+        active() {
+            return !!this.editModeContext.system?.isActiveComponent(this.componentIdentifier)
+        },
+        editing() {
+            return this.editModeContext.content.isEditing(this.componentIdentifier)
+        }
     },
     methods: {
         // provide actions from store as methods inside this component
-        ...mapActions(usePiniaStore, ["setComponentIdentifier", "toggleComponentEditModeSettings", "closeEditModeComponentSettings"]),
-
         showActionButtons(event) {
             event.stopPropagation()
-            this.closeEditModeComponentSettings()
-            this.setComponentIdentifier(this.componentIdentifier)
+            this.editModeContext.system?.setActiveComponent(this.componentIdentifier)
         },
         deleteComponent() {
             if (confirm("Delete this component and its content?")) {
-                this.context.deleteComponent()
+                this.editModeContext.deleteComponent()
                 this.$emit("delete")
             }
         },
         addComponent() {
-            this.$emit("add")
+            alert("Add component")
         },
         cancelComponent(event) {
-            if (this.context.editing) {
+            if (this.editing) {
                 event.stopPropagation()
-                this.context.editing = false
-                this.actionButtons = false
-                this.$emit("cancel")
+                this.editModeContext.content.stopEditing()
             }
         },
         editComponent(event) {
             event.stopPropagation()
-            this.context.editing = true
-            this.$emit("edit")
+            this.editModeContext.content.startEditing(this.componentIdentifier)
         },
         saveComponent() {
-            this.context.save()
-            this.context.editing = false
-            this.$emit("save")
+            this.updateContent(
+                buildComponentFinderList(this.componentFinders, this.componentFinder),
+                this.editModeContext.content.getUpdateHandlerProviders(this.componentIdentifier).map(provider => provider()))
+            this.editModeContext.content.stopEditing()
         },
         editSettings(event) {
             event.stopPropagation()
-
-            if (!this.context.editing) {
-                this.toggleComponentEditModeSettings(this.componentName, this.componentProps, this.context.callPersistHandler, this.editModeContextData)
-            }
+            this.editModeContext.settings.startEditing(
+                this.componentIdentifier,
+                this.componentName,
+                this.componentProps,
+                this.saveSettings
+            )
         },
-        cancelSettings() {
-            this.showLinkInMainNavigation = this.sectionShowLinkInMainNavigation
-            this.linkIconClass = this.sectionLinkIconClass
-            this.linkText = this.sectionLinkText
-        },
-        saveSettings() {
-            this.updateContentSection(this.sectionId, {
-                showLinkInMainNavigation: this.showLinkInMainNavigation,
-                iconClass: this.linkIconClass,
-                navEntry: this.linkText
-            })
-        }
-    },
-    watch: {
-        storeComponentIdentifier() {
-            if (this.storeComponentIdentifier !== this.componentIdentifier) {
-                this.context.editing = false
-            }
+        saveSettings(updateCallback) {
+            this.updateSettings(
+                buildComponentFinderList(this.componentFinders, this.componentFinder),
+                updateCallback)
+            this.editModeContext.settings.stopEditing()
         }
     }
+}
+
+function buildComponentFinderList(parentComponentFinders, componentFinder) {
+    const finders = [...parentComponentFinders || []]
+    if (componentFinder) {
+        finders.push(componentFinder)
+    }
+    return finders
 }
 </script>
 
