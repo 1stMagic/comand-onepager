@@ -1,20 +1,17 @@
-import {reactive, watchEffect} from "vue"
+import {reactive} from "vue"
 
 export function useEditModeContext() {
     const state = reactive({})
-    const systemState = {
-        componentGroups: {}
-    }
 
     return {
         state,
-        content: contentActions(state, systemState),
-        settings: settingsActions(state, systemState),
-        system: systemActions(state, systemState)
+        content: contentActions(state),
+        settings: settingsActions(state),
+        system: systemActions(state)
     }
 }
 
-function contentActions(state, systemState) {
+function contentActions(state) {
     return {
         startEditing(componentIdentifier) {
             state.contentEditing = componentIdentifier
@@ -24,25 +21,11 @@ function contentActions(state, systemState) {
         },
         stopEditing() {
             state.contentEditing = null
-        },
-        watchEditingFlag(watcherCallback) {
-            const watcherComponentGroup = systemState.currentComponentGroup
-            watchEffect(() => {
-                watcherCallback(state.contentEditing === watcherComponentGroup)
-            })
-        },
-        addUpdateHandlerProvider(provider) {
-            if (systemState.currentComponentGroup) {
-                systemState.componentGroups[systemState.currentComponentGroup].updateHandlerProviders.push(provider)
-            }
-        },
-        getUpdateHandlerProviders(componentIdentifier) {
-            return systemState.componentGroups[componentIdentifier]?.updateHandlerProviders || []
         }
     }
 }
 
-function settingsActions(state, systemState) {
+function settingsActions(state) {
     return {
         startEditing(componentIdentifier, componentName, componentProps, saveHandler) {
             state.settingsEditing = componentIdentifier
@@ -58,12 +41,6 @@ function settingsActions(state, systemState) {
             state.componentName = null
             state.componentProps = null
             state.settingsSaveHandler = null
-        },
-        watchEditingFlag(watcherCallback) {
-            const watcherComponentGroup = systemState.currentComponentGroup
-            watchEffect(() => {
-                watcherCallback(state.settingsEditing === watcherComponentGroup)
-            })
         },
         show() {
             return !!state.componentName
@@ -83,11 +60,8 @@ function settingsActions(state, systemState) {
     }
 }
 
-function systemActions(state, systemState) {
+function systemActions(state) {
     return {
-        getActiveComponent() {
-            return state.activeComponentIdentifier
-        },
         setActiveComponent(componentIdentifier) {
             state.activeComponentIdentifier = componentIdentifier
             if (state.contentEditing !== componentIdentifier) {
@@ -96,14 +70,6 @@ function systemActions(state, systemState) {
         },
         isActiveComponent(componentIdentifier) {
             return state.activeComponentIdentifier === componentIdentifier
-        },
-        setCurrentComponentGroup(componentIdentifier) {
-            if (systemState.currentComponentGroup !== componentIdentifier) {
-                systemState.componentGroups[componentIdentifier] = {
-                    updateHandlerProviders: []
-                }
-                systemState.currentComponentGroup = componentIdentifier
-            }
         }
     }
 }

@@ -67,11 +67,12 @@
             <template v-if="editMode">
                 <EditSectionWrapper>
                     <CmdSiteFooter>
-                        <EditComponentWrapper v-for="(component, componentIndex) in site.siteFooter?.components || []"
-                                              :key="componentIndex"
-                                              :componentName="component.name"
-                                              :componentProps="component.props"
-                                              :componentIdentifier="`${componentIndex}`">
+                        <EditComponentWrapper
+                            v-for="(component, componentIndex) in site.siteFooter?.components || []"
+                            :key="componentIndex"
+                            :componentName="component.name"
+                            :componentProps="component.props"
+                            :componentPath="componentPath(componentIndex)">
                             <component
                                     :is="component.name"
                                     v-bind="component.props"
@@ -83,7 +84,7 @@
                                         :is="childComponent.name"
                                         :componentName="component.name"
                                         :componentProps="component.props"
-                                        :componentIdentifier="`${componentIndex}.${childComponentIndex}`"
+                                        :componentPath="childComponentPath(childComponentIndex)"
                                 >
                                     <component
                                             :is="childComponent.name"
@@ -280,6 +281,19 @@ export default {
         }
     },
     methods: {
+        componentPath(componentIndex) {
+            return [
+                "siteFooter",
+                "components",
+                componentIndex
+            ]
+        },
+        childComponentPath(componentIndex) {
+            return [
+                "components",
+                componentIndex
+            ]
+        },
         handlers(component) {
             if (component.handlers === "toggleSection") {
                 return {

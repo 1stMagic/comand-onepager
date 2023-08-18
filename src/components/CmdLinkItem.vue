@@ -1,5 +1,5 @@
 <template>
-    <li v-if="!editModeContext?.editing" class="cmd-link-item">
+    <li v-if="!editing" class="cmd-link-item">
     <!-- begin use href -->
     <a v-if="link.type === 'href' || link.type === undefined"
        :href="link.path"
@@ -41,13 +41,12 @@
 </template>
 
 <script>
+import EditMode from "./mixins/EditMode.vue"
+import {updateHandlerProvider} from "../utils/editmode.js"
 export default {
     name: "CmdLinkItem",
-    inject: {
-        editModeContext: {
-            default: null
-        }
-    },
+    inheritAttrs: false,
+    mixins: [EditMode],
     data() {
         return {
             editableText: this.link.text
@@ -62,28 +61,15 @@ export default {
             required: false
         }
     },
-    // mounted() {
-    //     this.editModeContext?.addSaveHandler(this.onSave)
-    //     this.editModeContext?.addDeleteHandler(this.onDelete)
-    // },
-    // methods: {
-    //     onSave() {
-    //         const data = {
-    //             link: {
-    //                 text: this.editableText
-    //             }
-    //         }
-    //         console.log("LinkItem.save()", data)
-    //         return {
-    //             editModeContextData: this.editModeContextData,
-    //             ...data
-    //         }
-    //     },
-    //     onDelete() {
-    //         return {
-    //             editModeContextData: this.editModeContextData
-    //         }
-    //     }
-    // }
+    methods: {
+        updateHandlerProvider() {
+            const text = this.editableText
+            return updateHandlerProvider(this, {
+                update(props) {
+                    props.text = text
+                }
+            })
+        }
+    }
 }
 </script>

@@ -59,53 +59,37 @@
 <script>
 import {mapState} from "pinia"
 import {usePiniaStore} from "../../stores/pinia.js"
+import {componentPathAsString, findEditComponentWrapper} from "../../utils/editmode.js"
 
 export default {
     name: "EditComponentWrapper",
     inject: {
-        editModeContext: {},
-        componentFinders: {
-            default() {
-                return []
-            }
-        }
-    },
-    provide() {
-        return {
-            componentFinders: buildComponentFinderList(this.componentFinders, this.componentFinder)
-        }
+        editModeContext: {}
     },
     props: {
-        /**
-         * contains sectionId, componentIndex (and optional childComponentIndex)
-         */
-        componentIdentifier: {
-            type: String,
-            required: true
-        },
-        componentFinder: {
-            type: Function
-        },
         componentName: {
             type: String
         },
         componentProps: {
             type: Object
+        },
+        componentPath: {
+            type: Array,
+            required: true
         }
     },
     data() {
         return {
-
+            componentIdentifier: "",
+            editStateListeners: [],
+            updateHandlerProviders: []
         }
-    },
-    created() {
-        this.editModeContext.system.setCurrentComponentGroup(this.componentIdentifier)
     },
     computed: {
         // provide states from store as computed-properties inside this component
         ...mapState(usePiniaStore, ["updateContent", "updateSettings"]),
         active() {
-            return !!this.editModeContext.system?.isActiveComponent(this.componentIdentifier)
+            return !!this.editModeContext.system.isActiveComponent(this.componentIdentifier)
         },
         editing() {
             return this.editModeContext.content.isEditing(this.componentIdentifier)
@@ -115,11 +99,11 @@ export default {
         // provide actions from store as methods inside this component
         showActionButtons(event) {
             event.stopPropagation()
-            this.editModeContext.system?.setActiveComponent(this.componentIdentifier)
+            this.editModeContext.system.setActiveComponent(this.componentIdentifier)
         },
         deleteComponent() {
             if (confirm("Delete this component and its content?")) {
-                this.editModeContext.deleteComponent()
+                // this.editModeContext.deleteComponent()
                 this.$emit("delete")
             }
         },
@@ -138,8 +122,8 @@ export default {
         },
         saveComponent() {
             this.updateContent(
-                buildComponentFinderList(this.componentFinders, this.componentFinder),
-                this.editModeContext.content.getUpdateHandlerProviders(this.componentIdentifier).map(provider => provider()))
+                buildComponentPath(this),
+                this.updateHandlerProviders.map(provider => provider()))
             this.editModeContext.content.stopEditing()
         },
         editSettings(event) {
@@ -153,19 +137,38 @@ export default {
         },
         saveSettings(updateCallback) {
             this.updateSettings(
-                buildComponentFinderList(this.componentFinders, this.componentFinder),
+                buildComponentPath(this),
                 updateCallback)
             this.editModeContext.settings.stopEditing()
+        },
+        addEditStateListener(listener) {
+            this.editStateListeners.push(listener)
+            listener(this.editing)
+        },
+        addUpdateHandlerProvider(updateHandlerProvider) {
+            this.updateHandlerProviders.push(updateHandlerProvider)
+        }
+    },
+    watch: {
+        componentPath: {
+            handler() {
+                this.componentIdentifier = componentPathAsString(buildComponentPath(this))
+            },
+            immediate: true,
+            deep: true
+        },
+        editing(value) {
+            this.editStateListeners.forEach(listener => listener(value))
         }
     }
 }
 
-function buildComponentFinderList(parentComponentFinders, componentFinder) {
-    const finders = [...parentComponentFinders || []]
-    if (componentFinder) {
-        finders.push(componentFinder)
+function buildComponentPath(component) {
+    const path = []
+    for (let parent = component; parent; parent = findEditComponentWrapper(parent.$parent)) {
+        path.unshift(...parent.componentPath)
     }
-    return finders
+    return path
 }
 </script>
 

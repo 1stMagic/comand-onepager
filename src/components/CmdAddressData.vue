@@ -31,7 +31,7 @@
                                           :key="'x' + index"
                                           componentName="CmdAddressDataItem"
                                           :componentProps="entry"
-                                          :componentIdentifier="'nase' + index"
+                                          :componentPath="['addressData', index]"
                     >
                         <!-- begin labels -->
                         <CmdAddressDataItem

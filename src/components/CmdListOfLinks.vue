@@ -2,7 +2,7 @@
     <div :class="['cmd-list-of-links', {box: styleAsBox, horizontal: orientation === 'horizontal', 'section-anchors': sectionAnchors, 'large-icons': largeIcons}]" style="padding: 2rem;">
         <!-- begin cmd-headline -->
         <CmdHeadline
-            v-if="cmdHeadline?.headlineText || editModeContext?.editing"
+            v-if="cmdHeadline?.headlineText || editing"
             v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
@@ -23,7 +23,7 @@
                                   :key="'x' + index"
                                   componentName="CmdLinkItem"
                                   :componentProps="link"
-                                  :componentIdentifier="componentIdentifier(index)"
+                                  :componentPath="['props', 'links', index]"
             >
                 <CmdLinkItem
                     :class="{'active': sectionAnchors && activeSection === index}"
@@ -37,16 +37,13 @@
 </template>
 
 <script>
-import {createUuid} from "comand-component-library"
+import EditMode from "./mixins/EditMode.vue"
+import {updateHandlerProvider} from "../utils/editmode.js"
 
 export default {
     name: "CmdListOfLinks",
     emits: ["click"],
-    inject: {
-        editModeContext: {
-            default: null
-        }
-    },
+    mixins: [EditMode],
     props: {
         /**
          * activate if component should contain a list of anchors for the section within the page
@@ -124,11 +121,6 @@ export default {
             default: false
         }
     },
-    data() {
-        return {
-            uuid: createUuid()
-        }
-    },
     computed: {
         setStretchClass() {
             if(this.largeIcons && this.orientation === "horizontal") {
@@ -149,41 +141,17 @@ export default {
             }
             this.$emit("click", {link, originalEvent: event})
         },
-        componentIdentifier(index) {
-            return `${this.uuid}.${index}`
-        },
-        // onSave(data) {
-        //     console.log("ListOfLinks.save()", data)
-        //     if (!Array.isArray(data)) {
-        //         data = [data]
-        //     }
-        //     const linkIndex = data[0].editModeContextData.linkIndex;
-        //     return {
-        //         editModeContextData: {
-        //             ...(this.editModeContextData || {})
-        //         },
-        //         update(props) {
-        //             console.log("ListOfLinks.update()", props)
-        //             props.links[linkIndex] = {
-        //                 ...props.links[linkIndex],
-        //                 ...data[0].link
-        //             }
-        //             data.filter(dataItem => typeof dataItem.update === "function").forEach(dataItem => dataItem.update(props))
-        //         }
-        //     }
-        // },
-        // onDelete(data) {
-        //     const result = {
-        //         editModeContextData: {
-        //             ...(this.editModeContextData || {})
-        //         }
-        //     }
-        //     if (data && data.length > 0) {
-        //         const linkIndex = data[0].editModeContextData.linkIndex
-        //         result.delete = (props) => props.links.splice(linkIndex, 1)
-        //     }
-        //     return result
-        // }
+        updateHandlerProvider() {
+            return updateHandlerProvider(this, {
+                update(props, childUpdateHandlers) {
+                    const cmdHeadlineUpdateHandler = childUpdateHandlers?.find(handler => handler.name === "CmdHeadline")
+                    if (cmdHeadlineUpdateHandler) {
+                        props.cmdHeadline = props.cmdHeadline || {}
+                        cmdHeadlineUpdateHandler.update(props.cmdHeadline)
+                    }
+                }
+            })
+        }
     }
 }
 </script>

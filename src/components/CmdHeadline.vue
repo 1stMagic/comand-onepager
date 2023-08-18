@@ -34,6 +34,7 @@
 
 <script>
 import EditMode from "./mixins/EditMode.vue"
+import {updateHandlerProvider} from "../utils/editmode.js"
 
 export default {
     name: "CmdHeadline",
@@ -99,12 +100,11 @@ export default {
     methods: {
         updateHandlerProvider() {
             const headlineText = this.editableHeadlineText
-            return {
-                name: "CmdHeadline",
+            return updateHandlerProvider(this, {
                 update(props) {
                     props.headlineText = headlineText
                 }
-            }
+            })
         }
     },
     watch: {

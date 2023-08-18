@@ -2,11 +2,10 @@
     <!-- begin content -->
     <main>
         <!-- begin edit-mode -->
-        <EditComponentWrapper v-if="editMode"
-                              componentName="CmdSlideshow"
-                              :componentProps="{}"
-                              componentIdentifier="slideshow"
-            >
+        <EditComponentWrapper
+            v-if="editMode"
+            componentName="CmdSlideshow"
+            :componentPath="componentPath()">
             <!-- begin cmd-slideshow -->
             <CmdSlideshow
                     v-if="slideshow.slideshowItems?.length"
@@ -86,6 +85,12 @@ export default {
         BaseI18nComponent
     ],
     methods: {
+        componentPath() {
+            return [
+                "main",
+                "slideshow"
+            ]
+        },
         deleteComponent(componentName, sectionId) {
             if (componentName === "mainHeadline") {
                 this.updateMainHeadlineState(false)

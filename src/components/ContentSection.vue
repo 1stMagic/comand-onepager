@@ -5,8 +5,7 @@
             <EditComponentWrapper
                 componentName="CmdHeadline"
                 :componentProps="{headlineText, headlineLevel}"
-                :componentIdentifier="`${id}.headline`"
-                :componentFinder="componentFinder(id)">
+                :componentPath="componentPath(id)">
                 <!-- begin cmd-headline (headline is required in section) -->
                 <CmdHeadline :headlineText="headlineText" :headlineLevel="headlineLevel"/>
                 <!-- end cmd-headline -->
@@ -80,8 +79,12 @@ export default {
         }
     },
     methods: {
-        componentFinder(sectionId) {
-            return site => site?.main?.sections?.find(section => section.id === sectionId)
+        componentPath(sectionId) {
+            return [
+                "main",
+                "sections",
+                {id: sectionId}
+            ]
         }
     }
 }

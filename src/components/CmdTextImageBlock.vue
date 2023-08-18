@@ -31,6 +31,7 @@
 
 <script>
 import EditMode from "./mixins/EditMode.vue"
+import {updateHandlerProvider} from "../utils/editmode.js"
 
 export default {
     name: "CmdTextImageBlock",
@@ -94,21 +95,18 @@ export default {
         updateHandlerProvider() {
             const htmlContent = this.editableHtmlContent
             const children = ["CmdHeadline", "CmdImage"]
-            return {
-                name: "CmdTextImageBlock",
-                update(props) {
+            return updateHandlerProvider(this, {
+                update(props, childUpdateHandlers) {
                     props.htmlContent = htmlContent
-                },
-                handleChildUpdate(props, childUpdateHandler) {
-                    if (children.includes(childUpdateHandler.name)) {
-                        const prop = childUpdateHandler.name[0].toLowerCase() + childUpdateHandler.name.slice(1)
-                        props[prop] = props[prop] || {}
-                        childUpdateHandler.update(props[prop])
-                        return true
-                    }
-                    return false
+                    childUpdateHandlers?.forEach(childUpdateHandler => {
+                        if (children.includes(childUpdateHandler.name)) {
+                            const prop = childUpdateHandler.name[0].toLowerCase() + childUpdateHandler.name.slice(1)
+                            props[prop] = props[prop] || {}
+                            childUpdateHandler.update(props[prop])
+                        }
+                    })
                 }
-            }
+            })
         }
     }
 }

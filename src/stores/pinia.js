@@ -3,17 +3,40 @@ import {i18nClient} from "../api/I18nClient"
 import axios from "axios"
 import {createUuid} from "comand-component-library"
 
-function findComponent(site, componentFinders) {
-    let component = null
-    if (Array.isArray(componentFinders) && componentFinders.length > 0) {
-        for (let i = 0, c = componentFinders.length; i < c; i++) {
-            component = componentFinders[i](component || site)
-            if (component == null) {
+function findComponent(site, componentPath) {
+    if (!(site && Array.isArray(componentPath) && componentPath.length > 0)) {
+        return null
+    }
+
+    let node = site
+    for (let i = 0, c = componentPath.length; i < c; i++) {
+        if (typeof componentPath[i] === "object") {
+            if (!Array.isArray(node)) {
                 return null
             }
+            node = node.find(childNode => propsMatch(childNode, componentPath[i]))
+        } else {
+            node = node?.[componentPath[i]]
+        }
+        if (!node) {
+            return null
         }
     }
-    return component
+    return node
+}
+
+function propsMatch(node, props) {
+    if (typeof node === "object") {
+        const entries = Object.entries(props)
+        for (let i = 0, c = entries.length; i < c; i++) {
+            const [name, value] = entries[i]
+            if (node[name] !== value) {
+                return false
+            }
+        }
+        return true
+    }
+    return false
 }
 
 export const usePiniaStore = defineStore("pinia", {
@@ -109,34 +132,22 @@ export const usePiniaStore = defineStore("pinia", {
               }
           )
         },
-        updateContent(componentFinders, updateHandlers) {
-            const component = findComponent(this.site, componentFinders)
-            if (!component) {
+        updateContent(componentPath, updateHandlers) {
+            const component = findComponent(this.site, componentPath)
+            if (!component || !Array.isArray(updateHandlers) || updateHandlers.length === 0) {
                 return
             }
-
-            updateHandlers.forEach((updateHandler, index) => invokeUpdateHandler(component, updateHandler, index))
-
-            function invokeUpdateHandler(component, updateHandler, index) {
-                if (updateHandler.processed) {
-                    return
-                }
-                if (typeof updateHandler.update === "function") {
-                    updateHandler.update(component.props || component)
-                }
-                if (typeof updateHandler.handleChildUpdate === "function" && updateHandlers.length > index + 1) {
-                    updateHandlers.slice(index + 1).forEach(childUpdateHandler => invokeChildUpdateHandler(component, updateHandler, childUpdateHandler))
-                }
+            const childUpdateHandlers = []
+            if (updateHandlers.length > 1) {
+                childUpdateHandlers.push(...updateHandlers.slice(1))
             }
-
-            function invokeChildUpdateHandler(component, updateHandler, childUpdateHandler) {
-                if (typeof childUpdateHandler.update === "function") {
-                    childUpdateHandler.processed = !!updateHandler.handleChildUpdate(component.props || component, childUpdateHandler)
-                }
+            const updateHandler = updateHandlers[0].update
+            if (typeof updateHandler === "function") {
+                updateHandler(component.props || component, childUpdateHandlers)
             }
         },
-        updateSettings(componentFinders, updateCallback) {
-            const component = findComponent(this.site, componentFinders)
+        updateSettings(componentPath, updateCallback) {
+            const component = findComponent(this.site, componentPath)
             if (component) {
                 updateCallback(component.props || component)
             }

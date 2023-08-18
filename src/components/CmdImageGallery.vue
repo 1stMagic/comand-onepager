@@ -35,8 +35,7 @@
             :key="index"
             componentName="CmdImage"
             :componentProps="image"
-            :componentIdentifier="componentIdentifier(index)"
-            :componentFinder="componentFinder(index)"
+            :componentPath="['props', 'images', index]"
         >
             <CmdImage :image="image.image" :figcaption="image.figcaption" />
         </EditComponentWrapper>
@@ -46,17 +45,13 @@
 
 <script>
 // import functions
-import {openFancyBox, createUuid} from "comand-component-library"
+import {openFancyBox} from "comand-component-library"
 import EditMode from "./mixins/EditMode.vue"
+import {updateHandlerProvider} from "../utils/editmode.js"
 
 export default {
     name: "CmdImageGallery",
     mixins: [EditMode],
-    inject: {
-        editModeContext: {
-            default: null
-        }
-    },
     props: {
         /**
          * properties for CmdHeadline-component
@@ -91,18 +86,7 @@ export default {
             default: "bottom"
         }
     },
-    data() {
-        return {
-            uuid: createUuid()
-        }
-    },
     methods: {
-        componentIdentifier(index) {
-            return `${this.uuid}.${index}`
-        },
-        componentFinder(index) {
-            return imageGalleryComponent => imageGalleryComponent?.props?.images?.[index]
-        },
         showFancyBox(index) {
             openFancyBox({fancyBoxGallery: this.images, defaultGalleryIndex: index})
         },
@@ -111,20 +95,16 @@ export default {
         },
         updateHandlerProvider() {
             const htmlContent = this.editableHtmlContent
-            return {
-                name: "CmdImageGallery",
-                update(props) {
+            return updateHandlerProvider(this, {
+                update(props, childUpdateHandlers) {
                     props.htmlContent = htmlContent
-                },
-                handleChildUpdate(props, childUpdateHandler) {
-                    if (childUpdateHandler.name === "CmdHeadline") {
+                    const cmdHeadlineUpdateHandler = childUpdateHandlers?.find(handler => handler.name === "CmdHeadline")
+                    if (cmdHeadlineUpdateHandler) {
                         props.cmdHeadline = props.cmdHeadline || {}
-                        childUpdateHandler.update(props.cmdHeadline)
-                        return true
+                        cmdHeadlineUpdateHandler.update(props.cmdHeadline)
                     }
-                    return false
                 }
-            }
+            })
         }
     }
 }

@@ -5,8 +5,7 @@
                                   :key="componentIndex"
                                   :componentName="component.name"
                                   :componentProps="component.props"
-                                  :componentIdentifier="`${sectionId}.${componentIndex}`"
-                                  :componentFinder="componentFinder(sectionId, componentIndex)">
+                                  :componentPath="componentPath(componentIndex)">
                 <component
                         :is="component.name"
                         v-bind="component.props"
@@ -16,8 +15,7 @@
                             :key="childComponentIndex"
                             :componentName="childComponent.name"
                             :componentProps="childComponent.props"
-                            :componentIdentifier="`${sectionId}.${componentIndex}.${childComponentIndex}`"
-                            :componentFinder="componentFinder(sectionId, componentIndex, childComponentIndex)"
+                            :componentPath="childComponentPath(childComponentIndex)"
                     >
                         <component
                                 :is="childComponent.name"
@@ -164,34 +162,22 @@ export default {
         }
     },
     methods: {
-        componentFinder(sectionId, ...componentIndexes) {
-            return site => {
-                if (componentIndexes.length > 0) {
-                    const sections = site?.main?.sections
-                    if (sections) {
-                        const section = sections.find(section => section.id === sectionId)
-                        if (section?.components) {
-                            let component = null
-                            componentIndexes.forEach(
-                                componentIndex => component = getArrayItem(
-                                    component,
-                                    componentIndex,
-                                    getArrayItem(section.components, componentIndex)))
-                            return component
-                        }
-                    }
-                }
-                return null
-            }
+        componentPath(componentIndex) {
+            return [
+                "main",
+                "sections",
+                {id: this.sectionId},
+                "components",
+                componentIndex
+            ]
+        },
+        childComponentPath(componentIndex) {
+            return [
+                "components",
+                componentIndex
+            ]
         }
     }
-}
-
-function getArrayItem(array, index, defaultValue) {
-    if (Array.isArray(array) && array.length > index) {
-        return array[index]
-    }
-    return defaultValue
 }
 </script>
 

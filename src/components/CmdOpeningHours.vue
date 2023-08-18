@@ -2,13 +2,13 @@
     <div class="cmd-opening-hours">
         <!-- begin cmd-headline -->
         <CmdHeadline
-                v-if="cmdHeadline?.headlineText || editModeContext?.editing"
+                v-if="cmdHeadline?.headlineText || editing"
                 v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
 
         <!-- begin opening-status with link to detail-page -->
-        <template v-if="!editModeContext?.editing">
+        <template v-if="!editing">
             <template v-if="link && link?.path && link?.show">
                 <a v-if="link.type === 'href'" :href="link.path" :class="{closed: isClosed}">{{ textOpenClosed }}</a>
                 <router-link v-if="link.type === 'router'" :to="link.path" :class="{closed: isClosed}">{{
@@ -67,7 +67,7 @@
                               :key="'x' + index"
                               componentName="CmdOpeningHoursItem"
                               :componentProps="day"
-                              :componentIdentifier="'opening-hours' + index"
+                              :componentPath="['props', 'openingHours', index]"
         >
                 <CmdOpeningHoursItem
                         :day="day"
@@ -79,7 +79,7 @@
         </dl>
 
         <!-- begin holiday-closes-text and miscellaneous information -->
-        <div v-if="!editModeContext?.editing && (textHolidays || textMiscInfo)">
+        <div v-if="!editing && (textHolidays || textMiscInfo)">
             <p v-if="textHolidays">
                 <strong>{{ textHolidays }}</strong>
             </p>
@@ -88,7 +88,7 @@
         <!-- end holiday-closes-text and miscellaneous information -->
 
         <!-- begin edit-mode -->
-        <div v-if="editModeContext?.editing" class="flex-container vertical">
+        <div v-if="editing" class="flex-container vertical">
             <CmdFormElement
                     element="input"
                     type="text"
@@ -111,6 +111,9 @@
 </template>
 
 <script>
+import EditMode from "./mixins/EditMode.vue"
+import {updateHandlerProvider} from "../utils/editmode.js"
+
 export function localizedTime(language) {
     return (hour, minute) => {
         const now = new Date()
@@ -121,11 +124,7 @@ export function localizedTime(language) {
 
 export default {
     name: "CmdOpeningHours",
-    inject: {
-        editModeContext: {
-            default: null
-        }
-    },
+    mixins: [EditMode],
     data() {
         return {
             currentTime: new Date(),
@@ -232,6 +231,15 @@ export default {
                 // use arrow-function to assure that 'this' is the component
                 this.currentTime = new Date()
             }, this.checkInterval)
+        }
+    },
+    beforeUnmount() {
+        if (this.$_CmdOpeningHours_intervalId) {
+            // remove interval
+            clearInterval(this.$_CmdOpeningHours_intervalId)
+
+            // clear interval-id
+            this.$_CmdOpeningHours_intervalId = null
         }
     },
     computed: {
@@ -344,7 +352,29 @@ export default {
             return true
         }
     },
-    // methods: {
+    methods: {
+        updateHandlerProvider() {
+            const openingHours = this.editableOpeningHours
+            const textOpen = this.editableTextOpen
+            const textClosed = this.editableTextClosed
+            const textHolidays = this.editableTextHolidays
+            const textMiscInfo = this.editableTextMiscInfo
+            return updateHandlerProvider(this, {
+                update(props, childUpdateHandlers) {
+                    props.openingHours = openingHours
+                    props.textOpen = textOpen
+                    props.textClosed = textClosed
+                    props.textHolidays = textHolidays
+                    props.textMiscInfo = textMiscInfo
+                    const cmdHeadlineUpdateHandler = childUpdateHandlers?.find(handler => handler.name === "CmdHeadline")
+                    if (cmdHeadlineUpdateHandler) {
+                        props.cmdHeadline = props.cmdHeadline || {}
+                        cmdHeadlineUpdateHandler.update(props.cmdHeadline)
+                    }
+                }
+            })
+        }
+    }
     //     onPersist(data) {
     //         const textOpen = this.textOpenModel
     //         const textClosed = this.textClosedModel
@@ -388,15 +418,6 @@ export default {
     //         }
     //     }
     // },
-    beforeUnmount() {
-        if (this.$_CmdOpeningHours_intervalId) {
-            // remove interval
-            clearInterval(this.$_CmdOpeningHours_intervalId)
-
-            // clear interval-id
-            this.$_CmdOpeningHours_intervalId = null
-        }
-    }
 }
 </script>
 

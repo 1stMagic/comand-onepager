@@ -11,7 +11,7 @@
          ref="thumbnail-scroller">
         <!-- begin cmd-headline -->
         <CmdHeadline
-                v-if="cmdHeadline?.headlineText || editModeContext?.editing"
+                v-if="cmdHeadline?.headlineText || editing"
                 v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
@@ -53,7 +53,7 @@
                                           class="image-wrapper"
                                           componentName="CmdImage"
                                           :componentProps="item"
-                                          :componentIdentifier="componentIdentifier(index)"
+                                          :componentPath="['props', 'thumbnailScrollerItems', index]"
                     >
                         <!-- begin CmdImage -->
                         <CmdImage
@@ -89,27 +89,24 @@
 
 <script>
 // import functions
-import {createUuid, openFancyBox} from 'comand-component-library'
+import {openFancyBox} from 'comand-component-library'
 
 // import mixins
 import I18n from "./mixins/I18n"
 import DefaultMessageProperties from "./mixins/CmdThumbnailScroller/DefaultMessageProperties"
+import EditMode from "./mixins/EditMode.vue"
+import {updateHandlerProvider} from "../utils/editmode.js"
 
 export default {
     name: "CmdThumbnailScroller",
     emits: ["click"],
     mixins: [
         I18n,
-        DefaultMessageProperties
+        DefaultMessageProperties,
+        EditMode
     ],
-    inject: {
-        editModeContext: {
-            default: null
-        }
-    },
     data() {
         return {
-            uuid: createUuid(),
             items: [],
             showSlidebuttons: true
         }
@@ -255,9 +252,6 @@ export default {
         }
     },
     methods: {
-        componentIdentifier(index) {
-            return `${this.uuid}.${index}`
-        },
         toggleSlideButtons(innerListWrapper) {
             this.showSlidebuttons = innerListWrapper.scrollWidth > innerListWrapper.clientWidth
         },
@@ -298,40 +292,17 @@ export default {
                 this.showFancyBox(index)
             }
         },
-        // onSave(data) {
-        //     const result = {
-        //         editModeContextData: {
-        //             ...(this.editModeContextData || {})
-        //         },
-        //         update() {
-        //         }
-        //     }
-        //     if (Array.isArray(data) && data.length > 0 && data[0].headlineText != null) {
-        //         result.update = props => {
-        //             props.cmdHeadline = {
-        //                 ...(props.cmdHeadline || {}),
-        //             }
-        //             props.cmdHeadline.headlineText = data[0].headlineText
-        //         }
-        //     }
-        //     return result
-        // },
-        // onDelete(data) {
-        //     console.log("CmdThumbnailScroller.onDelete", data)
-        //     const result = {
-        //         editModeContextData: {
-        //             ...(this.editModeContextData || {})
-        //         }
-        //     }
-        //     if (data && data.length > 0) {
-        //         const imageIndex = data[0].editModeContextData.imageIndex
-        //         result.delete = (props) => {
-        //             console.log("thumbnail items delete", props)
-        //             props.thumbnailScrollerItems.splice(imageIndex, 1)
-        //         }
-        //     }
-        //     return result
-        // }
+        updateHandlerProvider() {
+            return updateHandlerProvider(this, {
+                update(props, childUpdateHandlers) {
+                    const cmdHeadlineUpdateHandler = childUpdateHandlers?.find(handler => handler.name === "CmdHeadline")
+                    if (cmdHeadlineUpdateHandler) {
+                        props.cmdHeadline = props.cmdHeadline || {}
+                        cmdHeadlineUpdateHandler.update(props.cmdHeadline)
+                    }
+                }
+            })
+        }
     },
     watch: {
         thumbnailScrollerItems: {

@@ -1,4 +1,6 @@
 <script>
+import {findEditComponentWrapper} from "../../utils/editmode.js"
+
 export default {
     inject: {
         editModeContext: {
@@ -11,8 +13,11 @@ export default {
         }
     },
     created() {
-        this.editModeContext?.content.watchEditingFlag(editing => this.editing = editing)
-        this.editModeContext?.content.addUpdateHandlerProvider(this.updateHandlerProvider)
+        const editComponentWrapper = findEditComponentWrapper(this.$parent)
+        if (editComponentWrapper) {
+            editComponentWrapper.addEditStateListener(editing => this.editing = editing)
+            editComponentWrapper.addUpdateHandlerProvider(this.updateHandlerProvider)
+        }
     },
     methods: {
         updateHandlerProvider() {

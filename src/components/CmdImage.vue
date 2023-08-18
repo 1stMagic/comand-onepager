@@ -34,6 +34,7 @@
 import {CmdFormElement, CmdIcon} from "comand-component-library"
 import {checkAndUploadFile} from "../utils/checkAndUploadFile"
 import EditMode from "./mixins/EditMode.vue"
+import {updateHandlerProvider} from "../utils/editmode.js"
 
 export default {
     name: "CmdImage",
@@ -216,15 +217,14 @@ export default {
         },
         updateHandlerProvider() {
             const figcaptionText = this.editableFigcaptionText
-            return {
-                name: "CmdImage",
+            return updateHandlerProvider(this, {
                 update(props) {
                     if (!props.figcaption) {
                         props.figcaption = {}
                     }
                     props.figcaption.text = figcaptionText
                 }
-            }
+            })
         }
     }
 }

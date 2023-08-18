@@ -1,6 +1,6 @@
 <template>
     <!-- begin opening-days and -hours -->
-    <template v-if="!editModeContext?.editing">
+    <template v-if="!editing">
         <dt>{{ day.day }}</dt>
         <dd>
                     <span v-if="day.am" class="am">
@@ -113,6 +113,8 @@
 </template>
 
 <script>
+import EditMode from "./mixins/EditMode.vue"
+import {updateHandlerProvider} from "../utils/editmode.js"
 function timeFormatting(separator, suffix1, suffix2, hoursLeadingZero = true) {
     function addLeadingZero(time, addLeadingZero) {
         if (addLeadingZero && time < 10) {
@@ -136,11 +138,8 @@ function timeFormatting(separator, suffix1, suffix2, hoursLeadingZero = true) {
 }
 
 export default {
-    inject: {
-        editModeContext: {
-            default: null
-        }
-    },
+    name: "CmdOpeningHoursItem",
+    mixins: [EditMode],
     data() {
         return {
             editableDay: {}
@@ -176,6 +175,26 @@ export default {
                 return this.timeFormatter(time.hours, time.mins)
             }
             return timeFormatting(":", " " + this.abbreviationText, "", false)(time.hours, time.mins)
+        },
+        updateHandlerProvider() {
+            const data = this.editableDay
+            return updateHandlerProvider(this, {
+                update(props) {
+                    props.day = data.day
+                    if (!props.am) {
+                        props.am = {}
+                    }
+                    props.am.fromTime = data.amFrom
+                    props.am.tillTime = data.amTill
+                    props.am.displayText = data.amClosed ? data.amDisplayText : ""
+                    if (!props.pm) {
+                        props.pm = {}
+                    }
+                    props.pm.fromTime = data.pmFrom
+                    props.pm.tillTime = data.pmTill
+                    props.pm.displayText = data.pmClosed ? data.pmDisplayText : ""
+                }
+            })
         }
     },
     watch: {
