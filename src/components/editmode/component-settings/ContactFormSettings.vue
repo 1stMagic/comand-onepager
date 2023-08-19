@@ -47,29 +47,17 @@ export default {
             }
         }
     },
-    // methods: {
-    //     save(editModeContextData) {
-    //         const headlineData = this.$refs.headlineSettings.save(editModeContextData)
-    //         const data = {
-    //             cmdHeadline: {
-    //                 headlineText: headlineData.headlineText,
-    //                 headlineLevel: headlineData.headlineLevel,
-    //                 textAlign: headlineData.textAlign
-    //             },
-    //             // emailAddress: this.emailAddressModel
-    //         }
-    //         return {
-    //             editModeContextData,
-    //             ...data,
-    //             update(props) {
-    //                 props.cmdHeadline.headlineText = data.cmdHeadline.headlineText
-    //                 props.cmdHeadline.headlineLevel = data.cmdHeadline.headlineLevel
-    //                 props.cmdHeadline.textAlign = data.cmdHeadline.textAlign
-    //                 // props.emailAddress = data.emailAddress
-    //             }
-    //         }
-    //     }
-    // }
+    methods: {
+        updateCallbackProvider() {
+            const headlineUpdateCallback = this.$refs.headlineSettings.updateCallbackProvider()
+            return props => {
+                if (!props.cmdHeadline) {
+                    props.cmdHeadline = {}
+                }
+                headlineUpdateCallback(props.cmdHeadline)
+            }
+        }
+    }
 }
 </script>
 

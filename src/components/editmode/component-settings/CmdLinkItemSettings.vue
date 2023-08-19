@@ -32,12 +32,16 @@ export default {
             editablePath: null,
             targetOptions: [
                 {
+                    text: "Please select",
+                    value: ""
+                },
+                {
                     text: "new tab",
                     value: "_blank"
                 },
                 {
-                    text: "popup",
-                    value: "popup"
+                    text: "popup/fancybox",
+                    value: "fancybox"
                 }
             ],
             editableTarget: null
@@ -53,8 +57,10 @@ export default {
             default: ""
         },
         target: {
-            type: String,
-            default: "_blank"
+            type: String
+        },
+        fancybox: {
+            type: Boolean
         }
     },
     computed: {
@@ -76,7 +82,14 @@ export default {
         },
         targetModel: {
             get() {
-                return this.editableTarget == null ? this.target: this.editableTarget
+                if (this.editableTarget == null) {
+                    if (this.fancybox) {
+                        return "fancybox"
+                    }
+                return this.target || ""
+                }
+
+                return this.editableTarget
             },
             set(value) {
                 this.editableTarget = value
@@ -84,20 +97,20 @@ export default {
         }
     },
     methods: {
-        save(editModeContextData) {
-            const data = {
-                text: this.textModel,
-                path: this.pathModel,
-                target: this.targetModel
-            }
-            return {
-                editModeContextData,
-                ...data,
-                update(props) {
-                    const link = props.links[editModeContextData.linkIndex]
-                    link.text = data.text
-                    link.path = data.path
-                    link.target = data.target
+        updateCallbackProvider() {
+            const text = this.textModel
+            const path = this.pathModel
+            const target = this.targetModel
+            return props => {
+                props.text = text
+                props.path = path
+
+                if(target === "fancybox") {
+                    props.fancybox = true
+                    props.target = ""
+                } else  {
+                    props.fancybox = false
+                    props.target = target
                 }
             }
         }

@@ -3,26 +3,25 @@
     <template v-if="!editing">
         <dt>{{ day.day }}</dt>
         <dd>
-                    <span v-if="day.am" class="am">
-                        <template v-if="day.am.displayText">{{ day.am.displayText }}</template>
-                        <template
-                                v-else>{{ getTime(day.am.fromTime) }} {{ separator }} {{
-                                getTime(day.am.tillTime)
-                            }}</template>
-                    </span>
+            <span v-if="day.am" class="am">
+                <template v-if="day.am.displayText">{{ day.am.displayText }}</template>
+                <template
+                        v-else>{{ getTime(day.am.fromTime) }} {{ separator }} {{
+                        getTime(day.am.tillTime)
+                    }}</template>
+            </span>
             <span v-if="day.pm" class="pm">
-                        <template v-if="day.pm.displayText">{{ day.pm.displayText }}</template>
-                        <template
-                                v-else>{{ getTime(day.pm.fromTime) }} {{ separator }} {{
-                                getTime(day.pm.tillTime)
-                            }}</template>
-                    </span>
+                <template v-if="day.pm.displayText">{{ day.pm.displayText }}</template>
+                <template
+                        v-else>{{ getTime(day.pm.fromTime) }} {{ separator }} {{
+                        getTime(day.pm.tillTime)
+                    }}</template>
+            </span>
         </dd>
     </template>
     <!-- end opening-days and -hours -->
     <template v-else>
         <div class="input-wrapper">
-
             <CmdFormElement
                     element="input"
                     type="text"
@@ -167,7 +166,7 @@ export default {
         timeFormatter: {
             type: Function,
             required: false
-        },
+        }
     },
     methods: {
         getTime(time) {

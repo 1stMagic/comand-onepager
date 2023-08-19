@@ -9,7 +9,7 @@
         <template v-else>
             <!-- begin cmd-headline -->
             <CmdHeadline
-                    v-if="cmdHeadline?.headlineText || editModeContext?.editing"
+                    v-if="cmdHeadline?.headlineText || editing"
                     v-bind="cmdHeadline"
             />
             <!-- end cmd-headline -->
@@ -18,20 +18,20 @@
             <address class="adr">
                 <!-- begin list with labels -->
                 <dl v-if="showLabels && !showIconsOnly">
-                        <!-- begin labels -->
-                        <CmdAddressDataItem
-                                v-if="!editModeContext"
-                                v-for="(entry, index) in addressData"
-                                :key="index"
-                                :addressEntry="entry"
-                        />
+                    <!-- begin labels -->
+                    <CmdAddressDataItem
+                            v-if="!editModeContext"
+                            v-for="(entry, index) in addressData"
+                            :key="index"
+                            :addressEntry="entry"
+                    />
                     <!-- begin edit-mode -->
                     <EditComponentWrapper v-else
                                           v-for="(entry, index) in addressData"
                                           :key="'x' + index"
                                           componentName="CmdAddressDataItem"
                                           :componentProps="entry"
-                                          :componentPath="['addressData', index]"
+                                          :componentPath="['props', 'addressData', index]"
                     >
                         <!-- begin labels -->
                         <CmdAddressDataItem
@@ -151,6 +151,9 @@
 </template>
 
 <script>
+import EditMode from "./mixins/EditMode.vue"
+import {updateHandlerProvider} from "../utils/editmode.js";
+
 // import mixins
 //import I18n from "../mixins/I18n"
 //import DefaultMessageProperties from "../mixins/CmdAddressData/DefaultMessageProperties"
@@ -158,11 +161,7 @@
 export default {
     name: "CmdAddressData",
     //  mixins: [I18n, DefaultMessageProperties],
-    inject: {
-        editModeContext: {
-            default: null
-        }
-    },
+    mixins: [EditMode],
     props: {
         /**
          * activate if you want to use slot instead for given structure
@@ -232,42 +231,29 @@ export default {
         }
     },
     methods: {
-        // onSave(data) {
-        //     const addressData = this.editableAddressData
-        //     return {
-        //         editModeContextData: {
-        //             ...(this.editModeContextData || {})
-        //         },
-        //         update(props) {
-        //             props.cmdHeadline = {
-        //                 ...(props.cmdHeadline || {}),
-        //             }
-        //             props.cmdHeadline.headlineText = data[0].headlineText
-        //             if (!props.addressData) {
-        //                 props.addressData = []
-        //             }
-        //             addressData.forEach((value, index) => {
-        //                 const item = props.addressData[index]
-        //                 if (item.name === "address") {
-        //                     Object.entries(value).forEach(([k, v]) => item[k] = v)
-        //                 } else {
-        //                     if (item.href == null) {
-        //                         item.data = value;
-        //                     } else {
-        //                         item.href = value;
-        //                     }
-        //                 }
-        //             })
-        //         }
-        //     }
-        // },
-        // onDelete() {
-        //     return {
-        //         editModeContextData: {
-        //             ...(this.editModeContextData || {})
-        //         }
-        //     }
-        // }
+        getHref(entry) {
+            if (entry.name === "telephone" || entry.name === "mobilephone") {
+                return "tel:" + entry.href
+            }
+            if (entry.name === "email") {
+                return "mailto:" + entry.href
+            }
+            if (entry.name === "website") {
+                return entry.href
+            }
+            return null
+        },
+        updateHandlerProvider() {
+            return updateHandlerProvider(this, {
+                update(props, childUpdateHandlers) {
+                    const cmdHeadlineUpdateHandler = childUpdateHandlers?.find(handler => handler.name === "CmdHeadline")
+                    if (cmdHeadlineUpdateHandler) {
+                        props.cmdHeadline = props.cmdHeadline || {}
+                        cmdHeadlineUpdateHandler.update(props.cmdHeadline)
+                    }
+                }
+            })
+        }
     },
     watch: {
 

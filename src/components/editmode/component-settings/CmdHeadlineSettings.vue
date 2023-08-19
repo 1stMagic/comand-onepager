@@ -79,8 +79,7 @@ export default {
             default: ""
         },
         headlineLevel: {
-            type: [String, Number],
-            required: true
+            type: [String, Number]
         },
         textAlign: {
             type: String,
@@ -98,7 +97,7 @@ export default {
         },
         headlineLevelModel: {
             get() {
-                return this.editableHeadlineLevel == null ? this.headlineLevel : this.editableHeadlineLevel
+                return (this.editableHeadlineLevel == null ? this.headlineLevel : this.editableHeadlineLevel) || "1"
             },
             set(value) {
                 this.editableHeadlineLevel = value

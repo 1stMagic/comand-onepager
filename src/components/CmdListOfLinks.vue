@@ -130,17 +130,6 @@ export default {
         }
     },
     methods: {
-        getRoute(link) {
-            return getRoute(link)
-        },
-        executeLink(link, event) {
-            if (link.fancybox) {
-                event.preventDefault()
-                openFancyBox({url: link.path, showSubmitButtons: link.showSubmitButtons})
-                return
-            }
-            this.$emit("click", {link, originalEvent: event})
-        },
         updateHandlerProvider() {
             return updateHandlerProvider(this, {
                 update(props, childUpdateHandlers) {

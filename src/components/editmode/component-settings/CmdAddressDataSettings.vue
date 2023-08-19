@@ -157,37 +157,25 @@ export default {
         }
     },
     methods: {
-        save(editModeContextData) {
-            const headlineData = this.$refs.headlineSettings.save(editModeContextData)
-            const data = {
-                cmdHeadline: {
-                    headlineText: headlineData.headlineText,
-                    headlineLevel: headlineData.headlineLevel,
-                    textAlign: headlineData.textAlign
-                },
-                showIconsOnly: this.showIconsOnlyModel,
-                showLabelIcons: this.showLabelIconsModel,
-                showLabelTexts: this.showLabelTextsModel,
-                showLabels: this.showLabelsModel,
-                linkGoogleMaps: this.linkGoogleMapsModel
-            }
+        updateCallbackProvider() {
+            const headlineUpdateCallback = this.$refs.headlineSettings.updateCallbackProvider()
+            const showIconsOnly = this.showIconsOnlyModel
+            const showLabelIcons = this.showLabelIconsModel
+            const showLabelTexts = this.showLabelTextsModel
+            const showLabels = this.showLabelsModel
+            const linkGoogleMaps = this.linkGoogleMapsModel
 
-            return {
-                editModeContextData,
-                ...data,
-                update(props) {
-                    if (!props.cmdHeadline) {
-                        props.cmdHeadline = {}
-                    }
-                    props.cmdHeadline.headlineText = data.cmdHeadline.headlineText
-                    props.cmdHeadline.headlineLevel = data.cmdHeadline.headlineLevel
-                    props.cmdHeadline.textAlign = data.cmdHeadline.textAlign
-                    props.showIconsOnly = data.showIconsOnly
-                    props.showLabelIcons = data.showLabelIcons
-                    props.showLabelTexts = data.showLabelTexts
-                    props.showLabels = data.showLabels
-                    props.linkGoogleMaps = data.linkGoogleMaps
+            return props => {
+                if (!props.cmdHeadline) {
+                    props.cmdHeadline = {}
                 }
+                headlineUpdateCallback(props.cmdHeadline)
+
+                props.showIconsOnly = showIconsOnly
+                props.showLabelIcons = showLabelIcons
+                props.showLabelTexts = showLabelTexts
+                props.showLabels = showLabels
+                props.linkGoogleMaps = linkGoogleMaps
             }
         }
     }

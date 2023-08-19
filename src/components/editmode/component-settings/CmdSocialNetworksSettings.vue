@@ -186,36 +186,26 @@ export default {
             // toggle active-status for clicked network
             this.listOfAllNetworks[index].active = !this.listOfAllNetworks[index].active
         },
-        save(editModeContextData) {
-            const headlineData = this.$refs.headlineSettings.save(editModeContextData)
+        updateCallbackProvider() {
+            const headlineUpdateCallback = this.$refs.headlineSettings.updateCallbackProvider()
             const data = {
-                cmdHeadline: {
-                    headlineText: headlineData.headlineText,
-                    headlineLevel: headlineData.headlineLevel,
-                    textAlign: headlineData.textAlign
-                },
                 align: this.alignModel,
                 userMustAcceptDataPrivacy: this.userMustAcceptDataPrivacyModel,
                 useGap: this.useGapModel,
                 stretchButtons: this.stretchButtonsModel,
                 networks: this.listOfAllNetworks.filter(network => network.active)
             }
-            return {
-                editModeContextData,
-                ...data,
-                update(props) {
-                    if (!props.cmdHeadline) {
-                        props.cmdHeadline = {}
-                    }
-                    props.cmdHeadline.headlineText = data.cmdHeadline.headlineText
-                    props.cmdHeadline.headlineLevel = data.cmdHeadline.headlineLevel
-                    props.cmdHeadline.textAlign = data.cmdHeadline.textAlign
-                    props.align = data.align
-                    props.userMustAcceptDataPrivacy = data.userMustAcceptDataPrivacy
-                    props.useGap = data.useGap
-                    props.stretchButtons = data.stretchButtons
-                    props.networks = data.networks
+            return props => {
+                if (!props.cmdHeadline) {
+                    props.cmdHeadline = {}
                 }
+                headlineUpdateCallback(props.cmdHeadline)
+
+                props.align = data.align
+                props.userMustAcceptDataPrivacy = data.userMustAcceptDataPrivacy
+                props.useGap = data.useGap
+                props.stretchButtons = data.stretchButtons
+                props.networks = data.networks
             }
         }
     },

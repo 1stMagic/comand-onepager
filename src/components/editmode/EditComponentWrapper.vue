@@ -32,7 +32,7 @@
                 </a>
             </li>
             <li>
-                <a :class="['icon-hexagon', {disabled: editing}]"
+                <a :class="['icon-hexagon', {disabled: editing || !hasSettings}]"
                    :href="editing ? null : '#'"
                    @click.prevent="editSettings"
                    title="Edit settings of this component">
@@ -60,6 +60,7 @@
 import {mapState} from "pinia"
 import {usePiniaStore} from "../../stores/pinia.js"
 import {componentPathAsString, findEditComponentWrapper} from "../../utils/editmode.js"
+import {getCurrentInstance} from "vue"
 
 export default {
     name: "EditComponentWrapper",
@@ -93,6 +94,10 @@ export default {
         },
         editing() {
             return this.editModeContext.content.isEditing(this.componentIdentifier)
+        },
+        hasSettings() {
+            const settingsComponentName = `${this.componentName}Settings`
+            return !!getCurrentInstance().appContext.components[settingsComponentName]
         }
     },
     methods: {

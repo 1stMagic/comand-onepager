@@ -136,7 +136,7 @@ export default {
         }
     },
     methods: {
-        save(editModeContextData) {
+        updateCallbackProvider() {
             const data = {
                 largeIcons: this.largeIconsModel,
                 textAlign: this.textAlignModel,
@@ -144,16 +144,12 @@ export default {
                 useGap: this.useGapModel,
                 styleAsBox: this.styleAsBoxModel
             }
-            return {
-                editModeContextData,
-                ...data,
-                update(props) {
-                    props.largeIcons = data.largeIcons
-                    props.textAlign = data.textAlign
-                    props.orientation = data.orientation
-                    props.useGap = data.useGap
-                    props.styleAsBox = data.styleAsBox
-                }
+            return props => {
+                props.largeIcons = data.largeIcons
+                props.textAlign = data.textAlign
+                props.orientation = data.orientation
+                props.useGap = data.useGap
+                props.styleAsBox = data.styleAsBox
             }
         }
     }

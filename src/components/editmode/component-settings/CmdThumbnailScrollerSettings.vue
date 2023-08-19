@@ -98,32 +98,22 @@ export default {
         }
     },
     methods: {
-        save(editModeContextData) {
-            const headlineData = this.$refs.headlineSettings.save(editModeContextData)
+        updateCallbackProvider() {
+            const headlineUpdateCallback = this.$refs.headlineSettings.updateCallbackProvider()
             const data = {
-                cmdHeadline: {
-                    headlineText: headlineData.headlineText,
-                    headlineLevel: headlineData.headlineLevel,
-                    textAlign: headlineData.textAlign
-                },
                 orientation: this.orientationModel,
                 fullWidth: this.fullWidthModel,
                 allowOpenFancyBox: this.allowOpenFancyBoxModel
             }
-            return {
-                editModeContextData,
-                ...data,
-                update(props) {
-                    if (!props.cmdHeadline) {
-                        props.cmdHeadline = {}
-                    }
-                    props.cmdHeadline.headlineText = data.cmdHeadline.headlineText
-                    props.cmdHeadline.headlineLevel = data.cmdHeadline.headlineLevel
-                    props.cmdHeadline.textAlign = data.cmdHeadline.textAlign
-                    props.orientation = data.orientation
-                    props.fullWidth = data.fullWidth
-                    props.allowOpenFancyBox = data.allowOpenFancyBox
+            return props => {
+                if (!props.cmdHeadline) {
+                    props.cmdHeadline = {}
                 }
+                headlineUpdateCallback(props.cmdHeadline)
+
+                props.orientation = data.orientation
+                props.fullWidth = data.fullWidth
+                props.allowOpenFancyBox = data.allowOpenFancyBox
             }
         }
     }

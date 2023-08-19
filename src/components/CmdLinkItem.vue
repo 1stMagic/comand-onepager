@@ -42,6 +42,10 @@
 
 <script>
 import EditMode from "./mixins/EditMode.vue"
+
+// import functions
+//import {getRoute} from 'comand-component-library'
+import {openFancyBox} from 'comand-component-library'
 import {updateHandlerProvider} from "../utils/editmode.js"
 export default {
     name: "CmdLinkItem",
@@ -69,7 +73,18 @@ export default {
                     props.text = text
                 }
             })
-        }
+        },
+        getRoute(link) {
+            return getRoute(link)
+        },
+        executeLink(link, event) {
+            if (link.fancybox) {
+                event.preventDefault()
+                openFancyBox({url: link.path, showSubmitButtons: link.showSubmitButtons})
+                return
+            }
+            this.$emit("click", {link, originalEvent: event})
+        },
     }
 }
 </script>

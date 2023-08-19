@@ -3,6 +3,9 @@ import router from "./router"
 import * as components from "comand-component-library"
 import ContactForm from "./components/ContactForm.vue"
 import LoginArea from "./components/LoginArea.vue"
+import CmdContainer from "./components/CmdContainer.vue"
+import CmdToggleDarkMode from "./components/CmdToggleDarkMode.vue"
+import CmdToggleDarkModeSettings from "./components/editmode/component-settings/CmdToggleDarkModeSettings.vue"
 import CmdTextImageBlock from "./components/CmdTextImageBlock.vue"
 import CmdHeadline from "./components/CmdHeadline.vue"
 import CmdAddressData from "./components/CmdAddressData.vue"
@@ -20,6 +23,7 @@ import CmdLinkItemSettings from "./components/editmode/component-settings/CmdLin
 import CmdOpeningHours from "./components/CmdOpeningHours.vue"
 import CmdOpeningHoursSettings from "./components/editmode/component-settings/CmdOpeningHoursSettings.vue"
 import CmdAddressDataSettings from "./components/editmode/component-settings/CmdAddressDataSettings.vue"
+import CmdAddressDataItemSettings from "./components/editmode/component-settings/CmdAddressDataItemSettings.vue"
 import CmdImageGallerySettings from "./components/editmode/component-settings/CmdImageGallerySettings.vue"
 import CmdImageSettings from "./components/editmode/component-settings/CmdImageSettings.vue"
 import CmdHeadlineSettings from "./components/editmode/component-settings/CmdHeadlineSettings.vue"
@@ -33,8 +37,11 @@ export function bootstrap(app) {
     Object.entries({
         ContactForm,
         LoginArea,
+        CmdContainer,
         CmdHeadline,
         CmdAddressData,
+        CmdToggleDarkMode,
+        CmdToggleDarkModeSettings,
         CmdTextImageBlock,
         CmdImage,
         CmdImageGallery,
@@ -48,6 +55,7 @@ export function bootstrap(app) {
         CmdLinkItemSettings,
         CmdOpeningHours,
         CmdAddressDataSettings,
+        CmdAddressDataItemSettings,
         CmdOpeningHoursSettings,
         CmdHeadlineSettings,
         CmdTextImageBlockSettings,
@@ -58,6 +66,7 @@ export function bootstrap(app) {
 
     const componentLibraryComponentBlacklist = [
         "CmdHeadline",
+        "CmdToggleDarkMode",
         "CmdImage",
         "CmdImageGallery",
         "CmdThumbnailScroller",

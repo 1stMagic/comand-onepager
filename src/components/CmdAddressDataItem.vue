@@ -14,7 +14,7 @@
 
     <!-- begin data (except for address) -->
     <dd v-if="addressEntry.name !== 'address' && addressEntry.data" :class="vCardClass(addressEntry)">
-        <template v-if="!editModeContext?.editing">
+        <template v-if="!editing">
             <a v-if="addressEntry.href"
                :href="getHref(addressEntry)"
                :target="addressEntry.name === 'website' ? '_blank' : null"
@@ -39,12 +39,12 @@
     </dd>
 
     <!-- begin data for address -->
-    <dd v-else>
+    <dd v-else-if="addressEntry.name === 'address'">
         <!-- begin linked address -->
-        <a v-if="linkGoogleMaps"
+        <a v-if="linkGoogleMaps && !editing"
            :href="locateAddress(addressEntry)"
            target="google-maps"
-           :title="getMessage('cmdaddressdata.title.open_address_on_google_maps')">
+           :title="addressEntry.tooltip">
             <!-- begin street/number -->
             <template v-if="addressEntry.streetNo">
                 <span class="street-address">{{ addressEntry.streetNo }}</span><br/>
@@ -72,7 +72,7 @@
 
         <!-- begin unlinked address -->
         <template v-else>
-            <template v-if="!editModeContext?.editing">
+            <template v-if="!editing">
                 <!-- begin street/number -->
                 <template v-if="addressEntry.streetNo">
                     <span class="street-address">{{ addressEntry.streetNo }}</span><br/>
@@ -151,7 +151,7 @@
                         class="edit-mode"
                         :show-label="false"
                         :labelText="addressEntry.labelText"
-                        :selectOptions="[{text: 'Deutschland', value: 'de'}, {text: 'England', value: 'uk'}]"
+                        :selectOptions="[{text: 'Germany', value: 'de'}, {text: 'United Kingdom', value: 'uk'}]"
                         v-model="editableAddressEntry.country"
                 />
                 <!-- end country -->
@@ -165,15 +165,15 @@
 </template>
 <!-- end data (except for address) -->
 <script>
+import EditMode from "./mixins/EditMode.vue"
+import {updateHandlerProvider} from "../utils/editmode.js";
+
 export default {
-    inject: {
-        editModeContext: {
-            default: null
-        }
-    },
+    name: "CmdAddressDataItem",
+    mixins: [EditMode],
     data () {
         return {
-            editableAddressEntry: {}
+            editableAddressEntry: null
         }
     },
     props: {
@@ -245,6 +245,22 @@ export default {
                 return entry.href
             }
             return null
+        },
+        updateHandlerProvider() {
+            const addressData = this.editableAddressEntry
+            return updateHandlerProvider(this, {
+                update(props) {
+                    if (typeof addressData === "object") {
+                        Object.entries(addressData).forEach(([name, value]) => props[name] = value)
+                    } else {
+                        if (props.href == null) {
+                            props.data = addressData
+                        } else {
+                            props.href = addressData
+                        }
+                    }
+                }
+            })
         }
     },
     watch: {
