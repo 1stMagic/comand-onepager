@@ -82,7 +82,7 @@
                                         v-for="(childComponent, childComponentIndex) in component.components || []"
                                         :key="childComponentIndex"
                                         :is="childComponent.name"
-                                        :componentName="component.name"
+                                        :componentName="childComponent.name"
                                         :componentProps="component.props"
                                         :componentPath="childComponentPath(childComponentIndex)"
                                 >
