@@ -1,5 +1,5 @@
 <template>
-    <li v-if="!editing" class="cmd-link-item">
+    <li v-if="!editing" class="cmd-list-of-links-item">
     <!-- begin use href -->
     <a v-if="link.type === 'href' || link.type === undefined"
        :href="link.path"
@@ -48,7 +48,7 @@ import EditMode from "./mixins/EditMode.vue"
 import {openFancyBox} from 'comand-component-library'
 import {updateHandlerProvider} from "../utils/editmode.js"
 export default {
-    name: "CmdLinkItem",
+    name: "CmdListOfLinksItem",
     inheritAttrs: false,
     mixins: [EditMode],
     data() {
@@ -66,6 +66,21 @@ export default {
         }
     },
     methods: {
+        addHandlerProvider() {
+            const itemStructure = {
+                "iconClass": "icon-user-profile",
+                "type": "href",
+                "text": "Linktext",
+                "path": "#",
+                "tooltip": "Tooltip",
+                "target": "_blank"
+            }
+            return updateHandlerProvider(this, {
+                item() {
+                    return itemStructure
+                }
+            })
+        },
         updateHandlerProvider() {
             const text = this.editableText
             return updateHandlerProvider(this, {

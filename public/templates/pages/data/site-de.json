@@ -121,6 +121,7 @@
       {
         "id": "section1",
         "iconClass": "icon-home",
+        "allowAddComponent": true,
         "showLinkInMainNavigation": true,
         "navEntry": "Section 1",
         "components": [
@@ -142,6 +143,7 @@
         "showLinkInMainNavigation": true,
         "navEntry": "Section 2",
         "alignImage": "right",
+        "allowAddComponent": true,
         "components": [
           {
             "name": "CmdTextImageBlock",
@@ -189,6 +191,7 @@
         "iconClass": "icon-user-profile",
         "showLinkInMainNavigation": true,
         "navEntry": "Section 3",
+        "allowAddComponent": true,
         "headlineText": "Überschrift für Section 3",
         "components": [
           {
@@ -261,6 +264,7 @@
         "showLinkInMainNavigation": false,
         "iconClass": "icon-user-profile",
         "navEntry": "Section 4",
+        "allowAddComponent": true,
         "headlineText": "Überschrift Section 4",
         "components": [
           {
@@ -270,7 +274,7 @@
                 {
                   "image": {
                     "id": 1,
-                    "srcImageSmall": "media/images/demo-images/small/landscape-01.jpg",
+                    "src": "media/images/demo-images/small/landscape-01.jpg",
                     "srcImageLarge": "media/images/demo-images/large/landscape-01.jpg",
                     "alt": "Alternative Text 1"
                   },
@@ -284,7 +288,7 @@
                 {
                   "image": {
                     "id": 2,
-                    "srcImageSmall": "media/images/demo-images/small/landscape-02.jpg",
+                    "src": "media/images/demo-images/small/landscape-02.jpg",
                     "srcImageLarge": "media/images/demo-images/large/landscape-02.jpg",
                     "alt": "Alternative Text 2"
                   },
@@ -298,7 +302,7 @@
                 {
                   "image": {
                     "id": 3,
-                    "srcImageSmall": "media/images/demo-images/small/landscape-03.jpg",
+                    "src": "media/images/demo-images/small/landscape-03.jpg",
                     "srcImageLarge": "media/images/demo-images/large/landscape-03.jpg",
                     "alt": "Alternative Text 3"
                   },
@@ -312,7 +316,7 @@
                 {
                   "image": {
                     "id": 4,
-                    "srcImageSmall": "media/images/demo-images/small/landscape-04.jpg",
+                    "src": "media/images/demo-images/small/landscape-04.jpg",
                     "srcImageLarge": "media/images/demo-images/large/landscape-04.jpg",
                     "alt": "Alternative Text 4"
                   },
@@ -326,7 +330,7 @@
                 {
                   "image": {
                     "id": 5,
-                    "srcImageSmall": "media/images/demo-images/small/landscape-05.jpg",
+                    "src": "media/images/demo-images/small/landscape-05.jpg",
                     "srcImageLarge": "media/images/demo-images/large/landscape-05.jpg",
                     "alt": "Alternative Text 5"
                   },
@@ -340,7 +344,7 @@
                 {
                   "image": {
                     "id": 6,
-                    "srcImageSmall": "media/images/demo-images/small/landscape-06.jpg",
+                    "src": "media/images/demo-images/small/landscape-06.jpg",
                     "srcImageLarge": "media/images/demo-images/large/landscape-06.jpg",
                     "alt": "Alternative Text 6"
                   },
@@ -354,7 +358,7 @@
                 {
                   "image": {
                     "id": 7,
-                    "srcImageSmall": "media/images/demo-images/small/landscape-07.jpg",
+                    "src": "media/images/demo-images/small/landscape-07.jpg",
                     "srcImageLarge": "media/images/demo-images/large/landscape-07.jpg",
                     "alt": "Alternative Text 7"
                   },
@@ -368,7 +372,7 @@
                 {
                   "image": {
                     "id": 8,
-                    "srcImageSmall": "media/images/demo-images/small/landscape-08.jpg",
+                    "src": "media/images/demo-images/small/landscape-08.jpg",
                     "srcImageLarge": "media/images/demo-images/large/landscape-08.jpg",
                     "alt": "Alternative Text 8"
                   },
@@ -484,6 +488,7 @@
     "components": [
       {
         "name": "CmdContainer",
+        "allowAddComponent": true,
         "props": {
           "class": "flex-container vertical"
         },
@@ -546,7 +551,7 @@
               "am": {
                 "fromTime": "08:00",
                 "tillTime": "12:00",
-                "displayText": "Vormittags offen"
+                "displayText": "open"
               },
               "pm": {
                 "fromTime": "13:00",

@@ -44,6 +44,7 @@
                         <ContentSection
                             :components="section.components"
                             :id="section.id"
+                            :allowAddComponent="section.allowAddComponent"
                             :headlineText="section.headlineText"
                         />
                     </template>

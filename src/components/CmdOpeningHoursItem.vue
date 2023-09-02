@@ -1,7 +1,7 @@
 <template>
     <!-- begin opening-days and -hours -->
     <template v-if="!editing">
-        <dt>{{ day.day }}</dt>
+        <dt class="cmd-opening-hours-item">{{ day.day }}</dt>
         <dd>
             <span v-if="day.am" class="am">
                 <template v-if="day.am.displayText">{{ day.am.displayText }}</template>
@@ -114,6 +114,7 @@
 <script>
 import EditMode from "./mixins/EditMode.vue"
 import {updateHandlerProvider} from "../utils/editmode.js"
+
 function timeFormatting(separator, suffix1, suffix2, hoursLeadingZero = true) {
     function addLeadingZero(time, addLeadingZero) {
         if (addLeadingZero && time < 10) {
@@ -152,10 +153,16 @@ export default {
             type: Object,
             required: true
         },
+        /**
+         * separator for time-spans
+         */
         separator: {
             type: String,
             default: "–"
         },
+        /**
+         *  abbreviation text for 'hours' (as a unit after displayed times)
+         */
         abbreviationText: {
             type: String,
             default: "h"
@@ -174,6 +181,24 @@ export default {
                 return this.timeFormatter(time.hours, time.mins)
             }
             return timeFormatting(":", " " + this.abbreviationText, "", false)(time.hours, time.mins)
+        },
+        addHandlerProvider() {
+            const itemStructure = {
+                "day": "Weekday",
+                "am": {
+                    "fromTime": "00:00",
+                    "tillTime": "00:00"
+                },
+                "pm": {
+                    "fromTime": "00:00",
+                    "tillTime": "00:00"
+                }
+            }
+            return updateHandlerProvider(this, {
+                item() {
+                    return itemStructure
+                }
+            })
         },
         updateHandlerProvider() {
             const data = this.editableDay

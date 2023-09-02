@@ -1,13 +1,67 @@
 <template>
     <div
-        :class="['edit-component-wrapper', {active}]"
-        tabindex="0"
-        @click="showActionButtons"
-        :data-identifier="componentIdentifier">
+            :class="['edit-component-wrapper', {active}]"
+            tabindex="0"
+            @click="showActionButtons"
+            :data-identifier="componentIdentifier">
+
+        <select v-if="allowAddComponent && active" :value="componentName" @change="switchComponent">
+            <option value="">Select component to add</option>
+            <option value="CmdContainer">Empty container</option>
+            <option value="CmdAddressData">Address data</option>
+            <option value="CmdHeadline">Headline</option>
+            <option value="CmdImage">Image</option>
+            <option value="CmdImageGallery">Image gallery</option>
+            <option value="CmdListOfLinks">List of links</option>
+            <option value="CmdOpeningHours">Opening hours</option>
+            <option value="CmdSlideshow">Slideshow</option>
+            <option value="CmdSocialNetworks">Social networks</option>
+            <option value="CmdTextImageBlock">Text-Image-Block</option>
+            <option value="CmdThumbnailScroller">Thumbnail-Scroller</option>
+            <option value="CmdToggleDarkMode">Toggle Dark-Mode</option>
+        </select>
+
+        <small v-else-if="!allowAddComponent && active" class="component-name">{{ componentName }}</small>
 
         <!-- begin action-buttons -->
-        <small v-show="active" class="component-name">{{ componentName }}</small>
         <ul v-show="active" class="flex-container no-flex no-gap action-buttons">
+            <li>
+                <a :class="['icon-hexagon', {disabled: !addHandlerProvider && !allowAddComponent}]"
+                   href="#"
+                   @click.prevent="addEntry"
+                   title="Add a new entry">
+                    <CmdIcon iconClass="icon-plus"/>
+                </a>
+                <template v-if="showAddComponentButtons">
+                    <a class="icon-hexagon"
+                       href="#"
+                       @click.prevent="addInnerComponent"
+                       title="Add a new entry inside of this component">
+                        <CmdIcon iconClass="icon-home"/>
+                    </a>
+                    <a class="icon-hexagon"
+                       href="#"
+                       @click.prevent="addSectionComponent"
+                       title="Add a new entry at same section-level as this component">
+                        <CmdIcon iconClass="icon-globe"/>
+                    </a>
+                </template>
+                <select v-if="showComponentSelection" @change="componentSelected">
+                    <option value="">Select component to add</option>
+                    <option value="CmdContainer">Empty container</option>
+                    <option value="CmdAddressData">Address data</option>
+                    <option value="CmdHeadline">Headline</option>
+                    <option value="CmdImage">Image</option>
+                    <option value="CmdImageGallery">Image gallery</option>
+                    <option value="CmdListOfLinks">List of links</option>
+                    <option value="CmdOpeningHours">Opening hours</option>
+                    <option value="CmdSlideshow">Slideshow</option>
+                    <option value="CmdSocialNetworks">Social networks</option>
+                    <option value="CmdTextImageBlock">Text-Image-Block</option>
+                    <option value="CmdThumbnailScroller">Thumbnail-Scroller</option>
+                    <option value="CmdToggleDarkMode">Toggle Dark-Mode</option>
+                </select>
+            </li>
             <li>
                 <a v-if="editing"
                    class="icon-hexagon button-save" href="#"
@@ -57,6 +111,8 @@
 </template>
 
 <script>
+import componentStructure from "../../assets/data/component-structure.json"
+
 import {mapState} from "pinia"
 import {usePiniaStore} from "../../stores/pinia.js"
 import {componentPathAsString, findEditComponentWrapper} from "../../utils/editmode.js"
@@ -77,18 +133,25 @@ export default {
         componentPath: {
             type: Array,
             required: true
+        },
+        allowAddComponent: {
+            type: Boolean
         }
     },
     data() {
         return {
             componentIdentifier: "",
             editStateListeners: [],
-            updateHandlerProviders: []
+            updateHandlerProviders: [],
+            addHandlerProvider: null,
+            showComponentSelection: false,
+            showAddComponentButtons: false,
+            addComponentLevel: ""
         }
     },
     computed: {
         // provide states from store as computed-properties inside this component
-        ...mapState(usePiniaStore, ["updateContent", "updateSettings"]),
+        ...mapState(usePiniaStore, ["updateContent", "updateSettings", "deleteContent", "addContent"]),
         active() {
             return !!this.editModeContext.system.isActiveComponent(this.componentIdentifier)
         },
@@ -101,6 +164,68 @@ export default {
         }
     },
     methods: {
+        switchComponent(event) {
+            if (confirm("All content for this component will be deleted. Switch to new component anyway?")) {
+                const selectedComponent = event.target.value
+                this.addContent(buildComponentPath(this), {
+                    name: selectedComponent,
+                    item() {
+                        return componentStructure[selectedComponent]
+                    }
+                })
+                this.deleteContent(buildComponentPath(this))
+            } else {
+                event.target.value = this.componentName
+            }
+        },
+        componentSelected(event) {
+            const selectedComponent = event.target.value
+
+            if (this.addComponentLevel === "after") {
+                this.addContent(buildComponentPath(this), {
+                    name: selectedComponent,
+                    item() {
+                        return componentStructure[selectedComponent]
+                    }
+                })
+            } else {
+                const path = buildComponentPath(this)
+                path.push("components")
+                path.push(-1)
+
+                this.addContent(path, {
+                    name: selectedComponent,
+                    item() {
+                        return componentStructure[selectedComponent]
+                    }
+                })
+            }
+
+            this.showComponentSelection = false
+            this.showAddComponentButtons = false
+            this.addComponentLevel = ""
+        },
+        addEntry() {
+            if (this.allowAddComponent) {
+                // check if component can contain other components
+                if (componentStructure[this.componentName]?.components) {
+                    this.showAddComponentButtons = true
+                } else {
+                    this.showComponentSelection = true
+                    this.addComponentLevel = "after"
+                }
+            } else if (this.addHandlerProvider) {
+                this.addContent(buildComponentPath(this), this.addHandlerProvider())
+            }
+        },
+        addInnerComponent() {
+            this.addComponentLevel = "inner"
+            this.showComponentSelection = true
+        },
+        addSectionComponent() {
+            this.addComponentLevel = "after"
+            this.showComponentSelection = true
+        },
         // provide actions from store as methods inside this component
         showActionButtons(event) {
             event.stopPropagation()
@@ -108,12 +233,8 @@ export default {
         },
         deleteComponent() {
             if (confirm("Delete this component and its content?")) {
-                // this.editModeContext.deleteComponent()
-                this.$emit("delete")
+                this.deleteContent(buildComponentPath(this))
             }
-        },
-        addComponent() {
-            alert("Add component")
         },
         cancelComponent(event) {
             if (this.editing) {
@@ -152,6 +273,12 @@ export default {
         },
         addUpdateHandlerProvider(updateHandlerProvider) {
             this.updateHandlerProviders.push(updateHandlerProvider)
+        },
+        setAddHandlerProvider(addHandlerProvider) {
+            // assign given function to data-property
+            if (addHandlerProvider) {
+                this.addHandlerProvider = addHandlerProvider
+            }
         }
     },
     watch: {

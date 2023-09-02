@@ -1,15 +1,16 @@
 <template>
-    <div :class="['cmd-list-of-links', {box: styleAsBox, horizontal: orientation === 'horizontal', 'section-anchors': sectionAnchors, 'large-icons': largeIcons}]" style="padding: 2rem;">
+    <div :class="['cmd-list-of-links', {box: styleAsBox, horizontal: orientation === 'horizontal', 'section-anchors': sectionAnchors, 'large-icons': largeIcons}]"
+         style="padding: 2rem;">
         <!-- begin cmd-headline -->
         <CmdHeadline
-            v-if="cmdHeadline?.headlineText || editing"
-            v-bind="cmdHeadline"
+                v-if="cmdHeadline?.headlineText || editing"
+                v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
 
         <!-- begin list of links -->
         <ul :class="['flex-container', {'no-gap': !useGap},'align-' + align, setStretchClass]">
-            <CmdLinkItem
+            <CmdListOfLinksItem
                     v-if="!editModeContext"
                     v-for="(link, index) in links"
                     :key="index"
@@ -25,9 +26,9 @@
                                   :componentProps="link"
                                   :componentPath="['props', 'links', index]"
             >
-                <CmdLinkItem
-                    :class="{'active': sectionAnchors && activeSection === index}"
-                    :link="link"
+                <CmdListOfLinksItem
+                        :class="{'active': sectionAnchors && activeSection === index}"
+                        :link="link"
                 />
             </EditComponentWrapper>
             <!-- end edit-mode -->
@@ -123,7 +124,7 @@ export default {
     },
     computed: {
         setStretchClass() {
-            if(this.largeIcons && this.orientation === "horizontal") {
+            if (this.largeIcons && this.orientation === "horizontal") {
                 return "stretch"
             }
             return null
@@ -206,5 +207,6 @@ export default {
         }
     }
 }
+
 /* end cmd-list-of-links------------------------------------------------------------------------------------------ */
 </style>

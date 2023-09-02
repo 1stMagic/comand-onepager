@@ -89,7 +89,7 @@
 
 <script>
 // import functions
-import {openFancyBox} from 'comand-component-library'
+import {createUuid, openFancyBox} from 'comand-component-library'
 
 // import mixins
 import I18n from "./mixins/I18n"

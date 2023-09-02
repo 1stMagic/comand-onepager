@@ -19,7 +19,7 @@
             ref="formElement"
     />
     <!-- end CmdFormElement -->
-    <h5>Figcaption - {{figcaption.show}} / {{ editableShowFigcaption }}</h5>
+    <h5>Figcaption</h5>
     <CmdFormElement
             element="input"
             type="checkbox"

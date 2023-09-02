@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import {CmdFormElement, CmdIcon} from "comand-component-library"
+import {CmdFormElement, CmdIcon, createUuid} from "comand-component-library"
 import {checkAndUploadFile} from "../utils/checkAndUploadFile"
 import EditMode from "./mixins/EditMode.vue"
 import {updateHandlerProvider} from "../utils/editmode.js"
@@ -214,6 +214,27 @@ export default {
                 event.preventDefault()
                 checkAndUploadFile(event.dataTransfer.files[0], this.allowedFileExtensions, this.minImageWidth, this.maxFileUploadSize, (imageSource) => this.newImageSource = imageSource)
             }
+        },
+        addHandlerProvider() {
+            const itemStructure = {
+                "image": {
+                    "id": createUuid(),
+                    "src": "media/images/demo-images/large/landscape-06.jpg",
+                    "srcImageLarge": "media/images/demo-images/large/landscape-06.jpg",
+                    "alt": "Alternative Text"
+                },
+                "figcaption": {
+                    "show": true,
+                    "position": "bottom",
+                    "text": "Figcaption",
+                    "textAlign": "center"
+                }
+            }
+            return updateHandlerProvider(this, {
+                item() {
+                    return itemStructure
+                }
+            })
         },
         updateHandlerProvider() {
             const figcaptionText = this.editableFigcaptionText

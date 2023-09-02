@@ -4,33 +4,14 @@
     </div>
 </template>
 <script>
+import EditMode from "./mixins/EditMode.vue"
 export default {
     name: "CmdContainer",
-    inject: {
-        editModeContext: {
-            default: null
+    mixins: [EditMode],
+    methods: {
+        addHandlerProvider() {
+            return ""
         }
-    },
-    // methods: {
-    //     onSave(data) {
-    //         return {
-    //             editModeContextData: {
-    //                 ...(this.editModeContextData || {})
-    //             }
-    //         }
-    //     },
-    //     onDelete(data) {
-    //         const result = {
-    //             editModeContextData: {
-    //                 ...(this.editModeContextData || {})
-    //             }
-    //         }
-    //         // if (data && data.length > 0) {
-    //         //     const imageIndex = data[0].editModeContextData.imageIndex
-    //         //     result.delete = (props) => props.images.splice(imageIndex, 1)
-    //         // }
-    //         return result
-    //     }
-    // }
+    }
 }
 </script>

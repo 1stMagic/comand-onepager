@@ -21,25 +21,29 @@
 
         <!-- begin list of networks -->
         <ul :class="['button-wrapper', {'no-gap': !useGap}]">
-            <li v-for="network in validNetworks">
-                <a
-                   :key="network.path"
-                   :class="['button', {disabled: userMustAcceptDataPrivacy && !dataPrivacyAccepted}, {'text-align-right': buttonTextAlign === 'right'}]"
-                   :id="network.id"
-                   :href="getUrl(network)"
-                   @click="preventOnDisabled"
-                   target="_blank"
-                   :title="tooltip(network.tooltip)">
-                        <!-- begin CmdIcon -->
-                        <CmdIcon
-                            v-if="network.iconClass"
-                             :iconClass="network.iconClass"
-                             :type="network.iconType"
-                        />
-                        <!-- end CmdIcon -->
-                        <span v-if="network.linkText">{{ network.linkText }}</span>
-                </a>
-            </li>
+            <CmdSocialNetworksItem
+                    v-if="!editModeContext"
+                    v-for="(entry, index) in validNetworks"
+                    :key="index"
+                    :network="entry"
+            />
+
+            <!-- begin edit-mode -->
+            <EditComponentWrapper v-else
+                                  v-for="(entry, index) in validNetworks"
+                                  :key="'x' + index"
+                                  componentName="CmdSocialNetworksItem"
+                                  :componentProps="entry"
+                                  :componentPath="['props', 'networks', index]"
+            >
+                <CmdSocialNetworksItem
+                    :network="entry"
+                    :userMustAcceptDataPrivacy="userMustAcceptDataPrivacy"
+                    :buttonTextAlign="buttonTextAlign"
+                    :dataPrivacyAccepted="dataPrivacyAccepted"
+                />
+            </EditComponentWrapper>
+            <!-- end edit-mode -->
         </ul>
         <!-- end list of networks -->
     </div>
@@ -128,6 +132,11 @@ export default {
             type: String,
             default: "You must accept data privacy conditions!"
         },
+        /**
+         * alignment for buttons
+         *
+         * @allowedValues: "left", "right"
+         */
         buttonTextAlign: {
             type: String,
             default: "left"
@@ -164,46 +173,6 @@ export default {
         }
     },
     methods: {
-        getUrl(network) {
-            if(this.userMustAcceptDataPrivacy && this.dataPrivacyAccepted) {
-                // if path is not given completely by json-data
-                if (this.appendPage) {
-                    // if page to share is given by property
-                    if (this.page) {
-                        return network.path + encodeURIComponent(this.page)
-                    }
-
-                    // if current page should be append to url
-                    return network.path + encodeURIComponent(location.href)
-                }
-
-                // if path is given completely by json-data
-                return network.path
-            }
-            return "#"
-        },
-        preventOnDisabled(event) {
-            let clickedElement = event.target
-
-            if(clickedElement.tagName !== "A") {
-                // get surrounding <a> if inner <span> is clicked
-                clickedElement = clickedElement.closest("a")
-            }
-
-            // href must be set due to html-validity, so click must be prevented if href contains "#" only (equals button is styled as disabled)
-            if(clickedElement.getAttribute("href") === "#") {
-                event.preventDefault()
-            }
-        },
-        tooltip(tooltip) {
-            if(this.userMustAcceptDataPrivacy) {
-                if(this.dataPrivacyAccepted) {
-                    return tooltip
-                }
-                return this.tooltipAcceptDataPrivacy
-            }
-            return tooltip
-        },
         onPersist(data) {
             return {
                 editModeContextData: {

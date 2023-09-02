@@ -1,5 +1,5 @@
 <template>
-    <dt :class="{'address': addressEntry.name === 'address'}">
+    <dt :class="['cmd-address-data-item', {'address': addressEntry.name === 'address'}]">
         <!-- begin CmdIcon -->
         <CmdIcon
                 v-if="addressEntry.iconClass && showLabelIcons"
@@ -171,7 +171,7 @@ import {updateHandlerProvider} from "../utils/editmode.js";
 export default {
     name: "CmdAddressDataItem",
     mixins: [EditMode],
-    data () {
+    data() {
         return {
             editableAddressEntry: null
         }
@@ -246,6 +246,21 @@ export default {
             }
             return null
         },
+        addHandlerProvider() {
+            const itemStructure = {
+                "name": "Name",
+                "iconClass": "icon-mail",
+                "data": "Your data",
+                "labelText": "Labeltext",
+                "tooltip": "Tooltip",
+                "href": "#"
+            }
+            return updateHandlerProvider(this, {
+                item() {
+                    return itemStructure
+                }
+            })
+        },
         updateHandlerProvider() {
             const addressData = this.editableAddressEntry
             return updateHandlerProvider(this, {
@@ -267,7 +282,7 @@ export default {
         addressEntry: {
             handler() {
                 // check if entry 'address' to create object
-                if(this.addressEntry.name === "address") {
+                if (this.addressEntry.name === "address") {
                     this.editableAddressEntry = {
                         streetNo: this.addressEntry.streetNo,
                         zip: this.addressEntry.zip,
@@ -277,7 +292,7 @@ export default {
                     }
                     // for each other entry assign data or href
                 } else {
-                    this.editableAddressEntry = (this.addressEntry.href == null ? this.addressEntry.data: this.addressEntry.href) || ""
+                    this.editableAddressEntry = (this.addressEntry.href == null ? this.addressEntry.data : this.addressEntry.href) || ""
                 }
             },
             immediate: true,

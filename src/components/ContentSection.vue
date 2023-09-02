@@ -3,6 +3,7 @@
         <a :id="'anchor-' + id"></a>
         <div class="flex-container vertical">
             <EditComponentWrapper
+                v-if="editMode"
                 componentName="CmdHeadline"
                 :componentProps="{headlineText, headlineLevel}"
                 :componentPath="componentPath(id)">
@@ -11,7 +12,10 @@
                 <!-- end cmd-headline -->
             </EditComponentWrapper>
 
+            <CmdHeadline v-else :headlineText="headlineText" :headlineLevel="headlineLevel"/>
+
             <CmdContent
+                :allowAddComponent="allowAddComponent"
                 :sectionId="id"
                 :components="components"
             />
@@ -25,6 +29,8 @@ import { CmdHeadline, CmdWidthLimitationWrapper } from 'comand-component-library
 
 // import mixins
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
+import {mapState} from "pinia"
+import {usePiniaStore} from "../stores/pinia.js"
 
 export default {
     components: {
@@ -56,9 +62,16 @@ export default {
         content: {
             type: String,
             required: false
+        },
+        allowAddComponent: {
+            type: Boolean
         }
     },
     computed: {
+        // provide states from store as computed-properties inside this component
+        ...mapState(usePiniaStore, {
+            editMode: "editMode"
+        }),
         cmdSlideButtons() {
             return {
                 next: {

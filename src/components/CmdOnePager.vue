@@ -70,6 +70,7 @@
                         <EditComponentWrapper
                             v-for="(component, componentIndex) in site.siteFooter?.components || []"
                             :key="componentIndex"
+                            :allow-add-component="component.allowAddComponent"
                             :componentName="component.name"
                             :componentProps="component.props"
                             :componentPath="componentPath(componentIndex)">
@@ -82,6 +83,7 @@
                                         v-for="(childComponent, childComponentIndex) in component.components || []"
                                         :key="childComponentIndex"
                                         :is="childComponent.name"
+                                        :allow-add-component="childComponent.allowAddComponent"
                                         :componentName="childComponent.name"
                                         :componentProps="component.props"
                                         :componentPath="childComponentPath(childComponentIndex)"

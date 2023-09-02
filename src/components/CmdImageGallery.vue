@@ -45,7 +45,7 @@
 
 <script>
 // import functions
-import {openFancyBox} from "comand-component-library"
+import {openFancyBox, createUuid} from "comand-component-library"
 import EditMode from "./mixins/EditMode.vue"
 import {updateHandlerProvider} from "../utils/editmode.js"
 

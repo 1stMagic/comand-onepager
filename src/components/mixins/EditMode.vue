@@ -17,6 +17,7 @@ export default {
         if (editComponentWrapper) {
             editComponentWrapper.addEditStateListener(editing => this.editing = editing)
             editComponentWrapper.addUpdateHandlerProvider(this.updateHandlerProvider)
+            editComponentWrapper.setAddHandlerProvider(this.addHandlerProvider)
         }
     },
     methods: {

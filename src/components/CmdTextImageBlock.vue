@@ -92,6 +92,9 @@ export default {
         }
     },
     methods: {
+        addHandlerProvider() {
+            return ""
+        },
         updateHandlerProvider() {
             const htmlContent = this.editableHtmlContent
             const children = ["CmdHeadline", "CmdImage"]

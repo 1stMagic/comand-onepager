@@ -3,26 +3,59 @@ import {i18nClient} from "../api/I18nClient"
 import axios from "axios"
 import {createUuid} from "comand-component-library"
 
+/**
+ * find a specific component in site-structure.
+ *
+ * <pre>
+ * result = {
+ *     parent: [] (contains entire parent-entry if exists),
+ *     node: {}, null (contains real component)
+ *     nodeIndex: number (contains index of specific component in parent-array)
+ * }
+ * </pre>
+ *
+ * @param site (contains entire site-structure)
+ * @param componentPath (contains an array proving all levels to the component inside the site-structure)
+ * @returns {{node: *}|null}
+ *
+ */
 function findComponent(site, componentPath) {
     if (!(site && Array.isArray(componentPath) && componentPath.length > 0)) {
         return null
     }
+    // ["main", "sections", {id: "section2"}, 0]
 
-    let node = site
+    const result = {
+        node: site
+    }
     for (let i = 0, c = componentPath.length; i < c; i++) {
         if (typeof componentPath[i] === "object") {
-            if (!Array.isArray(node)) {
+            if (!Array.isArray(result.node)) {
                 return null
             }
-            node = node.find(childNode => propsMatch(childNode, componentPath[i]))
+            result.parent = result.node
+            result.node = result.node.find((childNode, index) => {
+                if (propsMatch(childNode, componentPath[i])) {
+                    result.nodeIndex = index
+                    return true
+                }
+                return false
+            })
         } else {
-            node = node?.[componentPath[i]]
+            result.parent = result.node
+            if (componentPath[i] === -1) {
+                result.nodeIndex = (result.parent?.length || 0) - 1
+                result.node = null
+            } else {
+                result.nodeIndex = componentPath[i]
+                result.node = result.node?.[componentPath[i]]
+            }
         }
-        if (!node) {
-            return null
+        if (!result.node) {
+            return result
         }
     }
-    return node
+    return result
 }
 
 function propsMatch(node, props) {
@@ -132,8 +165,24 @@ export const usePiniaStore = defineStore("pinia", {
               }
           )
         },
+        addContent(componentPath, addHandler) {
+            const result = findComponent(this.site, componentPath)
+
+            console.log("componentPath", componentPath)
+            // add new entry after existing one
+            if(Array.isArray(result.parent) && result.nodeIndex != null) {
+                result.parent.splice(result.nodeIndex + 1, 0, addHandler.item())
+            }
+        },
+        deleteContent(componentPath) {
+            const result = findComponent(this.site, componentPath)
+
+            if(Array.isArray(result.parent) && result.nodeIndex != null) {
+                    result.parent.splice(result.nodeIndex, 1)
+            }
+        },
         updateContent(componentPath, updateHandlers) {
-            const component = findComponent(this.site, componentPath)
+            const component = findComponent(this.site, componentPath)?.node
             if (!component || !Array.isArray(updateHandlers) || updateHandlers.length === 0) {
                 return
             }
@@ -147,7 +196,7 @@ export const usePiniaStore = defineStore("pinia", {
             }
         },
         updateSettings(componentPath, updateCallback) {
-            const component = findComponent(this.site, componentPath)
+            const component = findComponent(this.site, componentPath)?.node
             if (component) {
                 updateCallback(component.props || component)
             }
