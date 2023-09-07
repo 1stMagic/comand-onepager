@@ -1,37 +1,39 @@
 <template>
-    <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            labelText="Use large icons"
-            v-model="largeIconsModel"
-    />
-    <CmdFormElement
-            element="select"
-            labelText="Alignment"
-            :selectOptions="textAlignOptions"
-            v-model="textAlignModel"
-    />
-    <CmdFormElement
-            element="select"
-            labelText="Orientation"
-            :selectOptions="orientationOptions"
-            v-model="orientationModel"
-    />
-    <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            labelText="Use gap"
-            v-model="useGapModel"
-    />
-    <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            labelText="Style as box"
-            v-model="styleAsBoxModel"
-    />
+    <div class="flex-container vertical component-settings-wrapper">
+        <CmdFormElement
+                element="input"
+                type="checkbox"
+                :toggleSwitch="true"
+                labelText="Use large icons"
+                v-model="largeIconsModel"
+        />
+        <CmdFormElement
+                element="select"
+                labelText="Alignment"
+                :selectOptions="textAlignOptions"
+                v-model="textAlignModel"
+        />
+        <CmdFormElement
+                element="select"
+                labelText="Orientation"
+                :selectOptions="orientationOptions"
+                v-model="orientationModel"
+        />
+        <CmdFormElement
+                element="input"
+                type="checkbox"
+                :toggleSwitch="true"
+                labelText="Use gap"
+                v-model="useGapModel"
+        />
+        <CmdFormElement
+                element="input"
+                type="checkbox"
+                :toggleSwitch="true"
+                labelText="Style as box"
+                v-model="styleAsBoxModel"
+        />
+    </div>
 </template>
 
 <script>

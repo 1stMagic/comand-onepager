@@ -1,23 +1,32 @@
 <template>
-    <CmdHeadlineSettings
-            ref="headlineSettings"
-            v-bind="cmdHeadline || {}"
-    />
-    <hr />
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Headline', headlineLevel: 4}">
+        <template v-slot:body>
+            <CmdHeadlineSettings
+                    ref="headlineSettings"
+                    v-bind="cmdHeadline || {}"
+            />
+        </template>
+    </CmdBox>
 
-    <CmdFormElement
-            element="input"
-            type="text"
-            labelText="Abbreviation text for hours"
-            v-model="abbreviationTextModel"
-    />
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Opening Hours', headlineLevel: 4}">
+        <template v-slot:body>
+            <div class="flex-container vertical component-settings-wrapper">
+                <CmdFormElement
+                        element="input"
+                        type="text"
+                        labelText="Abbreviation text for 'hours'"
+                        v-model="abbreviationTextModel"
+                />
 
-    <CmdFormElement
-            element="select"
-            :select-options="separators"
-            labelText="Select separator (for time span)"
-            v-model="separatorModel"
-    />
+                <CmdFormElement
+                        element="select"
+                        :select-options="separators"
+                        labelText="Select separator (for time span)"
+                        v-model="separatorModel"
+                />
+            </div>
+        </template>
+    </CmdBox>
 </template>
 
 <script>
@@ -119,3 +128,5 @@ export default {
 <style scoped>
 
 </style>
+<script setup>
+</script>

@@ -20,6 +20,8 @@
         </dd>
     </template>
     <!-- end opening-days and -hours -->
+
+    <!-- begin edit-mode -->
     <template v-else>
         <div class="input-wrapper">
             <CmdFormElement
@@ -50,23 +52,23 @@
             </template>
             <template v-else>
                 <CmdFormElement
-                        element="input"
-                        type="time"
-                        class="edit-mode"
-                        :showLabel="false"
-                        labelText="Text for AM from"
-                        placeholder="Text for AM from"
-                        v-model="editableDay.amFrom"
+                    element="input"
+                    type="time"
+                    class="edit-mode"
+                    :showLabel="false"
+                    labelText="Text for AM from"
+                    placeholder="Text for AM from"
+                    v-model="editableDay.amFrom"
                 />
                 <CmdFormElement
-                        element="input"
-                        type="time"
-                        :showLabel="false"
-                        class="edit-mode"
-                        :min="editableDay.amFrom"
-                        labelText="Text for AM till"
-                        placeholder="Text for AM till"
-                        v-model="editableDay.amTill"
+                    element="input"
+                    type="time"
+                    :showLabel="false"
+                    class="edit-mode"
+                    :min="editableDay.amFrom"
+                    labelText="Text for AM till"
+                    placeholder="Text for AM till"
+                    v-model="editableDay.amTill"
                 />
             </template>
             <CmdFormElement
@@ -77,13 +79,13 @@
             />
             <template v-if="editableDay.pmClosed">
                 <CmdFormElement
-                        element="input"
-                        type="text"
-                        class="edit-mode"
-                        :showLabel="false"
-                        labelText="Text for 'closed'"
-                        placeholder="Text for 'closed'"
-                        v-model="editableDay.pmDisplayText"
+                    element="input"
+                    type="text"
+                    class="edit-mode"
+                    :showLabel="false"
+                    labelText="Text for 'closed'"
+                    placeholder="Text for 'closed'"
+                    v-model="editableDay.pmDisplayText"
                 />
             </template>
             <template v-else>
@@ -109,6 +111,7 @@
             </template>
         </div>
     </template>
+    <!-- end edit-mode -->
 </template>
 
 <script>

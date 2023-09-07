@@ -1,48 +1,53 @@
 <template>
-    <CmdHeadlineSettings
+    <div class="flex-container vertical component-settings-wrapper">
+        <CmdHeadlineSettings
             ref="headlineSettings"
             v-bind="cmdHeadline || {}"
-    />
-    <hr />
-    <CmdFormElement
+        />
+        <hr />
+        <CmdFormElement
             element="input"
             type="checkbox"
             :toggleSwitch="true"
             labelText="Show labels (att all)"
             v-model="showLabelsModel"
-    />
+        />
 
-    <CmdFormElement
+        <CmdFormElement
             element="input"
             type="checkbox"
             :toggleSwitch="true"
+            :disabled="!showLabelsModel"
             labelText="Show icons only (no text)"
             v-model="showIconsOnlyModel"
-    />
+        />
 
-    <CmdFormElement
+        <CmdFormElement
             element="input"
             type="checkbox"
             :toggleSwitch="true"
+            :disabled="!showLabelsModel"
             labelText="Show icons in front of labels"
             v-model="showLabelIconsModel"
-    />
+        />
 
-    <CmdFormElement
+        <CmdFormElement
             element="input"
             type="checkbox"
             :toggleSwitch="true"
+            :disabled="!showLabelsModel"
             labelText="Show label-texts"
             v-model="showLabelTextsModel"
-    />
+        />
 
-    <CmdFormElement
+        <CmdFormElement
             element="input"
             type="checkbox"
             :toggleSwitch="true"
             labelText="Link address with Google Maps &trade;"
             v-model="linkGoogleMapsModel"
-    />
+        />
+    </div>
 </template>
 
 <script>

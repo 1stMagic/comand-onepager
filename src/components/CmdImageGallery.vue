@@ -30,9 +30,10 @@
         <!-- begin edit-mode view -->
         <EditComponentWrapper
             v-else
-            class="image-wrapper"
+            class="image-wrapper edit-items"
             v-for="(image, index) in images"
             :key="index"
+            :showComponentName="false"
             componentName="CmdImage"
             :componentProps="image"
             :componentPath="['props', 'images', index]"

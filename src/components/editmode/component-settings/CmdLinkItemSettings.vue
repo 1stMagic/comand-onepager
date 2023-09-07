@@ -1,25 +1,27 @@
 <template>
-    <CmdFormElement
+    <div class="flex-container vertical component-settings-wrapper">
+        <CmdFormElement
             element="input"
             type="text"
             labelText="Link text"
             placeholder="Link text"
             v-model="textModel"
-    />
-    <CmdFormElement
+        />
+        <CmdFormElement
             element="input"
             type="url"
             labelText="URL"
             placeholder="URL"
             :required="true"
             v-model="pathModel"
-    />
-    <CmdFormElement
+        />
+        <CmdFormElement
             element="select"
             labelText="Open content in"
             :selectOptions="targetOptions"
             v-model="targetModel"
-    />
+        />
+    </div>
 </template>
 
 <script>
@@ -86,7 +88,7 @@ export default {
                     if (this.fancybox) {
                         return "fancybox"
                     }
-                return this.target || ""
+                    return this.target || ""
                 }
 
                 return this.editableTarget
@@ -105,10 +107,10 @@ export default {
                 props.text = text
                 props.path = path
 
-                if(target === "fancybox") {
+                if (target === "fancybox") {
                     props.fancybox = true
                     props.target = ""
-                } else  {
+                } else {
                     props.fancybox = false
                     props.target = target
                 }

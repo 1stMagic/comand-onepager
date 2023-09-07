@@ -1,68 +1,70 @@
 <template>
-    <h4>Image</h4>
-    <a class="image-wrapper" title="Click to select new image" @click="selectFiles()">
-        <img v-show="image?.src" :src="image?.src" :alt="image?.alt" ref="contentImage" />
-        <span class="no-image" v-if="!image?.src">
-            <span class="icon-image"></span>
-            <span>(no image uploaded)</span>
-        </span>
-    </a>
+    <div class="flex-container vertical component-settings-wrapper">
+        <a class="image-wrapper" title="Click to select new image" @click="selectFiles()">
+            <img v-show="image?.src" :src="image?.src" :alt="image?.alt" ref="contentImage"/>
+            <span class="no-image" v-if="!image?.src">
+                <span class="icon-image"></span>
+                <span>(no image uploaded)</span>
+            </span>
+        </a>
 
-    <!-- begin CmdFormElement -->
-    <CmdFormElement
-            class="hidden"
-            element="input"
-            type="file"
-            labelText="Select file"
-            :disabled="uploadInitiated"
-            @change="fileSelected"
-            ref="formElement"
-    />
-    <!-- end CmdFormElement -->
-    <h5>Figcaption</h5>
-    <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            labelText="Show figcaption"
-            v-model="editableShowFigcaption"
-    />
-    <div class="flex-container">
+        <!-- begin CmdFormElement -->
         <CmdFormElement
-                element="select"
-                labelText="Position"
-                :selectOptions="positionOptions"
-                :disabled="!editableShowFigcaption"
-                v-model="editableFigcaptionPosition"
+                class="hidden"
+                element="input"
+                type="file"
+                labelText="Select file"
+                :disabled="uploadInitiated"
+                @change="fileSelected"
+                ref="formElement"
+        />
+        <!-- end CmdFormElement -->
+        <h5>Figcaption</h5>
+        <CmdFormElement
+                element="input"
+                type="checkbox"
+                :toggleSwitch="true"
+                labelText="Show figcaption"
+                v-model="editableShowFigcaption"
+        />
+        <div class="flex-container">
+            <CmdFormElement
+                    element="select"
+                    labelText="Position"
+                    :selectOptions="positionOptions"
+                    :disabled="!editableShowFigcaption"
+                    v-model="editableFigcaptionPosition"
+            />
+            <CmdFormElement
+                    element="select"
+                    labelText="Alignment"
+                    :selectOptions="textAlignOptions"
+                    :disabled="!editableShowFigcaption"
+                    v-model="editableFigcaptionTextAlign"
+            />
+        </div>
+        <CmdFormElement
+                element="input"
+                type="text"
+                :required="true"
+                labelText="Alternative Text"
+                placeholder="Alternative Text"
+                v-model="editableAlternativeText"
         />
         <CmdFormElement
-                element="select"
-                labelText="Alignment"
-                :selectOptions="textAlignOptions"
-                :disabled="!editableShowFigcaption"
-                v-model="editableFigcaptionTextAlign"
+                element="input"
+                type="text"
+                :required="false"
+                labelText="Tooltip"
+                placeholder="Tooltip"
+                v-model="editableTooltip"
         />
     </div>
-    <CmdFormElement
-            element="input"
-            type="text"
-            :required="true"
-            labelText="Alternative Text"
-            placeholder="Alternative Text"
-            v-model="editableAlternativeText"
-    />
-    <CmdFormElement
-            element="input"
-            type="text"
-            :required="false"
-            labelText="Tooltip"
-            placeholder="Tooltip"
-            v-model="editableTooltip"
-    />
 </template>
 
 <script>
 import {checkAndUploadFile} from "../../../utils/checkAndUploadFile.js"
+
 export default {
     name: "CmdImageSettings",
     inheritAttrs: false,

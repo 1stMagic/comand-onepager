@@ -9,40 +9,46 @@
         <template v-else>
             <!-- begin cmd-headline -->
             <CmdHeadline
-                    v-if="cmdHeadline?.headlineText || editing"
-                    v-bind="cmdHeadline"
+                v-if="cmdHeadline?.headlineText || editing"
+                v-bind="cmdHeadline"
             />
             <!-- end cmd-headline -->
 
             <!-- begin address-data in vCard microformat -->
             <address class="adr">
                 <!-- begin list with labels -->
-                <dl v-if="showLabels && !showIconsOnly">
-                    <!-- begin labels -->
-                    <CmdAddressDataItem
-                            v-if="!editModeContext"
+                <template v-if="showLabels && !showIconsOnly">
+                    <!-- begin default view -->
+                    <dl v-if="!editModeContext">
+                        <CmdAddressDataItem
                             v-for="(entry, index) in addressData"
                             :key="index"
                             :addressEntry="entry"
-                    />
+                        />
+                    </dl>
+                    <!-- end default view -->
+
                     <!-- begin edit-mode -->
-                    <EditComponentWrapper v-else
-                                          v-for="(entry, index) in addressData"
-                                          :key="'x' + index"
-                                          componentName="CmdAddressDataItem"
-                                          :componentProps="entry"
-                                          :componentPath="['props', 'addressData', index]"
+                    <EditComponentWrapper
+                        v-else
+                        v-for="(entry, index) in addressData"
+                        :key="'x' + index"
+                        class="edit-items"
+                        :showComponentName="false"
+                        componentName="CmdAddressDataItem"
+                        :componentProps="entry"
+                        :componentPath="['props', 'addressData', index]"
                     >
-                        <!-- begin labels -->
-                        <CmdAddressDataItem
+                        <dl>
+                            <CmdAddressDataItem
                                 :addressEntry="entry"
                                 :showLabelIcons="showLabelIcons"
                                 :showLabelTexts="showLabelTexts"
                                 :linkGoogleMaps="linkGoogleMaps"
-                        />
+                            />
+                        </dl>
                     </EditComponentWrapper>
-                    <!-- end data -->
-                </dl>
+                </template>
                 <!-- end list with labels -->
 
                 <!-- begin list without labels -->
@@ -57,9 +63,9 @@
                                     <template v-if="showIconsOnly">
                                         <!-- begin CmdIcon -->
                                         <CmdIcon
-                                            v-if="entry.iconClass"
-                                            :iconClass="entry.iconClass"
-                                            :type="entry.iconType"
+                                                v-if="entry.iconClass"
+                                                :iconClass="entry.iconClass"
+                                                :type="entry.iconType"
                                         />
                                         <!-- end CmdIcon -->
                                     </template>
@@ -76,9 +82,9 @@
                                         <template v-if="showIconsOnly">
                                             <!-- begin CmdIcon -->
                                             <CmdIcon
-                                                v-if="entry.iconClass"
-                                                :iconClass="entry.iconClass"
-                                                :type="entry.iconType"
+                                                    v-if="entry.iconClass"
+                                                    :iconClass="entry.iconClass"
+                                                    :type="entry.iconType"
                                             />
                                             <!-- end CmdIcon -->
                                         </template>
@@ -255,9 +261,7 @@ export default {
             })
         }
     },
-    watch: {
-
-    }
+    watch: {}
 }
 </script>
 

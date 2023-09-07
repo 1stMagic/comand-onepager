@@ -19,9 +19,9 @@
         <div class="inner-thumbnail-wrapper">
             <!-- begin CmdSlideButton -->
             <CmdSlideButton
-                    v-if="showSlidebuttons"
-                    @click.prevent="showPrevItem"
-                    slideButtonType="prev"
+                v-if="showSlidebuttons"
+                @click.prevent="showPrevItem"
+                slideButtonType="prev"
             />
             <!-- end CmdSlideButton -->
 
@@ -48,18 +48,20 @@
                         <!-- end contentType === text -->
                     </a>
 
-                    <!-- begin edit-mode view -->
-                    <EditComponentWrapper v-else
-                                          class="image-wrapper"
-                                          componentName="CmdImage"
-                                          :componentProps="item"
-                                          :componentPath="['props', 'thumbnailScrollerItems', index]"
+                    <!-- begin edit-mode -->
+                    <EditComponentWrapper
+                        v-else
+                        class="image-wrapper edit-items"
+                        :showComponentName="false"
+                        componentName="CmdImage"
+                        :componentProps="item"
+                        :componentPath="['props', 'thumbnailScrollerItems', index]"
                     >
                         <!-- begin CmdImage -->
                         <CmdImage
-                                v-if="contentType === 'image'"
-                                :image="item.image"
-                                :figcaption="item.figcaption"
+                            v-if="contentType === 'image'"
+                            :image="item.image"
+                            :figcaption="item.figcaption"
                         />
                         <!-- end CmdImage -->
 
@@ -72,6 +74,7 @@
                         </template>
                         <!-- end contentType === text -->
                     </EditComponentWrapper>
+                    <!-- end edit-mode -->
                 </li>
             </transition-group>
             <!-- end list of images to slide -->

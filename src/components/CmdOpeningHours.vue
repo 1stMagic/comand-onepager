@@ -2,8 +2,8 @@
     <div class="cmd-opening-hours">
         <!-- begin cmd-headline -->
         <CmdHeadline
-                v-if="cmdHeadline?.headlineText || editing"
-                v-bind="cmdHeadline"
+            v-if="cmdHeadline?.headlineText || editing"
+            v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
 
@@ -30,53 +30,58 @@
         <!-- begin edit-mode -->
         <div v-else class="flex-container">
             <CmdFormElement
-                    element="input"
-                    type="text"
-                    :showLabel="false"
-                    labelText="Text for 'open'"
-                    placeholder="Text for 'open'"
-                    v-model="textOpenModel"
+                element="input"
+                type="text"
+                :showLabel="false"
+                labelText="Text for 'open'"
+                placeholder="Text for 'open'"
+                v-model="textOpenModel"
             />
             <CmdFormElement
-                    element="input"
-                    type="text"
-                    :showLabel="false"
-                    labelText="Text for 'closed'"
-                    placeholder="Text for 'closed'"
-                    v-model="textClosedModel"
+                element="input"
+                type="text"
+                :showLabel="false"
+                labelText="Text for 'closed'"
+                placeholder="Text for 'closed'"
+                v-model="textClosedModel"
             />
         </div>
         <!-- end edit-mode -->
 
-        <!-- begin opening hours item -->
-        <dl>
-        <CmdOpeningHoursItem
-                v-if="!editModeContext"
-           v-for="(day, index) in openingHoursFormatted"
-           :key="index"
-           :day="day"
-           :separator="separator"
-           :abbreviationText="abbreviationText"
-        />
+        <!-- begin default view -->
+        <dl v-if="!editModeContext">
+            <CmdOpeningHoursItem
 
-        <!-- end opening hours item -->
+               v-for="(day, index) in openingHoursFormatted"
+               :key="index"
+               :day="day"
+               :separator="separator"
+               :abbreviationText="abbreviationText"
+            />
+        </dl>
+        <!-- end default view -->
 
         <!-- begin edit-mode -->
-        <EditComponentWrapper v-else
-                              v-for="(day, index) in openingHoursFormatted"
-                              :key="'x' + index"
-                              componentName="CmdOpeningHoursItem"
-                              :componentProps="day"
-                              :componentPath="['props', 'openingHours', index]"
+        <EditComponentWrapper
+            v-else
+            v-for="(day, index) in openingHoursFormatted"
+            :key="'x' + index"
+            class="edit-items"
+            :showComponentName="false"
+            componentName="CmdOpeningHoursItem"
+            :componentProps="day"
+            :componentPath="['props', 'openingHours', index]"
         >
+            <dl>
                 <CmdOpeningHoursItem
-                        :day="day"
-                        :separator="separator"
-                        :abbreviationText="abbreviationText"
+                    :day="day"
+                    :separator="separator"
+                    :abbreviationText="abbreviationText"
                 />
+            </dl>
         </EditComponentWrapper>
         <!-- end edit-mode -->
-        </dl>
+
 
         <!-- begin holiday-closes-text and miscellaneous information -->
         <div v-if="!editing && (textHolidays || textMiscInfo)">
@@ -90,20 +95,20 @@
         <!-- begin edit-mode -->
         <div v-if="editing" class="flex-container vertical">
             <CmdFormElement
-                    element="input"
-                    type="text"
-                    :showLabel="false"
-                    labelText="Text for 'holidays'"
-                    placeholder="Text for 'holidays'"
-                    v-model="textHolidaysModel"
+                element="input"
+                type="text"
+                :showLabel="false"
+                labelText="Text for 'holidays'"
+                placeholder="Text for 'holidays'"
+                v-model="textHolidaysModel"
             />
             <CmdFormElement
-                    element="input"
-                    type="text"
-                    :showLabel="false"
-                    labelText="Miscellaneous information"
-                    placeholder="Miscellaneous information"
-                    v-model="textMiscInfoModel"
+                element="input"
+                type="text"
+                :showLabel="false"
+                labelText="Miscellaneous information"
+                placeholder="Miscellaneous information"
+                v-model="textMiscInfoModel"
             />
         </div>
         <!-- end edit-mode -->
@@ -375,49 +380,6 @@ export default {
             })
         }
     }
-    //     onPersist(data) {
-    //         const textOpen = this.textOpenModel
-    //         const textClosed = this.textClosedModel
-    //         const textHolidays = this.textHolidaysModel
-    //         const textMiscInfo = this.textMiscInfoModel
-    //         const openingHours = this.editableOpeningHours
-    //         return {
-    //             editModeContextData: {
-    //                 ...(this.editModeContextData || {})
-    //             },
-    //             update(props) {
-    //                 props.cmdHeadline = {
-    //                     ...(props.cmdHeadline || {}),
-    //                 }
-    //                 props.cmdHeadline.headlineText = data[0].headlineText
-    //                 props.textOpen = textOpen
-    //                 props.textClosed = textClosed
-    //                 props.textHolidays = textHolidays
-    //                 props.textMiscInfo = textMiscInfo
-    //                 props.openingHours = openingHours.map(item => ({
-    //                     day: item.day,
-    //                     am: {
-    //                         fromTime: item.amFrom,
-    //                         tillTime: item.amTill,
-    //                         displayText: item.amClosed ? item.amDisplayText : ""
-    //                     },
-    //                     pm: {
-    //                         fromTime: item.pmFrom,
-    //                         tillTime: item.pmTill,
-    //                         displayText: item.pmClosed ? item.pmDisplayText : ""
-    //                     }
-    //                 }))
-    //             }
-    //         }
-    //     },
-    //     onDelete() {
-    //         return {
-    //             editModeContextData: {
-    //                 ...(this.editModeContextData || {})
-    //             }
-    //         }
-    //     }
-    // },
 }
 </script>
 
@@ -430,10 +392,10 @@ export default {
         display: table;
         margin-bottom: var(--default-margin);
         color: var(--pure-white);
-        background: #0b0;
+        background: var(--success-color);
 
         &.closed {
-            background: #b00;
+            background: var(--error-color);
         }
     }
 

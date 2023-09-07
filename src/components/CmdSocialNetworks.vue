@@ -2,8 +2,8 @@
     <div :class="['cmd-social-networks', {'stretch': stretchButtons}, alignment]">
         <!-- begin CmdHeadline -->
         <CmdHeadline
-                v-if="cmdHeadline?.headlineText || editModeContext?.editing"
-                v-bind="cmdHeadline || {}"
+            v-if="cmdHeadline?.headlineText || editModeContext?.editing"
+            v-bind="cmdHeadline || {}"
         />
         <!-- end CmdHeadline -->
 
@@ -20,21 +20,24 @@
         <!-- end CmdFormElement -->
 
         <!-- begin list of networks -->
-        <ul :class="['button-wrapper', {'no-gap': !useGap}]">
+        <ul v-if="validNetworks.length > 0" :class="['button-wrapper', {'no-gap': !useGap}]">
             <CmdSocialNetworksItem
-                    v-if="!editModeContext"
-                    v-for="(entry, index) in validNetworks"
-                    :key="index"
-                    :network="entry"
+                v-if="!editModeContext"
+                v-for="(entry, index) in validNetworks"
+                :key="index"
+                :network="entry"
             />
 
             <!-- begin edit-mode -->
-            <EditComponentWrapper v-else
-                                  v-for="(entry, index) in validNetworks"
-                                  :key="'x' + index"
-                                  componentName="CmdSocialNetworksItem"
-                                  :componentProps="entry"
-                                  :componentPath="['props', 'networks', index]"
+            <EditComponentWrapper
+                v-else
+                v-for="(entry, index) in validNetworks"
+                :key="'x' + index"
+                class="edit-items"
+                componentName="CmdSocialNetworksItem"
+                :componentProps="entry"
+                :componentPath="['props', 'networks', index]"
+                :showComponentName="false"
             >
                 <CmdSocialNetworksItem
                     :network="entry"
@@ -45,6 +48,10 @@
             </EditComponentWrapper>
             <!-- end edit-mode -->
         </ul>
+
+        <button v-else class="button small" title="Add new item" @click="addNewItem">
+            <span class="icon-plus"></span>
+        </button>
         <!-- end list of networks -->
     </div>
 </template>
@@ -173,6 +180,9 @@ export default {
         }
     },
     methods: {
+        addNewItem() {
+          alert("New item!")
+        },
         onPersist(data) {
             return {
                 editModeContextData: {

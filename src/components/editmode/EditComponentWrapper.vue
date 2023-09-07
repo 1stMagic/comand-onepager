@@ -1,30 +1,17 @@
 <template>
-    <div
-            :class="['edit-component-wrapper', {active}]"
-            tabindex="0"
-            @click="showActionButtons"
-            :data-identifier="componentIdentifier">
+    <component
+        :is="componentTag || 'div'"
+        :class="['edit-component-wrapper', {active}]"
+        tabindex="0"
+        @click="showActionButtons"
+        :data-identifier="componentIdentifier">
 
-        <select v-if="allowAddComponent && active" :value="componentName" @change="switchComponent">
-            <option value="">Select component to add</option>
-            <option value="CmdContainer">Empty container</option>
-            <option value="CmdAddressData">Address data</option>
-            <option value="CmdHeadline">Headline</option>
-            <option value="CmdImage">Image</option>
-            <option value="CmdImageGallery">Image gallery</option>
-            <option value="CmdListOfLinks">List of links</option>
-            <option value="CmdOpeningHours">Opening hours</option>
-            <option value="CmdSlideshow">Slideshow</option>
-            <option value="CmdSocialNetworks">Social networks</option>
-            <option value="CmdTextImageBlock">Text-Image-Block</option>
-            <option value="CmdThumbnailScroller">Thumbnail-Scroller</option>
-            <option value="CmdToggleDarkMode">Toggle Dark-Mode</option>
-        </select>
-
-        <small v-else-if="!allowAddComponent && active" class="component-name">{{ componentName }}</small>
+        <!-- begin show component name above wrapper -->
+        <small v-if="!allowAddComponent && active && showComponentName" class="component-name">{{ componentName }}</small>
+        <!-- end show component name above wrapper -->
 
         <!-- begin action-buttons -->
-        <ul v-show="active" class="flex-container no-flex no-gap action-buttons">
+        <ul v-show="active" class="flex-container no-flex action-buttons">
             <li>
                 <a :class="['icon-hexagon', {disabled: !addHandlerProvider && !allowAddComponent}]"
                    href="#"
@@ -107,7 +94,7 @@
         <!-- begin slot -->
         <slot></slot>
         <!-- end slot -->
-    </div>
+    </component>
 </template>
 
 <script>
@@ -136,6 +123,13 @@ export default {
         },
         allowAddComponent: {
             type: Boolean
+        },
+        showComponentName: {
+            type: Boolean,
+            default: true
+        },
+        componentTag: {
+            type: String
         }
     },
     data() {
@@ -164,20 +158,6 @@ export default {
         }
     },
     methods: {
-        switchComponent(event) {
-            if (confirm("All content for this component will be deleted. Switch to new component anyway?")) {
-                const selectedComponent = event.target.value
-                this.addContent(buildComponentPath(this), {
-                    name: selectedComponent,
-                    item() {
-                        return componentStructure[selectedComponent]
-                    }
-                })
-                this.deleteContent(buildComponentPath(this))
-            } else {
-                event.target.value = this.componentName
-            }
-        },
         componentSelected(event) {
             const selectedComponent = event.target.value
 
@@ -335,6 +315,7 @@ function buildComponentPath(component) {
     .action-buttons {
         --action-buttons-size: 3.6rem;
         transition: var(--default-transition);
+        gap: 0;
 
         position: absolute;
         top: calc(var(--action-buttons-size) / -1.9);
@@ -392,6 +373,42 @@ function buildComponentPath(component) {
             &:nth-child(1) {
                 right: calc(var(--action-buttons-size) / -1);
             }
+        }
+    }
+
+    .edit-items {
+        .action-buttons {
+            top: -1.2rem;
+            gap: calc(var(--default-gap) / 2);
+            flex-wrap: nowrap;
+
+            li  {
+                top: auto !important;
+                right: auto !important;
+
+                a {
+                    font-size: 1rem;
+
+                    &:before {
+                        content: ""
+                    }
+
+                    span[class*="icon-"] {
+                        position: relative;
+                        color: var(--hyperlink-color);
+                    }
+
+                    &:hover, &:active, &:focus {
+                        span[class*="icon-"] {
+                            color: var(--hyperlink-color-highlighted);
+                        }
+                    }
+                }
+            }
+        }
+
+        &.active {
+            background: var(--pure-white);
         }
     }
 }

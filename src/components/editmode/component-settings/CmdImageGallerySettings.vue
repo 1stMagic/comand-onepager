@@ -1,18 +1,29 @@
 <template>
-    <!-- begin cmdHeadline -->
-    <CmdHeadlineSettings
-            ref="headlineSettings"
-            v-bind="cmdHeadline || {}"
-    />
-    <!-- end cmdHeadline -->
-
-    <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            labelText="Use Fancybox for large images"
-            v-model="useFancyboxForLargeImagesModel"
-    />
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Headline', headlineLevel: 4}">
+        <template v-slot:body>
+            <!-- begin cmdHeadline -->
+            <CmdHeadlineSettings
+                    ref="headlineSettings"
+                    v-bind="cmdHeadline || {}"
+            />
+            <!-- end cmdHeadline -->
+        </template>
+    </CmdBox>
+    <CmdBox :use-slots="['body']"
+            :collapsible="true"
+            :cmdHeadline="{headlineText: 'Image Gallery', headlineLevel: 4}">
+        <template v-slot:body>
+            <div class="flex-container vertical component-settings-wrapper">
+                <CmdFormElement
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    labelText="Use Fancybox for large images"
+                    v-model="useFancyboxForLargeImagesModel"
+                />
+            </div>
+        </template>
+    </CmdBox>
 </template>
 
 <script>
@@ -29,7 +40,7 @@ export default {
             type: Object,
             required: false
         },
-       useFancyboxForLargeImages: {
+        useFancyboxForLargeImages: {
             type: Boolean,
             default: true
         }

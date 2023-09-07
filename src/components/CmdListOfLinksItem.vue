@@ -29,11 +29,12 @@
     <template v-else>
         <div class="input-wrapper">
             <CmdFormElement
-                    element="input"
-                    type="text"
-                    labelText="Linktext"
-                    placeholder="Linktext"
-                    v-model="editableText"
+                element="input"
+                type="text"
+                labelText="Linktext"
+                :showLabel="false"
+                placeholder="Linktext"
+                v-model="editableText"
             />
         </div>
     </template>

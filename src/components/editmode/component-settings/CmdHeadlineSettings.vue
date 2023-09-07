@@ -1,24 +1,41 @@
 <template>
-    <CmdFormElement
+    <div class="flex-container vertical component-settings-wrapper">
+        <CmdFormElement
+            element="input"
+            type="checkbox"
+            :toggleSwitch="true"
+            labelText="Show pre-headline above headline"
+            v-model="togglePreHeadlineModel"
+        />
+        <CmdFormElement
+            v-if="preHeadlineText || togglePreHeadlineModel"
+            element="input"
+            type="text"
+            labelText="Pre-Headline Text"
+            placeholder="Pre-Headline Text"
+            v-model="preHeadlineTextModel"
+        />
+        <CmdFormElement
             element="input"
             type="text"
             labelText="Headline Text"
             placeholder="Headline Text"
             v-model="headlineTextModel"
-    />
-    <div class="flex-container">
-        <CmdFormElement
+        />
+        <div class="flex-container">
+            <CmdFormElement
                 element="select"
                 labelText="Level"
                 :selectOptions="headlineLevelOptions"
                 v-model="headlineLevelModel"
-        />
-        <CmdFormElement
+            />
+            <CmdFormElement
                 element="select"
                 labelText="Alignment"
                 :selectOptions="textAlignOptions"
                 v-model="textAlignModel"
-        />
+            />
+        </div>
     </div>
 </template>
 
@@ -28,6 +45,8 @@ export default {
     inheritAttrs: false,
     data() {
         return {
+            togglePreHeadlineModel: false,
+            editablePreHeadlineText: null,
             editableHeadlineText: null,
             editableHeadlineLevel: null,
             headlineLevelOptions: [
@@ -74,6 +93,10 @@ export default {
         }
     },
     props: {
+        preHeadlineText: {
+            type: String,
+            default: ""
+        },
         headlineText: {
             type: String,
             default: ""
@@ -87,6 +110,14 @@ export default {
         }
     },
     computed: {
+        preHeadlineTextModel: {
+            get() {
+                return this.editablePreHeadlineText == null ? this.preHeadlineText : this.editablePreHeadlineText
+            },
+            set(value) {
+                this.editablePreHeadlineText = value
+            }
+        },
         headlineTextModel: {
             get() {
                 return this.editableHeadlineText == null ? this.headlineText : this.editableHeadlineText
@@ -114,10 +145,13 @@ export default {
     },
     methods: {
         updateCallbackProvider() {
-            const headlineText =  this.headlineTextModel
-            const headlineLevel =  this.headlineLevelModel
-            const textAlign =  this.textAlignModel
+            const preHeadlineText = this.preHeadlineTextModel
+            const headlineText = this.headlineTextModel
+            const headlineLevel = this.headlineLevelModel
+            const textAlign = this.textAlignModel
+
             return props => {
+                props.preHeadlineText = preHeadlineText
                 props.headlineText = headlineText
                 props.headlineLevel = headlineLevel
                 props.textAlign = textAlign
@@ -127,6 +161,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 
 </style>

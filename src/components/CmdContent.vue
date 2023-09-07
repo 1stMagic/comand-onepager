@@ -1,41 +1,47 @@
 <template>
     <div :class="['cmd-content flex-container', {'reverse': alignImage === 'right'}]">
+        <!-- begin edit-mode -->
         <template v-if="editMode">
             <!-- begin show component-wrapper with components inside (if exist) -->
             <template v-if="components.length > 0">
+                <!-- begin first-level component -->
                 <EditComponentWrapper
-                        v-for="(component, componentIndex) in components"
-                        :key="componentIndex"
-                        :allowAddComponent="allowAddComponent"
-                        :componentName="component.name"
-                        :componentProps="component.props"
-                        :componentPath="componentPath(componentIndex)">
+                    v-for="(component, componentIndex) in components"
+                    :key="componentIndex"
+                    :allowAddComponent="allowAddComponent"
+                    :componentName="component.name"
+                    :componentProps="component.props"
+                    :componentPath="componentPath(componentIndex)">
                     <component
-                            :is="component.name"
-                            v-bind="component.props"
+                        :is="component.name"
+                        v-bind="component.props"
                     >
+                        <!-- begin child/nested component -->
                         <EditComponentWrapper
-                                v-for="(childComponent, childComponentIndex) in component.components || []"
-                                :key="childComponentIndex"
-                                :allowAddComponent="component.allowAddComponent"
-                                :componentName="childComponent.name"
-                                :componentProps="childComponent.props"
-                                :componentPath="childComponentPath(childComponentIndex)"
+                            v-for="(childComponent, childComponentIndex) in component.components || []"
+                            :key="childComponentIndex"
+                            :allowAddComponent="component.allowAddComponent"
+                            :componentName="childComponent.name"
+                            :componentProps="childComponent.props"
+                            :componentPath="childComponentPath(childComponentIndex)"
                         >
                             <component
-                                    :is="childComponent.name"
-                                    v-bind="childComponent.props"
+                                :is="childComponent.name"
+                                v-bind="childComponent.props"
                             />
                         </EditComponentWrapper>
+                        <!-- end child/nested component -->
                     </component>
                 </EditComponentWrapper>
+                <!-- end first-level component -->
             </template>
             <!-- end show component-wrapper with components inside (if exist) -->
 
             <!-- begin show add-new-component-button if no component exists -->
             <div class="center-content" v-else>
-                <button class="button" title="Add new component" @click="addNewComponent">
+                <button class="button primary" @click="addNewComponent">
                     <span class="icon-plus"></span>
+                    <span>Add new component</span>
                 </button>
                 <select v-if="showComponentSelection" @change="componentSelected">
                     <option value="">Select component to add</option>
@@ -55,20 +61,21 @@
             </div>
             <!-- end show add-new-component-button if no component exists -->
         </template>
+        <!-- end edit-mode -->
 
         <!-- begin default view -->
         <template v-else>
             <component
-                    v-for="(component, componentIndex) in components"
-                    :key="componentIndex"
-                    :is="component.name"
-                    v-bind="component.props"
+                v-for="(component, componentIndex) in components"
+                :key="componentIndex"
+                :is="component.name"
+                v-bind="component.props"
             >
                 <component
-                        v-for="(childComponent, childComponentIndex) in component.components || []"
-                        :is="childComponent.name"
-                        :key="childComponentIndex"
-                        v-bind="childComponent.props"
+                    v-for="(childComponent, childComponentIndex) in component.components || []"
+                    :is="childComponent.name"
+                    :key="childComponentIndex"
+                    v-bind="childComponent.props"
                 />
             </component>
         </template>

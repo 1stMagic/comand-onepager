@@ -1,21 +1,34 @@
 <template>
-    <CmdHeadlineSettings
-            ref="headlineSettings"
-            v-bind="cmdHeadline || {}"
-    />
-    <hr />
-    <CmdImageSettings
-            ref="imageSettings"
-            v-bind="cmdImage || {}"
-    />
-    <hr />
-    <h4>Paragraph</h4>
-    <CmdFormElement
-            element="select"
-            labelText="Paragraph Text-Alignment"
-            :selectOptions="paragraphAlignmentOptions"
-            v-model="paragraphTextAlignModel"
-    />
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Headline', headlineLevel: 4}">
+        <template v-slot:body>
+            <CmdHeadlineSettings
+                    ref="headlineSettings"
+                    v-bind="cmdHeadline || {}"
+            />
+        </template>
+    </CmdBox>
+
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Image', headlineLevel: 4}">
+        <template v-slot:body>
+            <CmdImageSettings
+                ref="imageSettings"
+                v-bind="cmdImage || {}"
+            />
+        </template>
+    </CmdBox>
+
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Paragraph', headlineLevel: 4}">
+        <template v-slot:body>
+            <div class="flex-container vertical component-settings-wrapper">
+                <CmdFormElement
+                    element="select"
+                    labelText="Paragraph Text-Alignment"
+                    :selectOptions="paragraphAlignmentOptions"
+                    v-model="paragraphTextAlignModel"
+                />
+            </div>
+        </template>
+    </CmdBox>
 </template>
 
 <script>
@@ -89,3 +102,5 @@ export default {
 <style scoped>
 
 </style>
+<script setup>
+</script>

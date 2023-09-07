@@ -2,8 +2,13 @@
     <!-- begin edit-mode -->
     <figure v-if="editing" :class="['cmd-image flex-container vertical', getTextAlign]">
         <template v-if="figcaption?.position === 'top'">
-            <CmdFormElement element="input" type="text" :required="true" labelText="Text figcaption"
-                            v-model="editableFigcaptionText"/>
+            <CmdFormElement
+                element="input"
+                type="text"
+                :required="true"
+                labelText="Text figcaption"
+                v-model="editableFigcaptionText"
+            />
         </template>
         <div :class="['box drop-area flex-container vertical', { 'allow-drop': allowDrop }]" v-on="dragAndDropHandler" title="Drag new image to this area to replace old one!">
             <span class="icon-image"></span>
@@ -12,12 +17,13 @@
 
         <template v-if="figcaption?.position !== 'top'">
             <CmdFormElement
-                    element="input"
-                    type="text"
-                    :class="getTextAlign"
-                    :required="true"
-                    labelText="Text figcaption"
-                    v-model="editableFigcaptionText"
+                element="input"
+                type="text"
+                :class="getTextAlign"
+                :required="true"
+                labelText="Text figcaption"
+                :showLabel="false"
+                v-model="editableFigcaptionText"
             />
         </template>
     </figure>
@@ -254,6 +260,10 @@ export default {
 <style lang="scss">
 /* begin cmd-image ------------------------------------------------------------------------------------------ */
 .cmd-image {
+  img {
+      display: block;
+  }
+
   &.text-center {
     figcaption {
       text-align: center;

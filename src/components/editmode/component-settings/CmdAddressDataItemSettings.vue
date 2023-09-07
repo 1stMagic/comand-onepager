@@ -1,106 +1,106 @@
 <template>
-    <template v-if="name !== 'address'">
-        <CmdFormElement
+    <div class="flex-container vertical component-settings-wrapper">
+        <template v-if="name !== 'address'">
+            <CmdFormElement
                 element="input"
                 type="text"
                 labelText="Label text"
                 placeholder="Label text"
                 v-model="labelTextModel"
-        />
-        <CmdFormElement
+            />
+            <CmdFormElement
                 element="input"
                 type="text"
-                labelText="Data"
-                placeholder="Data"
+                labelText="Displayed text/data"
+                placeholder="Displayed text/data"
                 v-model="dataModel"
-        />
-    </template>
-    <template v-else>
-        <CmdFormElement
+            />
+        </template>
+        <template v-else>
+            <CmdFormElement
                 element="input"
                 type="text"
                 labelText="Label text"
                 placeholder="Label text"
                 v-model="labelTextModel"
-        />
+            />
 
-        <CmdFormElement
+            <CmdFormElement
                 element="input"
                 type="text"
                 labelText="streetNo"
                 placeholder="streetNo"
                 v-model="streetNoModel"
-        />
+            />
 
-        <div class="input-wrapper">
-            <CmdFormElement
+            <div class="input-wrapper">
+                <CmdFormElement
                     element="input"
                     type="text"
                     labelText="Zip"
                     placeholder="Zip"
                     v-model="zipModel"
-            />
-            <CmdFormElement
+                />
+                <CmdFormElement
                     element="input"
                     type="text"
                     labelText="City"
                     placeholder="City"
                     v-model="cityModel"
-            />
-        </div>
+                />
+            </div>
 
-        <CmdFormElement
+            <CmdFormElement
                 element="input"
                 type="text"
                 labelText="Misc. Info"
                 placeholder="Misc. Info"
                 v-model="miscInfoModel"
-        />
+            />
 
-        <CmdFormElement
+            <CmdFormElement
                 element="input"
                 type="checkbox"
                 :toggleSwitch="true"
                 labelText="Show country name"
                 v-model="showCountryNameModel"
-        />
+            />
 
-        <CmdFormElement
+            <CmdFormElement
                 v-if="showCountryNameModel"
                 element="select"
                 labelText="Country"
                 :selectOptions="countries"
                 v-model="countryModel"
-        />
+            />
+        </template>
 
-    </template>
-
-    <template v-if="canBeLinked">
-        <CmdFormElement
+        <template v-if="canBeLinked">
+            <CmdFormElement
                 element="input"
                 type="checkbox"
                 :toggleSwitch="true"
-                labelText="Link data"
+                labelText="Link displayed text/data"
                 v-model="linkDataModel"
-        />
-        <CmdFormElement
+            />
+            <CmdFormElement
                 v-if="linkDataModel"
                 element="input"
                 type="text"
-                labelText="Href for data"
-                placeholder="Href for data"
+                labelText="Href for displayed text/data"
+                placeholder="Href for displayed text/data"
                 v-model="hrefModel"
-        />
-        <CmdFormElement
+            />
+            <CmdFormElement
                 v-if="linkDataModel"
                 element="input"
                 type="text"
-                labelText="Tooltip on hover"
-                placeholder="Tooltip on hover"
+                labelText="Tooltip on hover/mouseover"
+                placeholder="Tooltip on hover/mouseover"
                 v-model="tooltipModel"
-        />
-    </template>
-
+            />
+        </template>
+    </div>
 </template>
 
 <script>
@@ -171,7 +171,7 @@ export default {
     },
     computed: {
         canBeLinked() {
-            switch(this.name) {
+            switch (this.name) {
                 case "telephone":
                 case "mobilephone":
                 case "email":
@@ -272,26 +272,26 @@ export default {
     },
     methods: {
         updateCallbackProvider() {
-            const labelText =  this.labelTextModel
-            const data =  this.dataModel
+            const labelText = this.labelTextModel
+            const data = this.dataModel
             const linkData = this.linkDataModel
-            const href =  this.hrefModel
-            const tooltip =  this.tooltipModel
-            const streetNo =  this.streetNoModel
-            const zip =  this.zipModel
-            const city =  this.cityModel
-            const miscInfo =  this.miscInfoModel
-            const showCountryName =  this.showCountryNameModel
-            const country =  this.countryModel
+            const href = this.hrefModel
+            const tooltip = this.tooltipModel
+            const streetNo = this.streetNoModel
+            const zip = this.zipModel
+            const city = this.cityModel
+            const miscInfo = this.miscInfoModel
+            const showCountryName = this.showCountryNameModel
+            const country = this.countryModel
 
             return props => {
-                if(props.name !== "address") {
+                if (props.name !== "address") {
                     props.labelText = labelText
                     props.data = data
                     props.href = href
                     props.tooltip = tooltip
 
-                    if(!linkData) {
+                    if (!linkData) {
                         props.href = null
                     }
                 } else {
@@ -301,7 +301,7 @@ export default {
                     props.miscInfo = miscInfo
                     props.country = country
 
-                    if(!showCountryName) {
+                    if (!showCountryName) {
                         props.country = null
                     }
                 }

@@ -1,54 +1,63 @@
 <template>
-    <!-- begin cmdHeadline -->
-    <CmdHeadlineSettings
-            ref="headlineSettings"
-            v-bind="cmdHeadline || {}"
-    />
-    <!-- end cmdHeadline -->
-    <hr/>
-    <h5>Networks</h5>
-    <div class="button-wrapper align-left">
-        <button v-for="(socialNetwork, index) in listOfAllNetworks"
-                :key="index"
-                :class="['button', {disabled: !socialNetwork.active}]"
-                :id="socialNetwork.id"
-                :title="tooltipForNetworkButton(socialNetwork)"
-                @click="toggleSocialNetwork(index)"
-        >
-            <span :class="socialNetwork.iconClass"></span>
-        </button>
-    </div>
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Headline', headlineLevel: 4}">
+        <template v-slot:body>
+            <!-- begin cmdHeadline -->
+            <CmdHeadlineSettings
+                    ref="headlineSettings"
+                    v-bind="cmdHeadline || {}"
+            />
+            <!-- end cmdHeadline -->
+        </template>
+    </CmdBox>
 
-    <CmdFormElement
-            element="select"
-            labelText="Alignment"
-            :selectOptions="alignOptions"
-            v-model="alignModel"
-    />
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Networks', headlineLevel: 4}">
+        <template v-slot:body>
+            <div class="flex-container vertical component-settings-wrapper">
+                <div class="button-wrapper align-left">
+                    <button v-for="(socialNetwork, index) in listOfAllNetworks"
+                            :key="index"
+                            :class="['button', {disabled: !socialNetwork.active}]"
+                            :id="socialNetwork.id"
+                            :title="tooltipForNetworkButton(socialNetwork)"
+                            @click="toggleSocialNetwork(index)"
+                    >
+                        <span :class="socialNetwork.iconClass"></span>
+                    </button>
+                </div>
 
-    <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            labelText="User must accept data privacy"
-            v-model="userMustAcceptDataPrivacyModel"
-    />
+                <CmdFormElement
+                        element="select"
+                        labelText="Alignment"
+                        :selectOptions="alignOptions"
+                        v-model="alignModel"
+                />
 
-    <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            labelText="Use gap"
-            v-model="useGapModel"
-    />
+                <CmdFormElement
+                        element="input"
+                        type="checkbox"
+                        :toggleSwitch="true"
+                        labelText="User must accept data privacy"
+                        v-model="userMustAcceptDataPrivacyModel"
+                />
 
-    <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            labelText="Stretch buttons"
-            v-model="stretchButtonsModel"
-    />
+                <CmdFormElement
+                        element="input"
+                        type="checkbox"
+                        :toggleSwitch="true"
+                        labelText="Use gap"
+                        v-model="useGapModel"
+                />
+
+                <CmdFormElement
+                        element="input"
+                        type="checkbox"
+                        :toggleSwitch="true"
+                        labelText="Stretch buttons"
+                        v-model="stretchButtonsModel"
+                />
+            </div>
+        </template>
+    </CmdBox>
 </template>
 
 <script>
@@ -177,7 +186,7 @@ export default {
     },
     methods: {
         tooltipForNetworkButton(socialNetwork) {
-            if(socialNetwork.active) {
+            if (socialNetwork.active) {
                 return "Deactivate " + socialNetwork.name
             }
             return "Activate " + socialNetwork.name
@@ -231,3 +240,5 @@ button.disabled:is(:hover, :active, :focus) {
     cursor: pointer !important;
 }
 </style>
+<script setup>
+</script>

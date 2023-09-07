@@ -21,13 +21,14 @@
 
     <!-- begin edit-mode -->
     <CmdFormElement
-            v-else
-            element="input"
-            type="text"
-            :class="['edit-mode', 'headline', 'h'+ headlineLevel]"
-            labelText="Headline"
-            placeholder="Headline"
-            v-model="editableHeadlineText"
+        v-else
+        element="input"
+        type="text"
+        :class="['edit-mode', 'headline', 'h'+ headlineLevel]"
+        labelText="Headline"
+        :showLabel="false"
+        placeholder="Headline"
+        v-model="editableHeadlineText"
     />
     <!-- end edit-mode -->
 </template>
@@ -41,7 +42,8 @@ export default {
     mixins: [EditMode],
     data() {
         return {
-            editableHeadlineText: this.headlineText
+            editableHeadlineText: this.headlineText,
+            editablePreHeadlineText: this.preHeadlineText
         }
     },
     props: {
@@ -100,9 +102,12 @@ export default {
     methods: {
         updateHandlerProvider() {
             const headlineText = this.editableHeadlineText
+            const preHeadlineText = this.editablePreHeadlineText
+
             return updateHandlerProvider(this, {
                 update(props) {
                     props.headlineText = headlineText
+                    props.preHeadlineText = preHeadlineText
                 }
             })
         }
@@ -111,6 +116,12 @@ export default {
         headlineText: {
             handler() {
                 this.editableHeadlineText = this.headlineText
+            },
+            immediate: true
+        },
+        preHeadlineText: {
+            handler() {
+                this.editablePreHeadlineText = this.preHeadlineText
             },
             immediate: true
         }

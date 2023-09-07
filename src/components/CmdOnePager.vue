@@ -3,8 +3,8 @@
     <div :id="templateId">
         <div :class="{'edit-mode': editMode, 'overflow-hidden': offCanvasOpen}" id="page-wrapper"
              :style="{'scroll-padding-top': heightSiteHeader + 'px'}">
-            <div v-if="editMode" class="system-message info" id="edit-mode-message">
-                <div class="flex-container">
+            <div v-if="editMode" :class="['system-message info flex-container', {'open': editModeMessage}]" id="edit-mode-message">
+                <div v-if="editModeMessage" class="flex-container">
                     <div>
                         <p>You are in EditMode. You can simply edit components by clicking on them and selecting one of
                             the
@@ -12,9 +12,8 @@
                         <p><a href="#" @click.prevent="leaveEditMode">Leave EditMode</a></p>
                     </div>
                     <div>
-
                         <label for="select-template">
-                            <span class="hidden">Select template</span>
+                            <span>Select template</span>
                             <select id="select-template" v-model="selectedTemplate">
                                 <option value="blank">Blank</option>
                                 <option value="business">Business</option>
@@ -24,8 +23,10 @@
                             </select>
                         </label>
                     </div>
-
                 </div>
+                <a class="no-flex" href="#" title="Collapse message" @click.prevent="editModeMessage = !editModeMessage">
+                    <span :class="editModeMessage ? 'icon-single-arrow-left' : 'icon-single-arrow-right'"></span>
+                </a>
             </div>
             <EditModeComponentSettingsWrapper v-if="editMode && context.settings.show()"/>
             <a id="anchor-back-to-top"></a>
@@ -188,6 +189,7 @@ export default {
     },
     data() {
         return {
+            editModeMessage: true,
             context: useEditModeContext(),
             selectedTemplate: "blank",
             acceptedCookies: [],
@@ -372,10 +374,12 @@ export default {
 .edit-mode {
     #edit-mode-message {
         position: fixed;
-        z-index: 1000;
-        width: 100%;
-        text-align: center;
+        z-index: 2000;
         margin: 0;
+
+        &.open {
+            width: 100%;
+        }
 
         > * {
             margin: 0 auto;
@@ -384,17 +388,17 @@ export default {
         select {
             color: var(--text-color);
         }
-    }
 
+        > a {
+            display: flex;
+            align-self: stretch;
+            align-items: center;
+            text-decoration: none;
 
-    .edit-mode-component-settings-wrapper {
-        background: var(--default-background);
-        position: fixed;
-        top: 0;
-        right: 0;
-        z-index: 2000;
-        padding: var(--default-padding);
-        height: 100vh;
+            span[class*="icon"] {
+                color: var(--pure-white);
+            }
+        }
     }
 }
 </style>

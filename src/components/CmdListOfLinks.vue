@@ -19,16 +19,19 @@
             />
 
             <!-- begin edit-mode -->
-            <EditComponentWrapper v-else
-                                  v-for="(link, index) in links"
-                                  :key="'x' + index"
-                                  componentName="CmdLinkItem"
-                                  :componentProps="link"
-                                  :componentPath="['props', 'links', index]"
+            <EditComponentWrapper
+                v-else
+                v-for="(link, index) in links"
+                :key="'x' + index"
+                class="edit-items"
+                :showComponentName="false"
+                componentName="CmdLinkItem"
+                :componentProps="link"
+                :componentPath="['props', 'links', index]"
             >
                 <CmdListOfLinksItem
-                        :class="{'active': sectionAnchors && activeSection === index}"
-                        :link="link"
+                    :class="{'active': sectionAnchors && activeSection === index}"
+                    :link="link"
                 />
             </EditComponentWrapper>
             <!-- end edit-mode -->
@@ -149,10 +152,7 @@ export default {
 <style lang="scss">
 /* begin cmd-list-of-links ---------------------------------------------------------------------------------------- */
 .cmd-list-of-links {
-    display: flex;
-    flex-direction: column;
-
-    ul {
+    > ul {
         flex-direction: column;
         gap: calc(var(--default-gap) / 2);
         margin: 0;
@@ -164,7 +164,7 @@ export default {
     }
 
     &.horizontal {
-        ul {
+        > ul {
             gap: var(--default-gap);
             flex-direction: row;
 
