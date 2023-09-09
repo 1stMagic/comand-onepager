@@ -47,7 +47,7 @@ import EditMode from "./mixins/EditMode.vue"
 // import functions
 //import {getRoute} from 'comand-component-library'
 import {openFancyBox} from 'comand-component-library'
-import {updateHandlerProvider} from "../utils/editmode.js"
+import {buildComponentPath, updateHandlerProvider} from "../utils/editmode.js"
 export default {
     name: "CmdListOfLinksItem",
     inheritAttrs: false,
@@ -67,21 +67,6 @@ export default {
         }
     },
     methods: {
-        addHandlerProvider() {
-            const itemStructure = {
-                "iconClass": "icon-user-profile",
-                "type": "href",
-                "text": "Linktext",
-                "path": "#",
-                "tooltip": "Tooltip",
-                "target": "_blank"
-            }
-            return updateHandlerProvider(this, {
-                item() {
-                    return itemStructure
-                }
-            })
-        },
         updateHandlerProvider() {
             const text = this.editableText
             return updateHandlerProvider(this, {

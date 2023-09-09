@@ -185,24 +185,6 @@ export default {
             }
             return timeFormatting(":", " " + this.abbreviationText, "", false)(time.hours, time.mins)
         },
-        addHandlerProvider() {
-            const itemStructure = {
-                "day": "Weekday",
-                "am": {
-                    "fromTime": "00:00",
-                    "tillTime": "00:00"
-                },
-                "pm": {
-                    "fromTime": "00:00",
-                    "tillTime": "00:00"
-                }
-            }
-            return updateHandlerProvider(this, {
-                item() {
-                    return itemStructure
-                }
-            })
-        },
         updateHandlerProvider() {
             const data = this.editableDay
             return updateHandlerProvider(this, {

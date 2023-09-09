@@ -1,96 +1,180 @@
 <template>
     <component
-        :is="componentTag || 'div'"
-        :class="['edit-component-wrapper', {active}]"
-        tabindex="0"
-        @click="showActionButtons"
-        :data-identifier="componentIdentifier">
-
-        <!-- begin show component name above wrapper -->
-        <small v-if="!allowAddComponent && active && showComponentName" class="component-name">{{ componentName }}</small>
-        <!-- end show component name above wrapper -->
-
-        <!-- begin action-buttons -->
-        <ul v-show="active" class="flex-container no-flex action-buttons">
-            <li>
-                <a :class="['icon-hexagon', {disabled: !addHandlerProvider && !allowAddComponent}]"
-                   href="#"
-                   @click.prevent="addEntry"
-                   title="Add a new entry">
-                    <CmdIcon iconClass="icon-plus"/>
-                </a>
-                <template v-if="showAddComponentButtons">
-                    <a class="icon-hexagon"
+            :is="componentTag || 'div'"
+            :class="['edit-component-wrapper', {active}]"
+            tabindex="0"
+            @click="showActionButtons"
+            :data-identifier="componentIdentifier">
+        <li v-if="componentTag === 'ul'">
+            <!-- begin action-buttons -->
+            <ul v-show="active" class="flex-container no-flex action-buttons">
+                <li>
+                    <a :class="['icon-hexagon', {disabled: !addHandlerProvider && !allowAddComponent}]"
                        href="#"
-                       @click.prevent="addInnerComponent"
-                       title="Add a new entry inside of this component">
-                        <CmdIcon iconClass="icon-home"/>
+                       @click.prevent="addEntry"
+                       title="Add a new entry">
+                        <CmdIcon iconClass="icon-plus"/>
                     </a>
-                    <a class="icon-hexagon"
+                    <template v-if="showAddComponentButtons">
+                        <a class="icon-hexagon"
+                           href="#"
+                           @click.prevent="addInnerComponent"
+                           title="Add a new entry inside of this component">
+                            <CmdIcon iconClass="icon-home"/>
+                        </a>
+                        <a class="icon-hexagon"
+                           href="#"
+                           @click.prevent="addSectionComponent"
+                           title="Add a new entry at same section-level as this component">
+                            <CmdIcon iconClass="icon-globe"/>
+                        </a>
+                    </template>
+                    <select v-if="showComponentSelection" @change="componentSelected">
+                        <option value="">Select component to add</option>
+                        <option value="CmdContainer">Empty container</option>
+                        <option value="CmdAddressData">Address data</option>
+                        <option value="CmdHeadline">Headline</option>
+                        <option value="CmdImage">Image</option>
+                        <option value="CmdImageGallery">Image gallery</option>
+                        <option value="CmdListOfLinks">List of links</option>
+                        <option value="CmdOpeningHours">Opening hours</option>
+                        <option value="CmdSlideshow">Slideshow</option>
+                        <option value="CmdSocialNetworks">Social networks</option>
+                        <option value="CmdTextImageBlock">Text-Image-Block</option>
+                        <option value="CmdThumbnailScroller">Thumbnail-Scroller</option>
+                        <option value="CmdToggleDarkMode">Toggle Dark-Mode</option>
+                    </select>
+                </li>
+                <li>
+                    <a v-if="editing"
+                       class="icon-hexagon button-save" href="#"
+                       @click.prevent="saveComponent"
+                       title="Save changes of this component">
+                        <CmdIcon iconClass="icon-check"/>
+                    </a>
+                    <a v-else
+                       :class="['icon-hexagon', {disabled: editModeContext.settings.isEditing(componentIdentifier)}]"
                        href="#"
-                       @click.prevent="addSectionComponent"
-                       title="Add a new entry at same section-level as this component">
-                        <CmdIcon iconClass="icon-globe"/>
+                       @click.prevent="editComponent"
+                       title="Edit content of this component">
+                        <CmdIcon iconClass="icon-edit"/>
                     </a>
-                </template>
-                <select v-if="showComponentSelection" @change="componentSelected">
-                    <option value="">Select component to add</option>
-                    <option value="CmdContainer">Empty container</option>
-                    <option value="CmdAddressData">Address data</option>
-                    <option value="CmdHeadline">Headline</option>
-                    <option value="CmdImage">Image</option>
-                    <option value="CmdImageGallery">Image gallery</option>
-                    <option value="CmdListOfLinks">List of links</option>
-                    <option value="CmdOpeningHours">Opening hours</option>
-                    <option value="CmdSlideshow">Slideshow</option>
-                    <option value="CmdSocialNetworks">Social networks</option>
-                    <option value="CmdTextImageBlock">Text-Image-Block</option>
-                    <option value="CmdThumbnailScroller">Thumbnail-Scroller</option>
-                    <option value="CmdToggleDarkMode">Toggle Dark-Mode</option>
-                </select>
-            </li>
-            <li>
-                <a v-if="editing"
-                   class="icon-hexagon button-save" href="#"
-                   @click.prevent="saveComponent"
-                   title="Save changes of this component">
-                    <CmdIcon iconClass="icon-check"/>
-                </a>
-                <a v-else
-                   :class="['icon-hexagon', {disabled: editModeContext.settings.isEditing(componentIdentifier)}]"
-                   href="#"
-                   @click.prevent="editComponent"
-                   title="Edit content of this component">
-                    <CmdIcon iconClass="icon-edit"/>
-                </a>
-            </li>
-            <li>
-                <a class="icon-hexagon button-delete"
-                   href="#"
-                   @click.prevent="deleteComponent"
-                   title="Delete this component (and its content)">
-                    <CmdIcon iconClass="icon-trash"/>
-                </a>
-            </li>
-            <li>
-                <a :class="['icon-hexagon', {disabled: editing || !hasSettings}]"
-                   :href="editing ? null : '#'"
-                   @click.prevent="editSettings"
-                   title="Edit settings of this component">
-                    <CmdIcon iconClass="icon-cog"/>
-                </a>
-            </li>
-            <li>
-                <a :class="['icon-hexagon button-cancel', {disabled: !editing}]"
-                   href="#"
-                   @click.prevent="cancelComponent"
-                   title="Cancel editing (changes will not be saved)">
-                    <CmdIcon iconClass="icon-cancel"/>
-                </a>
-            </li>
-        </ul>
-        <!-- end action buttons -->
+                </li>
+                <li>
+                    <a class="icon-hexagon button-delete"
+                       href="#"
+                       @click.prevent="deleteComponent"
+                       title="Delete this component (and its content)">
+                        <CmdIcon iconClass="icon-trash"/>
+                    </a>
+                </li>
+                <li>
+                    <a :class="['icon-hexagon', {disabled: editing || !hasSettings}]"
+                       :href="editing ? null : '#'"
+                       @click.prevent="editSettings"
+                       title="Edit settings of this component">
+                        <CmdIcon iconClass="icon-cog"/>
+                    </a>
+                </li>
+                <li>
+                    <a :class="['icon-hexagon button-cancel', {disabled: !editing}]"
+                       href="#"
+                       @click.prevent="cancelComponent"
+                       title="Cancel editing (changes will not be saved)">
+                        <CmdIcon iconClass="icon-cancel"/>
+                    </a>
+                </li>
+            </ul>
+            <!-- end action buttons -->
+        </li>
+        <template v-else>
+            <!-- begin show component name above wrapper -->
+            <small v-if="!allowAddComponent && active && showComponentName" class="component-name">{{
+                    componentName
+                }}</small>
+            <!-- end show component name above wrapper -->
 
+            <!-- begin action-buttons -->
+            <ul v-show="active" class="flex-container no-flex action-buttons">
+                <li>
+                    <a :class="['icon-hexagon', {disabled: !addHandlerProvider && !itemProvider && !allowAddComponent}]"
+                       href="#"
+                       @click.prevent="addEntry"
+                       title="Add a new entry">
+                        <CmdIcon iconClass="icon-plus"/>
+                    </a>
+                    <template v-if="showAddComponentButtons">
+                        <a class="icon-hexagon"
+                           href="#"
+                           @click.prevent="addInnerComponent"
+                           title="Add a new entry inside of this component">
+                            <CmdIcon iconClass="icon-home"/>
+                        </a>
+                        <a class="icon-hexagon"
+                           href="#"
+                           @click.prevent="addSectionComponent"
+                           title="Add a new entry at same section-level as this component">
+                            <CmdIcon iconClass="icon-globe"/>
+                        </a>
+                    </template>
+                    <select v-if="showComponentSelection" @change="componentSelected">
+                        <option value="">Select component to add</option>
+                        <option value="CmdContainer">Empty container</option>
+                        <option value="CmdAddressData">Address data</option>
+                        <option value="CmdHeadline">Headline</option>
+                        <option value="CmdImage">Image</option>
+                        <option value="CmdImageGallery">Image gallery</option>
+                        <option value="CmdListOfLinks">List of links</option>
+                        <option value="CmdOpeningHours">Opening hours</option>
+                        <option value="CmdSlideshow">Slideshow</option>
+                        <option value="CmdSocialNetworks">Social networks</option>
+                        <option value="CmdTextImageBlock">Text-Image-Block</option>
+                        <option value="CmdThumbnailScroller">Thumbnail-Scroller</option>
+                        <option value="CmdToggleDarkMode">Toggle Dark-Mode</option>
+                    </select>
+                </li>
+                <li>
+                    <a v-if="editing"
+                       class="icon-hexagon button-save" href="#"
+                       @click.prevent="saveComponent"
+                       title="Save changes of this component">
+                        <CmdIcon iconClass="icon-check"/>
+                    </a>
+                    <a v-else
+                       :class="['icon-hexagon', {disabled: editModeContext.settings.isEditing(componentIdentifier)}]"
+                       href="#"
+                       @click.prevent="editComponent"
+                       title="Edit content of this component">
+                        <CmdIcon iconClass="icon-edit"/>
+                    </a>
+                </li>
+                <li>
+                    <a class="icon-hexagon button-delete"
+                       href="#"
+                       @click.prevent="deleteComponent"
+                       title="Delete this component (and its content)">
+                        <CmdIcon iconClass="icon-trash"/>
+                    </a>
+                </li>
+                <li>
+                    <a :class="['icon-hexagon', {disabled: editing || !hasSettings}]"
+                       :href="editing ? null : '#'"
+                       @click.prevent="editSettings"
+                       title="Edit settings of this component">
+                        <CmdIcon iconClass="icon-cog"/>
+                    </a>
+                </li>
+                <li>
+                    <a :class="['icon-hexagon button-cancel', {disabled: !editing}]"
+                       href="#"
+                       @click.prevent="cancelComponent"
+                       title="Cancel editing (changes will not be saved)">
+                        <CmdIcon iconClass="icon-cancel"/>
+                    </a>
+                </li>
+            </ul>
+            <!-- end action buttons -->
+        </template>
         <!-- begin slot -->
         <slot></slot>
         <!-- end slot -->
@@ -130,6 +214,9 @@ export default {
         },
         componentTag: {
             type: String
+        },
+        itemProvider: {
+            type: Function
         }
     },
     data() {
@@ -196,6 +283,8 @@ export default {
                 }
             } else if (this.addHandlerProvider) {
                 this.addContent(buildComponentPath(this), this.addHandlerProvider())
+            } else if (this.itemProvider) {
+                this.editModeContext.content.addContent(buildComponentPath(this), this.itemProvider)
             }
         },
         addInnerComponent() {
@@ -234,12 +323,16 @@ export default {
         },
         editSettings(event) {
             event.stopPropagation()
-            this.editModeContext.settings.startEditing(
-                this.componentIdentifier,
-                this.componentName,
-                this.componentProps,
-                this.saveSettings
-            )
+
+            if(!this.editing && this.hasSettings) {
+                this.editModeContext.settings.startEditing(
+                    this.componentIdentifier,
+                    this.componentName,
+                    this.componentProps,
+                    buildComponentPath(this),
+                    this.saveSettings
+                )
+            }
         },
         saveSettings(updateCallback) {
             this.updateSettings(
@@ -382,7 +475,7 @@ function buildComponentPath(component) {
             gap: calc(var(--default-gap) / 2);
             flex-wrap: nowrap;
 
-            li  {
+            li {
                 top: auto !important;
                 right: auto !important;
 

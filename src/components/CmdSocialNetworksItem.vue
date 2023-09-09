@@ -62,6 +62,15 @@ export default {
          */
         dataPrivacyAccepted: {
             type: Boolean
+        },
+        /**
+         * tooltip shown on hovering disabled buttons
+         *
+         * userMustAcceptDataPrivacy-property must be activated
+         */
+        tooltipAcceptDataPrivacy: {
+            type: String,
+            default: "You must accept data privacy conditions!"
         }
     },
     methods: {

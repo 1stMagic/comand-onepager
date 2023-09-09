@@ -1,17 +1,20 @@
 import {reactive} from "vue"
+import {usePiniaStore} from "../stores/pinia.js"
 
 export function useEditModeContext() {
+
+    const store = usePiniaStore()
     const state = reactive({})
 
     return {
         state,
-        content: contentActions(state),
+        content: contentActions(store, state),
         settings: settingsActions(state),
         system: systemActions(state)
     }
 }
 
-function contentActions(state) {
+function contentActions(store, state) {
     return {
         startEditing(componentIdentifier) {
             state.contentEditing = componentIdentifier
@@ -21,16 +24,23 @@ function contentActions(state) {
         },
         stopEditing() {
             state.contentEditing = null
+        },
+        addContent(componentPath, itemProvider, componentPosition) {
+            store.addContent(componentPath, {item: itemProvider}, componentPosition)
+        },
+        deleteContent(componentPath) {
+            store.deleteContent(componentPath)
         }
     }
 }
 
 function settingsActions(state) {
     return {
-        startEditing(componentIdentifier, componentName, componentProps, saveHandler) {
+        startEditing(componentIdentifier, componentName, componentProps, componentPath, saveHandler) {
             state.settingsEditing = componentIdentifier
             state.componentName = componentName
             state.componentProps = componentProps
+            state.componentPath = componentPath
             state.settingsSaveHandler = saveHandler
         },
         isEditing(componentIdentifier) {
@@ -45,11 +55,18 @@ function settingsActions(state) {
         show() {
             return !!state.componentName
         },
+        updateEditing(componentName, componentProps) {
+            state.componentName = componentName
+            state.componentProps = componentProps
+        },
         getComponentName() {
             return state.componentName
         },
         getComponentProps() {
             return state.componentProps
+        },
+        getComponentPath() {
+            return state.componentPath
         },
         getSettingsComponentName() {
             return `${state.componentName}Settings`

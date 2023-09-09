@@ -8,6 +8,15 @@ function findEditComponentWrapper(component) {
     return null
 }
 
+function buildComponentPath(component, ...extraPathElements) {
+    const path = []
+    for (let parent = findEditComponentWrapper(component); parent; parent = findEditComponentWrapper(parent.$parent)) {
+        path.unshift(...parent.componentPath)
+    }
+    path.push(...extraPathElements)
+    return path
+}
+
 function componentPathAsString(componentPath) {
     if (Array.isArray(componentPath) && componentPath.length > 0) {
         return JSON.stringify(componentPath)
@@ -27,6 +36,7 @@ function updateHandlerProvider(component, options) {
 
 export {
     findEditComponentWrapper,
+    buildComponentPath,
     componentPathAsString,
     updateHandlerProvider
 }

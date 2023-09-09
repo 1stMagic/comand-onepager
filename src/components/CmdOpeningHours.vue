@@ -51,7 +51,6 @@
         <!-- begin default view -->
         <dl v-if="!editModeContext">
             <CmdOpeningHoursItem
-
                v-for="(day, index) in openingHoursFormatted"
                :key="index"
                :day="day"
@@ -62,6 +61,7 @@
         <!-- end default view -->
 
         <!-- begin edit-mode -->
+        <button v-if="openingHoursFormatted.length === 0" type="button" @click="onAddItem">+</button>
         <EditComponentWrapper
             v-else
             v-for="(day, index) in openingHoursFormatted"
@@ -71,6 +71,7 @@
             componentName="CmdOpeningHoursItem"
             :componentProps="day"
             :componentPath="['props', 'openingHours', index]"
+            :itemProvider="itemProvider"
         >
             <dl>
                 <CmdOpeningHoursItem
@@ -117,7 +118,7 @@
 
 <script>
 import EditMode from "./mixins/EditMode.vue"
-import {updateHandlerProvider} from "../utils/editmode.js"
+import {buildComponentPath, updateHandlerProvider} from "../utils/editmode.js"
 
 export function localizedTime(language) {
     return (hour, minute) => {
@@ -358,6 +359,24 @@ export default {
         }
     },
     methods: {
+        onAddItem() {
+            this.editModeContext.content.addContent(
+                buildComponentPath(this, 'props', 'openingHours', -1),
+                this.itemProvider)
+        },
+        itemProvider() {
+            return {
+                "day": "Weekday",
+                "am": {
+                    "fromTime": "00:00",
+                    "tillTime": "00:00"
+                },
+                "pm": {
+                    "fromTime": "00:00",
+                    "tillTime": "00:00"
+                }
+            }
+        },
         updateHandlerProvider() {
             const openingHours = this.editableOpeningHours
             const textOpen = this.editableTextOpen

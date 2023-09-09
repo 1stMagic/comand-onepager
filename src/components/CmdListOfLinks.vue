@@ -25,15 +25,18 @@
                 :key="'x' + index"
                 class="edit-items"
                 :showComponentName="false"
+                componentTag="li"
                 componentName="CmdLinkItem"
                 :componentProps="link"
                 :componentPath="['props', 'links', index]"
+                :itemProvider="itemProvider"
             >
                 <CmdListOfLinksItem
                     :class="{'active': sectionAnchors && activeSection === index}"
                     :link="link"
                 />
             </EditComponentWrapper>
+            <button v-if="links.length === 0" type="button" @click="onAddItem">+</button>
             <!-- end edit-mode -->
         </ul>
         <!-- end list of links -->
@@ -42,7 +45,7 @@
 
 <script>
 import EditMode from "./mixins/EditMode.vue"
-import {updateHandlerProvider} from "../utils/editmode.js"
+import {buildComponentPath, updateHandlerProvider} from "../utils/editmode.js"
 
 export default {
     name: "CmdListOfLinks",
@@ -134,6 +137,21 @@ export default {
         }
     },
     methods: {
+        onAddItem() {
+            this.editModeContext.content.addContent(
+                buildComponentPath(this, 'props', 'links', -1),
+                this.itemProvider)
+        },
+        itemProvider() {
+            return {
+                "iconClass": "icon-user-profile",
+                "type": "href",
+                "text": "Linktext",
+                "path": "#",
+                "tooltip": "Tooltip",
+                "target": "_blank"
+            }
+        },
         updateHandlerProvider() {
             return updateHandlerProvider(this, {
                 update(props, childUpdateHandlers) {

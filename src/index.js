@@ -3,6 +3,7 @@ import router from "./router"
 import * as components from "comand-component-library"
 import ContactForm from "./components/ContactForm.vue"
 import LoginArea from "./components/LoginArea.vue"
+import CmdBox from "./components/CmdBox.vue"
 import CmdContainer from "./components/CmdContainer.vue"
 import CmdToggleDarkMode from "./components/CmdToggleDarkMode.vue"
 import CmdToggleDarkModeSettings from "./components/editmode/component-settings/CmdToggleDarkModeSettings.vue"
@@ -37,6 +38,7 @@ export function bootstrap(app) {
     Object.entries({
         ContactForm,
         LoginArea,
+        CmdBox,
         CmdContainer,
         CmdHeadline,
         CmdAddressData,
@@ -66,6 +68,7 @@ export function bootstrap(app) {
 
     const componentLibraryComponentBlacklist = [
         "CmdHeadline",
+        "CmdBox",
         "CmdToggleDarkMode",
         "CmdImage",
         "CmdImageGallery",

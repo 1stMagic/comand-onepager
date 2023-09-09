@@ -10,11 +10,11 @@
                     <h3>Component Settings</h3>
                     <!-- begin selection of allowed components to switch component type -->
                     <CmdFormElement
-                            element="select"
-                            labelText="Component type"
-                            :selectOptions="listOfValidComponents"
-                            :value="componentName"
-                            @change="switchComponent"
+                        element="select"
+                        labelText="Component type"
+                        :selectOptions="listOfValidComponents"
+                        v-model="currentComponentName"
+                        @update:modelValue="switchComponent"
                     />
                     <!-- end selection of allowed components to switch component type -->
                     <template v-if="componentProps">
@@ -23,6 +23,16 @@
                             <component ref="settings" :is="settingsComponentName" v-bind="componentProps"/>
                         </div>
                     </template>
+                </div>
+                <div class="button-wrapper">
+                    <button class="button confirm" @click="saveSettings">
+                        <span class="icon-check"></span>
+                        <span>Save</span>
+                    </button>
+                    <button class="button cancel" @click="cancelSettings">
+                        <span class="icon-cancel"></span>
+                        <span>Cancel</span>
+                    </button>
                 </div>
             </template>
             <template v-slot:tab-content-1>
@@ -33,8 +43,7 @@
                             element="select"
                             labelText="Select component to insert"
                             :selectOptions="listOfValidComponents"
-                            :value="addedComponentName"
-                            @change="switchComponent"
+                            v-model="addedComponentName"
                     />
                     <!-- end selection of allowed components to add additional component -->
 
@@ -46,29 +55,30 @@
                             @change="switchComponent"
                     />
                 </div>
+                <div class="button-wrapper">
+                    <button class="button confirm" @click="addComponent">
+                        <span class="icon-check"></span>
+                        <span>Save</span>
+                    </button>
+                    <button class="button cancel" @click="cancelAddComponent">
+                        <span class="icon-cancel"></span>
+                        <span>Cancel</span>
+                    </button>
+                </div>
             </template>
         </CmdTabs>
-        <div class="button-wrapper">
-            <button class="button confirm" @click="saveSettings">
-                <span class="icon-check"></span>
-                <span>Save</span>
-            </button>
-            <button class="button cancel" @click="cancelSettings">
-                <span class="icon-cancel"></span>
-                <span>Cancel</span>
-            </button>
-        </div>
     </aside>
 </template>
 
 <script>
-import componentStructure from "../../../assets/data/component-structure.json";
+import componentStructure from "../../../assets/data/component-structure.json"
 
 export default {
     name: "EditModeComponentSettingsWrapper.vue",
     inject: ["editModeContext"],
     data() {
         return {
+            currentComponentName: "",
             addedComponentName: "",
             addedComponentPosition: "after",
             availableComponentPositions: [
@@ -79,7 +89,7 @@ export default {
                 {
                     text: "After existing component",
                     value: "after"
-                },
+                }
             ],
             listOfValidComponents: [
                 {
@@ -145,18 +155,14 @@ export default {
         }
     },
     methods: {
-        switchComponent(event) {
+        switchComponent(selectedComponent) {
             if (confirm("All content for this component will be deleted. Switch to new component anyway?")) {
-                const selectedComponent = event.target.value
-                this.addContent(buildComponentPath(this), {
-                    name: selectedComponent,
-                    item() {
-                        return componentStructure[selectedComponent]
-                    }
-                })
-                this.deleteContent(buildComponentPath(this))
+                // add new/selected component and delete existing one if switch is confirmed (and update settings)
+                this.editModeContext.content.addContent(this.editModeContext.settings.getComponentPath(), () => componentStructure[selectedComponent])
+                this.editModeContext.content.deleteContent(this.editModeContext.settings.getComponentPath())
+                this.editModeContext.settings.updateEditing(selectedComponent, componentStructure[selectedComponent].props)
             } else {
-                event.target.value = this.componentName
+                this.$nextTick(() => this.currentComponentName = this.componentName)
             }
         },
         cancelSettings() {
@@ -168,6 +174,22 @@ export default {
             const saveHandler = this.editModeContext.settings.getSettingsSaveHandler()
             saveHandler(this.$refs.settings.updateCallbackProvider())
             this.editModeContext.settings.stopEditing()
+        },
+        addComponent() {
+            this.editModeContext.content.addContent(this.editModeContext.settings.getComponentPath(), () => componentStructure[this.addedComponentName], this.addedComponentPosition)
+        },
+        cancelAddComponent() {
+            if (confirm('Are you sure your want to cancel? (changes will not be saved)')) {
+                this.editModeContext.settings.stopEditing()
+            }
+        }
+    },
+    watch: {
+        componentName: {
+            handler() {
+                this.currentComponentName = this.componentName
+            },
+            immediate: true
         }
     }
 }

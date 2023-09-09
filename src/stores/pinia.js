@@ -165,13 +165,20 @@ export const usePiniaStore = defineStore("pinia", {
               }
           )
         },
-        addContent(componentPath, addHandler) {
+        addContent(componentPath, addHandler, componentPosition) {
             const result = findComponent(this.site, componentPath)
 
-            console.log("componentPath", componentPath)
-            // add new entry after existing one
+            // add new component-entry
             if(Array.isArray(result.parent) && result.nodeIndex != null) {
-                result.parent.splice(result.nodeIndex + 1, 0, addHandler.item())
+                let position = 1 // default adds '1' to nodeIndex to insert new component after existing one
+
+                if(componentPosition === 'before') {
+                    // set position to '0' to not raise nodeIndex and insert new component before existing one
+                    position = 0
+                }
+                // insert new component
+                result.parent.splice(result.nodeIndex + position, 0, addHandler.item())
+
             }
         },
         deleteContent(componentPath) {
