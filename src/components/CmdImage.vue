@@ -1,10 +1,11 @@
 <template>
     <!-- begin edit-mode -->
-    <figure v-if="editing" :class="['cmd-image flex-container vertical', getTextAlign]">
+    <figure v-if="editing" :class="['cmd-image flex-container no-gap vertical', getTextAlign]">
         <template v-if="figcaption?.position === 'top'">
             <CmdFormElement
                 element="input"
                 type="text"
+                :class="[getTextAlign, 'edit-mode']"
                 :required="true"
                 labelText="Text figcaption"
                 v-model="editableFigcaptionText"
@@ -19,7 +20,7 @@
             <CmdFormElement
                 element="input"
                 type="text"
-                :class="getTextAlign"
+                :class="[getTextAlign, 'edit-mode']"
                 :required="true"
                 labelText="Text figcaption"
                 :showLabel="false"
@@ -305,5 +306,10 @@ export default {
   }
 }
 
+.edit-mode .edit-component-wrapper .cmd-image {
+    label.edit-mode input {
+        padding: calc(var(--default-padding) / 2);
+    }
+}
 /* end cmd-image ------------------------------------------------------------------------------------------ */
 </style>

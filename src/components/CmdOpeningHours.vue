@@ -432,6 +432,23 @@ export default {
     p:last-child {
         margin: 0;
     }
+
+    .edit-component-wrapper {
+        dl {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.edit-component-wrapper .cmd-opening-hours {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(var(--default-gap) / 2);
+
+    dt {
+        min-width: 2.5rem;
+    }
 }
 
 /* end cmd-opening-hours ------------------------------------------------------------------------------------------ */

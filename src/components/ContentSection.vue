@@ -102,3 +102,9 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.edit-mode section .cmd-headline {
+    margin-bottom: 0;
+}
+</style>

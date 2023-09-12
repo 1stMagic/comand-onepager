@@ -83,45 +83,48 @@ main {
         }
     }
 
-    input, textarea {
-        &.edit-mode {
-            padding: 0;
-            height: auto;
-            background: none;
-            width: 100%;
-            border-style: dashed;
 
-            &:focus {
-                background: var(--pure-white);
-            }
-        }
-
+    label {
         &[class*="headline"] {
             font-weight: var(--headline-font-weight);
 
-          &.h1 {
-            font-size: 3rem; /* font-size for h1 */
-          }
+            &.h1 {
+                font-size: 3rem; /* font-size for h1 */
+            }
 
-          &.h2 {
-            font-size: 2.6rem; /* font-size for h2 */
-          }
+            &.h2 {
+                font-size: 2.6rem; /* font-size for h2 */
+            }
 
-          &.h3 {
-            font-size: 2.2rem; /* font-size for h3 */
-          }
+            &.h3 {
+                font-size: 2.2rem; /* font-size for h3 */
+            }
 
-          &.h4 {
-            font-size: 2rem; /* font-size for h4 */
-          }
+            &.h4 {
+                font-size: 2rem; /* font-size for h4 */
+            }
 
-          &.h5 {
-            font-size: 1.8rem; /* font-size for h5 */
-          }
+            &.h5 {
+                font-size: 1.8rem; /* font-size for h5 */
+            }
 
-          &.h6 {
-            font-size: 1.6rem; /* font-size for h6 */
-          }
+            &.h6 {
+                font-size: 1.6rem; /* font-size for h6 */
+            }
+
+            input, textarea {
+                &.edit-mode {
+                    padding: 0;
+                    height: auto;
+                    background: none;
+                    width: 100%;
+                    border-style: dashed;
+
+                    &:focus {
+                        background: var(--pure-white);
+                    }
+                }
+            }
         }
     }
 

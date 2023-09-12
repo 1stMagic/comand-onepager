@@ -24,7 +24,7 @@
         v-else
         element="input"
         type="text"
-        :class="['edit-mode', 'headline', 'h'+ headlineLevel]"
+        :class="['edit-mode', 'headline', 'h'+ headlineLevel, getTextAlign]"
         labelText="Headline"
         :showLabel="false"
         placeholder="Headline"
@@ -178,6 +178,38 @@ export default {
     //        margin-bottom: calc(var(--default-margin) * 2);
     //    }
     //}
+}
+
+.edit-mode label.headline {
+    input {
+        padding: 0;
+        height: auto;
+    }
+
+    &.h1 input {
+        font-size: var(--headline-font-size-h1);
+        text-transform: var(--headline-text-transform);
+    }
+
+    &.h2 input {
+        font-size: var(--headline-font-size-h2);
+    }
+
+    &.h3 input {
+        font-size: var(--headline-font-size-h3);
+    }
+
+    &.h4 input {
+        font-size: var(--headline-font-size-h4);
+    }
+
+    &.h5 input {
+        font-size: var(--headline-font-size-h5);
+    }
+
+    &.h6 input {
+        font-size: var(--headline-font-size-h6);
+    }
 }
 /* end cmd-headline ------------------------------------------------------------------------------------------ */
 </style>

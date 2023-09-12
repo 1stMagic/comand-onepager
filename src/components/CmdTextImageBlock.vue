@@ -114,3 +114,9 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.edit-mode .cmd-text-block textarea {
+    width: 100%;
+}
+</style>

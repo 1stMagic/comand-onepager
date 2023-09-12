@@ -7,6 +7,7 @@
         >
             <template v-slot:tab-content-0>
                 <div>
+                    <div class="component-settings-wrapper">
                     <h3>Component Settings</h3>
                     <!-- begin selection of allowed components to switch component type -->
                     <CmdFormElement
@@ -16,6 +17,7 @@
                         v-model="currentComponentName"
                         @update:modelValue="switchComponent"
                     />
+                    </div>
                     <!-- end selection of allowed components to switch component type -->
                     <template v-if="componentProps">
                         <hr/>
@@ -204,7 +206,7 @@ export default {
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 1001;
     height: 100vh;
 
     h3 {
@@ -225,8 +227,22 @@ export default {
         gap: 0;
     }
 
-    .cmd-box {
-        .component-settings-wrapper {
+    .cmd-tabs, .cmd-tabs > div  {
+        height: 100%;
+    }
+
+    .cmd-tabs, .cmd-tabs > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .cmd-tabs > div {
+        padding: 0;
+    }
+
+    .cmd-tabs {
+        .button-wrapper, .component-settings-wrapper {
             padding: var(--default-padding);
         }
     }

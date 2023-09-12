@@ -293,6 +293,22 @@ export default {
             list-style: none;
         }
     }
+
+    .edit-component-wrapper {
+        dl {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.edit-component-wrapper .cmd-address-data address {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--default-gap) / 2);
+
+    dt {
+        min-width: 2.5rem;
+    }
 }
 
 /* end cmd-address-data ------------------------------------------------------------------------------------------ */

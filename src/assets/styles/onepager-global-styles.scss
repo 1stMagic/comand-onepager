@@ -17,6 +17,11 @@
 
 /* ---------------------------------------------- BEGIN BASIC STRUCTURE -------------------------------------------------- */
 /* begin page-structure --------------------------------------------------------------------------------------------------------------------------------------------------- */
+html {
+	--headline-font-size-h1: 5rem;
+	--headline-text-transform: uppercase;
+}
+
 body {
 	overflow: hidden; /* avoids-scrolling on body to enable scrolling (incl- scroll-padding on #page-wrapper) */
 
@@ -63,8 +68,8 @@ main {
 			margin: 0;
 
 			h1 {
-				font-size: 5rem;
-				text-transform: uppercase;
+				font-size: var(--headline-font-size-h1);
+				text-transform: var(--headline-text-transform);
 				margin-bottom: 0;
 			}
 		}
@@ -104,3 +109,17 @@ main {
 }
 /* end styles for print only --------------------------------------------------------------------------------------------------------------------------------------------------- */
 /* ---------------------------------------------- END MEDIA QUERIES -------------------------------------------------- */
+
+.edit-mode {
+	.edit-component-wrapper label {
+		&.text-center input {
+			text-align: center;
+		}
+
+		&.edit-mode input, select, textarea, cmd-fake-select {
+			padding: 0;
+			height: auto;
+			min-height: calc(var(--input-height) / 2);
+		}
+	}
+}

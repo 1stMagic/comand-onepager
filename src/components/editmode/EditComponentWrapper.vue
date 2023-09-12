@@ -313,6 +313,9 @@ export default {
         },
         editComponent(event) {
             event.stopPropagation()
+            // const component = this.$refs.editComponent.$el
+            // console.log("component", component)
+            // component.querySelector("input").focus()
             this.editModeContext.content.startEditing(this.componentIdentifier)
         },
         saveComponent() {
@@ -471,16 +474,17 @@ function buildComponentPath(component) {
 
     .edit-items {
         .action-buttons {
-            top: -1.2rem;
+            top: -1.5rem;
             gap: calc(var(--default-gap) / 2);
             flex-wrap: nowrap;
 
             li {
-                top: auto !important;
-                right: auto !important;
+                top: 0;
+                right: 0;
 
                 a {
                     font-size: 1rem;
+                    display: block;
 
                     &:before {
                         content: ""
@@ -489,6 +493,9 @@ function buildComponentPath(component) {
                     span[class*="icon-"] {
                         position: relative;
                         color: var(--hyperlink-color);
+                        top: 0;
+                        left: 0;
+                        transform: none;
                     }
 
                     &:hover, &:active, &:focus {
