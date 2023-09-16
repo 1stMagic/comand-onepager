@@ -5,9 +5,6 @@
             <slot></slot>
             <!-- end slot -->
         </template>
-        <a v-else class="add-content" href="#" @click.prevent="addComponent" title="Add content">
-            <span class="icon-plus"></span>
-        </a>
     </div>
 </template>
 

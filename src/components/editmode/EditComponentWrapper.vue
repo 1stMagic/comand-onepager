@@ -4,6 +4,7 @@
             :class="['edit-component-wrapper', {active}]"
             tabindex="0"
             @click="showActionButtons"
+            ref="editComponent"
             :data-identifier="componentIdentifier">
         <li v-if="componentTag === 'ul'">
             <!-- begin action-buttons -->
@@ -29,21 +30,6 @@
                             <CmdIcon iconClass="icon-globe"/>
                         </a>
                     </template>
-                    <select v-if="showComponentSelection" @change="componentSelected">
-                        <option value="">Select component to add</option>
-                        <option value="CmdContainer">Empty container</option>
-                        <option value="CmdAddressData">Address data</option>
-                        <option value="CmdHeadline">Headline</option>
-                        <option value="CmdImage">Image</option>
-                        <option value="CmdImageGallery">Image gallery</option>
-                        <option value="CmdListOfLinks">List of links</option>
-                        <option value="CmdOpeningHours">Opening hours</option>
-                        <option value="CmdSlideshow">Slideshow</option>
-                        <option value="CmdSocialNetworks">Social networks</option>
-                        <option value="CmdTextImageBlock">Text-Image-Block</option>
-                        <option value="CmdThumbnailScroller">Thumbnail-Scroller</option>
-                        <option value="CmdToggleDarkMode">Toggle Dark-Mode</option>
-                    </select>
                 </li>
                 <li>
                     <a v-if="editing"
@@ -117,21 +103,6 @@
                             <CmdIcon iconClass="icon-globe"/>
                         </a>
                     </template>
-                    <select v-if="showComponentSelection" @change="componentSelected">
-                        <option value="">Select component to add</option>
-                        <option value="CmdContainer">Empty container</option>
-                        <option value="CmdAddressData">Address data</option>
-                        <option value="CmdHeadline">Headline</option>
-                        <option value="CmdImage">Image</option>
-                        <option value="CmdImageGallery">Image gallery</option>
-                        <option value="CmdListOfLinks">List of links</option>
-                        <option value="CmdOpeningHours">Opening hours</option>
-                        <option value="CmdSlideshow">Slideshow</option>
-                        <option value="CmdSocialNetworks">Social networks</option>
-                        <option value="CmdTextImageBlock">Text-Image-Block</option>
-                        <option value="CmdThumbnailScroller">Thumbnail-Scroller</option>
-                        <option value="CmdToggleDarkMode">Toggle Dark-Mode</option>
-                    </select>
                 </li>
                 <li>
                     <a v-if="editing"
@@ -195,6 +166,9 @@ export default {
         editModeContext: {}
     },
     props: {
+        allowedComponentTypes: {
+          type: Array
+        },
         componentName: {
             type: String
         },
@@ -286,6 +260,7 @@ export default {
             } else if (this.itemProvider) {
                 this.editModeContext.content.addContent(buildComponentPath(this), this.itemProvider)
             }
+            this.$emit("item-added")
         },
         addInnerComponent() {
             this.addComponentLevel = "inner"
@@ -303,6 +278,9 @@ export default {
         deleteComponent() {
             if (confirm("Delete this component and its content?")) {
                 this.deleteContent(buildComponentPath(this))
+
+                // close settings sidebar if component is deleted
+                this.editModeContext.settings.stopEditing()
             }
         },
         cancelComponent(event) {
@@ -313,10 +291,10 @@ export default {
         },
         editComponent(event) {
             event.stopPropagation()
-            // const component = this.$refs.editComponent.$el
-            // console.log("component", component)
-            // component.querySelector("input").focus()
+            const component = this.$refs.editComponent
             this.editModeContext.content.startEditing(this.componentIdentifier)
+            // wait until input in inserted into DOM on next tick
+            this.$nextTick(() => component.querySelector("input")?.focus())
         },
         saveComponent() {
             this.updateContent(
@@ -332,6 +310,7 @@ export default {
                     this.componentIdentifier,
                     this.componentName,
                     this.componentProps,
+                    this.allowedComponentTypes,
                     buildComponentPath(this),
                     this.saveSettings
                 )

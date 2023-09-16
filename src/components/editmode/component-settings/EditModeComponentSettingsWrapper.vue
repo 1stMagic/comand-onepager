@@ -2,7 +2,7 @@
     <aside class="edit-mode-component-settings-wrapper flex-container vertical box">
         <CmdTabs
                 :stretchTabs="true"
-                :tabs="[{name: 'Settings', iconClass: 'icon-cog'}, {name: 'Add Component', iconClass: 'icon-plus'}]"
+                :tabs="tabs"
                 :useSlot="true"
         >
             <template v-slot:tab-content-0>
@@ -11,6 +11,7 @@
                     <h3>Component Settings</h3>
                     <!-- begin selection of allowed components to switch component type -->
                     <CmdFormElement
+                        v-if="isComponent"
                         element="select"
                         labelText="Component type"
                         :selectOptions="listOfValidComponents"
@@ -37,7 +38,7 @@
                     </button>
                 </div>
             </template>
-            <template v-slot:tab-content-1>
+            <template v-if="isComponent" v-slot:tab-content-1>
                 <h3>Add new component</h3>
                 <div class="flex-container vertical">
                     <!-- begin selection of allowed components to add additional component -->
@@ -146,6 +147,16 @@ export default {
         }
     },
     computed: {
+        tabs() {
+            const tabs = [{name: 'Settings', iconClass: 'icon-cog'}]
+
+            // show second tab (to add component) is settings belong to component (and not item)
+            if(this.isComponent) {
+                tabs.push({name: 'Add Component', iconClass: 'icon-plus'})
+            }
+
+            return tabs
+        },
         componentName() {
             return this.editModeContext.settings.getComponentName()
         },
@@ -154,6 +165,10 @@ export default {
         },
         settingsComponentName() {
             return this.editModeContext.settings.getSettingsComponentName()
+        },
+        isComponent() {
+            return !this.editModeContext.settings.getAllowedContentTypes() || this.editModeContext.settings.getAllowedContentTypes().length > 0;
+
         }
     },
     methods: {

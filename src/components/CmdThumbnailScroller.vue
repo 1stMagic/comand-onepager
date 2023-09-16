@@ -53,6 +53,7 @@
                         v-else
                         class="image-wrapper edit-items"
                         :showComponentName="false"
+                        :allowedComponentTypes="[]"
                         componentName="CmdImage"
                         :componentProps="item"
                         :componentPath="['props', 'thumbnailScrollerItems', index]"

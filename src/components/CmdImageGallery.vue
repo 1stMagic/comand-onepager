@@ -34,6 +34,7 @@
             v-for="(image, index) in images"
             :key="index"
             :showComponentName="false"
+            :allowedComponentTypes="[]"
             componentName="CmdImage"
             :componentProps="image"
             :componentPath="['props', 'images', index]"

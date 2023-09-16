@@ -8,11 +8,10 @@
             :componentPath="componentPath()">
             <!-- begin cmd-slideshow -->
             <CmdSlideshow
-                    v-if="slideshow.slideshowItems?.length"
-                    :slideshow-items="slideshow.slideshowItems"
-                    :full-width="true"
-                    :autoplay="false"
-                    :cmdSlideButtons="cmdSlideButtons"
+                :slideshow-items="slideshow.slideshowItems"
+                :full-width="true"
+                :autoplay="false"
+                :cmdSlideButtons="cmdSlideButtons"
             />
             <!-- end cmd-slideshow -->
         </EditComponentWrapper>

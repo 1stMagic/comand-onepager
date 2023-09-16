@@ -36,10 +36,11 @@ function contentActions(store, state) {
 
 function settingsActions(state) {
     return {
-        startEditing(componentIdentifier, componentName, componentProps, componentPath, saveHandler) {
+        startEditing(componentIdentifier, componentName, componentProps, allowedContentTypes, componentPath, saveHandler) {
             state.settingsEditing = componentIdentifier
             state.componentName = componentName
             state.componentProps = componentProps
+            state.allowedContentTypes = allowedContentTypes
             state.componentPath = componentPath
             state.settingsSaveHandler = saveHandler
         },
@@ -64,6 +65,9 @@ function settingsActions(state) {
         },
         getComponentProps() {
             return state.componentProps
+        },
+        getAllowedContentTypes() {
+            return state.allowedContentTypes
         },
         getComponentPath() {
             return state.componentPath

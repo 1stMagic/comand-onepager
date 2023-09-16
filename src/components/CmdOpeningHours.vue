@@ -61,7 +61,9 @@
         <!-- end default view -->
 
         <!-- begin edit-mode -->
-        <button v-if="openingHoursFormatted.length === 0" type="button" @click="onAddItem">+</button>
+        <button v-if="openingHoursFormatted.length === 0" type="button" @click="onAddItem">
+            <span class="icon-plus"></span>
+        </button>
         <EditComponentWrapper
             v-else
             v-for="(day, index) in openingHoursFormatted"

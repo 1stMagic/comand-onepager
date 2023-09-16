@@ -102,7 +102,7 @@ export const usePiniaStore = defineStore("pinia", {
             if(state.site.main?.slideshow) {
                 return state.site.main.slideshow
             }
-            return {}
+            return {slideshowItems: []}
         },
         // create getter to assure all information is loaded when site renders
         companyLogo(state) {

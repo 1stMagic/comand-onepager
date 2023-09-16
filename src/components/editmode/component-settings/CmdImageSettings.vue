@@ -1,8 +1,8 @@
 <template>
     <div class="flex-container vertical component-settings-wrapper">
         <a class="image-wrapper" title="Click to select new image" @click="selectFiles()">
-            <img v-show="image?.src" :src="image?.src" :alt="image?.alt" ref="contentImage"/>
-            <span class="no-image" v-if="!image?.src">
+            <img v-show="image?.src" :src="imgSrc" :alt="image?.alt" ref="contentImage"/>
+            <span v-if="!image?.src" class="no-image">
                 <span class="icon-image"></span>
                 <span>(no image uploaded)</span>
             </span>
@@ -119,6 +119,12 @@ export default {
         }
     },
     computed: {
+        imgSrc() {
+          if(typeof this.image?.src === "string") {
+              return this.image?.src
+          }
+          return this.image?.src?.small
+        },
         editableAlternativeText: {
             get() {
                 return this.alternativeText == null ? this.image?.alt : this.alternativeText
