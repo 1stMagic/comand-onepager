@@ -1,10 +1,11 @@
 <template>
-    <!-- begin content -->
+    <!-- begin main-content -->
     <main>
-        <!-- begin edit-mode -->
+        <!-- begin edit-mode for slideshow -->
         <EditComponentWrapper
             v-if="editMode"
             componentName="CmdSlideshow"
+            :allowAddComponent="true"
             :componentPath="componentPath()">
             <!-- begin cmd-slideshow -->
             <CmdSlideshow
@@ -15,6 +16,7 @@
             />
             <!-- end cmd-slideshow -->
         </EditComponentWrapper>
+        <!-- end edit-mode for slideshow -->
 
         <!-- begin cmd-slideshow -->
         <CmdSlideshow
@@ -26,11 +28,12 @@
         />
         <!-- end cmd-slideshow -->
 
-        <!-- begin main content -->
+        <!-- begin page-content -->
         <div id="page-content">
-            <CmdWidthLimitationWrapper v-if="editMode">
-                <EditSectionWrapper :componentExists="false" @add="addComponent('contentSection')"/>
-            </CmdWidthLimitationWrapper>
+            <!-- begin edit-mode for content-sections -->
+<!--            <CmdWidthLimitationWrapper v-if="editMode">-->
+<!--                <EditSectionWrapper :componentExists="false" @add="addComponent('contentSection')"/>-->
+<!--            </CmdWidthLimitationWrapper>-->
 
             <template v-if="editMode">
                 <EditSectionWrapper
@@ -50,21 +53,25 @@
                     <!-- end content sections -->
                 </EditSectionWrapper>
             </template>
+            <!-- end edit-mode for content-sections  -->
 
+            <!-- begin default-view for content-sections -->
             <template v-else>
                 <!-- begin content sections -->
                 <ContentSection
-                    v-for="(section, index) in sections" :key="index"
+                    v-for="(section, index) in sections"
+                    :key="index"
                     :id="section.id"
                     :headlineText="section.headlineText"
                     :components="section.components"
                 />
                 <!-- end content sections -->
             </template>
+            <!-- end default-view for content-sections -->
         </div>
-        <!-- end main content -->
+        <!-- end page-content -->
     </main>
-    <!-- end content -->
+    <!-- end main-content -->
 </template>
 
 <script>

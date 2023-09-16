@@ -3,6 +3,7 @@
         <div class="inner-slideshow-wrapper" @mouseenter="pause = true" @mouseleave="pause = false">
             <!-- begin CmdSlideButton -->
             <CmdSlideButton
+                v-if="showSlideButtons"
                 @click.prevent="showPrevItem"
                 slideButtonType="prev"
                 :class="{'disabled': slideshowItemEditing}"
@@ -63,6 +64,7 @@
 
             <!-- begin CmdSlideButton -->
             <CmdSlideButton
+                v-if="showSlideButtons"
                 @click.prevent="showNextItem"
                 :class="{'disabled': slideshowItemEditing}"
                 v-bind="tooltipForSlidebuttons"
@@ -147,7 +149,16 @@ export default {
             required: true
         },
         /**
+         * toggle slide-buttons-visibility
+         */
+        showSlideButtons: {
+            type: Boolean,
+            default: false
+        },
+        /**
          * properties for CmdSlideButtons-component
+         *
+         * showSlideButtons-property must be activated
          *
          * @requiredForAccessibility: partial
          */
@@ -366,6 +377,7 @@ export default {
                 margin: 0;
                 border: var(--default-border-reduced-opacity);
                 border-radius: var(--full-circle);
+                background: var(--light-gray);
 
                 a {
                     display: block;
@@ -427,8 +439,14 @@ export default {
     }
 }
 
-.cmd-slideshow .image-wrapper.edit-items .action-buttons {
-    position: relative;
+.edit-mode .cmd-slideshow .image-wrapper.edit-items {
+    width: auto;
+    padding: 0;
+    margin-top: 2rem;
+
+    label.edit-mode input {
+        font-size: 3rem;
+    }
 }
 
 /* end cmd-slideshow ------------------------------------------------------------------------------------------ */

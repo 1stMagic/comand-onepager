@@ -5,6 +5,7 @@
                 :tabs="tabs"
                 :useSlot="true"
         >
+            <!-- begin tab 'component settings' -->
             <template v-slot:tab-content-0>
                 <div>
                     <div class="component-settings-wrapper">
@@ -21,7 +22,7 @@
                     </div>
                     <!-- end selection of allowed components to switch component type -->
                     <template v-if="componentProps">
-                        <hr/>
+                        <hr v-if="isComponent"/>
                         <div class="list-of-components flex-container vertical">
                             <component ref="settings" :is="settingsComponentName" v-bind="componentProps"/>
                         </div>
@@ -38,6 +39,9 @@
                     </button>
                 </div>
             </template>
+            <!-- end tab 'component settings' -->
+
+            <!-- begin tab 'add component' (components only) -->
             <template v-if="isComponent" v-slot:tab-content-1>
                 <h3>Add new component</h3>
                 <div class="flex-container vertical">
@@ -50,6 +54,7 @@
                     />
                     <!-- end selection of allowed components to add additional component -->
 
+                    <!-- begin selection of available positions for added component -->
                     <CmdFormElement
                             element="select"
                             labelText="Select inserted component position"
@@ -57,6 +62,7 @@
                             v-model="addedComponentPosition"
                             @change="switchComponent"
                     />
+                    <!-- end selection of available positions for added component -->
                 </div>
                 <div class="button-wrapper">
                     <button class="button confirm" @click="addComponent">
@@ -69,6 +75,7 @@
                     </button>
                 </div>
             </template>
+            <!-- end tab 'add component' (components only) -->
         </CmdTabs>
     </aside>
 </template>

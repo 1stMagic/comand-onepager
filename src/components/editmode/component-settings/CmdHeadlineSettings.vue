@@ -5,10 +5,10 @@
             type="checkbox"
             :toggleSwitch="true"
             labelText="Show pre-headline above headline"
-            v-model="togglePreHeadlineModel"
+            v-model="usePreHeadlineModel"
         />
         <CmdFormElement
-            v-if="preHeadlineText || togglePreHeadlineModel"
+            v-if="preHeadlineText || usePreHeadlineModel"
             element="input"
             type="text"
             labelText="Pre-Headline Text"
@@ -45,7 +45,7 @@ export default {
     inheritAttrs: false,
     data() {
         return {
-            togglePreHeadlineModel: false,
+            editableUsePreHeadline: null,
             editablePreHeadlineText: null,
             editableHeadlineText: null,
             editableHeadlineLevel: null,
@@ -93,6 +93,9 @@ export default {
         }
     },
     props: {
+        preHeadline: {
+            type: Boolean
+        },
         preHeadlineText: {
             type: String,
             default: ""
@@ -110,6 +113,14 @@ export default {
         }
     },
     computed: {
+        usePreHeadlineModel: {
+            get() {
+                return this.editableUsePreHeadline == null ? this.preHeadline : this.editableUsePreHeadline
+            },
+            set(value) {
+                this.editableUsePreHeadline = value
+            }
+        },
         preHeadlineTextModel: {
             get() {
                 return this.editablePreHeadlineText == null ? this.preHeadlineText : this.editablePreHeadlineText

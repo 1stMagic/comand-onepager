@@ -1,7 +1,10 @@
 <template>
     <div class="flex-container vertical component-settings-wrapper">
         <a class="image-wrapper" title="Click to select new image" @click="selectFiles()">
-            <img v-show="image?.src" :src="imgSrc" :alt="image?.alt" ref="contentImage"/>
+            <figure>
+                <img v-show="image?.src" :src="imgSrc" :alt="image?.alt" title="Click to replace image" ref="contentImage">
+                <figcaption :title="image?.src.medium">{{imageFileName}}</figcaption>
+            </figure>
             <span v-if="!image?.src" class="no-image">
                 <span class="icon-image"></span>
                 <span>(no image uploaded)</span>
@@ -19,6 +22,8 @@
                 ref="formElement"
         />
         <!-- end CmdFormElement -->
+
+        <!-- begin figcaption -->
         <h5>Figcaption</h5>
         <CmdFormElement
                 element="input"
@@ -43,6 +48,12 @@
                     v-model="editableFigcaptionTextAlign"
             />
         </div>
+        <!-- end figcaption -->
+
+        <hr />
+
+        <!-- begin miscellaneous -->
+        <h5>Miscellaneous</h5>
         <CmdFormElement
                 element="input"
                 type="text"
@@ -59,6 +70,7 @@
                 placeholder="Tooltip"
                 v-model="editableTooltip"
         />
+        <!-- end miscellaneous -->
     </div>
 </template>
 
@@ -113,17 +125,26 @@ export default {
             type: Object,
             required: false
         },
+        /**
+         * image-object including source, alternative text, tooltip (not required)
+         */
         image: {
             type: Object,
             required: false
         }
     },
     computed: {
+        imageFileName() {
+            if(typeof this.image?.src === "string") {
+                return this.image?.src.replace("/media/images/demo-images/", "")
+            }
+            return this.image?.src?.medium.replace("/media/images/demo-images/medium/", "")
+        },
         imgSrc() {
           if(typeof this.image?.src === "string") {
               return this.image?.src
           }
-          return this.image?.src?.small
+          return this.image?.src?.medium
         },
         editableAlternativeText: {
             get() {
@@ -216,8 +237,10 @@ export default {
 
 <style lang="scss" scoped>
 .image-wrapper {
+    display: flex;
     border: var(--default-border);
     background: var(--pure-white);
+    align-self: center;
 
     img {
         border: 0;
