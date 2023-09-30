@@ -25,7 +25,7 @@
                 :key="'x' + index"
                 class="edit-items"
                 :showComponentName="false"
-                componentTag="li"
+                componentTag="ul"
                 componentName="CmdLinkItem"
                 :componentProps="link"
                 :componentPath="['props', 'links', index]"

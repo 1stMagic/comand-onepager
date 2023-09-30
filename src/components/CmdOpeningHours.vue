@@ -75,13 +75,13 @@
             :componentPath="['props', 'openingHours', index]"
             :itemProvider="itemProvider"
         >
-            <dl>
+            <dt>
                 <CmdOpeningHoursItem
                     :day="day"
                     :separator="separator"
                     :abbreviationText="abbreviationText"
                 />
-            </dl>
+            </dt>
         </EditComponentWrapper>
         <!-- end edit-mode -->
 

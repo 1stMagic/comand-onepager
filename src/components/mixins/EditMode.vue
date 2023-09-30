@@ -7,20 +7,34 @@ export default {
             default: null
         }
     },
+    props: {
+        componentPath: {
+            type: Array
+        }
+    },
     data() {
         return {
             editing: false
         }
     },
-    created() {
-        const editComponentWrapper = findEditComponentWrapper(this.$parent)
-        if (editComponentWrapper) {
-            editComponentWrapper.addEditStateListener(editing => this.editing = editing)
-            editComponentWrapper.addUpdateHandlerProvider(this.updateHandlerProvider)
-            editComponentWrapper.setAddHandlerProvider(this.addHandlerProvider)
-        }
+    mounted() {
+        this.initializeEditMode()
     },
     methods: {
+        customInitializeEditMode() {
+            return false
+        },
+        initializeEditMode() {
+            if (this.customInitializeEditMode()) {
+                return
+            }
+            const editComponentWrapper = findEditComponentWrapper(this.$parent);
+            if (editComponentWrapper) {
+                editComponentWrapper.addEditStateListener(editing => this.editing = editing)
+                editComponentWrapper.addUpdateHandlerProvider(this.updateHandlerProvider)
+                editComponentWrapper.setAddHandlerProvider(this.addHandlerProvider)
+            }
+        },
         updateHandlerProvider() {
             return {}
         }

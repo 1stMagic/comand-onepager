@@ -1,18 +1,27 @@
 <template>
-    <!-- begin cmdHeadline -->
-    <CmdHeadlineSettings
-            ref="headlineSettings"
-            v-bind="cmdHeadline || {}"
-    />
-    <!-- end cmdHeadline -->
-    <hr />
-    <CmdFormElement
-            element="input"
-            type="text"
-            labelText="Receiver E-Mail-Address"
-            placeholder="Receiver E-Mail-Address"
-            v-model="emailAddressModel"
-    />
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Headline', headlineLevel: 4}">
+        <template v-slot:body>
+            <CmdHeadlineSettings
+                    ref="headlineSettings"
+                    v-bind="cmdHeadline || {}"
+            />
+        </template>
+    </CmdBox>
+    <CmdBox :use-slots="['body']" :collapsible="true"
+            :cmdHeadline="{headlineText: 'Receiver Address', headlineLevel: 4}">
+        <template v-slot:body>
+            <div class="component-settings-wrapper">
+                <CmdFormElement
+                        element="input"
+                        type="email"
+                        :required="true"
+                        labelText="Receiver E-Mail-Address"
+                        placeholder="Receiver E-Mail-Address"
+                        v-model="emailAddressModel"
+                />
+            </div>
+        </template>
+    </CmdBox>
 </template>
 
 <script>

@@ -54,18 +54,19 @@
                         class="image-wrapper edit-items"
                         :showComponentName="false"
                         :allowedComponentTypes="[]"
+                        componentTag="ul"
                         componentName="CmdImage"
                         :componentProps="item"
                         :componentPath="['props', 'thumbnailScrollerItems', index]"
                     >
-                        <!-- begin CmdImage -->
-                        <CmdImage
-                            v-if="contentType === 'image'"
-                            :image="item.image"
-                            :figcaption="item.figcaption"
-                        />
-                        <!-- end CmdImage -->
-
+                        <li v-if="contentType === 'image'" class="item-wrapper">
+                            <!-- begin CmdImage -->
+                            <CmdImage
+                                :image="item.image"
+                                :figcaption="item.figcaption"
+                            />
+                            <!-- end CmdImage -->
+                        </li>
                         <!-- begin contentType === text -->
                         <template v-else>
                             <!-- begin CmdIcon -->

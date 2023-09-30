@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!editing" :class="['cmd-headline', {'has-pre-headline-text': preHeadlineText, 'has-icon': headlineIcon?.iconClass}, getTextAlign]">
+    <div v-if="!editModeContext" :class="['cmd-headline', {'has-pre-headline-text': preHeadlineText, 'has-icon': headlineIcon?.iconClass}, getTextAlign]">
         <!-- begin CmdIcon -->
         <CmdIcon v-if="headlineIcon" :iconClass="headlineIcon?.iconClass" :type="headlineIcon?.iconType" />
         <!-- end CmdIcon -->
@@ -20,16 +20,46 @@
     </div>
 
     <!-- begin edit-mode -->
-    <CmdFormElement
-        v-else
-        element="input"
-        type="text"
-        :class="['edit-mode', 'headline', 'h'+ headlineLevel, getTextAlign]"
-        labelText="Headline"
-        :showLabel="false"
-        placeholder="Headline"
-        v-model="editableHeadlineText"
-    />
+    <EditComponentWrapper
+    v-else
+    ref="editComponentWrapper"
+    class="edit-items"
+    :showComponentName="false"
+    :allowedComponentTypes="[]"
+    componentName="CmdHeadline"
+    :componentProps="{headlineText, headlineLevel}"
+    :componentPath="headlineComponentPath"
+    >
+        <CmdFormElement
+            v-if="editing"
+            element="input"
+            type="text"
+            :class="['edit-mode', 'headline', 'h'+ headlineLevel, getTextAlign]"
+            labelText="Headline"
+            :showLabel="false"
+            placeholder="Headline"
+            v-model="editableHeadlineText"
+        />
+        <div v-else :class="['cmd-headline', {'has-pre-headline-text': preHeadlineText, 'has-icon': headlineIcon?.iconClass}, getTextAlign]">
+            <!-- begin CmdIcon -->
+            <CmdIcon v-if="headlineIcon" :iconClass="headlineIcon?.iconClass" :type="headlineIcon?.iconType" />
+            <!-- end CmdIcon -->
+
+            <div v-if="preHeadlineText">
+                <span class="pre-headline-text">{{ preHeadlineText }}</span>
+                <component v-if="headlineText" :is="headlineTag">
+                    <!-- being slot -->
+                    <slot>{{ headlineText }}</slot>
+                    <!-- end slot -->
+                </component>
+            </div>
+            <component v-else-if="headlineText" :is="headlineTag">
+                <!-- being slot -->
+                <slot>{{ headlineText }}</slot>
+                <!-- end slot -->
+            </component>
+        </div>
+    </EditComponentWrapper>
     <!-- end edit-mode -->
 </template>
 
@@ -86,6 +116,9 @@ export default {
         }
     },
     computed: {
+        headlineComponentPath() {
+            return this.componentPath || ["props", "cmdHeadline"]
+        },
         headlineTag() {
             if(this.headlineLevel) {
                 return "h" + this.headlineLevel
@@ -100,6 +133,11 @@ export default {
         }
     },
     methods: {
+        customInitializeEditMode() {
+            this.$refs.editComponentWrapper?.addEditStateListener(editing => this.editing = editing)
+            this.$refs.editComponentWrapper?.addUpdateHandlerProvider(this.updateHandlerProvider)
+            return true
+        },
         updateHandlerProvider() {
             const headlineText = this.editableHeadlineText
             const preHeadlineText = this.editablePreHeadlineText

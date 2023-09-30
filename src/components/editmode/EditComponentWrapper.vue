@@ -5,8 +5,9 @@
             tabindex="0"
             @click="showActionButtons"
             ref="editComponent"
+            :title="!active ? 'Click to select this element' : 'Select an action from the buttons in the top-left corner'"
             :data-identifier="componentIdentifier">
-        <li v-if="componentTag === 'ul'">
+        <li v-if="componentTag === 'ul'" class="action-buttons-wrapper">
             <!-- begin action-buttons -->
             <ul v-show="active" class="flex-container no-flex action-buttons">
                 <li>
@@ -208,7 +209,8 @@ export default {
         // provide states from store as computed-properties inside this component
         ...mapState(usePiniaStore, ["updateContent", "updateSettings", "deleteContent", "addContent"]),
         active() {
-            return !!this.editModeContext.system.isActiveComponent(this.componentIdentifier)
+            // return !!this.editModeContext.system.isActiveComponent(this.componentIdentifier)
+            return !!this.editModeContext.system.isActiveComponent(buildComponentPath(this))
         },
         editing() {
             return this.editModeContext.content.isEditing(this.componentIdentifier)
@@ -271,9 +273,10 @@ export default {
             this.showComponentSelection = true
         },
         // provide actions from store as methods inside this component
-        showActionButtons(event) {
-            event.stopPropagation()
-            this.editModeContext.system.setActiveComponent(this.componentIdentifier)
+        showActionButtons() {
+            // console.log("this.componentIdentifier", this.componentIdentifier)
+            // this.editModeContext.system.setActiveComponent(this.componentIdentifier)
+            this.editModeContext.system.setActiveComponent(buildComponentPath(this))
         },
         deleteComponent() {
             if (confirm("Delete this component and its content?")) {
@@ -309,6 +312,7 @@ export default {
                 this.editModeContext.settings.startEditing(
                     this.componentIdentifier,
                     this.componentName,
+                    this.componentProps,
                     this.componentProps,
                     this.allowedComponentTypes,
                     buildComponentPath(this),
@@ -353,14 +357,16 @@ export default {
 function buildComponentPath(component) {
     const path = []
     for (let parent = component; parent; parent = findEditComponentWrapper(parent.$parent)) {
-        path.unshift(...parent.componentPath)
+        if (parent.componentPath) {
+            path.unshift(...parent.componentPath)
+        }
     }
     return path
 }
 </script>
 
 <style lang="scss">
-.edit-component-wrapper {
+@mixin edit-border {
     border: .1rem dashed transparent;
     transition: var(--default-transition);
 
@@ -379,6 +385,10 @@ function buildComponentPath(component) {
             transition: var(--default-transition);
         }
     }
+}
+
+.edit-component-wrapper {
+    @include edit-border;
 
     .component-name {
         position: absolute;
@@ -490,6 +500,31 @@ function buildComponentPath(component) {
             background: var(--pure-white);
         }
     }
+}
+
+ul.edit-component-wrapper {
+    border: 0;
+
+    > li {
+        list-style-type: none;
+        margin: 0;
+
+        &.action-buttons-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            padding-top: .1rem;
+
+            .action-buttons {
+                position: relative;
+                top: auto;
+            }
+        }
+
+        &.item-wrapper {
+            @include edit-border;
+        }
+    }
+
 }
 
 </style>

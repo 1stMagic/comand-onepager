@@ -83,14 +83,39 @@ function settingsActions(state) {
 
 function systemActions(state) {
     return {
-        setActiveComponent(componentIdentifier) {
-            state.activeComponentIdentifier = componentIdentifier
+        setActiveComponent(componentIdent) {
+            let componentIdentifier = componentIdent
+            if (Array.isArray(componentIdent)) {
+                componentIdentifier = JSON.stringify(componentIdent)
+            }
+            state.activeComponentIdentifier = componentIdentifier;
+            state.activeComponentIdentifierArray = componentIdent;
             if (state.contentEditing !== componentIdentifier) {
                 state.contentEditing = null
             }
         },
-        isActiveComponent(componentIdentifier) {
-            return state.activeComponentIdentifier === componentIdentifier
+        isActiveComponent(componentIdent) {
+            //return state.activeComponentIdentifier === componentIdentifier
+            let componentIdentifier = componentIdent
+            if (Array.isArray(componentIdent)) {
+                componentIdentifier = JSON.stringify(componentIdent)
+            }
+            if (state.activeComponentIdentifier === componentIdentifier) {
+                return true
+            }
+            if (Array.isArray(state.activeComponentIdentifierArray) && Array.isArray(componentIdent)) {
+                const minLength = Math.min(state.activeComponentIdentifierArray.length, componentIdent.length)
+                if (minLength > 3) {
+                    for (let i = 0, c = minLength; i < c; i++) {
+                        if (JSON.stringify(state.activeComponentIdentifierArray[i]) !== JSON.stringify(componentIdent[i])) {
+                            return false
+                        }
+                    }
+                    console.log("active", state.activeComponentIdentifierArray.length, componentIdent.length, state.activeComponentIdentifierArray, componentIdent)
+                    return true
+                }
+            }
+            return false
         }
     }
 }

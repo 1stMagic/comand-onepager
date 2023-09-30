@@ -4,6 +4,7 @@
         <CmdHeadline
                 v-if="(cmdHeadline?.headlineText || editing) && headlinePosition === 'aboveImage'"
                 v-bind="cmdHeadline"
+                :componentPath="['props', 'cmdHeadline']"
         />
         <!-- end cmdHeadline -->
 

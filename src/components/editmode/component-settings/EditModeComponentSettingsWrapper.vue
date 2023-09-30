@@ -22,7 +22,6 @@
                     </div>
                     <!-- end selection of allowed components to switch component type -->
                     <template v-if="componentProps">
-                        <hr v-if="isComponent"/>
                         <div class="list-of-components flex-container vertical">
                             <component ref="settings" :is="settingsComponentName" v-bind="componentProps"/>
                         </div>

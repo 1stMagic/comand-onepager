@@ -11,11 +11,12 @@
                 v-model="editableFigcaptionText"
             />
         </template>
-        <div :class="['box drop-area flex-container vertical', { 'allow-drop': allowDrop }]" v-on="dragAndDropHandler" title="Drag new image to this area to replace old one!">
+        <div :class="['box drop-area flex-container vertical', { 'allow-drop': allowDrop }]"
+             v-on="dragAndDropHandler"
+             title="Drag new image to this area to replace old one!">
             <span class="icon-image"></span>
             <img :src="imageSource" :alt="image.alt" :title="image.tooltip"/>
         </div>
-
         <template v-if="figcaption?.position !== 'top'">
             <CmdFormElement
                 element="input"
@@ -30,11 +31,13 @@
     </figure>
     <!-- end edit-mode -->
 
+    <!-- begin default-view -->
     <figure v-else :class="['cmd-image', getTextAlign]">
         <figcaption v-if="figcaption?.show && figcaption?.position === 'top'">{{ figcaption?.text }}</figcaption>
         <img :src="imageSource" :alt="image.alt" :title="image.tooltip"/>
         <figcaption v-if="figcaption?.show && figcaption?.position !== 'top'">{{ figcaption?.text }}</figcaption>
     </figure>
+    <!-- end default-view -->
 </template>
 
 <script>

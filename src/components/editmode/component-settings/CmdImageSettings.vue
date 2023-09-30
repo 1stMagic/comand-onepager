@@ -1,15 +1,33 @@
 <template>
     <div class="flex-container vertical component-settings-wrapper">
-        <a class="image-wrapper" title="Click to select new image" @click="selectFiles()">
-            <figure>
-                <img v-show="image?.src" :src="imgSrc" :alt="image?.alt" title="Click to replace image" ref="contentImage">
+        <!-- begin CmdTooltip -->
+        <CmdTooltip related-id="show-tooltip">
+            <dl>
+                <dt>Dimensions:</dt><dd>{{ imageWidth }} x {{ imageHeight }}</dd>
+                <dt>File type:</dt><dd>{{ getFileExtension(this.image?.src?.large) }}</dd>
+                <!--dt>File size:</dt><dd>{{ image?.src?.large }}</dd-->
+                <dt>Path to file:</dt><dd>{{ image?.src?.large }}</dd>
+            </dl>
+        </CmdTooltip>
+        <!-- end CmdTooltip  -->
+        <a href="#" @click.prevent="selectFiles" class="image-wrapper">
+            <figure v-if="image?.src" class="cmd-image" id="show-tooltip">
+                <div :class="['box drop-area flex-container vertical', { 'allow-drop': allowDrop }]"
+                     v-on="dragAndDropHandler">
+                    <span class="icon-image"></span>
+                    <img v-show="image?.src" :src="imgSrc" :alt="image?.alt" ref="contentImage">
+                </div>
                 <figcaption :title="image?.src.medium">{{imageFileName}}</figcaption>
             </figure>
-            <span v-if="!image?.src" class="no-image">
+            <span v-else class="no-image">
                 <span class="icon-image"></span>
                 <span>(no image uploaded)</span>
             </span>
         </a>
+        <button type="button" class="button" @click="removeImage">
+            <span class="icon-trash"></span>
+            <span>Remove image</span>
+        </button>
 
         <!-- begin CmdFormElement -->
         <CmdFormElement
@@ -32,19 +50,24 @@
                 labelText="Show figcaption"
                 v-model="editableShowFigcaption"
         />
-        <div class="flex-container">
+        <CmdFormElement
+                v-show="editableShowFigcaption"
+                element="input"
+                type="text"
+                labelText="Figcaption Text"
+                v-model="editableFigcaptionText"
+        />
+        <div v-show="editableShowFigcaption" class="flex-container">
             <CmdFormElement
                     element="select"
                     labelText="Position"
                     :selectOptions="positionOptions"
-                    :disabled="!editableShowFigcaption"
                     v-model="editableFigcaptionPosition"
             />
             <CmdFormElement
                     element="select"
                     labelText="Alignment"
                     :selectOptions="textAlignOptions"
-                    :disabled="!editableShowFigcaption"
                     v-model="editableFigcaptionTextAlign"
             />
         </div>
@@ -76,6 +99,7 @@
 
 <script>
 import {checkAndUploadFile} from "../../../utils/checkAndUploadFile.js"
+import {getFileExtension} from "comand-component-library"
 
 export default {
     name: "CmdImageSettings",
@@ -86,6 +110,7 @@ export default {
             uploadInitiated: false,
             allowDrop: false,
             showFigcaption: null,
+            figcaptionText: null,
             figcaptionPosition: null,
             figcaptionTextAlign: null,
             tooltip: null,
@@ -113,8 +138,7 @@ export default {
                     text: "Right",
                     value: "right"
                 }
-            ],
-            figcaptionText: null
+            ]
         }
     },
     props: {
@@ -134,11 +158,33 @@ export default {
         }
     },
     computed: {
+        imageWidth() {
+            const img = new Image();
+            img.src = this.image.src.large
+
+            return img.naturalWidth + " px"
+
+        },
+        imageHeight() {
+            const img = new Image();
+            img.src = this.image.src.large
+
+            return img.naturalHeight + " px"
+        },
+        dragAndDropHandler() {
+            // register handlers only if drag-and-drop is enabled
+            return {
+                dragenter: this.dragEnter,
+                dragover: this.dragOver,
+                dragleave: this.dragLeave,
+                drop: this.drop
+            }
+        },
         imageFileName() {
             if(typeof this.image?.src === "string") {
-                return this.image?.src.replace("/media/images/demo-images/", "")
+                return this.image?.src.replace("/media/images/slideshow-images/", "")
             }
-            return this.image?.src?.medium.replace("/media/images/demo-images/medium/", "")
+            return this.image?.src?.medium.replace("/media/images/slideshow-images/medium/", "")
         },
         imgSrc() {
           if(typeof this.image?.src === "string") {
@@ -196,6 +242,15 @@ export default {
         }
     },
     methods: {
+        // use imported function as method (to use in template)
+        getFileExtension(filename) {
+            return getFileExtension(filename)
+        },
+        removeImage() {
+            if (confirm("Remove this image (and copy of the file will remain on the server)?")) {
+              // this.deleteContent(buildComponentPath(this))
+            }
+        },
         fileSelected(event) {
             if (event.target.files.length > 0) {
                 checkAndUploadFile(event.target.files[0], this.allowedFileExtensions, this.minImageWidth, this.maxFileUploadSize, this.$refs.contentImage)
@@ -212,6 +267,7 @@ export default {
                     tooltip: this.editableTooltip
                 },
                 figcaption: {
+                    text: this.editableFigcaptionText,
                     position: this.editableFigcaptionPosition,
                     textAlign: this.editableFigcaptionTextAlign,
                     show: this.editableShowFigcaption
@@ -226,6 +282,7 @@ export default {
                 if (!props.figcaption) {
                     props.figcaption = {}
                 }
+                props.figcaption.text = data.figcaption.text
                 props.figcaption.position = data.figcaption.position
                 props.figcaption.textAlign = data.figcaption.textAlign
                 props.figcaption.show = data.figcaption.show
@@ -238,29 +295,37 @@ export default {
 <style lang="scss" scoped>
 .image-wrapper {
     display: flex;
-    border: var(--default-border);
     background: var(--pure-white);
     align-self: center;
 
-    img {
-        border: 0;
-    }
-
-    .no-image {
-        display: flex;
-        flex-direction: column;
-        gap: .5rem;
-        align-items: center;
-        padding: var(--default-padding);
-
-        [class*="icon"] {
-            font-size: 7rem;
+    .cmd-image {
+        span[class*="icon-"] {
+            font-size: 4rem;
         }
-    }
 
-    &:hover, &:active, &:focus {
-        cursor: pointer;
-        border-color: var(--hyperlink-color-highlighted);
+        img {
+            border: var(--default-border);;
+        }
+
+        .no-image {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            align-items: center;
+            padding: var(--default-padding);
+
+            [class*="icon"] {
+                font-size: 7rem;
+            }
+        }
+
+        &:hover, &:active, &:focus {
+            cursor: pointer;
+
+            img {
+                border-color: var(--hyperlink-color-highlighted);
+            }
+        }
     }
 }
 </style>

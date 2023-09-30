@@ -4,6 +4,7 @@
         <CmdHeadline
              v-if="cmdHeadline?.headlineText || editing"
              v-bind="cmdHeadline"
+             :componentPath="['props', 'cmdHeadline']"
         />
         <!-- end cmd-headline -->
 

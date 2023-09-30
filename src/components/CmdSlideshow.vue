@@ -199,9 +199,9 @@ export default {
           return {
               "image": {
                   "src": {
-                      "large": "/media/images/demo-images/large/landscape-01.jpg",
-                      "medium": "/media/images/demo-images/medium/landscape-01.jpg",
-                      "small": "/media/images/demo-images/small/landscape-01.jpg"
+                      "large": "/media/images/demo-images/large/slide1.jpg",
+                      "medium": "/media/images/demo-images/medium/slide1.jpg",
+                      "small": "/media/images/demo-images/small/slide1.jpg"
                   },
                   "alt": "Alternative Text",
                   "tooltip": "Tooltip 1"

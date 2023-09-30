@@ -3,6 +3,7 @@
         <CmdFormElement
             element="input"
             type="checkbox"
+            :colored="true"
             :toggleSwitch="true"
             labelText="Show pre-headline above headline"
             v-model="usePreHeadlineModel"

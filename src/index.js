@@ -18,6 +18,7 @@ import CmdThumbnailScroller from "./components/CmdThumbnailScroller.vue"
 import CmdThumbnailScrollerSettings from "./components/editmode/component-settings/CmdThumbnailScrollerSettings.vue"
 import ContactFormSettings from "./components/editmode/component-settings/ContactFormSettings.vue"
 import CmdSlideshow from "./components/CmdSlideshow.vue"
+import CmdSlideshowSettings from "./components/editmode/component-settings/CmdSlideshowSettings.vue"
 import CmdListOfLinks from "./components/CmdListOfLinks.vue"
 import CmdListOfLinksSettings from "./components/editmode/component-settings/CmdListOfLinksSettings.vue"
 import CmdLinkItemSettings from "./components/editmode/component-settings/CmdLinkItemSettings.vue"
@@ -63,6 +64,7 @@ export function bootstrap(app) {
         CmdTextImageBlockSettings,
         CmdSocialNetworks,
         CmdSocialNetworksSettings,
+        CmdSlideshowSettings,
         ContactFormSettings
     }).forEach(([name, component]) => app.component(name, component))
 

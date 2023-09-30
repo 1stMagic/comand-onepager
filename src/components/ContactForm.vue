@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="contact-form">
         <!-- begin CmdHeadline -->
         <CmdHeadline
                 v-if="cmdHeadline?.headlineText || editModeContext?.editing"
@@ -113,9 +113,10 @@ import {CmdForm, CmdFormElement, CmdHeadline, openFancyBox} from 'comand-compone
 // import functions
 import {ContactFormValidator} from "../utils/ContactFormValidator"
 
+// import store
 import {usePiniaStore} from "../stores/pinia"
 
-//import mixins
+// import mixins
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
 
 export default {
@@ -265,4 +266,12 @@ export default {
 //     })
 // }
 </script>
+
+<style lang="scss">
+.contact-form {
+    fieldset {
+        margin: 0;
+    }
+}
+</style>
 

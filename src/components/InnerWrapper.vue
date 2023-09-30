@@ -5,6 +5,7 @@
         <EditComponentWrapper
             v-if="editMode"
             componentName="CmdSlideshow"
+            :componentProps="slideshow"
             :allowAddComponent="true"
             :componentPath="componentPath()">
             <!-- begin cmd-slideshow -->

@@ -11,7 +11,9 @@ function findEditComponentWrapper(component) {
 function buildComponentPath(component, ...extraPathElements) {
     const path = []
     for (let parent = findEditComponentWrapper(component); parent; parent = findEditComponentWrapper(parent.$parent)) {
-        path.unshift(...parent.componentPath)
+        if (parent.componentPath) {
+            path.unshift(...parent.componentPath);
+        }
     }
     path.push(...extraPathElements)
     return path
