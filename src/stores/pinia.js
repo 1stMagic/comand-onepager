@@ -23,7 +23,14 @@ function findComponent(site, componentPath) {
     if (!(site && Array.isArray(componentPath) && componentPath.length > 0)) {
         return null
     }
-    // ["main", "sections", {id: "section2"}, 0]
+    // ["main", "sections", {id: "section2"}, 0, {...}]
+
+    // check if componentPath contains a component (otherwise $isComponent-flag is false)
+    const lastComponentPathEntry = componentPath[componentPath.length - 1]
+    if(typeof lastComponentPathEntry === "object" && lastComponentPathEntry.$isComponent === false) {
+        // remove last item (here object) from componentPath to ensure following functions will not break
+        componentPath = componentPath.slice(0, -1)
+    }
 
     const result = {
         node: site
@@ -182,10 +189,30 @@ export const usePiniaStore = defineStore("pinia", {
             }
         },
         deleteContent(componentPath) {
+            if(componentPath.length) {
+                const lastComponentPathEntry = componentPath[componentPath.length - 1]
+                if(typeof lastComponentPathEntry === "object" && lastComponentPathEntry.$isComponent === false) {
+                    // remove last item (here object) from componentPath to ensure componentPath has default array-structure
+                    componentPath = [...componentPath.slice(0, -1), ...lastComponentPathEntry.componentPath || []]
+                }
+            }
+
+            // get component (and its parent)
             const result = findComponent(this.site, componentPath)
 
+            // check if component parent is array
             if(Array.isArray(result.parent) && result.nodeIndex != null) {
-                    result.parent.splice(result.nodeIndex, 1)
+                // delete entry from array
+                result.parent.splice(result.nodeIndex, 1)
+            } else if (typeof result.parent === "object" && result.nodeIndex != null) {
+                // if parent component contains sub-components/is object, set corresponding property-name to empty object to remove content
+                // removing entire property would disable to re-enter content for that sub-component/property
+                if (typeof result.parent[result.nodeIndex] === "string") {
+                    result.parent[result.nodeIndex] = ""
+                } else {
+                    result.parent[result.nodeIndex] = {}
+                }
+
             }
         },
         updateContent(componentPath, updateHandlers) {

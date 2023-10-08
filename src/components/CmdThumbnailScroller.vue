@@ -11,8 +11,8 @@
          ref="thumbnail-scroller">
         <!-- begin cmd-headline -->
         <CmdHeadline
-                v-if="cmdHeadline?.headlineText || editing"
-                v-bind="cmdHeadline"
+            v-if="cmdHeadline?.headlineText || editing"
+            v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
 
@@ -49,33 +49,23 @@
                     </a>
 
                     <!-- begin edit-mode -->
-                    <EditComponentWrapper
-                        v-else
-                        class="image-wrapper edit-items"
-                        :showComponentName="false"
-                        :allowedComponentTypes="[]"
-                        componentTag="ul"
-                        componentName="CmdImage"
-                        :componentProps="item"
-                        :componentPath="['props', 'thumbnailScrollerItems', index]"
-                    >
-                        <li v-if="contentType === 'image'" class="item-wrapper">
-                            <!-- begin CmdImage -->
-                            <CmdImage
-                                :image="item.image"
-                                :figcaption="item.figcaption"
-                            />
-                            <!-- end CmdImage -->
-                        </li>
-                        <!-- begin contentType === text -->
-                        <template v-else>
-                            <!-- begin CmdIcon -->
-                            <CmdIcon v-if="item.iconClass" :iconClass="item.iconClass" :type="item.iconType"/>
-                            <!-- end CmdIcon -->
-                            <span v-if="item.text">{{ item.text }}</span>
-                        </template>
-                        <!-- end contentType === text -->
-                    </EditComponentWrapper>
+                    <span v-else-if="contentType === 'image'" class="image-wrapper edit-items">
+                        <!-- begin CmdImage -->
+                        <CmdImage
+                            :image="item.image"
+                            :figcaption="item.figcaption"
+                        />
+                         <!-- end CmdImage -->
+                    </span>
+
+                    <!-- begin contentType === text -->
+                    <template v-else-if="contentType === 'text'">
+                        <!-- begin CmdIcon -->
+                        <CmdIcon v-if="item.iconClass" :iconClass="item.iconClass" :type="item.iconType"/>
+                        <!-- end CmdIcon -->
+                        <span v-if="item.text">{{ item.text }}</span>
+                    </template>
+                    <!-- end contentType === text -->
                     <!-- end edit-mode -->
                 </li>
             </transition-group>
@@ -83,9 +73,9 @@
 
             <!-- begin CmdSlideButton -->
             <CmdSlideButton
-                    v-if="showSlidebuttons"
-                    @click.prevent="showNextItem"
-                    :slideButtons="cmdSlideButtons.next"
+                v-if="showSlidebuttons"
+                @click.prevent="showNextItem"
+                :slideButtons="cmdSlideButtons.next"
             />
             <!-- end CmdSlideButton -->
         </div>
@@ -250,7 +240,7 @@ export default {
             return this.getMessage("cmdthumbnailscroller.tooltip.open")
         },
         fullWidthClass() {
-            if(this.orientation === "horizontal") {
+            if (this.orientation === "horizontal") {
                 return "full-width"
             }
             return null
@@ -425,7 +415,6 @@ export default {
             }
         }
     }
-
 
     &.gallery-scroller {
         max-width: var(--max-width);

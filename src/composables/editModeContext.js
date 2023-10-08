@@ -83,37 +83,21 @@ function settingsActions(state) {
 
 function systemActions(state) {
     return {
-        setActiveComponent(componentIdent) {
-            let componentIdentifier = componentIdent
-            if (Array.isArray(componentIdent)) {
-                componentIdentifier = JSON.stringify(componentIdent)
-            }
-            state.activeComponentIdentifier = componentIdentifier;
-            state.activeComponentIdentifierArray = componentIdent;
-            if (state.contentEditing !== componentIdentifier) {
+        setActiveComponent(componentPath) {
+            const componentIdentifier = JSON.stringify(componentPath)
+            if (state.activeComponentIdentifier !== componentIdentifier) {
                 state.contentEditing = null
             }
+            state.activeComponentIdentifier = componentIdentifier;
+            state.activeComponentPath = componentPath;
         },
-        isActiveComponent(componentIdent) {
-            //return state.activeComponentIdentifier === componentIdentifier
-            let componentIdentifier = componentIdent
-            if (Array.isArray(componentIdent)) {
-                componentIdentifier = JSON.stringify(componentIdent)
-            }
+        isActiveComponent(componentPath) {
+            const componentIdentifier = JSON.stringify(componentPath)
             if (state.activeComponentIdentifier === componentIdentifier) {
                 return true
             }
-            if (Array.isArray(state.activeComponentIdentifierArray) && Array.isArray(componentIdent)) {
-                const minLength = Math.min(state.activeComponentIdentifierArray.length, componentIdent.length)
-                if (minLength > 3) {
-                    for (let i = 0, c = minLength; i < c; i++) {
-                        if (JSON.stringify(state.activeComponentIdentifierArray[i]) !== JSON.stringify(componentIdent[i])) {
-                            return false
-                        }
-                    }
-                    console.log("active", state.activeComponentIdentifierArray.length, componentIdent.length, state.activeComponentIdentifierArray, componentIdent)
-                    return true
-                }
+            if (state.activeComponentPath && componentPath.length >= state.activeComponentPath.length) {
+                return JSON.stringify(componentPath.slice(0, state.activeComponentPath.length)) === state.activeComponentIdentifier
             }
             return false
         }

@@ -121,7 +121,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="icon-hexagon button-delete"
+                    <a :class="['icon-hexagon', 'button-delete', {disabled: editing}]"
                        href="#"
                        @click.prevent="deleteComponent"
                        title="Delete this component (and its content)">
@@ -148,7 +148,7 @@
             <!-- end action buttons -->
         </template>
         <!-- begin slot -->
-        <slot></slot>
+        <slot :editing="editing"></slot>
         <!-- end slot -->
     </component>
 </template>
@@ -276,10 +276,13 @@ export default {
         showActionButtons() {
             // console.log("this.componentIdentifier", this.componentIdentifier)
             // this.editModeContext.system.setActiveComponent(this.componentIdentifier)
-            this.editModeContext.system.setActiveComponent(buildComponentPath(this))
+            const parentEditComponentWrapper = findEditComponentWrapper(this.$parent)
+            if (!parentEditComponentWrapper) {
+                this.editModeContext.system.setActiveComponent(buildComponentPath(this))
+            }
         },
         deleteComponent() {
-            if (confirm("Delete this component and its content?")) {
+            if (!this.editing && confirm("Delete this component and its content?")) {
                 this.deleteContent(buildComponentPath(this))
 
                 // close settings sidebar if component is deleted
@@ -403,8 +406,8 @@ function buildComponentPath(component) {
         gap: 0;
 
         position: absolute;
-        top: calc(var(--action-buttons-size) / -1.9);
-        right: 0;
+        top: -1.8rem;
+        right: -1rem;
         z-index: 1;
 
         margin: 0;
@@ -440,36 +443,66 @@ function buildComponentPath(component) {
             }
 
             &:nth-child(odd) {
-                top: calc(var(--action-buttons-size) / 2.2);
+                top: 0;
+            }
+
+            &:nth-child(even) {
+                top: -1.6rem;
+            }
+
+            &:nth-child(5) {
+                right: 0;
             }
 
             &:nth-child(4) {
-                right: calc(var(--action-buttons-size) / -4);
+                right: calc(var(--action-buttons-size) * -0.25);
             }
 
             &:nth-child(3) {
-                right: calc(var(--action-buttons-size) / -2);
+                right: calc(var(--action-buttons-size) * -0.5);
             }
 
             &:nth-child(2) {
-                right: calc(var(--action-buttons-size) / -1.333);
+                right: calc(var(--action-buttons-size) * -0.75);
             }
 
             &:nth-child(1) {
-                right: calc(var(--action-buttons-size) / -1);
+                right: calc(var(--action-buttons-size) * -1);
             }
         }
     }
 
     .edit-items {
         .action-buttons {
-            top: -1.5rem;
+            top: -1.6rem;
+            left: 0;
             gap: calc(var(--default-gap) / 2);
             flex-wrap: nowrap;
 
             li {
                 top: 0;
                 right: 0;
+                left: auto;
+
+                &:nth-child(5) {
+                    right: 0;
+                }
+
+                &:nth-child(4) {
+                    right: var(--icon-font-size);
+                }
+
+                &:nth-child(3) {
+                    right: calc(var(--icon-font-size) * 2);
+                }
+
+                &:nth-child(2) {
+                    right: calc(var(--icon-font-size) * 3);
+                }
+
+                &:nth-child(1) {
+                    right: calc(var(--icon-font-size) * 4);
+                }
 
                 a {
                     font-size: 1rem;
@@ -524,7 +557,6 @@ ul.edit-component-wrapper {
             @include edit-border;
         }
     }
-
 }
 
 </style>

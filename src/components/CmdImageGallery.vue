@@ -2,9 +2,8 @@
     <div class="grid-container-create-columns cmd-image-gallery">
         <!-- begin cmd-headline -->
         <CmdHeadline
-             v-if="cmdHeadline?.headlineText || editing"
-             v-bind="cmdHeadline"
-             :componentPath="['props', 'cmdHeadline']"
+            v-if="cmdHeadline?.headlineText || editing"
+            v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
 
@@ -29,19 +28,14 @@
         <!-- end default view -->
 
         <!-- begin edit-mode view -->
-        <EditComponentWrapper
+        <CmdImage
             v-else
-            class="image-wrapper edit-items"
             v-for="(image, index) in images"
             :key="index"
-            :showComponentName="false"
-            :allowedComponentTypes="[]"
-            componentName="CmdImage"
-            :componentProps="image"
-            :componentPath="['props', 'images', index]"
-        >
-            <CmdImage :image="image.image" :figcaption="image.figcaption" />
-        </EditComponentWrapper>
+            class="image-wrapper"
+            :image="image.image"
+            :figcaption="image.figcaption"
+        />
         <!-- end edit-mode view -->
     </div>
 </template>
@@ -116,38 +110,38 @@ export default {
 <style lang="scss">
 /* begin cmd-image-gallery ---------------------------------------------------------------------------------------- */
 .cmd-image-gallery {
-  > .cmd-headline, > input.edit-mode {
-    grid-column: span var(--grid-columns);
-    margin-bottom: 0;
-  }
-
-  > .image-wrapper {
-    align-self: center;
-    justify-self: center;
-    grid-column: span var(--grid-small-span);
-
-    img {
-      border: var(--default-border);
-      border-radius: var(--border-radius);
-      max-height: 30rem;
+    > .cmd-headline, > input.edit-mode, > .edit-component-wrapper {
+        grid-column: span var(--grid-columns);
+        margin-bottom: 0;
     }
 
-    figcaption {
-      padding: calc(var(--default-padding) / 2);
-    }
+    .image-wrapper {
+        align-self: center;
+        justify-self: center;
+        grid-column: span var(--grid-small-span);
 
-    &:hover, &:active, &:focus {
-      text-decoration: none;
+        img {
+            border: var(--default-border);
+            border-radius: var(--border-radius);
+            max-height: 30rem;
+        }
 
-      img {
-        border: var(--primary-border);
-      }
-    }
+        figcaption {
+            padding: calc(var(--default-padding) / 2);
+        }
 
-    & + .pager {
-      margin-top: calc(var(--default-margin) * 2);
+        &:hover, &:active, &:focus {
+            text-decoration: none;
+
+            img {
+                border: var(--primary-border);
+            }
+        }
+
+        & + .pager {
+            margin-top: calc(var(--default-margin) * 2);
+        }
     }
-  }
 }
 
 /* end cmd-image-gallery ------------------------------------------------------------------------------------------ */

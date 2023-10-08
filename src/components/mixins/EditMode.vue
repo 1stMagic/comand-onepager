@@ -21,19 +21,19 @@ export default {
         this.initializeEditMode()
     },
     methods: {
-        customInitializeEditMode() {
-            return false
-        },
         initializeEditMode() {
-            if (this.customInitializeEditMode()) {
-                return
+            if (this.$refs.editComponentWrapper) {
+                this.$refs.editComponentWrapper?.addUpdateHandlerProvider(this.updateHandlerProvider)
             }
-            const editComponentWrapper = findEditComponentWrapper(this.$parent);
-            if (editComponentWrapper) {
-                editComponentWrapper.addEditStateListener(editing => this.editing = editing)
-                editComponentWrapper.addUpdateHandlerProvider(this.updateHandlerProvider)
-                editComponentWrapper.setAddHandlerProvider(this.addHandlerProvider)
+            else {
+                const editComponentWrapper = findEditComponentWrapper(this.$parent);
+                if (editComponentWrapper) {
+                    editComponentWrapper.addEditStateListener(editing => this.editing = editing)
+                    editComponentWrapper.addUpdateHandlerProvider(this.updateHandlerProvider)
+                    editComponentWrapper.setAddHandlerProvider(this.addHandlerProvider)
+                }
             }
+
         },
         updateHandlerProvider() {
             return {}

@@ -2,29 +2,44 @@
     <div class="cmd-text-block flex-container vertical">
         <!-- begin cmdHeadline -->
         <CmdHeadline
-                v-if="(cmdHeadline?.headlineText || editing) && headlinePosition === 'aboveImage'"
-                v-bind="cmdHeadline"
-                :componentPath="['props', 'cmdHeadline']"
+            v-if="(cmdHeadline?.headlineText || editModeContext) && headlinePosition === 'aboveImage'"
+            v-bind="cmdHeadline"
         />
         <!-- end cmdHeadline -->
 
         <!-- begin cmdImage -->
         <CmdImage
-                v-if="cmdImage"
-                :image="cmdImage?.image"
-                :figcaption="cmdImage?.figcaption"
+            v-if="cmdImage"
+            :image="cmdImage?.image"
+            :figcaption="cmdImage?.figcaption"
         />
         <!-- end cmdImage -->
 
         <!-- begin cmdHeadline -->
         <CmdHeadline
-                v-if="(cmdHeadline?.headlineText || editing) && headlinePosition === 'belowImage'"
-                v-bind="cmdHeadline"
+            v-if="(cmdHeadline?.headlineText || editModeContext) && headlinePosition === 'belowImage'"
+            v-bind="cmdHeadline"
         />
         <!-- end cmdHeadline -->
 
         <!-- begin continuous text -->
-        <textarea v-if="editing" :class="['edit-mode', textAlign]" v-model="editableHtmlContent"></textarea>
+        <!-- begin edit-mode -->
+        <EditComponentWrapper
+            v-if="editModeContext"
+            ref="editComponentWrapper"
+            class="edit-items"
+            :showComponentName="false"
+            :allowedComponentTypes="[]"
+            :componentProps="{htmlContent, textAlign}"
+            :componentPath="paragraphComponentPath"
+        >
+            <template v-slot="slotProps">
+                <textarea v-if="slotProps.editing" :class="['edit-mode', textAlign]" v-model="editableHtmlContent" placeholder="Paragraph"></textarea>
+                <div v-else-if="htmlContent" v-html="htmlContent" :class="textAlign"></div>
+            </template>
+        </EditComponentWrapper>
+        <!-- end edit-mode -->
+
         <div v-else-if="htmlContent" v-html="htmlContent" :class="textAlign"></div>
         <!-- end continuous text -->
     </div>
@@ -39,7 +54,7 @@ export default {
     mixins: [EditMode],
     data() {
         return {
-            editableHtmlContent: this.htmlContent
+            editableHtmlContent: null
         }
     },
     props: {
@@ -85,8 +100,14 @@ export default {
         }
     },
     computed: {
+        paragraphComponentPath() {
+            /*  because paragraph is no component on its own, besides the componentPath (for the property),
+             an additional flag (here $isComponent-key) is used to let the store identify this edge case.
+             the '$'-prefix is set to ensure that the flag is not a generic name, that potentially is used as a property-name in any component */
+            return this.componentPath || [{componentPath: ["props", "htmlContent"], $isComponent: false}]
+        },
         textAlign() {
-            if(this.paragraphTextAlign) {
+            if (this.paragraphTextAlign) {
                 return "text-align-" + this.paragraphTextAlign
             }
             return ""
@@ -98,19 +119,21 @@ export default {
         },
         updateHandlerProvider() {
             const htmlContent = this.editableHtmlContent
-            const children = ["CmdHeadline", "CmdImage"]
+            this.editableHtmlContent = null // reset data-property
+
             return updateHandlerProvider(this, {
-                update(props, childUpdateHandlers) {
+                update(props) {
                     props.htmlContent = htmlContent
-                    childUpdateHandlers?.forEach(childUpdateHandler => {
-                        if (children.includes(childUpdateHandler.name)) {
-                            const prop = childUpdateHandler.name[0].toLowerCase() + childUpdateHandler.name.slice(1)
-                            props[prop] = props[prop] || {}
-                            childUpdateHandler.update(props[prop])
-                        }
-                    })
                 }
             })
+        }
+    },
+    watch: {
+        htmlContent: {
+            handler() {
+                this.editableHtmlContent = this.htmlContent
+            },
+            immediate: true
         }
     }
 }

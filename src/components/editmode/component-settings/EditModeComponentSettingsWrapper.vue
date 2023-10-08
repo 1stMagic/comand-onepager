@@ -9,18 +9,22 @@
             <template v-slot:tab-content-0>
                 <div>
                     <div class="component-settings-wrapper">
-                    <h3>Component Settings</h3>
-                    <!-- begin selection of allowed components to switch component type -->
-                    <CmdFormElement
-                        v-if="isComponent"
-                        element="select"
-                        labelText="Component type"
-                        :selectOptions="listOfValidComponents"
-                        v-model="currentComponentName"
-                        @update:modelValue="switchComponent"
-                    />
+                        <template v-if="isComponent">
+                            <h3>Component Settings</h3>
+                            <!-- begin selection of allowed components to switch component type -->
+                            <CmdFormElement
+                                v-if="isComponent"
+                                element="select"
+                                labelText="Component type"
+                                :selectOptions="listOfValidComponents"
+                                v-model="currentComponentName"
+                                @update:modelValue="switchComponent"
+                            />
+                            <!-- end selection of allowed components to switch component type -->
+                        </template>
+                        <h3 v-else>Item Settings</h3>
                     </div>
-                    <!-- end selection of allowed components to switch component type -->
+
                     <template v-if="componentProps">
                         <div class="list-of-components flex-container vertical">
                             <component ref="settings" :is="settingsComponentName" v-bind="componentProps"/>

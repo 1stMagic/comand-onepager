@@ -16,33 +16,23 @@
                 <template v-if="currentItem">
                     <template v-if="!useSlot">
                         <template v-if="!editModeContext">
-                            <a v-if="currentItem?.link?.href" :href="currentItem?.link?.href" :title="currentItem?.link?.tooltip">
+                            <a v-if="currentItem?.link?.href" :href="currentItem?.link?.href"
+                               :title="currentItem?.link?.tooltip">
                                 <!-- begin CmdImage -->
                                 <CmdImage :image="currentItem?.image" :figcaption="currentItem?.figcaption"/>
                                 <!-- begin CmdImage -->
                             </a>
 
-                           <!-- begin CmdImage -->
+                            <!-- begin CmdImage -->
                             <CmdImage v-else :image="currentItem?.image" :figcaption="currentItem?.figcaption"/>
                             <!-- begin CmdImage -->
                         </template>
+
                         <!-- begin edit-mode view -->
-                        <EditComponentWrapper
-                            v-else-if="slideshowItems.length"
-                            @item-added="showItem(index + 1)"
-                            class="image-wrapper edit-items"
-                            :showComponentName="false"
-                            :itemProvider="itemProvider"
-                            :allowedComponentTypes="[]"
-                            ref="slideshowItemComponentWrapper"
-                            componentName="CmdImage"
-                            :componentProps="currentItem"
-                            :componentPath="['slideshowItems', index]"
-                        >
-                            <!-- begin CmdImage -->
-                            <CmdImage :image="currentItem?.image" :figcaption="currentItem?.figcaption"/>
-                            <!-- begin CmdImage -->
-                        </EditComponentWrapper>
+                        <!-- begin CmdImage -->
+                        <CmdImage v-else-if="slideshowItems.length" :image="currentItem?.image"
+                                  :figcaption="currentItem?.figcaption"/>
+                        <!-- begin CmdImage -->
                         <!-- end edit-mode view -->
                     </template>
                     <div
@@ -56,7 +46,8 @@
                         <!-- end slot -->
                     </div>
                 </template>
-                <button v-else-if="editModeContext" type="button" class="button" title="Add slideshow-image" @click="onAddItem">
+                <button v-else-if="editModeContext" type="button" class="button" title="Add slideshow-image"
+                        @click="onAddItem">
                     <span class="icon-plus"></span>
                 </button>
             </transition-group>
@@ -196,27 +187,27 @@ export default {
                 this.itemProvider)
         },
         itemProvider() {
-          return {
-              "image": {
-                  "src": {
-                      "large": "/media/images/demo-images/large/slide1.jpg",
-                      "medium": "/media/images/demo-images/medium/slide1.jpg",
-                      "small": "/media/images/demo-images/small/slide1.jpg"
-                  },
-                  "alt": "Alternative Text",
-                  "tooltip": "Tooltip 1"
-              },
-              "figcaption": {
-                  "text": "Figcaption DE",
-                  "position": "bottom",
-                  "textAlign": "center",
-                  "show": true
-              }
-          }
+            return {
+                "image": {
+                    "src": {
+                        "large": "/media/images/demo-images/large/slide1.jpg",
+                        "medium": "/media/images/demo-images/medium/slide1.jpg",
+                        "small": "/media/images/demo-images/small/slide1.jpg"
+                    },
+                    "alt": "Alternative Text",
+                    "tooltip": "Tooltip 1"
+                },
+                "figcaption": {
+                    "text": "Figcaption DE",
+                    "position": "bottom",
+                    "textAlign": "center",
+                    "show": true
+                }
+            }
         },
         showPrevItem() {
             // avoids slide-button to be clicked in edit-mode
-            if(this.slideshowItemEditing) {
+            if (this.slideshowItemEditing) {
                 return
             }
 
@@ -235,13 +226,13 @@ export default {
             }
         },
         showItem(i) {
-            if (!this.slideshowItemEditing && i >= 0 && i < this.slideshowItems.length ) {
+            if (!this.slideshowItemEditing && i >= 0 && i < this.slideshowItems.length) {
                 this.index = i;
             }
         },
         showNextItem() {
             // avoids slide-button to be clicked in edit-mode
-            if(this.slideshowItemEditing) {
+            if (this.slideshowItemEditing) {
                 return
             }
 
@@ -267,7 +258,7 @@ export default {
     },
     computed: {
         tooltipForSlidebuttons() {
-            if(this.slideshowItemEditing) {
+            if (this.slideshowItemEditing) {
                 return {
                     title: "Not allowed while editing!"
                 }
