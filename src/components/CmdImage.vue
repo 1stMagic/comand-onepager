@@ -9,6 +9,7 @@
         componentName="CmdImage"
         :componentProps="{image, figcaption}"
         :componentPath="imageComponentPath"
+        :allowDeleteComponent="!!imageSource"
     >
         <template v-slot="slotProps">
             <figure :class="['cmd-image flex-container no-gap vertical', textAlign]">
@@ -23,7 +24,7 @@
                         labelText="Text figcaption"
                         v-model="editableFigcaptionText"
                     />
-                    <figcaption v-else>{{ figcaption?.text }}</figcaption>
+                    <figcaption v-else-if="figcaption?.text">{{ figcaption?.text }}</figcaption>
                 </template>
                 <!-- end figcaption above image -->
 
@@ -51,7 +52,7 @@
                     />
                     <!-- end CmdFormElement -->
                 </template>
-                <template v-else>
+                <template v-else-if="imageSource">
                     <!-- begin image without drop-area -->
                     <img :src="imageSource" :alt="image?.alt" :title="image?.tooltip"/>
                     <!-- end image without drop-area -->
@@ -69,10 +70,13 @@
                         labelText="Text figcaption"
                         :showLabel="false"
                         v-model="editableFigcaptionText"
+                        placeholder="figcaption"
                     />
-                    <figcaption v-else>{{ figcaption?.text }}</figcaption>
+                    <figcaption v-else-if="figcaption?.text">{{ figcaption?.text }}</figcaption>
                 </template>
                 <!-- end figcaption below image -->
+
+                <PlaceholderComponentWrapper v-if="!slotProps.editing && !imageSource" tagName="p" text="Image" />
             </figure>
         </template>
     </EditComponentWrapper>
@@ -247,7 +251,7 @@ export default {
         },
         fileSelected(event) {
             if (event.target.files.length > 0) {
-                checkAndUploadFile(event.target.files[0], this.allowedFileExtensions, this.minImageWidth, this.maxFileUploadSize, this.$refs.contentImage)
+                checkAndUploadFile(event.target.files[0], this.allowedFileExtensions, this.minImageWidth, this.maxFileUploadSize, (imageSource) => this.newImageSource = imageSource)
             }
         },
         updateWindowWidth() {
@@ -329,19 +333,10 @@ export default {
     watch: {
         figcaption: {
             handler() {
-                this.showFigcaption = this.figcaption.show
-                this.figcaptionText = this.figcaption.text
-                this.figcaptionPosition = this.figcaption.position
-                this.figcaptionTextAlign = this.figcaption.textAlign
-            },
-            immediate: true,
-            deep: true
-        },
-        image: {
-            handler() {
-                this.newImageSource = this.image.src
-                this.alternativeText = this.image.alt
-                this.tooltip = this.image.tooltip
+                this.showFigcaption = this.figcaption?.show
+                this.figcaptionText = this.figcaption?.text
+                this.figcaptionPosition = this.figcaption?.position
+                this.figcaptionTextAlign = this.figcaption?.textAlign
             },
             immediate: true,
             deep: true

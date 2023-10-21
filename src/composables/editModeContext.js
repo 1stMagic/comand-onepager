@@ -28,6 +28,9 @@ function contentActions(store, state) {
         addContent(componentPath, itemProvider, componentPosition) {
             store.addContent(componentPath, {item: itemProvider}, componentPosition)
         },
+        updateContent(componentPath, updateHandler) {
+            store.updateContent(componentPath, [{update: updateHandler}])
+        },
         deleteContent(componentPath) {
             store.deleteContent(componentPath)
         }
@@ -83,23 +86,25 @@ function settingsActions(state) {
 
 function systemActions(state) {
     return {
-        setActiveComponent(componentPath) {
-            const componentIdentifier = JSON.stringify(componentPath)
+        setActiveComponent(parentComponentPath, childComponentPath) {
+            if (parentComponentPath.length === 0) {
+                parentComponentPath = childComponentPath
+                childComponentPath = []
+            }
+            const componentIdentifier = JSON.stringify(parentComponentPath)
             if (state.activeComponentIdentifier !== componentIdentifier) {
                 state.contentEditing = null
             }
-            state.activeComponentIdentifier = componentIdentifier;
-            state.activeComponentPath = componentPath;
+            state.activeComponentIdentifier = componentIdentifier
+            state.activeComponentPath = parentComponentPath
+            state.activeChildComponentIdentifier = JSON.stringify(childComponentPath)
+            state.activeChildComponentPath = childComponentPath
         },
         isActiveComponent(componentPath) {
-            const componentIdentifier = JSON.stringify(componentPath)
-            if (state.activeComponentIdentifier === componentIdentifier) {
-                return true
-            }
-            if (state.activeComponentPath && componentPath.length >= state.activeComponentPath.length) {
-                return JSON.stringify(componentPath.slice(0, state.activeComponentPath.length)) === state.activeComponentIdentifier
-            }
-            return false
+            return state.activeComponentIdentifier === JSON.stringify(componentPath)
+        },
+        isActiveChildComponent(componentPath) {
+            return state.activeChildComponentIdentifier === JSON.stringify(componentPath)
         }
     }
 }

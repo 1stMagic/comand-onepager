@@ -15,6 +15,7 @@
                     <component
                         :is="component.name"
                         v-bind="component.props"
+                        :componentPath="['props']"
                     >
                         <!-- begin child/nested component -->
                         <EditComponentWrapper

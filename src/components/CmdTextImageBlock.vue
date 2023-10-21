@@ -32,10 +32,12 @@
             :allowedComponentTypes="[]"
             :componentProps="{htmlContent, textAlign}"
             :componentPath="paragraphComponentPath"
+            :allowDeleteComponent="!!htmlContent"
         >
             <template v-slot="slotProps">
                 <textarea v-if="slotProps.editing" :class="['edit-mode', textAlign]" v-model="editableHtmlContent" placeholder="Paragraph"></textarea>
                 <div v-else-if="htmlContent" v-html="htmlContent" :class="textAlign"></div>
+                <PlaceholderComponentWrapper v-else tagName="p" text="Paragraph" />
             </template>
         </EditComponentWrapper>
         <!-- end edit-mode -->
@@ -104,7 +106,7 @@ export default {
             /*  because paragraph is no component on its own, besides the componentPath (for the property),
              an additional flag (here $isComponent-key) is used to let the store identify this edge case.
              the '$'-prefix is set to ensure that the flag is not a generic name, that potentially is used as a property-name in any component */
-            return this.componentPath || [{componentPath: ["props", "htmlContent"], $isComponent: false}]
+            return  [{componentPath: ["props", "htmlContent"], $isComponent: false}]
         },
         textAlign() {
             if (this.paragraphTextAlign) {

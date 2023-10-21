@@ -29,14 +29,22 @@
 
         <!-- begin edit-mode view -->
         <CmdImage
-            v-else
+            v-else-if="images.length"
             v-for="(image, index) in images"
             :key="index"
             class="image-wrapper"
             :image="image.image"
             :figcaption="image.figcaption"
+            :componentPath="['props', 'images', index]"
         />
         <!-- end edit-mode view -->
+
+        <!-- begin show placeholder if no image exists (and component is not edited) -->
+        <button v-else type="button" class="button" title="Add gallery-image"
+                @click="onAddItem">
+            <span class="icon-plus"></span>
+        </button>
+        <!-- end show placeholder if no image exists (and component is not edited) -->
     </div>
 </template>
 
@@ -44,7 +52,7 @@
 // import functions
 import {openFancyBox, createUuid} from "comand-component-library"
 import EditMode from "./mixins/EditMode.vue"
-import {updateHandlerProvider} from "../utils/editmode.js"
+import {buildComponentPath, updateHandlerProvider} from "../utils/editmode.js"
 
 export default {
     name: "CmdImageGallery",
@@ -84,6 +92,26 @@ export default {
         }
     },
     methods: {
+        onAddItem() {
+            this.editModeContext.content.addContent(
+                buildComponentPath(this, 'props', 'images', -1),
+                this.itemProvider)
+        },
+        itemProvider() {
+            return {
+                "image": {
+                    "src": "/media/images/demo-images/small/slide1.jpg",
+                    "srcImageLarge": "/media/images/demo-images/large/slide1.jpg",
+                    "alt": "Alternative Text",
+                },
+                "figcaption": {
+                    "text": "Figcaption DE",
+                    "position": "bottom",
+                    "textAlign": "center",
+                    "show": true
+                }
+            }
+        },
         showFancyBox(index) {
             openFancyBox({fancyBoxGallery: this.images, defaultGalleryIndex: index})
         },
@@ -119,6 +147,8 @@ export default {
         align-self: center;
         justify-self: center;
         grid-column: span var(--grid-small-span);
+        width: 100%;
+        min-width: 11.1rem; // assure to be as wide as action-buttons in edit-mode
 
         img {
             border: var(--default-border);

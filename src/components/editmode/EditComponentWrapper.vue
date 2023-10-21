@@ -3,13 +3,13 @@
             :is="componentTag || 'div'"
             :class="['edit-component-wrapper', {active}]"
             tabindex="0"
-            @click="showActionButtons"
+            @click.stop="showActionButtons"
             ref="editComponent"
             :title="!active ? 'Click to select this element' : 'Select an action from the buttons in the top-left corner'"
             :data-identifier="componentIdentifier">
         <li v-if="componentTag === 'ul'" class="action-buttons-wrapper">
             <!-- begin action-buttons -->
-            <ul v-show="active" class="flex-container no-flex action-buttons">
+            <ul v-show="active" class="flex-container no-flex action-buttons" :data-component="componentName">
                 <li>
                     <a :class="['icon-hexagon', {disabled: !addHandlerProvider && !allowAddComponent}]"
                        href="#"
@@ -82,7 +82,7 @@
             <!-- end show component name above wrapper -->
 
             <!-- begin action-buttons -->
-            <ul v-show="active" class="flex-container no-flex action-buttons">
+            <ul v-show="active" class="flex-container no-flex action-buttons" :data-component="componentName">
                 <li>
                     <a :class="['icon-hexagon', {disabled: !addHandlerProvider && !itemProvider && !allowAddComponent}]"
                        href="#"
@@ -121,7 +121,7 @@
                     </a>
                 </li>
                 <li>
-                    <a :class="['icon-hexagon', 'button-delete', {disabled: editing}]"
+                    <a :class="['icon-hexagon', 'button-delete', {disabled: editing || !allowDeleteComponent}]"
                        href="#"
                        @click.prevent="deleteComponent"
                        title="Delete this component (and its content)">
@@ -183,6 +183,9 @@ export default {
         allowAddComponent: {
             type: Boolean
         },
+        allowDeleteComponent: {
+            type: Boolean
+        },
         showComponentName: {
             type: Boolean,
             default: true
@@ -209,7 +212,10 @@ export default {
         // provide states from store as computed-properties inside this component
         ...mapState(usePiniaStore, ["updateContent", "updateSettings", "deleteContent", "addContent"]),
         active() {
-            // return !!this.editModeContext.system.isActiveComponent(this.componentIdentifier)
+            const parentEditComponentWrapper = findEditComponentWrapper(this.$parent)
+            if (parentEditComponentWrapper) {
+                return !!this.editModeContext.system.isActiveChildComponent(buildComponentPath(this))
+            }
             return !!this.editModeContext.system.isActiveComponent(buildComponentPath(this))
         },
         editing() {
@@ -274,17 +280,12 @@ export default {
         },
         // provide actions from store as methods inside this component
         showActionButtons() {
-            // console.log("this.componentIdentifier", this.componentIdentifier)
-            // this.editModeContext.system.setActiveComponent(this.componentIdentifier)
             const parentEditComponentWrapper = findEditComponentWrapper(this.$parent)
-            if (!parentEditComponentWrapper) {
-                this.editModeContext.system.setActiveComponent(buildComponentPath(this))
-            }
+            this.editModeContext.system.setActiveComponent(buildComponentPath(parentEditComponentWrapper), buildComponentPath(this))
         },
         deleteComponent() {
-            if (!this.editing && confirm("Delete this component and its content?")) {
+            if (!this.editing && this.allowDeleteComponent && confirm("Delete this component and its content?")) {
                 this.deleteContent(buildComponentPath(this))
-
                 // close settings sidebar if component is deleted
                 this.editModeContext.settings.stopEditing()
             }
@@ -296,7 +297,7 @@ export default {
             }
         },
         editComponent(event) {
-            event.stopPropagation()
+            event?.stopPropagation()
             const component = this.$refs.editComponent
             this.editModeContext.content.startEditing(this.componentIdentifier)
             // wait until input in inserted into DOM on next tick
@@ -391,6 +392,9 @@ function buildComponentPath(component) {
 }
 
 .edit-component-wrapper {
+    display: block;
+    width: 100%;
+
     @include edit-border;
 
     .component-name {

@@ -115,15 +115,41 @@ main {
 /* ---------------------------------------------- END MEDIA QUERIES -------------------------------------------------- */
 
 .edit-mode {
-	.edit-component-wrapper label {
-		&.text-center input {
-			text-align: center;
+	.edit-component-wrapper {
+		label {
+			&.text-center input {
+				text-align: center;
+			}
+
+			&.edit-mode input, select, textarea, cmd-fake-select {
+				padding: 0;
+				height: auto;
+				min-height: calc(var(--input-height) / 2);
+			}
 		}
 
-		&.edit-mode input, select, textarea, cmd-fake-select {
-			padding: 0;
-			height: auto;
-			min-height: calc(var(--input-height) / 2);
+		.cmd-image {
+			input {
+				width: 5rem;
+			}
+		}
+
+		.cmd-slideshow {
+				padding-top: 2rem;
+		}
+
+		[data-component="CmdSlideshow"] {
+			top: 1.8rem;
+		}
+
+		.cmd-thumbnail-scroller {
+			.inner-thumbnail-wrapper > ul > li {
+				align-self: flex-start;
+			}
+
+			.cmd-image .drop-area span[class*="icon"] {
+				font-size: 5rem;
+			}
 		}
 	}
 }

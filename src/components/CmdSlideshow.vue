@@ -12,7 +12,7 @@
             <!-- end CmdSlideButton -->
 
             <!-- begin area to slide -->
-            <transition-group name="fade">
+            <transition name="fade">
                 <template v-if="currentItem">
                     <template v-if="!useSlot">
                         <template v-if="!editModeContext">
@@ -30,14 +30,18 @@
 
                         <!-- begin edit-mode view -->
                         <!-- begin CmdImage -->
-                        <CmdImage v-else-if="slideshowItems.length" :image="currentItem?.image"
-                                  :figcaption="currentItem?.figcaption"/>
-                        <!-- begin CmdImage -->
+                        <CmdImage
+                            v-else-if="slideshowItems.length"
+                            :image="currentItem?.image"
+                            :figcaption="currentItem?.figcaption"
+                            :componentPath="['props', 'slideshowItems', index]"
+                        />
+                        <!-- end CmdImage -->
                         <!-- end edit-mode view -->
                     </template>
                     <div
                         v-else
-                        class="image-wrapper"
+                        class="slot-wrapper"
                         :key="index"
                         :style="'background-image: url(' + currentItem.image.srcLarge + ')'"
                     >
@@ -50,7 +54,7 @@
                         @click="onAddItem">
                     <span class="icon-plus"></span>
                 </button>
-            </transition-group>
+            </transition>
             <!-- end area to slide -->
 
             <!-- begin CmdSlideButton -->
@@ -73,7 +77,7 @@
                     </a>
                 </li>
             </ol>
-            <span v-if="showCounter">{{ index + 1 }}/{{ slideshowItems.length }}</span>
+            <span class="item-counter" v-if="showCounter">{{ index + 1 }}/{{ slideshowItems.length }}</span>
         </div>
     </div>
 </template>
@@ -183,7 +187,7 @@ export default {
     methods: {
         onAddItem() {
             this.editModeContext.content.addContent(
-                buildComponentPath(this, 'slideshowItems', -1),
+                buildComponentPath(this, 'props', 'slideshowItems', -1),
                 this.itemProvider)
         },
         itemProvider() {
@@ -338,7 +342,7 @@ export default {
             margin: 0;
         }
 
-        .image-wrapper {
+        .slot-wrapper {
             padding: calc(var(--default-padding) * 5);
             width: 100%;
             min-height: 50rem;
@@ -351,6 +355,12 @@ export default {
             .box {
                 align-self: flex-start;
             }
+        }
+
+        .image-wrapper {
+            width: 100%;
+            min-width: 11.1rem; // assure to be as wide as action-buttons in edit-mode
+            min-height: 50rem;
         }
 
         > ol {
@@ -413,7 +423,7 @@ export default {
             }
         }
 
-        > span {
+        > .item-counter {
             position: absolute;
             top: .5rem;
             right: 5.5rem;
@@ -431,7 +441,6 @@ export default {
 }
 
 .edit-mode .cmd-slideshow .image-wrapper.edit-items {
-    width: auto;
     padding: 0;
     margin-top: 2rem;
 

@@ -5,12 +5,12 @@
         <EditComponentWrapper
             v-if="editMode"
             componentName="CmdSlideshow"
-            :componentProps="slideshow"
+            :componentProps="slideshow?.props"
             :allowAddComponent="true"
             :componentPath="componentPath()">
             <!-- begin cmd-slideshow -->
             <CmdSlideshow
-                :slideshow-items="slideshow.slideshowItems"
+                :slideshow-items="slideshow?.props?.slideshowItems || []"
                 :full-width="true"
                 :autoplay="false"
                 :cmdSlideButtons="cmdSlideButtons"
@@ -21,8 +21,8 @@
 
         <!-- begin cmd-slideshow -->
         <CmdSlideshow
-                v-else-if="!editMode && slideshow.slideshowItems?.length"
-                :slideshow-items="slideshow.slideshowItems"
+                v-else-if="!editMode && slideshow?.props?.slideshowItems?.length"
+                :slideshow-items="slideshow?.props?.slideshowItems"
                 :full-width="true"
                 :autoplay="false"
                 :cmdSlideButtons="cmdSlideButtons"
@@ -83,12 +83,6 @@ import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia"
 
 export default {
-    data() {
-        return {
-            slideshowData: [],
-            shareButtons: []
-        }
-    },
     mixins: [
         BaseI18nComponent
     ],

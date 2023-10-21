@@ -185,7 +185,6 @@ export const usePiniaStore = defineStore("pinia", {
                 }
                 // insert new component
                 result.parent.splice(result.nodeIndex + position, 0, addHandler.item())
-
             }
         },
         deleteContent(componentPath) {

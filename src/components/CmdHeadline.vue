@@ -30,6 +30,7 @@
         componentName="CmdHeadline"
         :componentProps="{headlineText, headlineLevel}"
         :componentPath="headlineComponentPath"
+        :allowDeleteComponent="!!headlineText"
     >
         <template v-slot="slotProps">
             <CmdFormElement
@@ -42,7 +43,7 @@
                 placeholder="Headline"
                 v-model="editableHeadlineText"
             />
-            <div v-else
+            <div v-else-if="headlineText"
                  :class="['cmd-headline', {'has-pre-headline-text': preHeadlineText, 'has-icon': headlineIcon?.iconClass}, getTextAlign]">
                 <!-- begin CmdIcon -->
                 <CmdIcon v-if="headlineIcon" :iconClass="headlineIcon?.iconClass" :type="headlineIcon?.iconType"/>
@@ -62,6 +63,12 @@
                     <!-- end slot -->
                 </component>
             </div>
+            <!-- begin show placeholder if no image exists (and component is not edited) -->
+            <button v-else type="button" class="button" title="Add headline"
+                    @click="onAddItem">
+                <span class="icon-plus"></span>
+            </button>
+            <!-- end show placeholder if no image exists (and component is not edited) -->
         </template>
     </EditComponentWrapper>
     <!-- end edit-mode -->
@@ -69,7 +76,7 @@
 
 <script>
 import EditMode from "./mixins/EditMode.vue"
-import {updateHandlerProvider} from "../utils/editmode.js"
+import {buildComponentPath, updateHandlerProvider} from "../utils/editmode.js"
 
 export default {
     name: "CmdHeadline",
@@ -147,6 +154,9 @@ export default {
                     props.preHeadlineText = preHeadlineText
                 }
             })
+        },
+        onAddItem() {
+            this.$refs.editComponentWrapper.editComponent()
         }
     },
     watch: {

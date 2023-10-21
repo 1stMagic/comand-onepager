@@ -11,7 +11,7 @@
          ref="thumbnail-scroller">
         <!-- begin cmd-headline -->
         <CmdHeadline
-            v-if="cmdHeadline?.headlineText || editing"
+            v-if="cmdHeadline?.headlineText || editModeContext"
             v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
@@ -49,14 +49,14 @@
                     </a>
 
                     <!-- begin edit-mode -->
-                    <span v-else-if="contentType === 'image'" class="image-wrapper edit-items">
-                        <!-- begin CmdImage -->
-                        <CmdImage
-                            :image="item.image"
-                            :figcaption="item.figcaption"
-                        />
-                         <!-- end CmdImage -->
-                    </span>
+                    <!-- begin CmdImage -->
+                    <CmdImage
+                        v-else-if="contentType === 'image'"
+                        :image="item.image"
+                        :figcaption="item.figcaption"
+                        :componentPath="['props', 'thumbnailScrollerItems', index]"
+                    />
+                    <!-- end CmdImage -->
 
                     <!-- begin contentType === text -->
                     <template v-else-if="contentType === 'text'">
@@ -67,6 +67,14 @@
                     </template>
                     <!-- end contentType === text -->
                     <!-- end edit-mode -->
+                </li>
+                <li v-if="!items.length && contentType === 'image'" >
+                    <!-- begin show placeholder if no image exists (and component is not edited) -->
+                    <button type="button" class="button" title="Add thumbnail-scroller-image"
+                            @click="onAddItem">
+                        <span class="icon-plus"></span>
+                    </button>
+                    <!-- end show placeholder if no image exists (and component is not edited) -->
                 </li>
             </transition-group>
             <!-- end list of images to slide -->
@@ -90,7 +98,7 @@ import {createUuid, openFancyBox} from 'comand-component-library'
 import I18n from "./mixins/I18n"
 import DefaultMessageProperties from "./mixins/CmdThumbnailScroller/DefaultMessageProperties"
 import EditMode from "./mixins/EditMode.vue"
-import {updateHandlerProvider} from "../utils/editmode.js"
+import {buildComponentPath, updateHandlerProvider} from "../utils/editmode.js"
 
 export default {
     name: "CmdThumbnailScroller",
@@ -247,6 +255,28 @@ export default {
         }
     },
     methods: {
+        onAddItem() {
+            this.editModeContext.content.addContent(
+                buildComponentPath(this, 'props', 'thumbnailScrollerItems', -1),
+                this.itemProvider)
+        },
+        itemProvider() {
+            return {
+                "image": {
+                    "id": createUuid(),
+                    "src": "/media/images/demo-images/small/slide1.jpg",
+                    "srcImageLarge": "/media/images/demo-images/large/slide1.jpg",
+                    "alt": "Alternative Text",
+                    "tooltip": "Tooltip 1"
+                },
+                "figcaption": {
+                    "text": "Figcaption DE",
+                    "position": "bottom",
+                    "textAlign": "center",
+                    "show": true
+                }
+            }
+        },
         toggleSlideButtons(innerListWrapper) {
             this.showSlidebuttons = innerListWrapper.scrollWidth > innerListWrapper.clientWidth
         },
@@ -342,9 +372,10 @@ export default {
         }
     }
 
-    > div {
+    > .inner-thumbnail-wrapper {
         border-radius: var(--border-radius);
-        padding: var(--default-padding);
+        padding: calc(var(--default-padding) * 2);
+        padding-top: 0;
         margin: 0 auto;
         border: var(--default-border);
         background: var(--color-scheme-background-color);
@@ -362,6 +393,7 @@ export default {
                 align-self: center;
                 list-style-type: none;
                 margin: 0;
+                margin-top: 2rem;
 
                 a {
                     text-align: center;
@@ -369,6 +401,7 @@ export default {
 
                 img {
                     border-radius: var(--border-radius);
+                    min-width: 15rem;
                     max-height: 10rem;
                 }
 
@@ -378,6 +411,10 @@ export default {
                             opacity: 1;
                         }
                     }
+                }
+
+                .image-wrapper {
+                    min-width: 11.1rem; // assure to be as wide as action-buttons in edit-mode
                 }
             }
         }
