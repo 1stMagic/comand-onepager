@@ -2,18 +2,6 @@
     <CmdWidthLimitationWrapper :id="'section-wrapper-' + id">
         <a :id="'anchor-' + id"></a>
         <div class="flex-container vertical">
-            <EditComponentWrapper
-                v-if="editMode"
-                componentName="CmdHeadline"
-                :componentProps="{headlineText, headlineLevel}"
-                :componentPath="componentPath(id)">
-                <!-- begin cmd-headline (headline is required in section) -->
-                <CmdHeadline :headlineText="headlineText" :headlineLevel="headlineLevel"/>
-                <!-- end cmd-headline -->
-            </EditComponentWrapper>
-
-            <CmdHeadline v-else :headlineText="headlineText" :headlineLevel="headlineLevel"/>
-
             <CmdContent
                 :allowAddComponent="allowAddComponent"
                 :sectionId="id"

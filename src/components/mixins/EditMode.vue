@@ -10,6 +10,9 @@ export default {
     props: {
         componentPath: {
             type: Array
+        },
+        editModeConfig: {
+            type: Object
         }
     },
     data() {

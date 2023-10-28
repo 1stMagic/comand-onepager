@@ -3,8 +3,8 @@
         <template v-slot:body>
             <!-- begin cmdHeadline -->
             <CmdHeadlineSettings
-                    ref="headlineSettings"
-                    v-bind="cmdHeadline || {}"
+                ref="headlineSettings"
+                v-bind="cmdHeadline || {}"
             />
             <!-- end cmdHeadline -->
         </template>

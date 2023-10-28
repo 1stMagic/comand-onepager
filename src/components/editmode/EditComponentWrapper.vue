@@ -1,17 +1,17 @@
 <template>
     <component
-            :is="componentTag || 'div'"
-            :class="['edit-component-wrapper', {active}]"
-            tabindex="0"
-            @click.stop="showActionButtons"
-            ref="editComponent"
-            :title="!active ? 'Click to select this element' : 'Select an action from the buttons in the top-left corner'"
-            :data-identifier="componentIdentifier">
+        :is="componentTag || 'div'"
+        :class="['edit-component-wrapper', {active}]"
+        tabindex="0"
+        @click.stop="showActionButtons"
+        ref="editComponent"
+        :title="!active ? 'Click to select this element' : 'Select an action from the buttons in the top-left corner'"
+        :data-identifier="componentIdentifier">
         <li v-if="componentTag === 'ul'" class="action-buttons-wrapper">
             <!-- begin action-buttons -->
             <ul v-show="active" class="flex-container no-flex action-buttons" :data-component="componentName">
                 <li>
-                    <a :class="['icon-hexagon', {disabled: !addHandlerProvider && !allowAddComponent}]"
+                    <a :class="['icon-hexagon', {disabled: !addHandlerProvider && !itemProvider && !allowAddComponent}]"
                        href="#"
                        @click.prevent="addEntry"
                        title="Add a new entry">
@@ -31,8 +31,23 @@
                             <CmdIcon iconClass="icon-globe"/>
                         </a>
                     </template>
+                    <select v-if="showComponentSelection" @change="componentSelected">
+                        <option value="">Select component to add</option>
+                        <option value="CmdContainer">Empty container</option>
+                        <option value="CmdAddressData">Address data</option>
+                        <option value="CmdHeadline">Headline</option>
+                        <option value="CmdImage">Image</option>
+                        <option value="CmdImageGallery">Image gallery</option>
+                        <option value="CmdListOfLinks">List of links</option>
+                        <option value="CmdOpeningHours">Opening hours</option>
+                        <option value="CmdSlideshow">Slideshow</option>
+                        <option value="CmdSocialNetworks">Social networks</option>
+                        <option value="CmdTextImageBlock">Text-Image-Block</option>
+                        <option value="CmdThumbnailScroller">Thumbnail-Scroller</option>
+                        <option value="CmdToggleDarkMode">Toggle Dark-Mode</option>
+                    </select>
                 </li>
-                <li>
+                <li v-if="!isOuterComponent">
                     <a v-if="editing"
                        class="icon-hexagon button-save" href="#"
                        @click.prevent="saveComponent"
@@ -63,7 +78,7 @@
                         <CmdIcon iconClass="icon-cog"/>
                     </a>
                 </li>
-                <li>
+                <li v-if="!isOuterComponent">
                     <a :class="['icon-hexagon button-cancel', {disabled: !editing}]"
                        href="#"
                        @click.prevent="cancelComponent"
@@ -75,12 +90,6 @@
             <!-- end action buttons -->
         </li>
         <template v-else>
-            <!-- begin show component name above wrapper -->
-            <small v-if="!allowAddComponent && active && showComponentName" class="component-name">{{
-                    componentName
-                }}</small>
-            <!-- end show component name above wrapper -->
-
             <!-- begin action-buttons -->
             <ul v-show="active" class="flex-container no-flex action-buttons" :data-component="componentName">
                 <li>
@@ -104,8 +113,23 @@
                             <CmdIcon iconClass="icon-globe"/>
                         </a>
                     </template>
+                    <select v-if="showComponentSelection" @change="componentSelected">
+                        <option value="">Select component to add</option>
+                        <option value="CmdContainer">Empty container</option>
+                        <option value="CmdAddressData">Address data</option>
+                        <option value="CmdHeadline">Headline</option>
+                        <option value="CmdImage">Image</option>
+                        <option value="CmdImageGallery">Image gallery</option>
+                        <option value="CmdListOfLinks">List of links</option>
+                        <option value="CmdOpeningHours">Opening hours</option>
+                        <option value="CmdSlideshow">Slideshow</option>
+                        <option value="CmdSocialNetworks">Social networks</option>
+                        <option value="CmdTextImageBlock">Text-Image-Block</option>
+                        <option value="CmdThumbnailScroller">Thumbnail-Scroller</option>
+                        <option value="CmdToggleDarkMode">Toggle Dark-Mode</option>
+                    </select>
                 </li>
-                <li>
+                <li v-if="!isOuterComponent">
                     <a v-if="editing"
                        class="icon-hexagon button-save" href="#"
                        @click.prevent="saveComponent"
@@ -136,12 +160,17 @@
                         <CmdIcon iconClass="icon-cog"/>
                     </a>
                 </li>
-                <li>
+                <li v-if="!isOuterComponent">
                     <a :class="['icon-hexagon button-cancel', {disabled: !editing}]"
                        href="#"
                        @click.prevent="cancelComponent"
                        title="Cancel editing (changes will not be saved)">
                         <CmdIcon iconClass="icon-cancel"/>
+                    </a>
+                </li>
+                <li v-if="!isOuterComponent">
+                    <a href="#" @click.prevent :title="componentName">
+                        <CmdIcon iconClass="icon-info"/>
                     </a>
                 </li>
             </ul>
@@ -168,7 +197,7 @@ export default {
     },
     props: {
         allowedComponentTypes: {
-          type: Array
+            type: Array
         },
         componentName: {
             type: String
@@ -184,7 +213,8 @@ export default {
             type: Boolean
         },
         allowDeleteComponent: {
-            type: Boolean
+            type: Boolean,
+            default: true
         },
         showComponentName: {
             type: Boolean,
@@ -209,6 +239,9 @@ export default {
         }
     },
     computed: {
+        isOuterComponent() {
+            return !findEditComponentWrapper(this.$parent)
+        },
         // provide states from store as computed-properties inside this component
         ...mapState(usePiniaStore, ["updateContent", "updateSettings", "deleteContent", "addContent"]),
         active() {
@@ -256,6 +289,7 @@ export default {
         },
         addEntry() {
             if (this.allowAddComponent) {
+
                 // check if component can contain other components
                 if (componentStructure[this.componentName]?.components) {
                     this.showAddComponentButtons = true
@@ -290,6 +324,11 @@ export default {
                 this.editModeContext.settings.stopEditing()
             }
         },
+        deleteInnerComponent() {
+            this.deleteContent(buildComponentPath(this))
+            // stop editing to close settings-sidebar
+            this.editModeContext.settings.stopEditing()
+        },
         cancelComponent(event) {
             if (this.editing) {
                 event.stopPropagation()
@@ -298,7 +337,13 @@ export default {
         },
         editComponent(event) {
             event?.stopPropagation()
-            const component = this.$refs.editComponent
+
+            // avoid component from resetting editing-flag
+            if (!event) {
+                this.showActionButtons()
+            }
+
+            const component = this.$refs.editComponent;
             this.editModeContext.content.startEditing(this.componentIdentifier)
             // wait until input in inserted into DOM on next tick
             this.$nextTick(() => component.querySelector("input")?.focus())
@@ -312,15 +357,15 @@ export default {
         editSettings(event) {
             event.stopPropagation()
 
-            if(!this.editing && this.hasSettings) {
+            if (!this.editing && this.hasSettings) {
                 this.editModeContext.settings.startEditing(
                     this.componentIdentifier,
                     this.componentName,
                     this.componentProps,
-                    this.componentProps,
                     this.allowedComponentTypes,
                     buildComponentPath(this),
-                    this.saveSettings
+                    this.saveSettings,
+                    this.deleteInnerComponent
                 )
             }
         },
@@ -392,10 +437,9 @@ function buildComponentPath(component) {
 }
 
 .edit-component-wrapper {
-    display: block;
-    width: 100%;
-
     @include edit-border;
+
+    display: block;
 
     .component-name {
         position: absolute;
@@ -480,6 +524,7 @@ function buildComponentPath(component) {
         .action-buttons {
             top: -1.6rem;
             left: 0;
+            right: auto; /* avoids container to be stretched */
             gap: calc(var(--default-gap) / 2);
             flex-wrap: nowrap;
 

@@ -64,9 +64,9 @@
                 </component>
             </div>
             <!-- begin show placeholder if no image exists (and component is not edited) -->
-            <button v-else type="button" class="button" title="Add headline"
-                    @click="onAddItem">
+            <button v-else type="button" class="button confirm" @click="onAddItem">
                 <span class="icon-plus"></span>
+                <span>Add new headline</span>
             </button>
             <!-- end show placeholder if no image exists (and component is not edited) -->
         </template>
@@ -156,6 +156,7 @@ export default {
             })
         },
         onAddItem() {
+            // execute editComponent-function from editComponentWrapper to enter editMode directly on "add"
             this.$refs.editComponentWrapper.editComponent()
         }
     },

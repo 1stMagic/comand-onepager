@@ -12,6 +12,7 @@
             v-if="cmdImage"
             :image="cmdImage?.image"
             :figcaption="cmdImage?.figcaption"
+            :editModeConfig="{allowAddItem: false}"
         />
         <!-- end cmdImage -->
 
@@ -37,7 +38,12 @@
             <template v-slot="slotProps">
                 <textarea v-if="slotProps.editing" :class="['edit-mode', textAlign]" v-model="editableHtmlContent" placeholder="Paragraph"></textarea>
                 <div v-else-if="htmlContent" v-html="htmlContent" :class="textAlign"></div>
-                <PlaceholderComponentWrapper v-else tagName="p" text="Paragraph" />
+                <!-- begin show placeholder if no image exists (and component is not edited) -->
+                <button v-else type="button" class="button confirm" @click="onAddItem">
+                    <span class="icon-plus"></span>
+                    <span>Add new paragraph</span>
+                </button>
+                <!-- end show placeholder if no image exists (and component is not edited) -->
             </template>
         </EditComponentWrapper>
         <!-- end edit-mode -->
@@ -116,6 +122,10 @@ export default {
         }
     },
     methods: {
+        onAddItem() {
+            // execute editComponent-function from editComponentWrapper to enter editMode directly on "add"
+            this.$refs.editComponentWrapper.editComponent()
+        },
         addHandlerProvider() {
             return ""
         },

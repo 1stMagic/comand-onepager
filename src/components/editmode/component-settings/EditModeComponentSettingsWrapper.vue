@@ -70,7 +70,7 @@
                 <div class="button-wrapper">
                     <button class="button confirm" @click="addComponent">
                         <span class="icon-check"></span>
-                        <span>Save</span>
+                        <span>Add</span>
                     </button>
                     <button class="button cancel" @click="cancelAddComponent">
                         <span class="icon-cancel"></span>

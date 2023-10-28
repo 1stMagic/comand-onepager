@@ -39,13 +39,14 @@ function contentActions(store, state) {
 
 function settingsActions(state) {
     return {
-        startEditing(componentIdentifier, componentName, componentProps, allowedContentTypes, componentPath, saveHandler) {
+        startEditing(componentIdentifier, componentName, componentProps, allowedContentTypes, componentPath, saveHandler, deleteInnerComponent) {
             state.settingsEditing = componentIdentifier
             state.componentName = componentName
             state.componentProps = componentProps
             state.allowedContentTypes = allowedContentTypes
             state.componentPath = componentPath
             state.settingsSaveHandler = saveHandler
+            state.deleteInnerComponent = deleteInnerComponent
         },
         isEditing(componentIdentifier) {
             return state.settingsEditing === componentIdentifier
@@ -55,6 +56,7 @@ function settingsActions(state) {
             state.componentName = null
             state.componentProps = null
             state.settingsSaveHandler = null
+            state.deleteInnerComponent = null
         },
         show() {
             return !!state.componentName
@@ -80,6 +82,9 @@ function settingsActions(state) {
         },
         getSettingsSaveHandler() {
             return state.settingsSaveHandler
+        },
+        getDeleteInnerComponent() {
+            return state.deleteInnerComponent
         }
     }
 }

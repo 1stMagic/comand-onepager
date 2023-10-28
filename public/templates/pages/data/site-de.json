@@ -111,6 +111,7 @@
     "sections": [
       {
         "id": "main-headline",
+        "allowAddComponent": true,
         "components": [
           {
             "name": "CmdHeadline",
@@ -184,6 +185,9 @@
                 "position": "bottom",
                 "textAlign": "center",
                 "show": true
+              },
+              "editModeConfig": {
+                "allowAddItem": false
               }
             }
           }

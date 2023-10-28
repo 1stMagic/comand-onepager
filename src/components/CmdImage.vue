@@ -10,6 +10,7 @@
         :componentProps="{image, figcaption}"
         :componentPath="imageComponentPath"
         :allowDeleteComponent="!!imageSource"
+        :itemProvider="editModeConfig?.allowAddItem !== false ? itemProvider : null"
     >
         <template v-slot="slotProps">
             <figure :class="['cmd-image flex-container no-gap vertical', textAlign]">
@@ -76,7 +77,13 @@
                 </template>
                 <!-- end figcaption below image -->
 
-                <PlaceholderComponentWrapper v-if="!slotProps.editing && !imageSource" tagName="p" text="Image" />
+                <!-- begin show placeholder if no image exists (and component is not edited) -->
+                <button v-if="!slotProps.editing && !imageSource" type="button" class="button confirm"
+                        @click="onAddItem">
+                    <span class="icon-add"></span>
+                    <span>Add new image</span>
+                </button>
+                <!-- end show placeholder if no image exists (and component is not edited) -->
             </figure>
         </template>
     </EditComponentWrapper>
@@ -245,6 +252,27 @@ export default {
         }
     },
     methods: {
+        itemProvider() {
+            const editModeConfig = this.editModeConfig?.itemProviderOverwrite?.()
+            return {
+                "image": {
+                    "src": "/media/images/demo-images/medium/landscape-01.jpg",
+                    "alt": "Alternative Text",
+                    // add additional keys from editModeConfig
+                    ...editModeConfig?.image || {}
+                },
+                "figcaption": {
+                    "text": "Figcaption DE",
+                    "position": "bottom",
+                    "textAlign": "center",
+                    "show": true
+                }
+            }
+        },
+        onAddItem() {
+            // execute editComponent-function from editComponentWrapper to enter editMode directly on "add"
+            this.$refs.editComponentWrapper.editComponent()
+        },
         selectFiles() {
             let inputFile = this.$refs.formElement.getDomElement().querySelector("input[type='file']")
             inputFile.click()
@@ -388,6 +416,12 @@ export default {
             &:hover, :active, :focus {
                 opacity: 1;
                 transition: var(--default-transition);
+            }
+
+            &:not([src]) {
+                display: block;
+                width: 100%;
+                min-height: 30rem;
             }
         }
     }

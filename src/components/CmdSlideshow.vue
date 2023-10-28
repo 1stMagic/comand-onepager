@@ -35,6 +35,7 @@
                             :image="currentItem?.image"
                             :figcaption="currentItem?.figcaption"
                             :componentPath="['props', 'slideshowItems', index]"
+                            :editModeConfig="imageStructure()"
                         />
                         <!-- end CmdImage -->
                         <!-- end edit-mode view -->
@@ -50,9 +51,9 @@
                         <!-- end slot -->
                     </div>
                 </template>
-                <button v-else-if="editModeContext" type="button" class="button" title="Add slideshow-image"
-                        @click="onAddItem">
+                <button v-else-if="editModeContext" type="button" class="button confirm"  @click="onAddItem">
                     <span class="icon-plus"></span>
+                    <span>Add new slideshow-image</span>
                 </button>
             </transition>
             <!-- end area to slide -->
@@ -190,23 +191,18 @@ export default {
                 buildComponentPath(this, 'props', 'slideshowItems', -1),
                 this.itemProvider)
         },
-        itemProvider() {
+        imageStructure() {
             return {
-                "image": {
-                    "src": {
-                        "large": "/media/images/demo-images/large/slide1.jpg",
-                        "medium": "/media/images/demo-images/medium/slide1.jpg",
-                        "small": "/media/images/demo-images/small/slide1.jpg"
-                    },
-                    "alt": "Alternative Text",
-                    "tooltip": "Tooltip 1"
-                },
-                "figcaption": {
-                    "text": "Figcaption DE",
-                    "position": "bottom",
-                    "textAlign": "center",
-                    "show": true
-                }
+                itemProviderOverwrite: () => ({
+                    "image": {
+                        "src": {
+                            "large": "/media/images/slideshow-images/large/slide1.jpg",
+                            "medium": "/media/images/slideshow-images/medium/slide1.jpg",
+                            "small": "/media/images/slideshow-images/small/slide1.jpg"
+                        },
+                        "tooltip": "Tooltip DE"
+                    }
+                })
             }
         },
         showPrevItem() {

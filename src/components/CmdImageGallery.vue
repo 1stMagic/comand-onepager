@@ -2,7 +2,7 @@
     <div class="grid-container-create-columns cmd-image-gallery">
         <!-- begin cmd-headline -->
         <CmdHeadline
-            v-if="cmdHeadline?.headlineText || editing"
+            v-if="cmdHeadline?.headlineText || editModeContext"
             v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
@@ -36,13 +36,14 @@
             :image="image.image"
             :figcaption="image.figcaption"
             :componentPath="['props', 'images', index]"
+            :editModeConfig="imageStructure()"
         />
         <!-- end edit-mode view -->
 
         <!-- begin show placeholder if no image exists (and component is not edited) -->
-        <button v-else type="button" class="button" title="Add gallery-image"
-                @click="onAddItem">
+        <button v-else type="button" class="button confirm" @click="onAddItem">
             <span class="icon-plus"></span>
+            <span>Add new gallery-image</span>
         </button>
         <!-- end show placeholder if no image exists (and component is not edited) -->
     </div>
@@ -97,26 +98,21 @@ export default {
                 buildComponentPath(this, 'props', 'images', -1),
                 this.itemProvider)
         },
-        itemProvider() {
-            return {
-                "image": {
-                    "src": "/media/images/demo-images/small/slide1.jpg",
-                    "srcImageLarge": "/media/images/demo-images/large/slide1.jpg",
-                    "alt": "Alternative Text",
-                },
-                "figcaption": {
-                    "text": "Figcaption DE",
-                    "position": "bottom",
-                    "textAlign": "center",
-                    "show": true
-                }
-            }
-        },
         showFancyBox(index) {
             openFancyBox({fancyBoxGallery: this.images, defaultGalleryIndex: index})
         },
         getMessage() {
             return ""
+        },
+        imageStructure() {
+            return {
+                itemProviderOverwrite: () => ({
+                    "image": {
+                        "srcImageLarge": "/media/images/demo-images/large/landscape-01.jpg",
+                        "tooltip": "Tooltip DE"
+                    }
+                })
+            }
         },
         updateHandlerProvider() {
             const htmlContent = this.editableHtmlContent

@@ -55,6 +55,7 @@
                         :image="item.image"
                         :figcaption="item.figcaption"
                         :componentPath="['props', 'thumbnailScrollerItems', index]"
+                        :editModeConfig="imageStructure()"
                     />
                     <!-- end CmdImage -->
 
@@ -68,11 +69,11 @@
                     <!-- end contentType === text -->
                     <!-- end edit-mode -->
                 </li>
-                <li v-if="!items.length && contentType === 'image'" >
+                <li v-if="!items.length && contentType === 'image'">
                     <!-- begin show placeholder if no image exists (and component is not edited) -->
-                    <button type="button" class="button" title="Add thumbnail-scroller-image"
-                            @click="onAddItem">
+                    <button type="button" class="button confirm" @click="onAddItem">
                         <span class="icon-plus"></span>
+                        <span>Add new thumbnail-scroller-image</span>
                     </button>
                     <!-- end show placeholder if no image exists (and component is not edited) -->
                 </li>
@@ -260,21 +261,16 @@ export default {
                 buildComponentPath(this, 'props', 'thumbnailScrollerItems', -1),
                 this.itemProvider)
         },
-        itemProvider() {
+        imageStructure() {
             return {
-                "image": {
-                    "id": createUuid(),
-                    "src": "/media/images/demo-images/small/slide1.jpg",
-                    "srcImageLarge": "/media/images/demo-images/large/slide1.jpg",
-                    "alt": "Alternative Text",
-                    "tooltip": "Tooltip 1"
-                },
-                "figcaption": {
-                    "text": "Figcaption DE",
-                    "position": "bottom",
-                    "textAlign": "center",
-                    "show": true
-                }
+                itemProviderOverwrite: () => ({
+                    "image": {
+                        "id": createUuid(),
+                        "src": "/media/images/demo-images/small/landscape-01.jpg",
+                        "srcImageLarge": "/media/images/demo-images/large/landscape-01.jpg",
+                        "tooltip": "Tooltip DE"
+                    }
+                })
             }
         },
         toggleSlideButtons(innerListWrapper) {

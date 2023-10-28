@@ -9,7 +9,8 @@
                 <dt>Path to file:</dt><dd>{{ image?.src?.large }}</dd>
             </dl>
         </CmdTooltip>
-        <!-- end CmdTooltip  -->
+        <!-- end CmdTooltip -->
+
         <a href="#" @click.prevent="selectFiles" class="image-wrapper">
             <figure v-if="image?.src" class="cmd-image" id="show-tooltip">
                 <div :class="['box drop-area flex-container vertical', { 'allow-drop': allowDrop }]"
@@ -103,6 +104,7 @@ import {getFileExtension} from "comand-component-library"
 
 export default {
     name: "CmdImageSettings",
+    inject: ["editModeContext"],
     inheritAttrs: false,
     data() {
         return {
@@ -247,8 +249,12 @@ export default {
             return getFileExtension(filename)
         },
         removeImage() {
-            if (confirm("Remove this image (and copy of the file will remain on the server)?")) {
-              // this.deleteContent(buildComponentPath(this))
+            if (confirm("Remove this image (a copy of the file will remain on the server)?")) {
+              // call getter from composables
+              const deleteInnerComponent = this.editModeContext.settings.getDeleteInnerComponent()
+
+              // call returned function from getter
+              deleteInnerComponent()
             }
         },
         fileSelected(event) {
