@@ -15,7 +15,7 @@
                        href="#"
                        @click.prevent="addEntry"
                        title="Add a new entry">
-                        <CmdIcon iconClass="icon-plus"/>
+                        <CmdIcon :iconClass="!isOuterComponent ? 'icon-plus' : 'icon-plus-outline'"/>
                     </a>
                     <template v-if="showAddComponentButtons">
                         <a class="icon-hexagon"
@@ -75,7 +75,7 @@
                        :href="editing ? null : '#'"
                        @click.prevent="editSettings"
                        title="Edit settings of this component">
-                        <CmdIcon iconClass="icon-cog"/>
+                        <CmdIcon :iconClass="!isOuterComponent ? 'icon-cog' : 'icon-cogs'"/>
                     </a>
                 </li>
                 <li v-if="!isOuterComponent">
@@ -91,13 +91,13 @@
         </li>
         <template v-else>
             <!-- begin action-buttons -->
-            <ul v-show="active" class="flex-container no-flex action-buttons" :data-component="componentName">
+            <ul v-show="active" class="flex-container no-flex action-buttons" :data-component="componentName" @mouseenter="addHighlightRelatedComponent" @mouseleave="removeHighlightRelatedComponent">
                 <li>
                     <a :class="['icon-hexagon', {disabled: !addHandlerProvider && !itemProvider && !allowAddComponent}]"
                        href="#"
                        @click.prevent="addEntry"
                        title="Add a new entry">
-                        <CmdIcon iconClass="icon-plus"/>
+                        <CmdIcon :iconClass="!isOuterComponent ? 'icon-plus' : 'icon-plus-outline'"/>
                     </a>
                     <template v-if="showAddComponentButtons">
                         <a class="icon-hexagon"
@@ -133,14 +133,14 @@
                     <a v-if="editing"
                        class="icon-hexagon button-save" href="#"
                        @click.prevent="saveComponent"
-                       title="Save changes of this component">
+                       :title="'Save changes of ' + componentName">
                         <CmdIcon iconClass="icon-check"/>
                     </a>
                     <a v-else
                        :class="['icon-hexagon', {disabled: editModeContext.settings.isEditing(componentIdentifier)}]"
                        href="#"
                        @click.prevent="editComponent"
-                       title="Edit content of this component">
+                       :title="'Edit content for ' + componentName">
                         <CmdIcon iconClass="icon-edit"/>
                     </a>
                 </li>
@@ -148,7 +148,7 @@
                     <a :class="['icon-hexagon', 'button-delete', {disabled: editing || !allowDeleteComponent}]"
                        href="#"
                        @click.prevent="deleteComponent"
-                       title="Delete this component (and its content)">
+                       :title="'Delete ' + componentName + ' (and its content)'">
                         <CmdIcon iconClass="icon-trash"/>
                     </a>
                 </li>
@@ -156,8 +156,8 @@
                     <a :class="['icon-hexagon', {disabled: editing || !hasSettings}]"
                        :href="editing ? null : '#'"
                        @click.prevent="editSettings"
-                       title="Edit settings of this component">
-                        <CmdIcon iconClass="icon-cog"/>
+                       :title="'Edit settings for ' + componentName">
+                        <CmdIcon :iconClass="!isOuterComponent ? 'icon-cog' : 'icon-cogs'"/>
                     </a>
                 </li>
                 <li v-if="!isOuterComponent">
@@ -166,11 +166,6 @@
                        @click.prevent="cancelComponent"
                        title="Cancel editing (changes will not be saved)">
                         <CmdIcon iconClass="icon-cancel"/>
-                    </a>
-                </li>
-                <li v-if="!isOuterComponent">
-                    <a href="#" @click.prevent :title="componentName">
-                        <CmdIcon iconClass="icon-info"/>
                     </a>
                 </li>
             </ul>
@@ -245,14 +240,17 @@ export default {
         // provide states from store as computed-properties inside this component
         ...mapState(usePiniaStore, ["updateContent", "updateSettings", "deleteContent", "addContent"]),
         active() {
-            const parentEditComponentWrapper = findEditComponentWrapper(this.$parent)
+            if (!this.editModeContext) {
+                return false
+            }
+            const parentEditComponentWrapper = findEditComponentWrapper(this.$parent);
             if (parentEditComponentWrapper) {
                 return !!this.editModeContext.system.isActiveChildComponent(buildComponentPath(this))
             }
             return !!this.editModeContext.system.isActiveComponent(buildComponentPath(this))
         },
         editing() {
-            return this.editModeContext.content.isEditing(this.componentIdentifier)
+            return this.editModeContext?.content.isEditing(this.componentIdentifier)
         },
         hasSettings() {
             const settingsComponentName = `${this.componentName}Settings`
@@ -260,6 +258,14 @@ export default {
         }
     },
     methods: {
+        addHighlightRelatedComponent(event) {
+            const currentElement = event.target
+            currentElement.parentNode.classList.add("highlight")
+        },
+        removeHighlightRelatedComponent(event) {
+            const currentElement = event.target
+            currentElement.parentNode.classList.remove("highlight")
+        },
         componentSelected(event) {
             const selectedComponent = event.target.value
 
@@ -441,6 +447,15 @@ function buildComponentPath(component) {
 
     display: block;
 
+    &.highlight {
+        border-color: var(--hyperlink-color-highlighted);
+        border-style: dotted;
+    }
+
+    .cmd-headline {
+        margin: 0;
+    }
+
     .component-name {
         position: absolute;
         left: 0;
@@ -450,12 +465,13 @@ function buildComponentPath(component) {
 
     .action-buttons {
         --action-buttons-size: 3.6rem;
+
         transition: var(--default-transition);
         gap: 0;
 
         position: absolute;
         top: -1.8rem;
-        right: -1rem;
+        right: 0.8rem;
         z-index: 1;
 
         margin: 0;
@@ -522,11 +538,15 @@ function buildComponentPath(component) {
 
     .edit-items {
         .action-buttons {
-            top: -1.6rem;
+            top: -2rem;
             left: 0;
             right: auto; /* avoids container to be stretched */
             gap: calc(var(--default-gap) / 2);
             flex-wrap: nowrap;
+            background: var(--pure-white);
+            padding: .2rem;
+            border: var(--primary-border);
+            border-bottom: 0;
 
             li {
                 top: 0;
@@ -579,6 +599,7 @@ function buildComponentPath(component) {
         }
 
         &.active {
+            width: 100%; /* stretch inside flex-container */
             background: var(--pure-white);
         }
     }

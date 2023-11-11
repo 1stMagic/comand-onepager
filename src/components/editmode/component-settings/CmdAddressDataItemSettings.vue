@@ -1,6 +1,14 @@
 <template>
     <div class="flex-container vertical component-settings-wrapper">
-        <template v-if="name !== 'address'">
+        <CmdFormElement
+            element="select"
+            required="required"
+            labelText="Select type"
+            v-model="typeModel"
+            :selectOptions="fieldTypes"
+        />
+
+        <template v-if="typeModel !== 'address'">
             <CmdFormElement
                 element="input"
                 type="text"
@@ -49,6 +57,14 @@
                     v-model="cityModel"
                 />
             </div>
+
+            <CmdFormElement
+                element="input"
+                type="checkbox"
+                :toggleSwitch="true"
+                labelText="Link address with Google Maps&trade;"
+                v-model="linkGoogleMapsModel"
+            />
 
             <CmdFormElement
                 element="input"
@@ -109,11 +125,19 @@ export default {
     inheritAttrs: false,
     data() {
         return {
+            fieldTypes: [
+                {text: 'custom', value: 'custom'},
+                {text: 'telephone', value: 'phone'},
+                {text: 'email', value: 'email'},
+                {text: 'url', value: 'url'},
+                {text: 'address', value: 'address'}
+            ],
             countries: [
                 {text: 'Please select', value: ''},
                 {text: 'Germany', value: 'de'},
                 {text: 'United Kingdom', value: 'uk'}
             ],
+            editableType: null,
             editableLabelText: null,
             editableData: null,
             editableLinkData: null,
@@ -124,11 +148,12 @@ export default {
             editableCity: null,
             editableMiscInfo: null,
             editableShowCountryName: null,
-            editableCountry: null
+            editableCountry: null,
+            editableLinkGoogleMaps: null
         }
     },
     props: {
-        name: {
+        type: {
             type: String,
             default: ""
         },
@@ -139,6 +164,13 @@ export default {
         data: {
             type: String,
             default: ""
+        },
+        /**
+         * link physical address (street, no, zip and city) with Google Maps
+         */
+        linkGoogleMaps: {
+            type: Boolean,
+            default: false
         },
         href: {
             type: String,
@@ -171,14 +203,21 @@ export default {
     },
     computed: {
         canBeLinked() {
-            switch (this.name) {
-                case "telephone":
-                case "mobilephone":
+            switch (this.typeModel) {
+                case "phone":
                 case "email":
-                case "website":
+                case "url":
                     return true
                 default:
                     return false
+            }
+        },
+        typeModel: {
+            get() {
+                return (this.editableType == null ? this.type : this.editableType) || ""
+            },
+            set(value) {
+                this.editableType = value
             }
         },
         labelTextModel: {
@@ -195,6 +234,14 @@ export default {
             },
             set(value) {
                 this.editableData = value
+            }
+        },
+        linkGoogleMapsModel: {
+            get() {
+                return (this.editableLinkGoogleMaps == null ? this.linkGoogleMaps : this.editableLinkGoogleMaps)
+            },
+            set(value) {
+                this.editableLinkGoogleMaps = value
             }
         },
         linkDataModel: {
@@ -272,6 +319,7 @@ export default {
     },
     methods: {
         updateCallbackProvider() {
+            const type = this.typeModel
             const labelText = this.labelTextModel
             const data = this.dataModel
             const linkData = this.linkDataModel
@@ -283,9 +331,12 @@ export default {
             const miscInfo = this.miscInfoModel
             const showCountryName = this.showCountryNameModel
             const country = this.countryModel
+            const linkGoogleMaps = this.linkGoogleMapsModel
 
             return props => {
-                if (props.name !== "address") {
+                props.type = type
+
+                if (props.type !== "address") {
                     props.labelText = labelText
                     props.data = data
                     props.href = href
@@ -295,6 +346,7 @@ export default {
                         props.href = null
                     }
                 } else {
+                    props.linkGoogleMaps = linkGoogleMaps
                     props.streetNo = streetNo
                     props.zip = zip
                     props.city = city

@@ -28,4 +28,7 @@ import {bootstrap} from "./index.js";
 
 const app = createApp(App)
 
+// can be removed for vue 3.4+
+app.config.unwrapInjectedRef = true
+
 bootstrap(app).mount('#app')

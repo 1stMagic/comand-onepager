@@ -2,7 +2,7 @@
     <div class="cmd-opening-hours">
         <!-- begin cmd-headline -->
         <CmdHeadline
-            v-if="cmdHeadline?.headlineText || editing"
+            v-if="cmdHeadline?.headlineText || editModeContext"
             v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
@@ -51,18 +51,19 @@
         <!-- begin default view -->
         <dl v-if="!editModeContext">
             <CmdOpeningHoursItem
-               v-for="(day, index) in openingHoursFormatted"
-               :key="index"
-               :day="day"
-               :separator="separator"
-               :abbreviationText="abbreviationText"
+                v-for="(day, index) in openingHoursFormatted"
+                :key="index"
+                :day="day"
+                :separator="separator"
+                :abbreviationText="abbreviationText"
             />
         </dl>
         <!-- end default view -->
 
         <!-- begin edit-mode -->
-        <button v-if="openingHoursFormatted.length === 0" type="button" @click="onAddItem">
+        <button v-if="openingHoursFormatted.length === 0" type="button" class="button confirm small" @click="onAddItem">
             <span class="icon-plus"></span>
+            <span>Add new entry</span>
         </button>
         <EditComponentWrapper
             v-else
@@ -75,13 +76,13 @@
             :componentPath="['props', 'openingHours', index]"
             :itemProvider="itemProvider"
         >
-            <dt>
+            <dl>
                 <CmdOpeningHoursItem
                     :day="day"
                     :separator="separator"
                     :abbreviationText="abbreviationText"
                 />
-            </dt>
+            </dl>
         </EditComponentWrapper>
         <!-- end edit-mode -->
 

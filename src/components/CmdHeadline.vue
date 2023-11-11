@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!editModeContext"
+    <div v-if="!editModeContext || settingsContext"
          :class="['cmd-headline', {'has-pre-headline-text': preHeadlineText, 'has-icon': headlineIcon?.iconClass}, getTextAlign]">
         <!-- begin CmdIcon -->
         <CmdIcon v-if="headlineIcon" :iconClass="headlineIcon?.iconClass" :type="headlineIcon?.iconType"/>
@@ -64,7 +64,7 @@
                 </component>
             </div>
             <!-- begin show placeholder if no image exists (and component is not edited) -->
-            <button v-else type="button" class="button confirm" @click="onAddItem">
+            <button v-else-if="componentActive" type="button" class="button confirm" @click="onAddItem">
                 <span class="icon-plus"></span>
                 <span>Add new headline</span>
             </button>
@@ -76,7 +76,7 @@
 
 <script>
 import EditMode from "./mixins/EditMode.vue"
-import {buildComponentPath, updateHandlerProvider} from "../utils/editmode.js"
+import {buildComponentPath, findEditComponentWrapper, updateHandlerProvider} from "../utils/editmode.js"
 
 export default {
     name: "CmdHeadline",
@@ -127,6 +127,9 @@ export default {
         }
     },
     computed: {
+        componentActive() {
+            return this.editModeContext?.system.isActiveComponent(buildComponentPath(findEditComponentWrapper(this)))
+        },
         headlineComponentPath() {
             return this.componentPath || ["props", "cmdHeadline"]
         },
@@ -147,11 +150,13 @@ export default {
         updateHandlerProvider() {
             const headlineText = this.editableHeadlineText
             const preHeadlineText = this.editablePreHeadlineText
+            const headlineLevel = this.headlineLevel
 
             return updateHandlerProvider(this, {
                 update(props) {
                     props.headlineText = headlineText
                     props.preHeadlineText = preHeadlineText
+                    props.headlineLevel = headlineLevel
                 }
             })
         },
@@ -232,6 +237,7 @@ export default {
     input {
         padding: 0;
         height: auto;
+        font-weight: var(--headline-font-weight);
     }
 
     &.h1 input {

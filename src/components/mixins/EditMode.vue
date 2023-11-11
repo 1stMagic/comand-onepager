@@ -1,5 +1,5 @@
 <script>
-import {findEditComponentWrapper} from "../../utils/editmode.js"
+import {findEditComponentWrapper, findEditSettingsComponentWrapper} from "../../utils/editmode.js"
 
 export default {
     inject: {
@@ -17,7 +17,8 @@ export default {
     },
     data() {
         return {
-            editing: false
+            editing: false,
+            settingsContext: false
         }
     },
     mounted() {
@@ -27,8 +28,7 @@ export default {
         initializeEditMode() {
             if (this.$refs.editComponentWrapper) {
                 this.$refs.editComponentWrapper?.addUpdateHandlerProvider(this.updateHandlerProvider)
-            }
-            else {
+            } else {
                 const editComponentWrapper = findEditComponentWrapper(this.$parent);
                 if (editComponentWrapper) {
                     editComponentWrapper.addEditStateListener(editing => this.editing = editing)
@@ -36,7 +36,7 @@ export default {
                     editComponentWrapper.setAddHandlerProvider(this.addHandlerProvider)
                 }
             }
-
+            this.settingsContext = !!findEditSettingsComponentWrapper(this)
         },
         updateHandlerProvider() {
             return {}

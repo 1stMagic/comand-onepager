@@ -15,6 +15,10 @@
             :cmdHeadline="{headlineText: 'Thumbnail-Scroller', headlineLevel: 4}">
         <template v-slot:body>
             <div class="flex-container vertical component-settings-wrapper">
+                <button type="button" class="button" @click="removeItems">
+                    <span class="icon-trash"></span>
+                    <span>{{removeButtonLabel}}</span>
+                </button>
                 <CmdFormElement
                         element="select"
                         labelText="Orientation"
@@ -43,6 +47,7 @@
 <script>
 export default {
     name: "CmdImageGallerySettings",
+    inject: ["editModeContext"],
     inheritAttrs: false,
     data() {
         return {
@@ -81,9 +86,19 @@ export default {
                     headlineLevel: "2"
                 }
             }
-        }
+        },
+        /**
+         * list of thumbnail-scroller-items
+         */
+        thumbnailScrollerItems: {
+            type: Array,
+            required: true
+        },
     },
     computed: {
+        removeButtonLabel() {
+            return "Remove " + this.thumbnailScrollerItems.length + " all images"
+        },
         orientationModel: {
             get() {
                 return this.editableOrientation == null ? this.orientation : this.editableOrientation
@@ -110,6 +125,12 @@ export default {
         }
     },
     methods: {
+        removeItems() {
+            if (confirm("All images/items will be removed (the component itself remains). Continue anyways?")) {
+                const saveHandler = this.editModeContext.settings.getSettingsSaveHandler()
+                saveHandler(props => props.thumbnailScrollerItems = [])
+            }
+        },
         updateCallbackProvider() {
             const headlineUpdateCallback = this.$refs.headlineSettings.updateCallbackProvider()
             const data = {

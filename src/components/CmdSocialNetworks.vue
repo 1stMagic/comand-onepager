@@ -49,7 +49,7 @@
             <!-- end edit-mode -->
         </ul>
 
-        <button v-else class="button small" title="Add new item" @click="addNewItem">
+        <button v-else class="button small" title="Add new item" @click="onAddItem">
             <span class="icon-plus"></span>
         </button>
         <!-- end list of networks -->
@@ -57,13 +57,12 @@
 </template>
 
 <script>
+import {buildComponentPath} from "../utils/editmode.js";
+import EditMode from "./mixins/EditMode.vue";
+
 export default {
     name: "CmdSocialNetworks",
-    inject: {
-        editModeContext: {
-            default: null
-        }
-    },
+    mixins: [EditMode],
     data() {
         return {
             dataPrivacyAccepted: false
@@ -180,8 +179,19 @@ export default {
         }
     },
     methods: {
-        addNewItem() {
-          alert("New item!")
+        onAddItem() {
+            this.editModeContext.content.addContent(
+                buildComponentPath(this, 'props', 'networks', -1),
+                this.itemProvider)
+        },
+        itemProvider() {
+            return                 {
+                "id": "social-network-facebook",
+                "path": "https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fdevelopment.comand-cms.com%2Fmodule%2Fteam.html",
+                "tooltip": "Share this page on facebook",
+                "iconClass": "icon-facebook",
+                "linkText": "Share"
+            }
         },
         onPersist(data) {
             return {
@@ -310,39 +320,6 @@ export default {
 
     a:last-of-type {
         margin-right: 0;
-    }
-
-    [id^="social-network"] {
-        background: var(--social-network-color);
-        border-color: var(--social-network-color);
-
-        > span {
-            color: var(--pure-white);
-        }
-
-        &:hover, &:active, &:focus {
-            color: var(--pure-white);
-
-            > span {
-                color: var(--social-network-color);
-            }
-        }
-    }
-
-    #social-network-facebook {
-        --social-network-color: #3c5a99;
-    }
-
-    #social-network-twitter {
-        --social-network-color: #6bacde;
-    }
-
-    #social-network-xing {
-        --social-network-color: #007575;
-    }
-
-    #social-network-linkedin {
-        --social-network-color: #0077b5;
     }
 }
 

@@ -9,13 +9,13 @@
             target="_blank"
             :title="tooltip(network.tooltip)">
 
-                <!-- begin CmdIcon -->
-                <CmdIcon
-                        v-if="network.iconClass"
-                        :iconClass="network.iconClass"
-                        :type="network.iconType"
-                />
-                <!-- end CmdIcon -->
+            <!-- begin CmdIcon -->
+            <CmdIcon
+                v-if="network.iconClass"
+                :iconClass="network.iconClass"
+                :type="network.iconType"
+            />
+            <!-- end CmdIcon -->
 
             <span v-if="network.linkText">{{ network.linkText }}</span>
         </a>
@@ -26,6 +26,7 @@
 import {createUuid} from "comand-component-library"
 import {updateHandlerProvider} from "../utils/editmode.js";
 import EditMode from "./mixins/EditMode.vue"
+
 export default {
     name: "CmdSocialNetworksItem",
     data() {
@@ -75,7 +76,7 @@ export default {
     },
     methods: {
         getUrl(network) {
-            if(this.userMustAcceptDataPrivacy && this.dataPrivacyAccepted) {
+            if (this.userMustAcceptDataPrivacy && this.dataPrivacyAccepted) {
                 // if path is not given completely by json-data
                 if (this.appendPage) {
                     // if page to share is given by property
@@ -95,19 +96,19 @@ export default {
         preventOnDisabled(event) {
             let clickedElement = event.target
 
-            if(clickedElement.tagName !== "A") {
+            if (clickedElement.tagName !== "A") {
                 // get surrounding <a> if inner <span> is clicked
                 clickedElement = clickedElement.closest("a")
             }
 
             // href must be set due to html-validity, so click must be prevented if href contains "#" only (equals button is styled as disabled)
-            if(clickedElement.getAttribute("href") === "#") {
+            if (clickedElement.getAttribute("href") === "#") {
                 event.preventDefault()
             }
         },
         tooltip(tooltip) {
-            if(this.userMustAcceptDataPrivacy) {
-                if(this.dataPrivacyAccepted) {
+            if (this.userMustAcceptDataPrivacy) {
+                if (this.dataPrivacyAccepted) {
                     return tooltip
                 }
                 return this.tooltipAcceptDataPrivacy
@@ -146,6 +147,38 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 
+[id^="social-network"] {
+    background: var(--social-network-color);
+    border-color: var(--social-network-color);
+
+    > span {
+        color: var(--pure-white);
+    }
+
+    &:hover, &:active, &:focus {
+        color: var(--pure-white);
+
+        > span {
+            color: var(--social-network-color);
+        }
+    }
+}
+
+#social-network-facebook {
+    --social-network-color: #3c5a99;
+}
+
+#social-network-twitter {
+    --social-network-color: #6bacde;
+}
+
+#social-network-xing {
+    --social-network-color: #007575;
+}
+
+#social-network-linkedin {
+    --social-network-color: #0077b5;
+}
 </style>

@@ -6,14 +6,14 @@
             <span v-if="day.am" class="am">
                 <template v-if="day.am.displayText">{{ day.am.displayText }}</template>
                 <template
-                        v-else>{{ getTime(day.am.fromTime) }} {{ separator }} {{
+                    v-else>{{ getTime(day.am.fromTime) }} {{ separator }} {{
                         getTime(day.am.tillTime)
                     }}</template>
             </span>
             <span v-if="day.pm" class="pm">
                 <template v-if="day.pm.displayText">{{ day.pm.displayText }}</template>
                 <template
-                        v-else>{{ getTime(day.pm.fromTime) }} {{ separator }} {{
+                    v-else>{{ getTime(day.pm.fromTime) }} {{ separator }} {{
                         getTime(day.pm.tillTime)
                     }}</template>
             </span>
@@ -25,91 +25,91 @@
     <template v-else>
         <div class="flex-container">
             <CmdFormElement
-                    element="input"
-                    type="text"
-                    class="edit-mode"
-                    :showLabel="false"
-                    labelText="Text for weekday"
-                    placeholder="Text for weekday"
-                    v-model="editableDay.day"
+                element="input"
+                type="text"
+                class="edit-mode"
+                :showLabel="false"
+                labelText="Text for weekday"
+                placeholder="Text for weekday"
+                v-model="editableDay.day"
             />
             <div class="flex-container vertical no-flex">
                 <CmdFormElement
-                        element="input"
-                        type="checkbox"
-                        labelText="closed on am"
-                        v-model="editableDay.amClosed"
+                    element="input"
+                    type="checkbox"
+                    labelText="closed on am"
+                    v-model="editableDay.amClosed"
                 />
                 <template v-if="editableDay.amClosed">
                     <CmdFormElement
-                            element="input"
-                            type="text"
-                            class="edit-mode"
-                            :showLabel="false"
-                            labelText="Text for 'closed'"
-                            placeholder="Text for 'closed'"
-                            v-model="editableDay.amDisplayText"
+                        element="input"
+                        type="text"
+                        class="edit-mode"
+                        :showLabel="false"
+                        labelText="Text for 'closed'"
+                        placeholder="Text for 'closed'"
+                        v-model="editableDay.amDisplayText"
                     />
                 </template>
                 <div v-if="!editableDay.amClosed" class="input-wrapper">
                     <CmdFormElement
-                            element="input"
-                            type="time"
-                            class="edit-mode"
-                            :showLabel="false"
-                            labelText="Text for AM from"
-                            placeholder="Text for AM from"
-                            v-model="editableDay.amFrom"
+                        element="input"
+                        type="time"
+                        class="edit-mode"
+                        :showLabel="false"
+                        labelText="Text for AM from"
+                        placeholder="Text for AM from"
+                        v-model="editableDay.amFrom"
                     />
                     <CmdFormElement
-                            element="input"
-                            type="time"
-                            :showLabel="false"
-                            class="edit-mode"
-                            :min="editableDay.amFrom"
-                            labelText="Text for AM till"
-                            placeholder="Text for AM till"
-                            v-model="editableDay.amTill"
+                        element="input"
+                        type="time"
+                        :showLabel="false"
+                        class="edit-mode"
+                        :min="editableDay.amFrom"
+                        labelText="Text for AM till"
+                        placeholder="Text for AM till"
+                        v-model="editableDay.amTill"
                     />
                 </div>
             </div>
             <div class="flex-container vertical no-flex">
                 <CmdFormElement
-                        element="input"
-                        type="checkbox"
-                        labelText="closed on pm"
-                        v-model="editableDay.pmClosed"
+                    element="input"
+                    type="checkbox"
+                    labelText="closed on pm"
+                    v-model="editableDay.pmClosed"
                 />
                 <template v-if="editableDay.pmClosed">
                     <CmdFormElement
-                            element="input"
-                            type="text"
-                            class="edit-mode"
-                            :showLabel="false"
-                            labelText="Text for 'closed'"
-                            placeholder="Text for 'closed'"
-                            v-model="editableDay.pmDisplayText"
+                        element="input"
+                        type="text"
+                        class="edit-mode"
+                        :showLabel="false"
+                        labelText="Text for 'closed'"
+                        placeholder="Text for 'closed'"
+                        v-model="editableDay.pmDisplayText"
                     />
                 </template>
                 <div v-if="!editableDay.pmClosed" class="input-wrapper">
                     <CmdFormElement
-                            element="input"
-                            type="time"
-                            :showLabel="false"
-                            class="edit-mode"
-                            labelText="Text for PM from"
-                            placeholder="Text for PM from"
-                            v-model="editableDay.pmFrom"
+                        element="input"
+                        type="time"
+                        :showLabel="false"
+                        class="edit-mode"
+                        labelText="Text for PM from"
+                        placeholder="Text for PM from"
+                        v-model="editableDay.pmFrom"
                     />
                     <CmdFormElement
-                            element="input"
-                            type="time"
-                            :showLabel="false"
-                            class="edit-mode"
-                            :min="editableDay.pmFrom"
-                            labelText="Text for PM till"
-                            placeholder="Text for PM till"
-                            v-model="editableDay.pmTill"
+                        element="input"
+                        type="time"
+                        :showLabel="false"
+                        class="edit-mode"
+                        :min="editableDay.pmFrom"
+                        labelText="Text for PM till"
+                        placeholder="Text for PM till"
+                        v-model="editableDay.pmTill"
                     />
                 </div>
             </div>

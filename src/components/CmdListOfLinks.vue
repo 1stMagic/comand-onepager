@@ -1,21 +1,21 @@
 <template>
-    <div :class="['cmd-list-of-links', {box: styleAsBox, horizontal: orientation === 'horizontal', 'section-anchors': sectionAnchors, 'large-icons': largeIcons}]"
-         style="padding: 2rem;">
+    <div
+        :class="['cmd-list-of-links', {box: styleAsBox, horizontal: orientation === 'horizontal', 'section-anchors': sectionAnchors, 'large-icons': largeIcons}]">
         <!-- begin cmd-headline -->
         <CmdHeadline
-                v-if="cmdHeadline?.headlineText || editing"
-                v-bind="cmdHeadline"
+            v-if="cmdHeadline?.headlineText || editModeContext"
+            v-bind="cmdHeadline"
         />
         <!-- end cmd-headline -->
 
         <!-- begin list of links -->
         <ul :class="['flex-container', {'no-gap': !useGap},'align-' + align, setStretchClass]">
             <CmdListOfLinksItem
-                    v-if="!editModeContext"
-                    v-for="(link, index) in links"
-                    :key="index"
-                    :class="{'active': sectionAnchors && activeSection === index}"
-                    :link="link"
+                v-if="!editModeContext"
+                v-for="(link, index) in links"
+                :key="index"
+                :class="{'active': sectionAnchors && activeSection === index}"
+                :link="link"
             />
 
             <!-- begin edit-mode -->
@@ -36,7 +36,10 @@
                     :link="link"
                 />
             </EditComponentWrapper>
-            <button v-if="links.length === 0" type="button" @click="onAddItem">+</button>
+            <button v-if="links.length === 0" type="button" class="button confirm small" @click="onAddItem">
+                <span class="icon-plus"></span>
+                <span>Add new entry</span>
+            </button>
             <!-- end edit-mode -->
         </ul>
         <!-- end list of links -->

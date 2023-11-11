@@ -1,9 +1,9 @@
 <template>
     <aside class="edit-mode-component-settings-wrapper flex-container vertical box">
         <CmdTabs
-                :stretchTabs="true"
-                :tabs="tabs"
-                :useSlot="true"
+            :stretchTabs="true"
+            :tabs="tabs"
+            :useSlot="true"
         >
             <!-- begin tab 'component settings' -->
             <template v-slot:tab-content-0>
@@ -31,7 +31,7 @@
                         </div>
                     </template>
                 </div>
-                <div class="button-wrapper">
+                <div class="button-wrapper action-buttons-wrapper">
                     <button class="button confirm" @click="saveSettings">
                         <span class="icon-check"></span>
                         <span>Save</span>
@@ -46,28 +46,29 @@
 
             <!-- begin tab 'add component' (components only) -->
             <template v-if="isComponent" v-slot:tab-content-1>
-                <h3>Add new component</h3>
-                <div class="flex-container vertical">
+                <div class="flex-container vertical component-settings-wrapper">
+                    <h3>Add new component</h3>
+
                     <!-- begin selection of allowed components to add additional component -->
                     <CmdFormElement
-                            element="select"
-                            labelText="Select component to insert"
-                            :selectOptions="listOfValidComponents"
-                            v-model="addedComponentName"
+                        element="select"
+                        labelText="Select component to insert"
+                        :selectOptions="listOfValidComponents"
+                        v-model="addedComponentName"
                     />
                     <!-- end selection of allowed components to add additional component -->
 
                     <!-- begin selection of available positions for added component -->
                     <CmdFormElement
-                            element="select"
-                            labelText="Select inserted component position"
-                            :selectOptions="availableComponentPositions"
-                            v-model="addedComponentPosition"
-                            @change="switchComponent"
+                        element="select"
+                        labelText="Select inserted component position"
+                        :selectOptions="availableComponentPositions"
+                        v-model="addedComponentPosition"
+                        @change="switchComponent"
                     />
                     <!-- end selection of available positions for added component -->
                 </div>
-                <div class="button-wrapper">
+                <div class="button-wrapper action-buttons-wrapper">
                     <button class="button confirm" @click="addComponent">
                         <span class="icon-check"></span>
                         <span>Add</span>
@@ -87,7 +88,7 @@
 import componentStructure from "../../../assets/data/component-structure.json"
 
 export default {
-    name: "EditModeComponentSettingsWrapper.vue",
+    name: "EditModeComponentSettingsWrapper",
     inject: ["editModeContext"],
     data() {
         return {
@@ -161,7 +162,7 @@ export default {
             const tabs = [{name: 'Settings', iconClass: 'icon-cog'}]
 
             // show second tab (to add component) is settings belong to component (and not item)
-            if(this.isComponent) {
+            if (this.isComponent) {
                 tabs.push({name: 'Add Component', iconClass: 'icon-plus'})
             }
 
@@ -204,6 +205,7 @@ export default {
         },
         addComponent() {
             this.editModeContext.content.addContent(this.editModeContext.settings.getComponentPath(), () => componentStructure[this.addedComponentName], this.addedComponentPosition)
+            this.editModeContext.settings.stopEditing()
         },
         cancelAddComponent() {
             if (confirm('Are you sure your want to cancel? (changes will not be saved)')) {
@@ -238,7 +240,7 @@ export default {
         text-align: center;
     }
 
-    .button-wrapper > * {
+    .action-buttons-wrapper > * {
         flex: 1;
     }
 
@@ -252,7 +254,7 @@ export default {
         gap: 0;
     }
 
-    .cmd-tabs, .cmd-tabs > div  {
+    .cmd-tabs, .cmd-tabs > div {
         height: 100%;
     }
 
@@ -267,8 +269,22 @@ export default {
     }
 
     .cmd-tabs {
-        .button-wrapper, .component-settings-wrapper {
+        .action-buttons-wrapper, .component-settings-wrapper {
             padding: var(--default-padding);
+        }
+    }
+
+    .no-image {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: calc(var(--default-gap) / 2);
+        padding: var(--default-padding);
+        border: var(--default-border);
+
+        [class*="icon"] {
+                font-size: 3rem;
         }
     }
 }

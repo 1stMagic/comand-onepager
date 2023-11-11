@@ -3,8 +3,8 @@
         <template v-slot:body>
             <!-- begin cmdHeadline -->
             <CmdHeadlineSettings
-                    ref="headlineSettings"
-                    v-bind="cmdHeadline || {}"
+                ref="headlineSettings"
+                v-bind="cmdHeadline || {}"
             />
             <!-- end cmdHeadline -->
         </template>
@@ -14,46 +14,51 @@
         <template v-slot:body>
             <div class="flex-container vertical component-settings-wrapper">
                 <div class="button-wrapper align-left">
-                    <button v-for="(socialNetwork, index) in listOfAllNetworks"
-                            :key="index"
-                            :class="['button', {disabled: !socialNetwork.active}]"
-                            :id="socialNetwork.id"
-                            :title="tooltipForNetworkButton(socialNetwork)"
-                            @click="toggleSocialNetwork(index)"
+                    <button
+                        v-for="(socialNetwork, index) in listOfAllNetworks"
+                        :key="index"
+                        :class="['button', {disabled: !socialNetwork.active}]"
+                        :id="socialNetwork.id"
+                        :title="tooltipForNetworkButton(socialNetwork)"
+                        @click="toggleSocialNetwork(index)"
                     >
                         <span :class="socialNetwork.iconClass"></span>
                     </button>
                 </div>
+                <button type="button" class="button" @click="removeItems">
+                    <span class="icon-trash"></span>
+                    <span>{{removeButtonLabel}}</span>
+                </button>
 
                 <CmdFormElement
-                        element="select"
-                        labelText="Alignment"
-                        :selectOptions="alignOptions"
-                        v-model="alignModel"
+                    element="select"
+                    labelText="Alignment"
+                    :selectOptions="alignOptions"
+                    v-model="alignModel"
                 />
 
                 <CmdFormElement
-                        element="input"
-                        type="checkbox"
-                        :toggleSwitch="true"
-                        labelText="User must accept data privacy"
-                        v-model="userMustAcceptDataPrivacyModel"
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    labelText="User must accept data privacy"
+                    v-model="userMustAcceptDataPrivacyModel"
                 />
 
                 <CmdFormElement
-                        element="input"
-                        type="checkbox"
-                        :toggleSwitch="true"
-                        labelText="Use gap"
-                        v-model="useGapModel"
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    labelText="Use gap between buttons"
+                    v-model="useGapModel"
                 />
 
                 <CmdFormElement
-                        element="input"
-                        type="checkbox"
-                        :toggleSwitch="true"
-                        labelText="Stretch buttons"
-                        v-model="stretchButtonsModel"
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    labelText="Stretch buttons"
+                    v-model="stretchButtonsModel"
                 />
             </div>
         </template>
@@ -63,6 +68,7 @@
 <script>
 export default {
     name: "CmdSocialNetworksSettings",
+    inject: ["editModeContext"],
     inheritAttrs: false,
     data() {
         return {
@@ -151,6 +157,9 @@ export default {
         }
     },
     computed: {
+        removeButtonLabel() {
+            return "Remove all " + this.networks.length + " networks"
+        },
         alignModel: {
             get() {
                 return this.editableAlign == null ? this.align : this.editableAlign
@@ -185,6 +194,12 @@ export default {
         }
     },
     methods: {
+        removeItems() {
+            if (confirm("All networks will be removed (the component itself remains). Continue anyways?")) {
+                const saveHandler = this.editModeContext.settings.getSettingsSaveHandler()
+                saveHandler(props => props.networks = [])
+            }
+        },
         tooltipForNetworkButton(socialNetwork) {
             if (socialNetwork.active) {
                 return "Deactivate " + socialNetwork.name
@@ -235,10 +250,24 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 button.disabled:is(:hover, :active, :focus) {
     cursor: pointer !important;
 }
+
+#social-network-facebook {
+    --social-network-color: #3c5a99;
+}
+
+#social-network-twitter {
+    --social-network-color: #6bacde;
+}
+
+#social-network-xing {
+    --social-network-color: #007575;
+}
+
+#social-network-linkedin {
+    --social-network-color: #0077b5;
+}
 </style>
-<script setup>
-</script>

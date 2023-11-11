@@ -1,39 +1,54 @@
 <template>
-    <div class="flex-container vertical component-settings-wrapper">
-        <CmdFormElement
-                element="input"
-                type="checkbox"
-                :toggleSwitch="true"
-                labelText="Use large icons"
-                v-model="largeIconsModel"
-        />
-        <CmdFormElement
-                element="select"
-                labelText="Alignment"
-                :selectOptions="textAlignOptions"
-                v-model="textAlignModel"
-        />
-        <CmdFormElement
-                element="select"
-                labelText="Orientation"
-                :selectOptions="orientationOptions"
-                v-model="orientationModel"
-        />
-        <CmdFormElement
-                element="input"
-                type="checkbox"
-                :toggleSwitch="true"
-                labelText="Use gap"
-                v-model="useGapModel"
-        />
-        <CmdFormElement
-                element="input"
-                type="checkbox"
-                :toggleSwitch="true"
-                labelText="Style as box"
-                v-model="styleAsBoxModel"
-        />
-    </div>
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Headline', headlineLevel: 4}">
+        <template v-slot:body>
+            <!-- begin cmdHeadline -->
+            <CmdHeadlineSettings
+                ref="headlineSettings"
+                v-bind="cmdHeadline || {}"
+            />
+            <!-- end cmdHeadline -->
+        </template>
+    </CmdBox>
+
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'List of links', headlineLevel: 4}">
+        <template v-slot:body>
+            <div class="flex-container vertical component-settings-wrapper">
+                <CmdFormElement
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    labelText="Use large icons"
+                    v-model="largeIconsModel"
+                />
+                <CmdFormElement
+                    element="select"
+                    labelText="Alignment"
+                    :selectOptions="textAlignOptions"
+                    v-model="textAlignModel"
+                />
+                <CmdFormElement
+                    element="select"
+                    labelText="Orientation"
+                    :selectOptions="orientationOptions"
+                    v-model="orientationModel"
+                />
+                <CmdFormElement
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    labelText="Use gap"
+                    v-model="useGapModel"
+                />
+                <CmdFormElement
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    labelText="Style as box"
+                    v-model="styleAsBoxModel"
+                />
+            </div>
+        </template>
+    </CmdBox>
 </template>
 
 <script>
@@ -94,6 +109,14 @@ export default {
             type: Boolean,
             default: false
         },
+        cmdHeadline: {
+            type: Object,
+            default() {
+                return {
+                    headlineLevel: "2"
+                }
+            }
+        }
     },
     computed: {
         largeIconsModel: {
@@ -161,3 +184,5 @@ export default {
 <style scoped>
 
 </style>
+<script setup>
+</script>

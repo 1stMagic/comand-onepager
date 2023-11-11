@@ -1,53 +1,63 @@
 <template>
-    <div class="flex-container vertical component-settings-wrapper">
-        <CmdHeadlineSettings
-            ref="headlineSettings"
-            v-bind="cmdHeadline || {}"
-        />
-        <hr />
-        <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            labelText="Show labels (att all)"
-            v-model="showLabelsModel"
-        />
 
-        <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            :disabled="!showLabelsModel"
-            labelText="Show icons only (no text)"
-            v-model="showIconsOnlyModel"
-        />
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Headline', headlineLevel: 4}">
+        <template v-slot:body>
+            <!-- begin cmdHeadline -->
+            <CmdHeadlineSettings
+                ref="headlineSettings"
+                v-bind="cmdHeadline || {}"
+            />
+            <!-- end cmdHeadline -->
+        </template>
+    </CmdBox>
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Address data', headlineLevel: 4}">
+        <template v-slot:body>
+            <div class="flex-container vertical component-settings-wrapper">
+                <CmdFormElement
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    labelText="Show labels (att all)"
+                    v-model="showLabelsModel"
+                />
 
-        <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            :disabled="!showLabelsModel"
-            labelText="Show icons in front of labels"
-            v-model="showLabelIconsModel"
-        />
+                <CmdFormElement
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    :disabled="!showLabelsModel"
+                    labelText="Show icons in front of labels"
+                    v-model="showLabelIconsModel"
+                />
 
-        <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            :disabled="!showLabelsModel"
-            labelText="Show label-texts"
-            v-model="showLabelTextsModel"
-        />
+                <CmdFormElement
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    :disabled="!showLabelsModel || !showLabelIconsModel"
+                    labelText="Show icons only (no text)"
+                    v-model="showIconsOnlyModel"
+                />
 
-        <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            labelText="Link address with Google Maps &trade;"
-            v-model="linkGoogleMapsModel"
-        />
-    </div>
+                <CmdFormElement
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    :disabled="!showLabelsModel || !showIconsOnlyModel"
+                    labelText="Show label-texts"
+                    v-model="showLabelTextsModel"
+                />
+
+                <CmdFormElement
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    labelText="Link address with Google Maps&trade;"
+                    v-model="linkGoogleMapsModel"
+                />
+            </div>
+        </template>
+    </CmdBox>
 </template>
 
 <script>
@@ -64,14 +74,6 @@ export default {
         }
     },
     props: {
-        headlineText: {
-            type: String,
-            default: ""
-        },
-        headlineLevel: {
-            type: [String, Number],
-            default: "2"
-        },
         /**
          * activate if only icons (without any text) should be displayed
          */
@@ -116,7 +118,11 @@ export default {
         },
         cmdHeadline: {
             type: Object,
-            required: false
+            default() {
+                return {
+                    headlineLevel: "2"
+                }
+            }
         }
     },
     computed: {
@@ -141,7 +147,7 @@ export default {
                 return this.editableShowLabelIcons == null ? this.showLabelIcons : this.editableShowLabelIcons
             },
             set(value) {
-                this.editableShowLabelIcons= value
+                this.editableShowLabelIcons = value
             }
         },
         showLabelTextsModel: {
@@ -149,7 +155,7 @@ export default {
                 return this.editableShowLabelTexts == null ? this.showLabelTexts : this.editableShowLabelTexts
             },
             set(value) {
-                this.editableShowLabelTexts= value
+                this.editableShowLabelTexts = value
             }
         },
         linkGoogleMapsModel: {
@@ -157,7 +163,7 @@ export default {
                 return this.editableLinkGoogleMaps == null ? this.linkGoogleMaps : this.editableLinkGoogleMaps
             },
             set(value) {
-                this.editableLinkGoogleMaps= value
+                this.editableLinkGoogleMaps = value
             }
         }
     },
@@ -190,3 +196,5 @@ export default {
 <style scoped>
 
 </style>
+<script setup>
+</script>

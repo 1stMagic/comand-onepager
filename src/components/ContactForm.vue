@@ -172,7 +172,7 @@ export default {
     mounted() {
         usePiniaStore().$subscribe(() => {
             this.$nextTick(() => {
-                this.$refs.dataPrivacy.querySelector('.fancybox')?.addEventListener('click', event => {
+                this.$refs.dataPrivacy?.querySelector('.fancybox')?.addEventListener('click', event => {
                     event.preventDefault()
                     openFancyBox({url: event.target.getAttribute('href')})
                 })

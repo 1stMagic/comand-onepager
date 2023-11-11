@@ -3,7 +3,8 @@
     <div :id="templateId">
         <div :class="{'edit-mode': editMode, 'overflow-hidden': offCanvasOpen}" id="page-wrapper"
              :style="{'scroll-padding-top': heightSiteHeader + 'px'}">
-            <div v-if="editMode" :class="['system-message info flex-container', {'open': editModeMessage}]" id="edit-mode-message">
+            <div v-if="editMode" :class="['system-message info flex-container', {'open': editModeMessage}]"
+                 id="edit-mode-message">
                 <div v-if="editModeMessage" class="flex-container">
                     <div>
                         <p>You are in EditMode. You can simply edit components by clicking on them and selecting one of
@@ -24,36 +25,37 @@
                         </label>
                     </div>
                 </div>
-                <a class="no-flex" href="#" title="Collapse message" @click.prevent="editModeMessage = !editModeMessage">
+                <a class="no-flex" href="#" title="Collapse message"
+                   @click.prevent="editModeMessage = !editModeMessage">
                     <span :class="editModeMessage ? 'icon-single-arrow-left' : 'icon-single-arrow-right'"></span>
                 </a>
             </div>
-            <EditModeComponentSettingsWrapper v-if="editMode && context.settings.show()"/>
+            <EditModeComponentSettingsWrapper v-if="editMode && context?.settings.show()"/>
             <a id="anchor-back-to-top"></a>
             <!-- begin cmd-site-header -->
             <CmdSiteHeader
-                    :cmd-main-navigation="{navigationEntries: mainNavigation}"
-                    :closeOffcanvas="{ iconClass: 'icon-cancel', text: label('main_navigation.close_navigation'), showText: true}"
-                    :navigationInline="site.siteHeader?.navigationInline"
-                    @offcanvas="offcanvasToggled"
+                :cmd-main-navigation="{navigationEntries: mainNavigation}"
+                :closeOffcanvas="{ iconClass: 'icon-cancel', text: label('main_navigation.close_navigation'), showText: true}"
+                :navigationInline="site.siteHeader?.navigationInline"
+                @offcanvas="offcanvasToggled"
             >
                 <template v-slot:top-header>
                     <!-- begin cmd-list-of-links (for top-header-navigation) -->
                     <CmdListOfLinks
-                            v-if="topHeaderNavigationData"
-                            :links="topHeaderNavigationData"
-                            orientation="horizontal"
-                            align="right"
+                        v-if="topHeaderNavigationData"
+                        :links="topHeaderNavigationData"
+                        orientation="horizontal"
+                        align="right"
                     />
                     <!-- end cmd-list-of-links (for top-header-navigation) -->
                 </template>
                 <template v-slot:logo>
                     <!-- begin cmd-company-logo -->
                     <CmdCompanyLogo
-                            v-if="companyLogo.pathDefaultLogo"
-                            :altText="companyLogo.altText"
-                            :pathDefaultLogo="companyLogo.pathDefaultLogo"
-                            :pathDarkmodeLogo="companyLogo.pathDarkmodeLogo"
+                        v-if="companyLogo.pathDefaultLogo"
+                        :altText="companyLogo.altText"
+                        :pathDefaultLogo="companyLogo.pathDefaultLogo"
+                        :pathDarkmodeLogo="companyLogo.pathDarkmodeLogo"
                     />
                     <!-- end cmd-company-logo -->
                 </template>
@@ -76,23 +78,23 @@
                             :componentProps="component.props"
                             :componentPath="componentPath(componentIndex)">
                             <component
-                                    :is="component.name"
-                                    v-bind="component.props"
-                                    v-on="handlers(component)"
+                                :is="component.name"
+                                v-bind="component.props"
+                                v-on="handlers(component)"
                             >
                                 <EditComponentWrapper
-                                        v-for="(childComponent, childComponentIndex) in component.components || []"
-                                        :key="childComponentIndex"
-                                        :is="childComponent.name"
-                                        :allow-add-component="childComponent.allowAddComponent"
-                                        :componentName="childComponent.name"
-                                        :componentProps="component.props"
-                                        :componentPath="childComponentPath(childComponentIndex)"
+                                    v-for="(childComponent, childComponentIndex) in component.components || []"
+                                    :key="childComponentIndex"
+                                    :is="childComponent.name"
+                                    :allow-add-component="childComponent.allowAddComponent"
+                                    :componentName="childComponent.name"
+                                    :componentProps="component.props"
+                                    :componentPath="childComponentPath(childComponentIndex)"
                                 >
                                     <component
-                                            :is="childComponent.name"
-                                            v-bind="childComponent.props"
-                                            v-on="handlers(childComponent)"
+                                        :is="childComponent.name"
+                                        v-bind="childComponent.props"
+                                        v-on="handlers(childComponent)"
                                     />
                                 </EditComponentWrapper>
                             </component>
@@ -103,17 +105,17 @@
 
             <CmdSiteFooter v-else>
                 <component
-                        v-for="(component, index) in site.siteFooter?.components || []" :key="index"
-                        :is="component.name"
-                        v-bind="component.props"
-                        v-on="handlers(component)"
+                    v-for="(component, index) in site.siteFooter?.components || []" :key="index"
+                    :is="component.name"
+                    v-bind="component.props"
+                    v-on="handlers(component)"
                 >
                     <component
-                            v-for="(childComponent, childComponentIndex) in component.components || []"
-                            :key="childComponentIndex" :is="childComponent.name"
-                            v-bind="childComponent.props"
-                            v-on="handlers(childComponent)"
-                            :editContent="childComponent.editContent"/>
+                        v-for="(childComponent, childComponentIndex) in component.components || []"
+                        :key="childComponentIndex" :is="childComponent.name"
+                        v-bind="childComponent.props"
+                        v-on="handlers(childComponent)"
+                        :editContent="childComponent.editContent"/>
                 </component>
             </CmdSiteFooter>
             <!-- end cmd-site-footer -->
@@ -129,21 +131,21 @@
 
             <!-- begin fancy-box ------------------------------------------------------------------------------------------------------------------------------------------------------->
             <CmdFancyBox
-                    v-if="cookieDisclaimerData"
-                    :show="fancyBoxCookieDisclaimer"
-                    :fancyboxOptions="{}"
-                    :allowEscapeKey="false"
-                    :cmdHeadline="{show: true, headlineText: 'Cookie Disclaimer', headlineLevel: 2}"
-                    ariaLabelText="Cookie Disclaimer"
+                v-if="cookieDisclaimerData"
+                :show="fancyBoxCookieDisclaimer"
+                :fancyboxOptions="{}"
+                :allowEscapeKey="false"
+                :cmdHeadline="{show: true, headlineText: 'Cookie Disclaimer', headlineLevel: 2}"
+                ariaLabelText="Cookie Disclaimer"
             >
                 <!-- begin cookie-disclaimer ------------------------------------------------------------------------------------------------------------------------------------------------------->
                 <CmdCookieDisclaimer
-                        :cookieOptions="cookieDisclaimerData"
-                        buttonLabelAcceptAllCookies="Accept all cookies"
-                        buttonLabelAcceptCurrentSettings="Accept current settings"
-                        @closeCookieDisclaimer="closeCookieDisclaimer"
-                        v-model="acceptedCookies"
-                        :cmdHeadlineCookieDisclaimer="{ show: false }">
+                    :cookieOptions="cookieDisclaimerData"
+                    buttonLabelAcceptAllCookies="Accept all cookies"
+                    buttonLabelAcceptCurrentSettings="Accept current settings"
+                    @closeCookieDisclaimer="closeCookieDisclaimer"
+                    v-model="acceptedCookies"
+                    :cmdHeadlineCookieDisclaimer="{ show: false }">
                     <template #privacy-text>
                         <p>
                             <strong>
@@ -172,6 +174,7 @@ import {loadMetaData} from "../utils/metaData"
 // import mixins
 import BaseI18nComponent from "../components/mixins/BaseI18nComponent"
 import {useEditModeContext} from "../composables/editModeContext.js"
+import {computed} from "vue";
 
 export default {
     mixins: [
@@ -179,7 +182,7 @@ export default {
     ],
     provide() {
         return {
-            editModeContext: this.context
+            editModeContext: computed(() => this.context)
         }
     },
     props: {
@@ -190,7 +193,7 @@ export default {
     data() {
         return {
             editModeMessage: true,
-            context: useEditModeContext(),
+            // context: this.editMode ? useEditModeContext() : null,
             selectedTemplate: "blank",
             acceptedCookies: [],
             fancyBoxCookieDisclaimer: true,
@@ -225,10 +228,13 @@ export default {
         removeEventListener("hashchange", this.onLocationHashChanged)
     },
     computed: {
+        context() {
+            return this.editMode ? useEditModeContext() : null
+        },
         templateId() {
             return "template-" + this.selectedTemplate
         },
-        ...mapState(usePiniaStore, ["editMode", "componentEditMode", "showEditModeComponentSettings", "companyLogo"]),
+        ...mapState(usePiniaStore, ["currentLanguage", "site", "editMode", "componentEditMode", "showEditModeComponentSettings", "companyLogo"]),
 
         mainNavigation() {
             const navigationEntries = []
@@ -257,10 +263,6 @@ export default {
                 tooltip: this.label("back_to_top_button.tooltip")
             }
         },
-
-        // create reference "currentLanguage" from store as computed property
-        ...mapState(usePiniaStore, ["currentLanguage", "site"]),
-
         // addressData() {
         //    const addressDataTranslated = JSON.parse(JSON.stringify(this.addressDataData))
         //    addressDataTranslated.address.country = this.label(addressDataTranslated.address.country, addressDataTranslated.address.country)

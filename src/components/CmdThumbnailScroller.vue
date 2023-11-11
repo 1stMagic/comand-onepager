@@ -99,7 +99,7 @@ import {createUuid, openFancyBox} from 'comand-component-library'
 import I18n from "./mixins/I18n"
 import DefaultMessageProperties from "./mixins/CmdThumbnailScroller/DefaultMessageProperties"
 import EditMode from "./mixins/EditMode.vue"
-import {buildComponentPath, updateHandlerProvider} from "../utils/editmode.js"
+import {buildComponentPath} from "../utils/editmode.js"
 
 export default {
     name: "CmdThumbnailScroller",
@@ -256,6 +256,23 @@ export default {
         }
     },
     methods: {
+        itemProvider() {
+            return {
+                "image": {
+                    "id": createUuid(),
+                    "src": "/media/images/demo-images/small/landscape-01.jpg",
+                    "srcImageLarge": "/media/images/demo-images/large/landscape-01.jpg",
+                    "alt": "Alternative Text",
+                    "tooltip": "Tooltip 1"
+                },
+                "figcaption": {
+                    "text": "Figcaption DE",
+                    "position": "bottom",
+                    "textAlign": "center",
+                    "show": true
+                }
+            }
+        },
         onAddItem() {
             this.editModeContext.content.addContent(
                 buildComponentPath(this, 'props', 'thumbnailScrollerItems', -1),
@@ -312,17 +329,6 @@ export default {
                 // show content in fancybox
                 this.showFancyBox(index)
             }
-        },
-        updateHandlerProvider() {
-            return updateHandlerProvider(this, {
-                update(props, childUpdateHandlers) {
-                    const cmdHeadlineUpdateHandler = childUpdateHandlers?.find(handler => handler.name === "CmdHeadline")
-                    if (cmdHeadlineUpdateHandler) {
-                        props.cmdHeadline = props.cmdHeadline || {}
-                        cmdHeadlineUpdateHandler.update(props.cmdHeadline)
-                    }
-                }
-            })
         }
     },
     watch: {

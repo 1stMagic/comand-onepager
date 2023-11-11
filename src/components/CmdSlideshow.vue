@@ -87,6 +87,7 @@
 // import mixins
 import EditMode from "./mixins/EditMode.vue"
 import {buildComponentPath, updateHandlerProvider} from "../utils/editmode.js";
+import {createUuid} from "comand-component-library";
 //import {updateHandlerProvider} from "../utils/editmode.js"
 export default {
     name: "CmdSlideshow",
@@ -186,6 +187,25 @@ export default {
         }
     },
     methods: {
+        itemProvider() {
+            return {
+                "image": {
+                    "src": {
+                        "large": "/media/images/slideshow-images/large/slide1.jpg",
+                        "medium": "/media/images/slideshow-images/medium/slide1.jpg",
+                        "small": "/media/images/slideshow-images/small/slide1.jpg"
+                    },
+                    "alt": "Alternative Text",
+                    "tooltip": "Tooltip DE"
+                },
+                "figcaption": {
+                    "text": "Figcaption DE",
+                    "position": "bottom",
+                    "textAlign": "center",
+                    "show": true
+                }
+            }
+        },
         onAddItem() {
             this.editModeContext.content.addContent(
                 buildComponentPath(this, 'props', 'slideshowItems', -1),

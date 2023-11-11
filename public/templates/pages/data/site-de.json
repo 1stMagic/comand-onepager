@@ -133,7 +133,7 @@
             "name": "CmdTextImageBlock",
             "props": {
               "cmdHeadline": {
-                "headlineText": "Überschrift Komponente",
+                "headlineText": "Überschrift Text Image Block",
                 "headlineLevel": "2"
               },
               "htmlContent": "<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.</p><p> Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugia a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. <br />Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.</p>"
@@ -205,7 +205,7 @@
             "name": "CmdImageGallery",
             "props": {
               "cmdHeadline": {
-                "headlineText": "Überschrift für Komponente",
+                "headlineText": "Überschrift für Image Gallery",
                 "headlineLevel": "3"
               },
               "images": [
@@ -277,6 +277,10 @@
           {
             "name": "CmdThumbnailScroller",
             "props": {
+              "cmdHeadline": {
+                "headlineText": "Überschrift für Thumbnail Scroller",
+                "headlineLevel": "3"
+              },
               "thumbnailScrollerItems": [
                 {
                   "image": {
@@ -405,7 +409,7 @@
             "name": "ContactForm",
             "props": {
               "cmdHeadline": {
-                "headlineText": "Kontakt",
+                "headlineText": "Überschrift für Kontaktformular",
                 "headlineLevel": "2"
               },
               "email": "#",
@@ -504,6 +508,8 @@
             "name": "CmdListOfLinks",
             "handlers": "toggleSection",
             "props": {
+              "cmdHeadline": {
+              },
               "links": [
                 {
                   "iconClass": "icon-user-profile",
@@ -550,6 +556,8 @@
       {
         "name": "CmdOpeningHours",
         "props": {
+          "cmdHeadline": {
+          },
           "textHolidays": "",
           "textMiscInfo": "",
           "openingHours": [
@@ -638,16 +646,17 @@
       {
         "name": "CmdAddressData",
         "props": {
-          "linkGoogleMaps": false,
+          "cmdHeadline": {
+          },
           "addressData": [
             {
-              "name": "company",
+              "type": "company",
               "iconClass": "icon-company",
               "data": "Your company name",
               "labelText": "Company"
             },
             {
-              "name": "address",
+              "type": "address",
               "iconClass": "icon-home",
               "labelText": "Address",
               "streetNo": "Your Street/No",
@@ -657,10 +666,11 @@
               "country": "Your country",
               "longitude": "0.0",
               "latitude": "0.0",
-              "location": ""
+              "location": "",
+              "linkGoogleMaps": false
             },
             {
-              "name": "telephone",
+              "type": "phone",
               "iconClass": "icon-phone",
               "data": "Your phone number",
               "labelText": "Telephone",
@@ -668,7 +678,7 @@
               "href": "0123456789"
             },
             {
-              "name": "mobilephone",
+              "type": "phone",
               "iconClass": "icon-device-smartphone",
               "data": "Your mobile phone number",
               "labelText": "Mobile phone",
@@ -676,13 +686,13 @@
               "href": "0123456789"
             },
             {
-              "name": "fax",
+              "type": "fax",
               "iconClass": "icon-fax",
               "data": "Your fax number",
               "labelText": "Fax"
             },
             {
-              "name": "email",
+              "type": "email",
               "iconClass": "icon-mail",
               "data": "Your email address",
               "labelText": "Email",
@@ -690,7 +700,7 @@
               "href": "mail@provider.de"
             },
             {
-              "name": "website",
+              "type": "url",
               "iconClass": "icon-globe",
               "data": "Your web site",
               "labelText": "Web site",
@@ -698,7 +708,7 @@
               "href": "https://www.domain.toplevel"
             },
             {
-              "name": "custom",
+              "type": "custom",
               "iconClass": "icon-questionmark-circle",
               "data": "Custom data",
               "labelText": "Custom"

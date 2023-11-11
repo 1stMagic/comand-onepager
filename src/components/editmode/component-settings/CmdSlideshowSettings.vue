@@ -1,8 +1,8 @@
 <template>
     <div class="flex-container vertical component-settings-wrapper">
-        <button type="button" class="button" @click="deleteSlideshowItems">
+        <button type="button" class="button" @click="removeItems">
             <span class="icon-trash"></span>
-            <span>{{deleteButtonLabel}}</span>
+            <span>{{removeButtonLabel}}</span>
         </button>
 
         <h5>Autoplay options</h5>
@@ -27,11 +27,11 @@
 
         <h5>Display options</h5>
         <CmdFormElement
-                element="input"
-                type="checkbox"
-                :toggleSwitch="true"
-                labelText="Show slide-buttons"
-                v-model="showSlideButtonsModel"
+            element="input"
+            type="checkbox"
+            :toggleSwitch="true"
+            labelText="Show slide-buttons"
+            v-model="showSlideButtonsModel"
         />
         <CmdFormElement
             element="input"
@@ -53,6 +53,7 @@
 <script>
 export default {
     name: "CmdSlideshowSettings",
+    inject: ["editModeContext"],
     inheritAttrs: false,
     data() {
         return {
@@ -108,8 +109,8 @@ export default {
         }
     },
     computed: {
-        deleteButtonLabel() {
-          return "Delete all" + this.slideshowItems.length + " images/items"
+        removeButtonLabel() {
+          return "Remove all " + this.slideshowItems.length + " images/items"
         },
         autoplayModel: {
             get() {
@@ -153,9 +154,10 @@ export default {
         }
     },
     methods: {
-        deleteSlideshowItems() {
-            if (confirm("All images/items will be deleted (the component itself remains). Continue anyways?")) {
-                alert("Deleted")
+        removeItems() {
+            if (confirm("All images/items will be removed (the component itself remains). Continue anyways?")) {
+                const saveHandler = this.editModeContext.settings.getSettingsSaveHandler()
+                saveHandler(props => props.slideshowItems = [])
             }
         },
         updateCallbackProvider() {

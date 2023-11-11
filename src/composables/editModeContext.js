@@ -49,7 +49,10 @@ function settingsActions(state) {
             state.deleteInnerComponent = deleteInnerComponent
         },
         isEditing(componentIdentifier) {
-            return state.settingsEditing === componentIdentifier
+            if (componentIdentifier) {
+                return state.settingsEditing === componentIdentifier
+            }
+            return !!state.settingsEditing
         },
         stopEditing() {
             state.settingsEditing = null

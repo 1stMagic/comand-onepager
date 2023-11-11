@@ -93,6 +93,20 @@ export default {
         }
     },
     methods: {
+        itemProvider() {
+            return {
+                "image": {
+                    "src": "/media/images/demo-images/medium/landscape-01.jpg",
+                    "alt": "Alternative Text",
+                },
+                "figcaption": {
+                    "text": "Figcaption DE",
+                    "position": "bottom",
+                    "textAlign": "center",
+                    "show": true
+                }
+            }
+        },
         onAddItem() {
             this.editModeContext.content.addContent(
                 buildComponentPath(this, 'props', 'images', -1),

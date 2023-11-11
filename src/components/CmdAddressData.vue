@@ -9,7 +9,7 @@
         <template v-else>
             <!-- begin cmd-headline -->
             <CmdHeadline
-                v-if="cmdHeadline?.headlineText || editing"
+                v-if="cmdHeadline?.headlineText || editModeContext"
                 v-bind="cmdHeadline"
             />
             <!-- end cmd-headline -->
@@ -29,6 +29,10 @@
                     <!-- end default view -->
 
                     <!-- begin edit-mode -->
+                    <button v-if="addressData.length === 0" type="button" class="button confirm small" @click="onAddItem">
+                        <span class="icon-plus"></span>
+                        <span>Add new entry</span>
+                    </button>
                     <EditComponentWrapper
                         v-else
                         v-for="(entry, index) in addressData"
@@ -44,7 +48,6 @@
                                 :addressEntry="entry"
                                 :showLabelIcons="showLabelIcons"
                                 :showLabelTexts="showLabelTexts"
-                                :linkGoogleMaps="linkGoogleMaps"
                             />
                         </dl>
                     </EditComponentWrapper>
@@ -54,18 +57,18 @@
                 <!-- begin list without labels -->
                 <ul v-else :class="['flex-container', {'vertical': !showIconsOnly}]">
                     <template v-for="(entry, index) in addressData" :key="index">
-                        <template v-if="entry.href || entry.name === 'address' || !showIconsOnly">
+                        <template v-if="entry.href || entry.type === 'address' || !showIconsOnly">
                             <li :class="{'no-flex' : showIconsOnly}">
                                 <!-- begin all entries except address (which has no href) -->
                                 <a v-if="entry.href" :href="getHref(entry)"
-                                   :target="{'_blank' : entry.name === 'website'}"
+                                   :target="{'_blank' : entry.type === 'url'}"
                                    :title="entry.tooltip">
                                     <template v-if="showIconsOnly">
                                         <!-- begin CmdIcon -->
                                         <CmdIcon
-                                                v-if="entry.iconClass"
-                                                :iconClass="entry.iconClass"
-                                                :type="entry.iconType"
+                                            v-if="entry.iconClass"
+                                            :iconClass="entry.iconClass"
+                                            :type="entry.iconType"
                                         />
                                         <!-- end CmdIcon -->
                                     </template>
@@ -75,16 +78,16 @@
                                 <!-- end all entries except address -->
 
                                 <!-- begin address -->
-                                <template v-if="entry.name === 'address'">
+                                <template v-if="entry.type === 'address'">
                                     <!-- begin linked address -->
-                                    <a v-if="linkGoogleMaps" :href="locateAddress(entry)" target="google-maps"
+                                    <a v-if="entry.linkGoogleMaps" :href="locateAddress(entry)" target="google-maps"
                                        :title="entry.tooltip">
                                         <template v-if="showIconsOnly">
                                             <!-- begin CmdIcon -->
                                             <CmdIcon
-                                                    v-if="entry.iconClass"
-                                                    :iconClass="entry.iconClass"
-                                                    :type="entry.iconType"
+                                                v-if="entry.iconClass"
+                                                :iconClass="entry.iconClass"
+                                                :type="entry.iconType"
                                             />
                                             <!-- end CmdIcon -->
                                         </template>
@@ -116,7 +119,7 @@
                                     <!-- end linked address -->
 
                                     <!-- begin unlinked address -->
-                                    <template v-if="!linkGoogleMaps && !showIconsOnly">
+                                    <template v-if="!entry.linkGoogleMaps && !showIconsOnly">
                                         <!-- begin street/number -->
                                         <template v-if="entry.streetNo">
                                             <span class="street-address">{{ entry.streetNo }}</span><br/>
@@ -158,7 +161,7 @@
 
 <script>
 import EditMode from "./mixins/EditMode.vue"
-import {updateHandlerProvider} from "../utils/editmode.js";
+import {buildComponentPath, updateHandlerProvider} from "../utils/editmode.js";
 
 // import mixins
 //import I18n from "../mixins/I18n"
@@ -212,13 +215,6 @@ export default {
             required: true
         },
         /**
-         * link physical address (street, no, zip and city) with Google Maps
-         */
-        linkGoogleMaps: {
-            type: Boolean,
-            default: false
-        },
-        /**
          * properties for CmdHeadline-component
          */
         cmdHeadline: {
@@ -237,14 +233,27 @@ export default {
         }
     },
     methods: {
+        onAddItem() {
+            this.editModeContext.content.addContent(
+                buildComponentPath(this, 'props', 'addressData', -1),
+                this.itemProvider)
+        },
+        itemProvider() {
+            return {
+                "name": "name",
+                "iconClass": "icon-company",
+                "data": "Your data",
+                "labelText": "Label"
+            }
+        },
         getHref(entry) {
-            if (entry.name === "telephone" || entry.name === "mobilephone") {
+            if (entry.type === "phone") {
                 return "tel:" + entry.href
             }
-            if (entry.name === "email") {
+            if (entry.type === "email") {
                 return "mailto:" + entry.href
             }
-            if (entry.name === "website") {
+            if (entry.type === "url") {
                 return entry.href
             }
             return null

@@ -1,28 +1,33 @@
 <template>
     <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Headline', headlineLevel: 4}">
         <template v-slot:body>
+            <!-- begin cmdHeadline -->
             <CmdHeadlineSettings
-                    ref="headlineSettings"
-                    v-bind="cmdHeadline || {}"
+                ref="headlineSettings"
+                v-bind="cmdHeadline || {}"
             />
+            <!-- end cmdHeadline -->
         </template>
     </CmdBox>
 
     <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Opening Hours', headlineLevel: 4}">
         <template v-slot:body>
             <div class="flex-container vertical component-settings-wrapper">
+                <button type="button" class="button" @click="removeItems">
+                    <span class="icon-trash"></span>
+                    <span>{{ removeButtonLabel }}</span>
+                </button>
                 <CmdFormElement
-                        element="input"
-                        type="text"
-                        labelText="Abbreviation text for 'hours'"
-                        v-model="abbreviationTextModel"
+                    element="input"
+                    type="text"
+                    labelText="Abbreviation text for 'hours'"
+                    v-model="abbreviationTextModel"
                 />
-
                 <CmdFormElement
-                        element="select"
-                        :select-options="separators"
-                        labelText="Select separator (for time span)"
-                        v-model="separatorModel"
+                    element="select"
+                    :select-options="separators"
+                    labelText="Select separator (for time span)"
+                    v-model="separatorModel"
                 />
             </div>
         </template>
@@ -32,6 +37,7 @@
 <script>
 export default {
     name: "CmdOpeningHoursSettings",
+    inject: ["editModeContext"],
     inheritAttrs: false,
     data() {
         return {
@@ -83,12 +89,26 @@ export default {
             type: String,
             default: "–"
         },
+        /**
+         * list of opening-hours
+         */
+        openingHours: {
+            type: Array,
+            required: true
+        },
         cmdHeadline: {
             type: Object,
-            required: false
+            default() {
+                return {
+                    headlineLevel: "2"
+                }
+            }
         }
     },
     computed: {
+        removeButtonLabel() {
+            return "Remove " + this.openingHours.length + " all entries"
+        },
         abbreviationTextModel: {
             get() {
                 return this.editableAbbreviationText == null ? this.abbreviationText : this.editableAbbreviationText
@@ -107,6 +127,12 @@ export default {
         }
     },
     methods: {
+        removeItems() {
+            if (confirm("All entries will be removed (the component itself remains). Continue anyways?")) {
+                const saveHandler = this.editModeContext.settings.getSettingsSaveHandler()
+                saveHandler(props => props.openingHours = [])
+            }
+        },
         updateCallbackProvider() {
             const headlineUpdateCallback = this.$refs.headlineSettings.updateCallbackProvider()
             const abbreviationText = this.abbreviationTextModel

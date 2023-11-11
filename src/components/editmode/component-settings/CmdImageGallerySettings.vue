@@ -14,6 +14,10 @@
             :cmdHeadline="{headlineText: 'Image Gallery', headlineLevel: 4}">
         <template v-slot:body>
             <div class="flex-container vertical component-settings-wrapper">
+                <button type="button" class="button" @click="removeItems">
+                    <span class="icon-trash"></span>
+                    <span>{{removeButtonLabel}}</span>
+                </button>
                 <CmdFormElement
                     element="input"
                     type="checkbox"
@@ -29,6 +33,7 @@
 <script>
 export default {
     name: "CmdImageGallerySettings",
+    inject: ["editModeContext"],
     inheritAttrs: false,
     data() {
         return {
@@ -36,9 +41,20 @@ export default {
         }
     },
     props: {
+        /**
+         * list of images to display
+         */
+        images: {
+            type: Array,
+            default: []
+        },
         cmdHeadline: {
             type: Object,
-            required: false
+            default() {
+                return {
+                    headlineLevel: "2"
+                }
+            }
         },
         useFancyboxForLargeImages: {
             type: Boolean,
@@ -46,6 +62,9 @@ export default {
         }
     },
     computed: {
+        removeButtonLabel() {
+            return "Remove " + this.images.length + " all images"
+        },
         useFancyboxForLargeImagesModel: {
             get() {
                 return this.editableUseFancyboxForLargeImages == null ? this.useFancyboxForLargeImages : this.editableUseFancyboxForLargeImages
@@ -56,6 +75,12 @@ export default {
         }
     },
     methods: {
+        removeItems() {
+            if (confirm("All images will be removed (the component itself remains). Continue anyways?")) {
+                const saveHandler = this.editModeContext.settings.getSettingsSaveHandler()
+                saveHandler(props => props.images = [])
+            }
+        },
         updateCallbackProvider() {
             const headlineUpdateCallback = this.$refs.headlineSettings.updateCallbackProvider()
             const useFancyboxForLargeImages = this.useFancyboxForLargeImagesModel

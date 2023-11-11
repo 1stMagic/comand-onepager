@@ -11,6 +11,8 @@
         </CmdTooltip>
         <!-- end CmdTooltip -->
 
+        <!-- begin image -->
+        <h5>Image</h5>
         <a href="#" @click.prevent="selectFiles" class="image-wrapper">
             <figure v-if="image?.src" class="cmd-image" id="show-tooltip">
                 <div :class="['box drop-area flex-container vertical', { 'allow-drop': allowDrop }]"
@@ -29,47 +31,51 @@
             <span class="icon-trash"></span>
             <span>Remove image</span>
         </button>
+        <!-- end image -->
+
+        <hr />
 
         <!-- begin CmdFormElement -->
         <CmdFormElement
-                class="hidden"
-                element="input"
-                type="file"
-                labelText="Select file"
-                :disabled="uploadInitiated"
-                @change="fileSelected"
-                ref="formElement"
+            class="hidden"
+            element="input"
+            type="file"
+            labelText="Select file"
+            :disabled="uploadInitiated"
+            @change="fileSelected"
+            ref="formElement"
         />
         <!-- end CmdFormElement -->
 
         <!-- begin figcaption -->
         <h5>Figcaption</h5>
         <CmdFormElement
-                element="input"
-                type="checkbox"
-                :toggleSwitch="true"
-                labelText="Show figcaption"
-                v-model="editableShowFigcaption"
+            element="input"
+            type="checkbox"
+            :toggleSwitch="true"
+            labelText="Show figcaption"
+            v-model="editableShowFigcaption"
         />
         <CmdFormElement
-                v-show="editableShowFigcaption"
-                element="input"
-                type="text"
-                labelText="Figcaption Text"
-                v-model="editableFigcaptionText"
+            v-show="editableShowFigcaption"
+            element="input"
+            type="text"
+            labelText="Figcaption Text"
+            placeholder="Figcaption Text"
+            v-model="editableFigcaptionText"
         />
         <div v-show="editableShowFigcaption" class="flex-container">
             <CmdFormElement
-                    element="select"
-                    labelText="Position"
-                    :selectOptions="positionOptions"
-                    v-model="editableFigcaptionPosition"
+                element="select"
+                labelText="Position"
+                :selectOptions="positionOptions"
+                v-model="editableFigcaptionPosition"
             />
             <CmdFormElement
-                    element="select"
-                    labelText="Alignment"
-                    :selectOptions="textAlignOptions"
-                    v-model="editableFigcaptionTextAlign"
+                element="select"
+                labelText="Alignment"
+                :selectOptions="textAlignOptions"
+                v-model="editableFigcaptionTextAlign"
             />
         </div>
         <!-- end figcaption -->
@@ -79,20 +85,20 @@
         <!-- begin miscellaneous -->
         <h5>Miscellaneous</h5>
         <CmdFormElement
-                element="input"
-                type="text"
-                :required="true"
-                labelText="Alternative Text"
-                placeholder="Alternative Text"
-                v-model="editableAlternativeText"
+            element="input"
+            type="text"
+            :required="true"
+            labelText="Alternative Text"
+            placeholder="Alternative Text"
+            v-model="editableAlternativeText"
         />
         <CmdFormElement
-                element="input"
-                type="text"
-                :required="false"
-                labelText="Tooltip"
-                placeholder="Tooltip"
-                v-model="editableTooltip"
+            element="input"
+            type="text"
+            :required="false"
+            labelText="Tooltip"
+            placeholder="Tooltip"
+            v-model="editableTooltip"
         />
         <!-- end miscellaneous -->
     </div>
