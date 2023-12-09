@@ -19,6 +19,7 @@
         <CmdFormElement
             element="input"
             type="text"
+            :required="true"
             labelText="Headline Text"
             placeholder="Headline Text"
             v-model="headlineTextModel"
@@ -26,6 +27,7 @@
         <div class="flex-container">
             <CmdFormElement
                 element="select"
+                :required="true"
                 labelText="Level"
                 :selectOptions="headlineLevelOptions"
                 v-model="headlineLevelModel"

@@ -13,17 +13,19 @@
     <!-- end labels -->
 
     <!-- begin data (except for address) -->
-    <dd v-if="addressEntry.type !== 'address' && addressEntry.data" :class="vCardClass(addressEntry)">
+    <dd v-if="addressEntry.type !== 'address' && (addressEntry.data || addressEntry.href)" :class="vCardClass(addressEntry)">
         <template v-if="!editing">
             <a v-if="addressEntry.href"
                :href="getHref(addressEntry)"
                :target="addressEntry.type === 'url' ? '_blank' : null"
                :title="addressEntry.tooltip"
+               :data-type="addressEntry.type"
                v-telephone="addressEntry.href">
-                {{ addressEntry.href }}
+                {{ addressEntry.data || addressEntry.href }}
             </a>
             <span v-else v-html="addressEntry.data"></span>
         </template>
+
         <!-- begin edit-mode -->
         <CmdFormElement
                 v-else
@@ -60,7 +62,7 @@
 
             <!-- begin miscInfo -->
             <template v-if="addressEntry.miscInfo">
-                <span>{{ addressEntry.miscInfo }}</span><br/>
+                <span>{{ addressEntry.miscInfo }}</span><br v-if="addressEntry.country" />
             </template>
             <!-- end miscInfo -->
 
@@ -96,6 +98,7 @@
                 <span v-if="addressEntry.country" class="country-name">{{ addressEntry.country }}</span>
                 <!-- end country -->
             </template>
+
             <!-- begin edit-mode for address -->
             <template v-else>
                 <!-- begin street/number -->
@@ -235,7 +238,7 @@ export default {
             return "https://www.google.com/maps/place/" + entry.streetNo + ", " + entry.zip + " " + entry.city
         },
         getHref(entry) {
-            if (entry.type === "telephone") {
+            if (entry.type === "phone") {
                 return "tel:" + entry.href
             }
             if (entry.type === "email") {

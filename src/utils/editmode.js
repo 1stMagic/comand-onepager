@@ -1,17 +1,21 @@
-function findEditComponentWrapper(component) {
-    return findParentComponent(component, "EditComponentWrapper")
+function findEditComponentWrapper(component, filter) {
+    return findParentComponent(component, "EditComponentWrapper", filter)
 }
 
 function findEditSettingsComponentWrapper(component) {
-    return findParentComponent(component, "EditModeComponentSettingsWrapper")
+    return findParentComponent(component, "EditModeSettingsSidebar")
 }
 
-function findParentComponent(component, parentComponentName) {
-    if (component?.$options?.name === parentComponentName) {
+function findMainSidebar(component) {
+    return findParentComponent(component, "EditModeMainSidebar")
+}
+
+function findParentComponent(component, parentComponentName, filter) {
+    if (component?.$options?.name === parentComponentName && (filter == null || filter(component))) {
         return component
     }
     if (component?.$parent) {
-        return findParentComponent(component.$parent, parentComponentName)
+        return findParentComponent(component.$parent, parentComponentName, filter)
     }
     return null
 }
@@ -47,6 +51,7 @@ function updateHandlerProvider(component, options) {
 export {
     findEditComponentWrapper,
     findEditSettingsComponentWrapper,
+    findMainSidebar,
     buildComponentPath,
     componentPathAsString,
     updateHandlerProvider

@@ -19,27 +19,29 @@
             />
 
             <!-- begin edit-mode -->
-            <EditComponentWrapper
-                v-else
-                v-for="(link, index) in links"
-                :key="'x' + index"
-                class="edit-items"
-                :showComponentName="false"
-                componentTag="ul"
-                componentName="CmdLinkItem"
-                :componentProps="link"
-                :componentPath="['props', 'links', index]"
-                :itemProvider="itemProvider"
-            >
-                <CmdListOfLinksItem
-                    :class="{'active': sectionAnchors && activeSection === index}"
-                    :link="link"
-                />
-            </EditComponentWrapper>
-            <button v-if="links.length === 0" type="button" class="button confirm small" @click="onAddItem">
-                <span class="icon-plus"></span>
-                <span>Add new entry</span>
-            </button>
+            <li v-else>
+                <EditComponentWrapper
+                    v-for="(link, index) in links"
+                    :key="'x' + index"
+                    class="edit-items"
+                    :showComponentName="false"
+                    componentTag="ul"
+                    componentName="CmdLinkItem"
+                    :componentProps="link"
+                    :allowedComponentTypes="[]"
+                    :componentPath="['props', 'links', index]"
+                    :itemProvider="itemProvider"
+                >
+                    <CmdListOfLinksItem
+                        :class="{'active': sectionAnchors && activeSection === index}"
+                        :link="link"
+                    />
+                </EditComponentWrapper>
+                <button v-if="links.length === 0" type="button" class="button confirm small" @click="onAddItem">
+                    <span class="icon-plus"></span>
+                    <span>Add new entry</span>
+                </button>
+            </li>
             <!-- end edit-mode -->
         </ul>
         <!-- end list of links -->

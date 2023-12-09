@@ -29,7 +29,8 @@
                     <!-- end default view -->
 
                     <!-- begin edit-mode -->
-                    <button v-if="addressData.length === 0" type="button" class="button confirm small" @click="onAddItem">
+                    <button v-if="addressData.length === 0" type="button" class="button confirm small"
+                            @click="onAddItem">
                         <span class="icon-plus"></span>
                         <span>Add new entry</span>
                     </button>
@@ -39,6 +40,7 @@
                         :key="'x' + index"
                         class="edit-items"
                         :showComponentName="false"
+                        :allowedComponentTypes="[]"
                         componentName="CmdAddressDataItem"
                         :componentProps="entry"
                         :componentPath="['props', 'addressData', index]"
@@ -211,7 +213,7 @@ export default {
          * all address-data (incl. labels) that will be shown
          */
         addressData: {
-            type: Object,
+            type: Array,
             required: true
         },
         /**

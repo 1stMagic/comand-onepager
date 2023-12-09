@@ -13,6 +13,11 @@
     <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'List of links', headlineLevel: 4}">
         <template v-slot:body>
             <div class="flex-container vertical component-settings-wrapper">
+                <button type="button" class="button" @click="removeItems">
+                    <span class="icon-trash"></span>
+                    <span>{{ removeButtonLabel }}</span>
+                </button>
+
                 <CmdFormElement
                     element="input"
                     type="checkbox"
@@ -54,6 +59,7 @@
 <script>
 export default {
     name: "CmdListOfLinksSettings",
+    inject: ["editModeContext"],
     inheritAttrs: false,
     data() {
         return {
@@ -99,7 +105,7 @@ export default {
         },
         orientation: {
             type: String,
-            default: "horizontal"
+            default: "vertical"
         },
         useGap: {
             type: Boolean,
@@ -108,6 +114,10 @@ export default {
         styleAsBox: {
             type: Boolean,
             default: false
+        },
+        links: {
+            type: Array,
+            default: []
         },
         cmdHeadline: {
             type: Object,
@@ -119,6 +129,9 @@ export default {
         }
     },
     computed: {
+        removeButtonLabel() {
+            return "Remove " + this.links.length + " all entries"
+        },
         largeIconsModel: {
             get() {
                 return this.editableLargeIcons == null ? this.largeIcons : this.editableLargeIcons
@@ -161,6 +174,12 @@ export default {
         }
     },
     methods: {
+        removeItems() {
+            if (confirm("All entries will be removed (the component itself remains). Continue anyways?")) {
+                const saveHandler = this.editModeContext.settings.getSettingsSaveHandler()
+                saveHandler(props => props.links = [])
+            }
+        },
         updateCallbackProvider() {
             const data = {
                 largeIcons: this.largeIconsModel,

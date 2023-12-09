@@ -12,7 +12,10 @@
         <!-- end CmdTooltip -->
 
         <!-- begin image -->
-        <h5>Image</h5>
+        <h5 class="has-icon">
+            <span class="icon-image"></span>
+            <span>Image</span>
+        </h5>
         <a href="#" @click.prevent="selectFiles" class="image-wrapper">
             <figure v-if="image?.src" class="cmd-image" id="show-tooltip">
                 <div :class="['box drop-area flex-container vertical', { 'allow-drop': allowDrop }]"
@@ -60,6 +63,7 @@
             v-show="editableShowFigcaption"
             element="input"
             type="text"
+            :required="true"
             labelText="Figcaption Text"
             placeholder="Figcaption Text"
             v-model="editableFigcaptionText"

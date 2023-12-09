@@ -1,5 +1,5 @@
 <script>
-import {findEditComponentWrapper, findEditSettingsComponentWrapper} from "../../utils/editmode.js"
+import {findEditComponentWrapper, findEditSettingsComponentWrapper, findMainSidebar} from "../../utils/editmode.js"
 
 export default {
     inject: {
@@ -18,7 +18,8 @@ export default {
     data() {
         return {
             editing: false,
-            settingsContext: false
+            settingsContext: false,
+            mainSidebarContext: false
         }
     },
     mounted() {
@@ -36,6 +37,7 @@ export default {
                     editComponentWrapper.setAddHandlerProvider(this.addHandlerProvider)
                 }
             }
+            this.mainSidebarContext = !!findMainSidebar(this)
             this.settingsContext = !!findEditSettingsComponentWrapper(this)
         },
         updateHandlerProvider() {

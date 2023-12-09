@@ -1,8 +1,6 @@
 import {defineStore} from "pinia"
 import {i18nClient} from "../api/I18nClient"
 import axios from "axios"
-import {createUuid} from "comand-component-library"
-
 /**
  * find a specific component in site-structure.
  *
@@ -27,7 +25,7 @@ function findComponent(site, componentPath) {
 
     // check if componentPath contains a component (otherwise $isComponent-flag is false)
     const lastComponentPathEntry = componentPath[componentPath.length - 1]
-    if(typeof lastComponentPathEntry === "object" && lastComponentPathEntry.$isComponent === false) {
+    if (typeof lastComponentPathEntry === "object" && lastComponentPathEntry.$isComponent === false) {
         // remove last item (here object) from componentPath to ensure following functions will not break
         componentPath = componentPath.slice(0, -1)
     }
@@ -98,6 +96,9 @@ export const usePiniaStore = defineStore("pinia", {
         componentEditMode: false
     }),
     getters: {
+        metaData(state) {
+            return state.site.metaData
+        },
         labels(state) {
             if (state.languageLabels[state.currentLanguage]) {
                 return state.languageLabels[state.currentLanguage]
@@ -106,14 +107,14 @@ export const usePiniaStore = defineStore("pinia", {
         },
         // create getter to assure all information is loaded when site renders
         slideshow(state) {
-            if(state.site.main?.slideshow) {
+            if (state.site.main?.slideshow) {
                 return state.site.main.slideshow
             }
             return {slideshowItems: []}
         },
         // create getter to assure all information is loaded when site renders
         companyLogo(state) {
-            if(state.site.siteHeader?.propsLogo) {
+            if (state.site.siteHeader?.propsLogo) {
                 return state.site.siteHeader?.propsLogo
             }
             return {}
@@ -158,28 +159,14 @@ export const usePiniaStore = defineStore("pinia", {
                 .then(response => this.site = response.data)
                 .catch(() => this.site = {})
         },
-        updateMainHeadlineState(showMainHeadline) {
-            this.mainHeadline = showMainHeadline
-        },
-        addContentSection() {
-          this.sections.unshift(
-              {
-                  id: createUuid(),
-                  iconClass: "",
-                  navEntry: "Neue Sektion",
-                  headline: "Überschrift Neue Sektion",
-                  content: "<p>Placeholder</p>"
-              }
-          )
-        },
         addContent(componentPath, addHandler, componentPosition) {
             const result = findComponent(this.site, componentPath)
 
             // add new component-entry
-            if(Array.isArray(result.parent) && result.nodeIndex != null) {
+            if (Array.isArray(result.parent) && result.nodeIndex != null) {
                 let position = 1 // default adds '1' to nodeIndex to insert new component after existing one
 
-                if(componentPosition === 'before') {
+                if (componentPosition === 'before') {
                     // set position to '0' to not raise nodeIndex and insert new component before existing one
                     position = 0
                 }
@@ -188,9 +175,9 @@ export const usePiniaStore = defineStore("pinia", {
             }
         },
         deleteContent(componentPath) {
-            if(componentPath.length) {
+            if (componentPath.length) {
                 const lastComponentPathEntry = componentPath[componentPath.length - 1]
-                if(typeof lastComponentPathEntry === "object" && lastComponentPathEntry.$isComponent === false) {
+                if (typeof lastComponentPathEntry === "object" && lastComponentPathEntry.$isComponent === false) {
                     // remove last item (here object) from componentPath to ensure componentPath has default array-structure
                     componentPath = [...componentPath.slice(0, -1), ...lastComponentPathEntry.componentPath || []]
                 }
@@ -200,7 +187,7 @@ export const usePiniaStore = defineStore("pinia", {
             const result = findComponent(this.site, componentPath)
 
             // check if component parent is array
-            if(Array.isArray(result.parent) && result.nodeIndex != null) {
+            if (Array.isArray(result.parent) && result.nodeIndex != null) {
                 // delete entry from array
                 result.parent.splice(result.nodeIndex, 1)
             } else if (typeof result.parent === "object" && result.nodeIndex != null) {
@@ -232,6 +219,31 @@ export const usePiniaStore = defineStore("pinia", {
             const component = findComponent(this.site, componentPath)?.node
             if (component) {
                 updateCallback(component.props || component)
+            }
+        },
+        updateMetaData(metaData) {
+            for (const name in metaData) {
+                this.site.metaData[name] = metaData[name]
+            }
+        },
+        updateSectionsSettings(componentPath, action, navEntry) {
+            const contentElement = findComponent(this.site, componentPath)?.node
+            // check if component path return a valid component
+            if (!contentElement) {
+                return
+            }
+
+            // toggle visibility for component
+            if (action === "visibility") {
+                if (contentElement.show == null) {
+                    contentElement.show = false
+                } else {
+                    contentElement.show = !contentElement.show
+                }
+            } else if (action === "navEntryVisibility") {
+                contentElement.showLinkInMainNavigation = !contentElement.showLinkInMainNavigation
+            } else if (action === "editNavEntry") {
+                contentElement.navEntry = navEntry
             }
         }
     }

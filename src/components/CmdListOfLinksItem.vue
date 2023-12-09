@@ -1,29 +1,31 @@
 <template>
+    <!-- begin default-view -->
     <li v-if="!editing" class="cmd-list-of-links-item">
-    <!-- begin use href -->
-    <a v-if="link.type === 'href' || link.type === undefined"
-       :href="link.path"
-       :target="link.target"
-       @click="executeLink(link, $event)"
-       :title="link.tooltip && link.tooltip !== undefined ? link.tooltip : undefined">
-        <!-- begin CmdIcon -->
-        <CmdIcon v-if="link.iconClass" :iconClass="link.iconClass" :type="link.iconType" />
-        <!-- end CmdIcon -->
-        <span v-if="link.text">{{ link.text }}</span>
-    </a>
-    <!-- end use href --->
+        <!-- begin use href -->
+        <a v-if="link.type === 'href' || link.type === undefined"
+           :href="link.path"
+           :target="link.target"
+           @click="executeLink(link, $event)"
+           :title="link.tooltip && link.tooltip !== undefined ? link.tooltip : undefined">
+            <!-- begin CmdIcon -->
+            <CmdIcon v-if="link.iconClass" :iconClass="link.iconClass" :type="link.iconType" />
+            <!-- end CmdIcon -->
+            <span v-if="link.text">{{ link.text }}</span>
+        </a>
+        <!-- end use href --->
 
-    <!-- begin use router-link -->
-    <router-link v-else-if="link.type === 'router'"
-                 :to="getRoute(link)"
-                 :title="link.tooltip">
-        <!-- begin CmdIcon -->
-        <CmdIcon v-if="link.iconClass" :iconClass="link.iconClass" :type="link.iconType" />
-        <!-- end CmdIcon -->
-        <span v-if="link.text">{{ link.text }}</span>
-    </router-link>
-    <!-- end use router-link -->
+        <!-- begin use router-link -->
+        <router-link v-else-if="link.type === 'router'"
+                     :to="getRoute(link)"
+                     :title="link.tooltip">
+            <!-- begin CmdIcon -->
+            <CmdIcon v-if="link.iconClass" :iconClass="link.iconClass" :type="link.iconType" />
+            <!-- end CmdIcon -->
+            <span v-if="link.text">{{ link.text }}</span>
+        </router-link>
+        <!-- end use router-link -->
     </li>
+    <!-- end default-view -->
 
     <!-- begin edit-mode -->
     <template v-else>

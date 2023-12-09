@@ -65,6 +65,7 @@
             <span class="icon-plus"></span>
             <span>Add new entry</span>
         </button>
+
         <EditComponentWrapper
             v-else
             v-for="(day, index) in openingHoursFormatted"
@@ -73,10 +74,11 @@
             :showComponentName="false"
             componentName="CmdOpeningHoursItem"
             :componentProps="day"
+            :allowedComponentTypes="[]"
             :componentPath="['props', 'openingHours', index]"
             :itemProvider="itemProvider"
         >
-            <dl>
+            <dl class="edit-mode-opening-hours-item">
                 <CmdOpeningHoursItem
                     :day="day"
                     :separator="separator"
@@ -84,6 +86,7 @@
                 />
             </dl>
         </EditComponentWrapper>
+
         <!-- end edit-mode -->
 
 

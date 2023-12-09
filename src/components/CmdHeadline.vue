@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!editModeContext || settingsContext"
+    <div v-if="!editModeContext || settingsContext || mainSidebarContext"
          :class="['cmd-headline', {'has-pre-headline-text': preHeadlineText, 'has-icon': headlineIcon?.iconClass}, getTextAlign]">
         <!-- begin CmdIcon -->
         <CmdIcon v-if="headlineIcon" :iconClass="headlineIcon?.iconClass" :type="headlineIcon?.iconType"/>

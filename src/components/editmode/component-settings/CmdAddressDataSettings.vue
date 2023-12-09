@@ -13,6 +13,11 @@
     <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Address data', headlineLevel: 4}">
         <template v-slot:body>
             <div class="flex-container vertical component-settings-wrapper">
+                <button type="button" class="button" @click="removeItems">
+                    <span class="icon-trash"></span>
+                    <span>{{ removeButtonLabel }}</span>
+                </button>
+
                 <CmdFormElement
                     element="input"
                     type="checkbox"
@@ -63,6 +68,7 @@
 <script>
 export default {
     name: "CmdAddressDataSettings",
+    inject: ["editModeContext"],
     inheritAttrs: false,
     data() {
         return {
@@ -106,7 +112,7 @@ export default {
          * all address-data (incl. labels) that will be shown
          */
         addressData: {
-            type: Object,
+            type: Array,
             required: true
         },
         /**
@@ -126,6 +132,9 @@ export default {
         }
     },
     computed: {
+        removeButtonLabel() {
+            return "Remove " + this.addressData.length + " all entries"
+        },
         showLabelsModel: {
             get() {
                 return this.editableShowLabels == null ? this.showLabels : this.editableShowLabels
@@ -168,6 +177,12 @@ export default {
         }
     },
     methods: {
+        removeItems() {
+            if (confirm("All entries will be removed (the component itself remains). Continue anyways?")) {
+                const saveHandler = this.editModeContext.settings.getSettingsSaveHandler()
+                saveHandler(props => props.addressData = [])
+            }
+        },
         updateCallbackProvider() {
             const headlineUpdateCallback = this.$refs.headlineSettings.updateCallbackProvider()
             const showIconsOnly = this.showIconsOnlyModel
@@ -191,10 +206,4 @@ export default {
         }
     }
 }
-</script>
-
-<style scoped>
-
-</style>
-<script setup>
 </script>

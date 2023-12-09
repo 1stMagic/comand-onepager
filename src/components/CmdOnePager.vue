@@ -1,37 +1,11 @@
 <template>
     <!-- begin page-wrapper -->
-    <div :id="templateId">
-        <div :class="{'edit-mode': editMode, 'overflow-hidden': offCanvasOpen}" id="page-wrapper"
+    <div :class="{'edit-mode': editMode}" :id="templateId">
+        <a id="anchor-back-to-top"></a>
+        <EditModeMainSidebar v-if="editMode" :editModeMessage="editModeMessage"/>
+        <div :class="{'overflow-hidden': offCanvasOpen}" id="page-wrapper"
              :style="{'scroll-padding-top': heightSiteHeader + 'px'}">
-            <div v-if="editMode" :class="['system-message info flex-container', {'open': editModeMessage}]"
-                 id="edit-mode-message">
-                <div v-if="editModeMessage" class="flex-container">
-                    <div>
-                        <p>You are in EditMode. You can simply edit components by clicking on them and selecting one of
-                            the
-                            actions-buttons at the top-right corner of that component.</p>
-                        <p><a href="#" @click.prevent="leaveEditMode">Leave EditMode</a></p>
-                    </div>
-                    <div>
-                        <label for="select-template">
-                            <span>Select template</span>
-                            <select id="select-template" v-model="selectedTemplate">
-                                <option value="blank">Blank</option>
-                                <option value="business">Business</option>
-                                <option value="casual">Casual</option>
-                                <option value="dating">Dating</option>
-                                <option value="influencer">Influencer</option>
-                            </select>
-                        </label>
-                    </div>
-                </div>
-                <a class="no-flex" href="#" title="Collapse message"
-                   @click.prevent="editModeMessage = !editModeMessage">
-                    <span :class="editModeMessage ? 'icon-single-arrow-left' : 'icon-single-arrow-right'"></span>
-                </a>
-            </div>
-            <EditModeComponentSettingsWrapper v-if="editMode && context?.settings.show()"/>
-            <a id="anchor-back-to-top"></a>
+
             <!-- begin cmd-site-header -->
             <CmdSiteHeader
                 :cmd-main-navigation="{navigationEntries: mainNavigation}"
@@ -68,8 +42,10 @@
 
             <!-- begin cmd-site-footer -->
             <template v-if="editMode">
-                <EditSectionWrapper>
+                <!-- begin edit-section-wrapper -->
+                <EditModeSectionWrapper :sectionPath="[]">
                     <CmdSiteFooter>
+                        <!-- begin parent-component -->
                         <EditComponentWrapper
                             v-for="(component, componentIndex) in site.siteFooter?.components || []"
                             :key="componentIndex"
@@ -82,13 +58,14 @@
                                 v-bind="component.props"
                                 v-on="handlers(component)"
                             >
+                                <!-- begin child-component -->
                                 <EditComponentWrapper
                                     v-for="(childComponent, childComponentIndex) in component.components || []"
                                     :key="childComponentIndex"
                                     :is="childComponent.name"
                                     :allow-add-component="childComponent.allowAddComponent"
                                     :componentName="childComponent.name"
-                                    :componentProps="component.props"
+                                    :componentProps="childComponent.props"
                                     :componentPath="childComponentPath(childComponentIndex)"
                                 >
                                     <component
@@ -97,26 +74,34 @@
                                         v-on="handlers(childComponent)"
                                     />
                                 </EditComponentWrapper>
+                                <!-- end child-component -->
                             </component>
                         </EditComponentWrapper>
+                        <!-- end parent-component -->
                     </CmdSiteFooter>
-                </EditSectionWrapper>
+                </EditModeSectionWrapper>
+                <!-- end edit-section-wrapper -->
             </template>
 
             <CmdSiteFooter v-else>
+                <!-- begin parent-component -->
                 <component
                     v-for="(component, index) in site.siteFooter?.components || []" :key="index"
                     :is="component.name"
                     v-bind="component.props"
                     v-on="handlers(component)"
                 >
+                    <!-- begin child-component -->
                     <component
                         v-for="(childComponent, childComponentIndex) in component.components || []"
                         :key="childComponentIndex" :is="childComponent.name"
                         v-bind="childComponent.props"
                         v-on="handlers(childComponent)"
-                        :editContent="childComponent.editContent"/>
+                        :editContent="childComponent.editContent"
+                    />
+                    <!-- end child-component -->
                 </component>
+                <!-- end parent-component -->
             </CmdSiteFooter>
             <!-- end cmd-site-footer -->
 
@@ -125,8 +110,11 @@
             <!-- end cmd-copyright-information DO NOT REMOVE -->
 
             <!-- begin cmd-back-to-top-button -->
-            <CmdBackToTopButton href="#anchor-back-to-top" :iconBackToTop="iconBackToTop"
-                                scroll-container="#page-wrapper"/>
+            <CmdBackToTopButton
+                href="#anchor-back-to-top"
+                :iconBackToTop="iconBackToTop"
+                scroll-container="#page-wrapper"
+            />
             <!-- end cmd-back-to-top-button -->
 
             <!-- begin fancy-box ------------------------------------------------------------------------------------------------------------------------------------------------------->
@@ -159,22 +147,23 @@
             <!-- end fancy-box ------------------------------------------------------------------------------------------------------------------------------------------------------->
         </div>
         <!-- end page-wrapper -->
+
+        <EditModeSettingsSidebar v-if="editMode && context?.settings.show()"/>
     </div><!-- end templateId -->
 </template>
 
 <script>
 // import components from comand-component-library
-import {openFancyBox} from 'comand-component-library'
+import {createUuid, openFancyBox} from 'comand-component-library'
 
 // import functions
 import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia"
-import {loadMetaData} from "../utils/metaData"
 
 // import mixins
 import BaseI18nComponent from "../components/mixins/BaseI18nComponent"
 import {useEditModeContext} from "../composables/editModeContext.js"
-import {computed} from "vue";
+import {computed, watch} from "vue";
 
 export default {
     mixins: [
@@ -194,7 +183,6 @@ export default {
         return {
             editModeMessage: true,
             // context: this.editMode ? useEditModeContext() : null,
-            selectedTemplate: "blank",
             acceptedCookies: [],
             fancyBoxCookieDisclaimer: true,
             footerNavigationData: [],
@@ -213,6 +201,15 @@ export default {
 
         // save privacy settings
         this.fancyBoxCookieDisclaimer = localStorage.getItem('onepagerPrivacySettingsAccepted') !== "true"
+
+        const store = usePiniaStore()
+        watch(() => store.site.main?.sections, sections => sections.length === 0 && sections.push({
+            id: createUuid(),
+            iconClass: "",
+            navEntry: "New section",
+            allowAddComponent: true,
+            components: []
+        }), { deep: true })
     },
     mounted() {
         const siteHeader = document.getElementsByClassName("cmd-site-header")
@@ -234,29 +231,26 @@ export default {
         templateId() {
             return "template-" + this.selectedTemplate
         },
-        ...mapState(usePiniaStore, ["currentLanguage", "site", "editMode", "componentEditMode", "showEditModeComponentSettings", "companyLogo"]),
+        ...mapState(usePiniaStore, ["currentLanguage", "site", "editMode", "componentEditMode", "showEditModeComponentSettings", "companyLogo", "metaData", "sections"]),
 
         mainNavigation() {
             const navigationEntries = []
-            const sections = this.site.main?.sections
-            if (sections) {
-                for (let i = 0; i < sections.length; i++) {
-                    if (sections[i].showLinkInMainNavigation) {
-                        const path = "#anchor-" + sections[i].id
-                        const entry = {
-                            iconClass: sections[i].iconClass,
-                            text: sections[i].navEntry,
-                            path: path,
-                            type: "href",
-                            active: this.currentUrlHash === path // compare url from hash with path from store to set 'active'-class
-                        }
-                        navigationEntries.push(entry)
+
+            for (let i = 0; i < this.sections.length; i++) {
+                if (this.sections[i].showLinkInMainNavigation) {
+                    const path = "#anchor-" + this.sections[i].id
+                    const entry = {
+                        iconClass: this.sections[i].iconClass,
+                        text: this.sections[i].navEntry,
+                        path: path,
+                        type: "href",
+                        active: this.currentUrlHash === path // compare url from hash with path from store to set 'active'-class
                     }
+                    navigationEntries.push(entry)
                 }
             }
             return navigationEntries
         },
-
         iconBackToTop() {
             return {
                 iconClass: "icon-single-arrow-up",
@@ -324,7 +318,7 @@ export default {
             this.currentUrlHash = location.hash
         },
 
-        ...mapActions(usePiniaStore, ["loadLabels", "loadSite", "deactivateEditMode"]),
+        ...mapActions(usePiniaStore, ["loadLabels", "loadSite"]),
 
         openFancybox(event) {
             openFancyBox({url: event.target.href})
@@ -335,72 +329,43 @@ export default {
         },
         offcanvasToggled(event) {
             this.offCanvasOpen = event.open
-        },
-        leaveEditMode() {
-            if (confirm('Really leave EditMode? (All unsaved changes will be lost!)')) {
-                this.deactivateEditMode()
-            }
         }
     },
     watch: {
+        metaData: {
+            handler() {
+                if (this.metaData) {
+                    for (const name in this.metaData) {
+                        if (name === "title") {
+                            document.head.querySelector("title").innerText = this.metaData.title
+                        } else {
+                            const metaTag = document.head.querySelector("meta[name='" + name + "']")
+                            if (metaTag) {
+                                metaTag.setAttribute("content", this.metaData[name])
+                            } else {
+                                const newMetaTag = document.createElement("meta")
+                                newMetaTag.setAttribute("name", name)
+                                newMetaTag.setAttribute("content", this.metaData[name])
+                                document.head.appendChild(newMetaTag)
+                            }
+                        }
+                    }
+                }
+            },
+            immediate: true,
+            deep: true
+        },
         currentLanguage: {
             handler() {
                 // load site if language is changed (in store)
                 this.loadSite()
-
-                // load imported meta-data-function if language is changed (in store)
-                loadMetaData(this.currentLanguage)
             },
             immediate: true
-        },
-        selectedTemplate() {
-            let linkTag = document.querySelector('link')
-
-            if (linkTag) {
-                linkTag.parentNode.removeChild(linkTag)
-            }
-
-            if (this.selectedTemplate !== "blank") {
-                let newLink = document.createElement('link');
-                newLink.rel = 'stylesheet';
-                newLink.href = 'https://cdn.jsdelivr.net/npm/comand-frontend-framework/dist/templates/' + this.selectedTemplate + '.css';
-
-                document.head.appendChild(newLink);
-            }
         }
     }
 }
 </script>
 
 <style lang="scss">
-.edit-mode {
-    #edit-mode-message {
-        position: fixed;
-        z-index: 2000;
-        margin: 0;
 
-        &.open {
-            width: 100%;
-        }
-
-        > * {
-            margin: 0 auto;
-        }
-
-        select {
-            color: var(--text-color);
-        }
-
-        > a {
-            display: flex;
-            align-self: stretch;
-            align-items: center;
-            text-decoration: none;
-
-            span[class*="icon"] {
-                color: var(--pure-white);
-            }
-        }
-    }
-}
 </style>

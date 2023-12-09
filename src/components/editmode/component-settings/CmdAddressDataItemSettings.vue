@@ -127,7 +127,7 @@ export default {
         return {
             fieldTypes: [
                 {text: 'custom', value: 'custom'},
-                {text: 'telephone', value: 'phone'},
+                {text: 'phone', value: 'phone'},
                 {text: 'email', value: 'email'},
                 {text: 'url', value: 'url'},
                 {text: 'address', value: 'address'}

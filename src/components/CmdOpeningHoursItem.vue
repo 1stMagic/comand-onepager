@@ -23,7 +23,8 @@
 
     <!-- begin edit-mode -->
     <template v-else>
-        <div class="flex-container">
+        <!-- begin day -->
+        <dt>
             <CmdFormElement
                 element="input"
                 type="text"
@@ -33,53 +34,55 @@
                 placeholder="Text for weekday"
                 v-model="editableDay.day"
             />
-            <div class="flex-container vertical no-flex">
+        </dt>
+        <!-- end day -->
+
+        <!-- begin hours -->
+        <dd class="flex-container no-flex">
+            <!-- begin AM -->
+            <div class="flex-container no-flex am-wrapper">
+            <template v-if="editableDay.amClosed">
                 <CmdFormElement
                     element="input"
-                    type="checkbox"
-                    labelText="closed on am"
-                    v-model="editableDay.amClosed"
+                    type="text"
+                    class="edit-mode"
+                    :showLabel="false"
+                    labelText="Text for 'closed'"
+                    placeholder="Text for 'closed'"
+                    v-model="editableDay.amDisplayText"
                 />
-                <template v-if="editableDay.amClosed">
-                    <CmdFormElement
-                        element="input"
-                        type="text"
-                        class="edit-mode"
-                        :showLabel="false"
-                        labelText="Text for 'closed'"
-                        placeholder="Text for 'closed'"
-                        v-model="editableDay.amDisplayText"
-                    />
-                </template>
-                <div v-if="!editableDay.amClosed" class="input-wrapper">
-                    <CmdFormElement
-                        element="input"
-                        type="time"
-                        class="edit-mode"
-                        :showLabel="false"
-                        labelText="Text for AM from"
-                        placeholder="Text for AM from"
-                        v-model="editableDay.amFrom"
-                    />
-                    <CmdFormElement
-                        element="input"
-                        type="time"
-                        :showLabel="false"
-                        class="edit-mode"
-                        :min="editableDay.amFrom"
-                        labelText="Text for AM till"
-                        placeholder="Text for AM till"
-                        v-model="editableDay.amTill"
-                    />
-                </div>
+            </template>
+            <div v-if="!editableDay.amClosed" class="input-wrapper">
+                <CmdFormElement
+                    element="input"
+                    type="time"
+                    class="edit-mode"
+                    :showLabel="false"
+                    labelText="Text for AM from"
+                    placeholder="Text for AM from"
+                    v-model="editableDay.amFrom"
+                />
+                <CmdFormElement
+                    element="input"
+                    type="time"
+                    :showLabel="false"
+                    class="edit-mode"
+                    :min="editableDay.amFrom"
+                    labelText="Text for AM till"
+                    placeholder="Text for AM till"
+                    v-model="editableDay.amTill"
+                />
             </div>
-            <div class="flex-container vertical no-flex">
-                <CmdFormElement
-                    element="input"
-                    type="checkbox"
-                    labelText="closed on pm"
-                    v-model="editableDay.pmClosed"
-                />
+            <a href="#"
+               @click.prevent="toggleClosedStatus('am')"
+               :title="editableDay.amClosed ? 'Set to open' : 'Set to closed'"
+               :class="editableDay.amClosed ? 'icon-clock' : 'icon-blocked'"
+            ></a>
+            </div>
+            <!-- end AM -->
+
+            <!-- begin PM -->
+            <div class="flex-container no-flex pm-wrapper">
                 <template v-if="editableDay.pmClosed">
                     <CmdFormElement
                         element="input"
@@ -112,8 +115,16 @@
                         v-model="editableDay.pmTill"
                     />
                 </div>
+                <a href="#"
+                   @click.prevent="toggleClosedStatus('pm')"
+                   :title="editableDay.pmClosed ? 'Set to open' : 'Set to closed'"
+                   :class="editableDay.pmClosed ? 'icon-clock' : 'icon-blocked'"
+                ></a>
             </div>
-        </div>
+
+            <!-- end PM -->
+        </dd>
+        <!-- end hours -->
     </template>
     <!-- end edit-mode -->
 </template>
@@ -183,6 +194,9 @@ export default {
         }
     },
     methods: {
+        toggleClosedStatus(period) {
+            period  === 'am' ? this.editableDay.amClosed = !this.editableDay.amClosed : this.editableDay.pmClosed = !this.editableDay.pmClosed
+        },
         getTime(time) {
             if (this.timeFormatter) {
                 return this.timeFormatter(time.hours, time.mins)
@@ -232,3 +246,20 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.edit-mode-opening-hours-item {
+    .am-wrapper, .pm-wrapper {
+        align-items: center;
+        gap: calc(var(--default-gap) / 2);
+    }
+
+    label {
+        max-width: 11rem;
+    }
+
+    .input-wrapper {
+        width: 11rem;
+    }
+}
+</style>

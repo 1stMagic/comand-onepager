@@ -179,6 +179,24 @@ export default {
         }
     },
     methods: {
+        getUrl(network) {
+            if (this.userMustAcceptDataPrivacy && this.dataPrivacyAccepted) {
+                // if path is not given completely by json-data
+                if (this.appendPage) {
+                    // if page to share is given by property
+                    if (this.page) {
+                        return network.path + encodeURIComponent(this.page)
+                    }
+
+                    // if current page should be append to url
+                    return network.path + encodeURIComponent(location.href)
+                }
+
+                // if path is given completely by json-data
+                return network.path
+            }
+            return "#"
+        },
         onAddItem() {
             this.editModeContext.content.addContent(
                 buildComponentPath(this, 'props', 'networks', -1),
@@ -192,6 +210,28 @@ export default {
                 "iconClass": "icon-facebook",
                 "linkText": "Share"
             }
+        },
+        preventOnDisabled(event) {
+            let clickedElement = event.target
+
+            if (clickedElement.tagName !== "A") {
+                // get surrounding <a> if inner <span> is clicked
+                clickedElement = clickedElement.closest("a")
+            }
+
+            // href must be set due to html-validity, so click must be prevented if href contains "#" only (equals button is styled as disabled)
+            if (clickedElement.getAttribute("href") === "#") {
+                event.preventDefault()
+            }
+        },
+        tooltip(tooltip) {
+            if (this.userMustAcceptDataPrivacy) {
+                if (this.dataPrivacyAccepted) {
+                    return tooltip
+                }
+                return this.tooltipAcceptDataPrivacy
+            }
+            return tooltip
         },
         onPersist(data) {
             return {
@@ -278,6 +318,12 @@ export default {
         margin: 0;
     }
 
+    &.align-right {
+        .share-button-wrapper {
+            justify-content: flex-end;
+        }
+    }
+
     &.align-center {
         .cmd-headline > * {
             text-align: center;
@@ -287,7 +333,7 @@ export default {
             margin: auto;
         }
 
-        .button-wrapper {
+        .share-button-wrapper {
             justify-content: center;
         }
     }
@@ -320,6 +366,39 @@ export default {
 
     a:last-of-type {
         margin-right: 0;
+    }
+
+    [id^="social-network"] {
+        background: var(--social-network-color);
+        border-color: var(--social-network-color);
+
+        > span {
+            color: var(--pure-white);
+        }
+
+        &:hover, &:active, &:focus {
+            color: var(--pure-white);
+
+            > span {
+                color: var(--social-network-color);
+            }
+        }
+    }
+
+    #social-network-facebook {
+        --social-network-color: #3c5a99;
+    }
+
+    #social-network-twitter {
+        --social-network-color: #6bacde;
+    }
+
+    #social-network-xing {
+        --social-network-color: #007575;
+    }
+
+    #social-network-linkedin {
+        --social-network-color: #0077b5;
     }
 }
 

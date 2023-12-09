@@ -40,7 +40,7 @@
 
             <!-- begin show add-new-component-button if no component exists -->
             <div class="center-content" v-else>
-                <button class="button primary confirm" @click="addNewComponent">
+                <button class="button confirm" @click="addNewComponent">
                     <span class="icon-plus"></span>
                     <span>Add new component</span>
                 </button>

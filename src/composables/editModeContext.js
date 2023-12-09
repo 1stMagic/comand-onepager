@@ -39,7 +39,7 @@ function contentActions(store, state) {
 
 function settingsActions(state) {
     return {
-        startEditing(componentIdentifier, componentName, componentProps, allowedContentTypes, componentPath, saveHandler, deleteInnerComponent) {
+        startEditing(componentIdentifier, componentName, componentProps, allowedContentTypes, componentPath, saveHandler, deleteInnerComponent, activeTab) {
             state.settingsEditing = componentIdentifier
             state.componentName = componentName
             state.componentProps = componentProps
@@ -47,6 +47,7 @@ function settingsActions(state) {
             state.componentPath = componentPath
             state.settingsSaveHandler = saveHandler
             state.deleteInnerComponent = deleteInnerComponent
+            state.activeTab = activeTab
         },
         isEditing(componentIdentifier) {
             if (componentIdentifier) {
@@ -88,6 +89,9 @@ function settingsActions(state) {
         },
         getDeleteInnerComponent() {
             return state.deleteInnerComponent
+        },
+        getActiveTab() {
+            return state.activeTab
         }
     }
 }
@@ -107,12 +111,28 @@ function systemActions(state) {
             state.activeComponentPath = parentComponentPath
             state.activeChildComponentIdentifier = JSON.stringify(childComponentPath)
             state.activeChildComponentPath = childComponentPath
+            state.activeSectionPath = null
         },
         isActiveComponent(componentPath) {
             return state.activeComponentIdentifier === JSON.stringify(componentPath)
         },
         isActiveChildComponent(componentPath) {
             return state.activeChildComponentIdentifier === JSON.stringify(componentPath)
+        },
+        setActiveSection(sectionPath) {
+            // deactivate edit-mode for inner components if section is selected
+            state.contentEditing = null
+            state.activeComponentIdentifier = null
+            state.activeComponentPath = null
+            state.activeChildComponentIdentifier = null
+            state.activeChildComponentPath = null
+
+            // set state for active section-path
+            state.activeSectionPath = JSON.stringify(sectionPath)
+        },
+        isActiveSection(sectionPath) {
+            // check if given sectionPath equals existing one to set active-state
+            return state.activeSectionPath === JSON.stringify(sectionPath)
         }
     }
 }

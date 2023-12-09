@@ -1,76 +1,41 @@
 <template>
     <!-- begin main-content -->
     <main>
-        <!-- begin edit-mode for slideshow -->
-        <EditComponentWrapper
-            v-if="editMode"
-            componentName="CmdSlideshow"
-            :componentProps="slideshow?.props"
-            :allowAddComponent="true"
-            :componentPath="componentPath()">
-            <!-- begin cmd-slideshow -->
-            <CmdSlideshow
-                :slideshow-items="slideshow?.props?.slideshowItems || []"
-                :full-width="true"
-                :autoplay="false"
-                :cmdSlideButtons="cmdSlideButtons"
-            />
-            <!-- end cmd-slideshow -->
-        </EditComponentWrapper>
-        <!-- end edit-mode for slideshow -->
-
-        <!-- begin cmd-slideshow -->
-        <CmdSlideshow
-                v-else-if="!editMode && slideshow?.props?.slideshowItems?.length"
-                :slideshow-items="slideshow?.props?.slideshowItems"
-                :full-width="true"
-                :autoplay="false"
-                :cmdSlideButtons="cmdSlideButtons"
-        />
-        <!-- end cmd-slideshow -->
-
-        <!-- begin page-content -->
-        <div id="page-content">
-            <!-- begin edit-mode for content-sections -->
-<!--            <CmdWidthLimitationWrapper v-if="editMode">-->
-<!--                <EditSectionWrapper :componentExists="false" @add="addComponent('contentSection')"/>-->
-<!--            </CmdWidthLimitationWrapper>-->
-
-            <template v-if="editMode">
-                <EditSectionWrapper
-                    v-for="(section, index) in sections" :key="index" :id="section.id"
-                    @delete="deleteComponent('contentSection')"
-                    :sectionId="section.id"
-                >
-                    <!-- begin content sections -->
-                    <template v-slot="slotProps">
-                        <ContentSection
-                            :components="section.components"
-                            :id="section.id"
-                            :allowAddComponent="section.allowAddComponent"
-                            :headlineText="section.headlineText"
-                        />
-                    </template>
-                    <!-- end content sections -->
-                </EditSectionWrapper>
-            </template>
-            <!-- end edit-mode for content-sections  -->
-
-            <!-- begin default-view for content-sections -->
-            <template v-else>
+        <!-- begin edit-mode for content-sections -->
+        <template v-if="editMode">
+            <EditModeSectionWrapper
+                v-for="(section, index) in sections" :key="index"
+                :id="'edit-mode-' + section.id"
+                :sectionId="section.id"
+                :sectionPath="['main', 'sections', index]"
+            >
                 <!-- begin content sections -->
-                <ContentSection
-                    v-for="(section, index) in sections"
-                    :key="index"
-                    :id="section.id"
-                    :headlineText="section.headlineText"
-                    :components="section.components"
-                />
+                <template v-slot="slotProps">
+                    <ContentSection
+                        :components="section.components"
+                        :id="section.id"
+                        :allowAddComponent="section.allowAddComponent"
+                        :headlineText="section.headlineText"
+                    />
+                </template>
                 <!-- end content sections -->
-            </template>
-            <!-- end default-view for content-sections -->
-        </div>
-        <!-- end page-content -->
+            </EditModeSectionWrapper>
+        </template>
+        <!-- end edit-mode for content-sections  -->
+
+        <!-- begin default-view for content-sections -->
+        <template v-else>
+            <!-- begin content sections -->
+            <ContentSection
+                v-for="(section, index) in sections"
+                :key="index"
+                :id="section.id"
+                :headlineText="section.headlineText"
+                :components="section.components"
+            />
+            <!-- end content sections -->
+        </template>
+        <!-- end default-view for content-sections -->
     </main>
     <!-- end main-content -->
 </template>
@@ -81,34 +46,12 @@ import BaseI18nComponent from "./mixins/BaseI18nComponent"
 
 import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia"
+import {createUuid} from "comand-component-library";
 
 export default {
     mixins: [
         BaseI18nComponent
     ],
-    methods: {
-        componentPath() {
-            return [
-                "main",
-                "slideshow"
-            ]
-        },
-        deleteComponent(componentName, sectionId) {
-            if (componentName === "mainHeadline") {
-                this.updateMainHeadlineState(false)
-            } else if (componentName === "contentSection") {
-                this.deleteContentSection(sectionId)
-            }
-        },
-        addComponent(componentName) {
-            if (componentName === "mainHeadline") {
-                this.updateMainHeadlineState(true)
-            } else if (componentName === "contentSection") {
-                this.addContentSection()
-            }
-        },
-        ...mapActions(usePiniaStore, ["updateMainHeadlineState", "deleteContentSection", "addContentSection"])
-    },
     computed: {
         ...mapState(usePiniaStore, ["site", "currentLanguage", "editMode", "mainHeadline", "slideshow", "sections"]),
 
@@ -123,6 +66,29 @@ export default {
                     tooltip: this.label("slidebutton_previous.tooltip")
                 }
             }
+        }
+    },
+    methods: {
+        componentPath() {
+            return [
+                "main",
+                "slideshow"
+            ]
+        },
+        ...mapActions(usePiniaStore, ["addContent"]),
+
+        addSection() {
+            this.addContent(["main", "sections", -1], {
+                item() {
+                    return {
+                        id: createUuid(),
+                        iconClass: "",
+                        navEntry: "New section",
+                        allowAddComponent: true,
+                        components: []
+                    }
+                }
+            })
         }
     }
 }
