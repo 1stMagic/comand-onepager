@@ -1,6 +1,6 @@
 <template>
     <CmdBox :use-slots="['body']" :collapsible="true"
-            :cmdHeadline="{headlineText: 'Meta Data Settings', headlineLevel: 4, headlineIcon: {iconClass: 'icon-globe'}}"
+            :cmdHeadline="{headlineText: 'Meta Data Settings', headlineLevel: 4, headlineIcon: {iconClass: 'icon-html'}}"
             :openCollapsedBox="openBoxStatus">
         <template v-slot:body>
             <div class="flex-container vertical">

@@ -15,7 +15,7 @@
         <template v-slot="slotProps">
             <figure :class="['cmd-image flex-container no-gap vertical', textAlign]">
                 <!-- begin figcaption above image -->
-                <template v-if="figcaption?.position === 'top'">
+                <template v-if="figcaption.show && figcaption?.position === 'top'">
                     <CmdFormElement
                         v-if="slotProps.editing"
                         element="input"
@@ -61,7 +61,7 @@
                 <!-- end image-wrapper -->
 
                 <!-- begin figcaption below image -->
-                <template v-if="figcaption?.position !== 'top'">
+                <template v-if="figcaption.show && figcaption?.position !== 'top'">
                     <CmdFormElement
                         v-if="slotProps.editing"
                         element="input"

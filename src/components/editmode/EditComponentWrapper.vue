@@ -14,8 +14,8 @@
                 <li>
                     <a :class="['icon-hexagon button confirm', {disabled: !addHandlerProvider && !itemProvider && !allowAddComponent}]"
                        href="#"
-                       @click.prevent="editSettings($event, 1)"
-                       title="Add a new entry">
+                       @click.prevent="addEntry($event)"
+                       :title="!isOuterComponent ? 'Add new item/entry' : 'Add new component'">
                         <CmdIcon :iconClass="!isOuterComponent ? 'icon-plus' : 'icon-plus'"/>
                     </a>
                 </li>
@@ -77,6 +77,7 @@
         </li>
         <template v-else>
             <!-- begin action-buttons -->
+            <p v-if="isOuterComponent" class="component-name">{{ componentName }}</p>
             <ul v-show="active"
                 class="flex-container no-flex action-buttons"
                 :data-component="componentName"
@@ -86,9 +87,9 @@
                 <li>
                     <a :class="['icon-hexagon use-icon-as-background button confirm', {disabled: !addHandlerProvider && !itemProvider && !allowAddComponent}]"
                        href="#"
-                       @click.prevent="editSettings($event,1)"
-                       title="Add a new entry">
-                        <CmdIcon :iconClass="!isOuterComponent ? 'icon-plus' : 'icon-plus'"/>
+                       @click.prevent="addEntry"
+                       :title="!isOuterComponent ? 'Add new item/entry' : 'Add new component'">
+                       <CmdIcon :iconClass="!isOuterComponent ? 'icon-plus' : 'icon-plus'"/>
                     </a>
                 </li>
                 <!-- end add -->
@@ -110,7 +111,7 @@
                        href="#"
                        @click.prevent="deleteComponent"
                        :title="'Delete ' + componentName + ' (and its content)'">
-                        <CmdIcon iconClass="icon-trash"/>
+                       <CmdIcon iconClass="icon-trash"/>
                     </a>
                 </li>
                 <!-- end delete -->
@@ -121,7 +122,7 @@
                        href="#"
                        @click.prevent="cancelComponent"
                        title="Cancel editing (changes will not be saved)">
-                        <CmdIcon iconClass="icon-cancel"/>
+                       <CmdIcon iconClass="icon-cancel"/>
                     </a>
                 </li>
                 <li v-if="!isOuterComponent">
@@ -129,7 +130,7 @@
                        class="icon-hexagon use-icon-as-background button confirm" href="#"
                        @click.prevent="saveComponent"
                        :title="'Save changes of ' + componentName">
-                        <CmdIcon iconClass="icon-check"/>
+                       <CmdIcon iconClass="icon-check"/>
                     </a>
                     <a v-else
                        :class="['icon-hexagon use-icon-as-background button confirm', {disabled: editModeContext.settings.isEditing(componentIdentifier)}]"
@@ -238,58 +239,6 @@ export default {
             const currentElement = event.target
             currentElement.parentNode.classList.remove("highlight")
         },
-        componentSelected(event) {
-            const selectedComponent = event.target.value
-
-            if (this.addComponentLevel === "after") {
-                this.addContent(buildComponentPath(this), {
-                    name: selectedComponent,
-                    item() {
-                        return componentStructure[selectedComponent]
-                    }
-                })
-            } else {
-                const path = buildComponentPath(this)
-                path.push("components")
-                path.push(-1)
-
-                this.addContent(path, {
-                    name: selectedComponent,
-                    item() {
-                        return componentStructure[selectedComponent]
-                    }
-                })
-            }
-
-            this.showComponentSelection = false
-            this.showAddComponentButtons = false
-            this.addComponentLevel = ""
-        },
-        addEntry() {
-            if (this.allowAddComponent) {
-
-                // check if component can contain other components
-                if (componentStructure[this.componentName]?.components) {
-                    this.showAddComponentButtons = true
-                } else {
-                    this.showComponentSelection = true
-                    this.addComponentLevel = "after"
-                }
-            } else if (this.addHandlerProvider) {
-                this.addContent(buildComponentPath(this), this.addHandlerProvider())
-            } else if (this.itemProvider) {
-                this.editModeContext.content.addContent(buildComponentPath(this), this.itemProvider)
-            }
-            this.$emit("item-added")
-        },
-        addInnerComponent() {
-            this.addComponentLevel = "inner"
-            this.showComponentSelection = true
-        },
-        addSectionComponent() {
-            this.addComponentLevel = "after"
-            this.showComponentSelection = true
-        },
         // provide actions from store as methods inside this component
         showActionButtons() {
             const parentEditComponentWrapper = findEditComponentWrapper(this.$parent, component => component?.componentName !== "CmdContainer")
@@ -332,7 +281,7 @@ export default {
                 this.updateHandlerProviders.map(provider => provider()))
             this.editModeContext.content.stopEditing()
         },
-        editSettings(event, activeTab) {
+        editSettings(event, action) {
             event.stopPropagation()
 
             if (!this.editing && this.hasSettings) {
@@ -344,8 +293,17 @@ export default {
                     buildComponentPath(this),
                     this.saveSettings,
                     this.deleteInnerComponent,
-                    activeTab
+                    action || 'edit'
                 )
+            }
+        },
+        addEntry(event) {
+            if (this.itemProvider) {
+                // if related element is inner component (add item/entry)
+                this.editModeContext.content.addContent(buildComponentPath(this), this.itemProvider)
+            } else {
+                // if related element is outer component (open settings)
+                this.editSettings(event, 'add')
             }
         },
         saveSettings(updateCallback) {
@@ -398,9 +356,9 @@ function buildComponentPath(component) {
     border: .1rem dashed transparent;
     transition: var(--default-transition);
 
-    &:hover, &:active, &:focus, &.active {
+    &:hover, &:active, &:focus {
         border-color: var(--primary-color);
-        background: hsl(0, 0%, 96%);
+        background: hsla(0, 0%, 100%, 0.1);
         transition: var(--default-transition);
     }
 
@@ -430,10 +388,20 @@ function buildComponentPath(component) {
     }
 
     .component-name {
+        display: none;
         position: absolute;
-        left: 0;
-        top: -1.8rem;
+        left: auto;
+        right: 10rem;
         font-style: italic;
+        z-index: 10;
+        padding: .2rem;
+        background: var(--primary-color);
+    }
+
+    &.active {
+        .component-name {
+            display: block;
+        }
     }
 
     .action-buttons {
@@ -477,7 +445,6 @@ function buildComponentPath(component) {
             }
         }
     }
-
 
     .edit-items {
         .action-buttons {
@@ -585,5 +552,4 @@ ul.edit-component-wrapper {
         }
     }
 }
-
 </style>

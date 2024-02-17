@@ -4,7 +4,7 @@
         <div class="inner-sidebar-wrapper">
             <!-- begin CmdHeadline -->
             <CmdHeadline
-                v-if="cmdHeadline.headlineText && open"
+                v-if="cmdHeadline?.headlineText && open"
                 :headlineText="cmdHeadline.headlineText"
                 :headlineLevel="cmdHeadline.headlineLevel || 3"
                 :textAlign="cmdHeadline.textAlign"
@@ -133,6 +133,8 @@ export default {
 
     .inner-sidebar-wrapper {
         flex: 1;
+        display: flex;
+        flex-direction: column;
 
         .cmd-headline.sidebar-main-headline {
             padding: var(--default-padding);

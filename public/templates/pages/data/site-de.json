@@ -32,6 +32,7 @@
         "showLinkInMainNavigation": false,
         "navEntry": "Slideshow",
         "allowAddComponent": false,
+        "order": 1,
         "components": [
           {
             "name": "CmdSlideshow",
@@ -132,6 +133,7 @@
         "showLinkInMainNavigation": false,
         "navEntry": "Title",
         "allowAddComponent": true,
+        "order": 2,
         "components": [
           {
             "name": "CmdHeadline",
@@ -148,6 +150,7 @@
         "allowAddComponent": true,
         "showLinkInMainNavigation": true,
         "navEntry": "Text Block",
+        "order": 3,
         "components": [
           {
             "name": "CmdTextImageBlock",
@@ -168,6 +171,7 @@
         "navEntry": "Text Image Block",
         "alignImage": "right",
         "allowAddComponent": true,
+        "order": 4,
         "components": [
           {
             "name": "CmdTextImageBlock",
@@ -220,6 +224,7 @@
         "navEntry": "Image Gallery",
         "allowAddComponent": true,
         "headlineText": "Überschrift für Section 3",
+        "order": 5,
         "components": [
           {
             "name": "CmdImageGallery",
@@ -293,6 +298,7 @@
         "navEntry": "Thumbnail-Scroller",
         "allowAddComponent": true,
         "headlineText": "Überschrift Section 4",
+        "order": 6,
         "components": [
           {
             "name": "CmdThumbnailScroller",
@@ -424,6 +430,7 @@
         "iconClass": "icon-mail",
         "showLinkInMainNavigation": true,
         "navEntry": "Contact",
+        "order": 7,
         "components": [
           {
             "name": "ContactForm",
@@ -444,6 +451,7 @@
         "navEntry": "Login",
         "showLinkInMainNavigation": false,
         "show": false,
+        "order": 8,
         "components": [
           {
             "name": "LoginArea",
@@ -478,6 +486,7 @@
         "showLinkInMainNavigation": false,
         "iconClass": "icon-share",
         "navEntry": "Social Networks",
+        "order": 90,
         "components": [
           {
             "name": "CmdSocialNetworks",

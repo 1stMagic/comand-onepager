@@ -3,6 +3,7 @@
         <slot></slot>
     </div>
 </template>
+
 <script>
 import EditMode from "./mixins/EditMode.vue"
 export default {
@@ -15,3 +16,9 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.cmd-container {
+    min-height: 5rem;
+}
+</style>

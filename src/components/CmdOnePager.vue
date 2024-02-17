@@ -2,7 +2,7 @@
     <!-- begin page-wrapper -->
     <div :class="{'edit-mode': editMode}" :id="templateId">
         <a id="anchor-back-to-top"></a>
-        <EditModeMainSidebar v-if="editMode" :editModeMessage="editModeMessage"/>
+        <EditModeMainSidebar v-if="editMode" :editModeMessage="editModeMessage" @change-template="changeTemplate" />
         <div :class="{'overflow-hidden': offCanvasOpen}" id="page-wrapper"
              :style="{'scroll-padding-top': heightSiteHeader + 'px'}">
 
@@ -39,6 +39,8 @@
             <!-- begin inner-wrapper -->
             <InnerWrapper/>
             <!-- end inner-wrapper -->
+
+            <EditModeSettingsSidebar v-if="editMode && context?.settings.show()"/>
 
             <!-- begin cmd-site-footer -->
             <template v-if="editMode">
@@ -147,8 +149,6 @@
             <!-- end fancy-box ------------------------------------------------------------------------------------------------------------------------------------------------------->
         </div>
         <!-- end page-wrapper -->
-
-        <EditModeSettingsSidebar v-if="editMode && context?.settings.show()"/>
     </div><!-- end templateId -->
 </template>
 
@@ -189,7 +189,8 @@ export default {
             topHeaderNavigationData: [],
             currentUrlHash: location.hash,
             heightSiteHeader: 150,
-            offCanvasOpen: false
+            offCanvasOpen: false,
+            selectedTemplate: "blank"
         }
     },
     created() {
@@ -229,7 +230,7 @@ export default {
             return this.editMode ? useEditModeContext() : null
         },
         templateId() {
-            return "template-" + this.selectedTemplate
+            return "template-" + (this.selectedTemplate || "blank")
         },
         ...mapState(usePiniaStore, ["currentLanguage", "site", "editMode", "componentEditMode", "showEditModeComponentSettings", "companyLogo", "metaData", "sections"]),
 
@@ -281,6 +282,9 @@ export default {
         }
     },
     methods: {
+        changeTemplate(event) {
+            this.selectedTemplate = event
+        },
         componentPath(componentIndex) {
             return [
                 "siteFooter",

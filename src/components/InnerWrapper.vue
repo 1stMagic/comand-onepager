@@ -8,6 +8,7 @@
                 :id="'edit-mode-' + section.id"
                 :sectionId="section.id"
                 :sectionPath="['main', 'sections', index]"
+                :sectionProps="{showLinkInMainNavigation: section.showLinkInMainNavigation, navEntry: section.navEntry, order: section.order}"
             >
                 <!-- begin content sections -->
                 <template v-slot="slotProps">

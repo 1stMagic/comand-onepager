@@ -1,5 +1,18 @@
 <template>
-    <div class="flex-container vertical component-settings-wrapper">
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Headline', headlineLevel: 4}">
+        <template v-slot:body>
+            <!-- begin cmdHeadline -->
+            <CmdHeadlineSettings
+                ref="headlineSettings"
+                v-bind="cmdHeadline || {}"
+            />
+            <!-- end cmdHeadline -->
+        </template>
+    </CmdBox>
+
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Slideshow', headlineLevel: 4}">
+        <template v-slot:body>
+            <div class="flex-container vertical component-settings-wrapper">
         <button type="button" class="button" @click="removeItems">
             <span class="icon-trash"></span>
             <span>{{removeButtonLabel}}</span>
@@ -48,6 +61,8 @@
             v-model="showCounterModel"
         />
     </div>
+        </template>
+    </CmdBox>
 </template>
 
 <script>
@@ -106,6 +121,17 @@ export default {
         showCounter: {
             type: Boolean,
             default: false
+        },
+        /**
+         * settings for CmdHeadline-component
+         */
+        cmdHeadline: {
+            type: Object,
+            default() {
+                return {
+                    headlineLevel: "2"
+                }
+            }
         }
     },
     computed: {

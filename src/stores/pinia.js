@@ -120,7 +120,13 @@ export const usePiniaStore = defineStore("pinia", {
             return {}
         },
         sections(state) {
-            return state.site.main?.sections?.filter(section => section.show !== false) || []
+            // filter only shown sections
+            const filteredSections = state.site.main?.sections?.filter(section => section.show !== false) || []
+
+            // compare sections for order
+            return filteredSections.toSorted((section1, section2) => {
+                return section1.order - section2.order
+            })
         }
     },
     actions: {
@@ -149,14 +155,15 @@ export const usePiniaStore = defineStore("pinia", {
                     this.currentLanguage = ''
                 })
         },
-        loadSections() {
-            axios.get("/templates/pages/data/content-sections-" + this.currentLanguage + '.json')
-                .then(response => this.sections = response.data)
-                .catch(() => this.sections = [])
-        },
         loadSite() {
             axios.get("/templates/pages/data/site-" + this.currentLanguage + '.json')
-                .then(response => this.site = response.data)
+                .then(response => {
+                    this.site = response.data
+                    // set section.order to continuous order (to avoid gaps)
+                    this.site.main.sections.toSorted((section1, section2) => section1.order - section2.order).forEach((section, index) => {
+                        section.order = index + 1
+                    })
+                })
                 .catch(() => this.site = {})
         },
         addContent(componentPath, addHandler, componentPosition) {
@@ -173,6 +180,8 @@ export const usePiniaStore = defineStore("pinia", {
                 // insert new component
                 result.parent.splice(result.nodeIndex + position, 0, addHandler.item())
             }
+
+            console.log("sections", this.site.main.sections)
         },
         deleteContent(componentPath) {
             if (componentPath.length) {
@@ -218,7 +227,7 @@ export const usePiniaStore = defineStore("pinia", {
         updateSettings(componentPath, updateCallback) {
             const component = findComponent(this.site, componentPath)?.node
             if (component) {
-                updateCallback(component.props || component)
+                updateCallback(component.props || component, this.site.main.sections)
             }
         },
         updateMetaData(metaData) {

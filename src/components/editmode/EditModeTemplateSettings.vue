@@ -1,6 +1,6 @@
 <template>
     <CmdBox :use-slots="['body']" :collapsible="true"
-            :cmdHeadline="{headlineText: 'Template Settings', headlineLevel: 4, headlineIcon: {iconClass: 'icon-home'}}"
+            :cmdHeadline="{headlineText: 'Template Settings', headlineLevel: 4, headlineIcon: {iconClass: 'icon-settings-template'}}"
             :openCollapsedBox="openBoxStatus">
         <template v-slot:body>
             <div v-if="editModeMessage" class="flex-container vertical">
@@ -79,6 +79,8 @@ export default {
 
                 document.head.appendChild(newLink)
             }
+
+            this.$emit("input", this.selectedTemplate)
         }
     }
 }

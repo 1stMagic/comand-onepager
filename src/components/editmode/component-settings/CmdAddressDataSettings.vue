@@ -1,5 +1,4 @@
 <template>
-
     <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Headline', headlineLevel: 4}">
         <template v-slot:body>
             <!-- begin cmdHeadline -->

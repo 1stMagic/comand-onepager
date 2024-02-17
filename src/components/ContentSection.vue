@@ -1,13 +1,11 @@
 <template>
     <CmdWidthLimitationWrapper :id="'section-wrapper-' + id">
         <a :id="'anchor-' + id"></a>
-        <div class="flex-container vertical">
-            <CmdContent
-                :allowAddComponent="allowAddComponent"
-                :sectionId="id"
-                :components="components"
-            />
-        </div>
+        <CmdContent
+            :allowAddComponent="allowAddComponent"
+            :sectionId="id"
+            :components="components"
+        />
     </CmdWidthLimitationWrapper>
 </template>
 

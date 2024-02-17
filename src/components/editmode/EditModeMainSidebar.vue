@@ -9,7 +9,7 @@
         <template v-slot:open>
             <div class="accordions-wrapper">
                 <CmdSystemMessage v-if="showSystemMessage" validation-status="success" system-message="You changes have been saved successfully!" />
-                <EditModeTemplateSettings :openBox="openTemplateSettingsStatus" :editModeMessage="editModeMessage" />
+                <EditModeTemplateSettings :openBox="openTemplateSettingsStatus" :editModeMessage="editModeMessage" @input="changeTemplate" />
                 <EditModeMetaDataSettings :openBox="openMetaSettingsStatus" />
                 <EditModeSectionsSettings :openBox="openSectionsSettingsStatus" />
             </div>
@@ -27,13 +27,13 @@
         <template v-slot:closed>
             <div class="closed-sidebar">
                 <a class="button primary" href="#" title="Open Template Settings" @click.prevent="openTemplateSettings">
-                    <span class="icon-home"></span>
+                    <span class="icon-settings-template"></span>
                 </a>
                 <a class="button primary" href="#" title="Open Meta Settings" @click.prevent="openMetaSettings">
-                    <span class="icon-globe"></span>
+                    <span class="icon-html"></span>
                 </a>
                 <a class="button primary" href="#" title="Open Section Settings" @click.prevent="openSectionsSettings">
-                    <span class="icon-square"></span>
+                    <span class="icon-settings-component"></span>
                 </a>
             </div>
         </template>
@@ -107,6 +107,9 @@ export default {
             this.updateMetaData(metaData)
 
             this.showSystemMessage = true
+        },
+        changeTemplate(event) {
+            this.$emit("change-template", event)
         }
     },
     computed: {

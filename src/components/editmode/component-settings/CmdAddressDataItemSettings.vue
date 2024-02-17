@@ -336,8 +336,9 @@ export default {
             return props => {
                 props.type = type
 
+                props.labelText = labelText
+
                 if (props.type !== "address") {
-                    props.labelText = labelText
                     props.data = data
                     props.href = href
                     props.tooltip = tooltip

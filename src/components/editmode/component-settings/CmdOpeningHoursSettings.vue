@@ -9,7 +9,6 @@
             <!-- end cmdHeadline -->
         </template>
     </CmdBox>
-
     <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Opening Hours', headlineLevel: 4}">
         <template v-slot:body>
             <div class="flex-container vertical component-settings-wrapper">
@@ -96,6 +95,9 @@ export default {
             type: Array,
             required: true
         },
+        /**
+         * settings for CmdHeadline-component
+         */
         cmdHeadline: {
             type: Object,
             default() {
@@ -149,10 +151,4 @@ export default {
         }
     }
 }
-</script>
-
-<style scoped>
-
-</style>
-<script setup>
 </script>

@@ -40,25 +40,10 @@
 
             <!-- begin show add-new-component-button if no component exists -->
             <div class="center-content" v-else>
-                <button class="button confirm" @click="addNewComponent">
+                <a href="#" @click.prevent="openSidebar" class="button confirm">
                     <span class="icon-plus"></span>
                     <span>Add new component</span>
-                </button>
-                <select v-if="showComponentSelection" @change="componentSelected">
-                    <option value="">Select component to add</option>
-                    <option value="CmdContainer">Empty container</option>
-                    <option value="CmdAddressData">Address data</option>
-                    <option value="CmdHeadline">Headline</option>
-                    <option value="CmdImage">Image</option>
-                    <option value="CmdImageGallery">Image gallery</option>
-                    <option value="CmdListOfLinks">List of links</option>
-                    <option value="CmdOpeningHours">Opening hours</option>
-                    <option value="CmdSlideshow">Slideshow</option>
-                    <option value="CmdSocialNetworks">Social networks</option>
-                    <option value="CmdTextImageBlock">Text-Image-Block</option>
-                    <option value="CmdThumbnailScroller">Thumbnail-Scroller</option>
-                    <option value="CmdToggleDarkMode">Toggle Dark-Mode</option>
-                </select>
+                </a>
             </div>
             <!-- end show add-new-component-button if no component exists -->
         </template>
@@ -88,10 +73,12 @@
 import EditComponentWrapper from "./editmode/EditComponentWrapper.vue"
 import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia.js"
-import componentStructure from "../assets/data/component-structure.json"
 
 export default {
     name: "CmdContent",
+    inject: {
+        editModeContext: {}
+    },
     components: {EditComponentWrapper},
     data() {
         return {
@@ -205,20 +192,19 @@ export default {
     },
     methods: {
         ...mapActions(usePiniaStore, ["addContent"]),
-        addNewComponent() {
-            this.showComponentSelection = !this.showComponentSelection
-        },
-        componentSelected(event) {
-            const selectedComponent = event.target.value
+        openSidebar() {
+            const componentPath = ["main", "sections", {id: this.sectionId}, "components", -1]
 
-            this.addContent(this.componentPath(-1), {
-                name: selectedComponent,
-                item() {
-                    return componentStructure[selectedComponent]
-                }
-            })
-
-            this.showComponentSelection = false
+            this.editModeContext.settings.startEditing(
+                JSON.stringify(componentPath),
+                "section",
+                {addComponent: true},
+                null,
+                componentPath,
+                null,
+                null,
+                1
+            )
         },
         componentPath(componentIndex) {
             return [

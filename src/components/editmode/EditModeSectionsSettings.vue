@@ -2,7 +2,7 @@
     <CmdBox :use-slots="['body']"
             :collapsible="true"
             class="edit-mode-sections-settings"
-            :cmdHeadline="{headlineText: 'Content Settings', headlineLevel: 4, headlineIcon: {iconClass: 'icon-square'}}"
+            :cmdHeadline="{headlineText: 'Content Settings', headlineLevel: 4, headlineIcon: {iconClass: 'icon-page'}}"
             :openCollapsedBox="openBoxStatus">
         <template v-slot:body>
             <ul class="list-of-sections">
@@ -20,7 +20,7 @@
                         </li>
                     </ul>
                 </li>
-                <li v-for="(section, index) in contentSections" :key="index" class="sections-name-wrapper">
+                <li v-for="(section, index) in contentSections" :key="index" class="sections-name-wrapper" :draggable="true" :data-section-index="index" v-on="dragDropHandlers(index)">
                     <!-- begin sectionName / navEntry -->
                     <CmdFormElement
                         v-if="editNavEntry === index"
@@ -102,6 +102,7 @@
 <script>
 import {mapState, mapActions} from "pinia"
 import {usePiniaStore} from "../../stores/pinia.js"
+import {highlightSection} from "../../utils/editmode.js"
 import {createUuid} from "comand-component-library";
 
 export default {
@@ -136,12 +137,13 @@ export default {
                 return sections
             }
 
-            const contentSections = this.site.main.sections.map((section, index) => {
+            const contentSections = this.site.main.sections.toSorted((section1, section2) => section1.order - section2.order).map((section, index) => {
                 return {
                     id: section.id,
                     navEntry: section.navEntry || 'Section' + " " + (index + 1),
                     show: section.show !== false,
                     showLinkInMainNavigation: section.showLinkInMainNavigation === true,
+                    order: section.order,
                     componentPath: ["main", "sections", index]
                 }
             })
@@ -155,7 +157,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(usePiniaStore, ["deleteContent", "updateContent", "updateSectionsSettings"]),
+        ...mapActions(usePiniaStore, ["deleteContent", "updateContent", "updateSettings", "updateSectionsSettings"]),
 
         toggleNavEntryTooltip(section) {
             let tooltip = ""
@@ -208,8 +210,6 @@ export default {
                         this.inputRefs[sectionIndex].focus();
                     }
                 })
-
-
             }
         },
 
@@ -238,10 +238,8 @@ export default {
             })
         },
         highlightSection(sectionId) {
-            // get the edit-mode-wrapper of a section
-            const element = document.getElementById("edit-mode-" + sectionId)
-            element.scrollIntoView()
-            element.classList.add("edit-mode-active")
+            // call function from utils
+            highlightSection(sectionId)
         },
         removeHighlightSection() {
             const elements = document.querySelectorAll(".section-wrapper")
@@ -253,7 +251,7 @@ export default {
 
         // begin delete
         deleteSection(componentPath) {
-            if (confirm("Delete this section (and their content)?")) {
+            if (confirm("Delete this section (and its content)?")) {
                 this.deleteContent(componentPath)
             }
         },
@@ -264,6 +262,60 @@ export default {
                         component.sections = []
                     }
                 }])
+            }
+        },
+        dragDropHandlers(index) {
+            return {
+                dragstart(event) {
+                    event.dataTransfer.dropEffect = "move"
+                    event.dataTransfer.setData("text/plain", index)
+                },
+                // dragend(event) {
+                //     console.log("dragend", event)
+                // },
+                // dragenter(event) {
+                //     console.log("dragenter", event)
+                // },
+                dragover(event) {
+                    event.preventDefault()
+                    event.dataTransfer.dropEffect = "move"
+                    return false
+                },
+                // dragleave(event) {
+                //     console.log("dragleave", event)
+                // },
+                drop: (event) => {
+                    event.preventDefault()
+                    const sourceSectionIndex = Number(event.dataTransfer.getData("text/plain"))
+                    const targetSectionIndex = Number(event.target.closest("li").dataset.sectionIndex)
+                    const sourceSection = this.contentSections[sourceSectionIndex]
+                    const targetSection = this.contentSections[targetSectionIndex]
+                    const sourceSectionOrder = sourceSection.order
+                    const targetSectionOrder = targetSection.order
+
+                    if (sourceSectionOrder === targetSectionOrder) {
+                        return
+                    }
+
+                    this.updateSettings(sourceSection.componentPath, (props, sections) => {
+                        const moveDown = sourceSectionOrder < targetSectionOrder
+                        if (moveDown) {
+                            sections.forEach(section => {
+                                if (section.order <= targetSectionOrder && section.order > sourceSectionOrder) {
+                                    section.order--
+                                }
+                            })
+                        } else {
+                            sections.forEach(section => {
+                                if (section.order >= targetSectionOrder && section.order < sourceSectionOrder) {
+                                    section.order++
+                                }
+                            })
+                        }
+                        props.order = targetSectionOrder
+                        sections.sort((a, b) => a.order - b.order)
+                    })
+                }
             }
         }
     }

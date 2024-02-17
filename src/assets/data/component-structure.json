@@ -83,7 +83,7 @@
         {
           "iconClass": "icon-user-profile",
           "type": "href",
-          "text": "Lintext",
+          "text": "Linktext",
           "path": "#",
           "tooltip": "Tooltip"
         }
@@ -217,5 +217,12 @@
       "labelTextDarkMode": "Labeltext Dark Mode",
       "labelTextLightMode": "Labeltext Light Mode"
     }
+  },
+  "section": {
+    "id": "section-new",
+    "useFullDeviceWidth": false,
+    "showLinkInMainNavigation": false,
+    "allowAddComponent": true,
+    "components": []
   }
 }

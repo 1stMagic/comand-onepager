@@ -1,131 +1,38 @@
 <template>
     <aside class="edit-mode-settings-sidebar flex-container vertical box">
-        <CmdTabs
-            :stretchTabs="true"
-            :tabs="tabs"
-            :useSlot="true"
-            :activeTab="editModeContext.settings.getActiveTab() || 0"
-        >
-            <!-- begin tab 'component settings' -->
-            <template v-slot:tab-content-0>
-                <div>
-                    <div class="component-settings-wrapper flex-container vertical no-list-item">
-                        <template v-if="isComponent">
-                            <h3 class="has-icon">
-                                <span class="icon-hexagon use-icon-as-background">
-                                    <span class="icon-cogs"></span>
-                                </span>
-                                <span>Component Settings</span>
-                            </h3>
-
-                            <!-- begin selection of allowed components to switch component type -->
-                            <template v-if="isComponent">
-                                <!-- begin components-view-selection -->
-                                <ul class="components-view-selection no-list-items">
-                                    <li>
-                                        <a href="#"
-                                           @click.prevent="showComponentsAsIcons = !showComponentsAsIcons"
-                                           :title="showComponentsAsIcons ? 'Switch to dropdown-view for components' : 'Switch to icon-view for components'"
-                                        >
-                                            <CmdIcon
-                                                :iconClass="showComponentsAsIcons ? 'icon-list' : 'icon-blocks-small'"
-                                            />
-                                        </a>
-                                    </li>
-                                </ul>
-                                <!-- end components-view-selection -->
-
-                                <!-- begin select components from icons -->
-                                <ul v-if="showComponentsAsIcons" class="components-icon-view">
-                                    <li v-for="(component, index) in listOfValidComponents" :key="index">
-                                        <a href="#"
-                                           @click.prevent="switchComponent"
-                                           :class="{ 'active': currentComponentName === component.value}"
-                                           title="Select this component">
-                                            <span class="icon-hexagon">
-                                                <CmdIcon :iconClass="component.iconClass"/>
-                                            </span>
-                                            <span>{{ component.text }}</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <!-- end select components from icons -->
-                                <!-- begin select components from dropdown -->
-                                <CmdFakeSelect
-                                    v-else
-                                    labelText="Component type"
-                                    :required="true"
-                                    :selectData="listOfValidComponents"
-                                    defaultOptionName="Select component:"
-                                    v-model="currentComponentName"
-                                    @update:modelValue="switchComponent"
-                                />
-                                <!-- end select components from dropdown -->
-                                <hr />
-                            </template>
-                            <!-- end selection of allowed components to switch component type -->
-                        </template>
-                        <h3 v-else class="has-icon">
-                            <span class="icon-circle use-icon-as-background">
-                                <span class="icon-cog"></span>
-                            </span>
-                            <span>Item Settings</span>
-                        </h3>
-                    </div>
-
-                    <!-- begin list of components -->
-                    <template v-if="componentProps">
-                        <div class="list-of-components flex-container vertical">
-                            <component ref="settings" :is="settingsComponentName" v-bind="componentProps"/>
-                        </div>
-                    </template>
-                    <!-- end list of components -->
-                </div>
-                <div class="button-wrapper action-buttons-wrapper">
-                    <button class="button confirm" @click="saveSettings" aria-label="Save settings">
-                        <span class="icon-check-circle"></span>
-                        <span>Save</span>
-                    </button>
-                    <button class="button cancel" @click="cancelSettings" aria-label="Cancel settings">
-                        <span class="icon-cancel-circle"></span>
-                        <span>Cancel</span>
-                    </button>
-                </div>
-            </template>
-            <!-- end tab 'component settings' -->
-
-            <!-- begin tab 'add component' (components only) -->
-            <template v-if="isComponent" v-slot:tab-content-1>
-                <div class="flex-container vertical component-settings-wrapper add-component-tab">
+        <template v-if="editModeContext.settings.getAction() === 'edit'">
+        <div>
+            <div class="component-settings-wrapper flex-container vertical no-list-item">
+                <template v-if="isComponent && !isSection">
                     <h3 class="has-icon">
-                           <span class="icon-hexagon use-icon-as-background">
-                                <span class="icon-plus"></span>
-                            </span>
-                        <span>Add new component</span>
+                        <span class="icon-hexagon use-icon-as-background">
+                            <span class="icon-cogs"></span>
+                        </span>
+                        <span>Component Settings</span>
                     </h3>
 
-
-                    <h4>{{ currentComponentName }}</h4>
-
-                    <!-- begin selection of allowed components to add additional component -->
+                    <!-- begin selection of allowed components to switch component type -->
+                    <!-- begin components-view-selection -->
                     <ul class="components-view-selection no-list-items">
                         <li>
                             <a href="#"
                                @click.prevent="showComponentsAsIcons = !showComponentsAsIcons"
                                :title="showComponentsAsIcons ? 'Switch to dropdown-view for components' : 'Switch to icon-view for components'"
                             >
-                                <CmdIcon :iconClass="showComponentsAsIcons ? 'icon-list' : 'icon-blocks-small'"/>
+                                <CmdIcon
+                                    :iconClass="showComponentsAsIcons ? 'icon-list' : 'icon-blocks-small'"
+                                />
                             </a>
                         </li>
                     </ul>
-                    <!-- end selection of allowed components to add additional component -->
+                    <!-- end components-view-selection -->
 
                     <!-- begin select components from icons -->
                     <ul v-if="showComponentsAsIcons" class="components-icon-view">
                         <li v-for="(component, index) in listOfValidComponents" :key="index">
                             <a href="#"
-                               @click.prevent="selectComponentToAdd(component.value)"
-                               :class="{ 'active': addedComponentName === component.value}"
+                               @click.prevent="switchComponent"
+                               :class="{ 'active': currentComponentName === component.value}"
                                title="Select this component">
                                 <span class="icon-hexagon">
                                     <CmdIcon :iconClass="component.iconClass"/>
@@ -139,61 +46,142 @@
                     <!-- begin select components from dropdown -->
                     <CmdFakeSelect
                         v-else
-                        labelText="Select component to insert"
+                        labelText="Component"
                         :required="true"
                         :selectData="listOfValidComponents"
                         defaultOptionName="Select component:"
-                        v-model="addedComponentName"
+                        v-model="currentComponentName"
+                        @update:modelValue="switchComponent"
                     />
                     <!-- end select components from dropdown -->
-                    <hr />
-                    <!-- end selection of allowed components to add additional component -->
+                    <hr/>
+                    <!-- end selection of allowed components to switch component type -->
+                </template>
+                <h3 v-else-if="!isSection" class="has-icon">
+                    <span class="icon-circle use-icon-as-background">
+                        <span class="icon-cog"></span>
+                    </span>
+                    <span>Item Settings</span>
+                </h3>
+            </div>
 
-                    <h4>Positioning</h4>
-                    <!--
-                    <a class="icon-hexagon button confirm"
-                       href="#"
-                       @click.prevent="addInnerComponent"
-                       title="Add a new entry inside of this component">
-                        <CmdIcon iconClass="icon-home"/>
-                    </a>
-                    <a class="icon-hexagon button confirm"
-                       href="#"
-                       @click.prevent="addSectionComponent"
-                       title="Add a new entry at same section-level as this component">
-                        <CmdIcon iconClass="icon-globe"/>
-                    </a>
-                    -->
-
-                    <!-- begin selection of available positions for added component -->
-                    <CmdFakeSelect
-                        labelText="Select inserted component position"
-                        :required="true"
-                        :selectData="availableComponentPositions"
-                        defaultOptionName="Select component:"
-                        v-model="addedComponentPosition"
-                    />
-                    <!-- end selection of available positions for added component -->
-                </div>
-                <div class="button-wrapper stretch-buttons action-buttons-wrapper">
-                    <button class="button confirm" @click="addComponent" aria-label="Add selected component">
-                        <span class="icon-check-circle"></span>
-                        <span>Add</span>
-                    </button>
-                    <button class="button cancel" @click="cancelAddComponent" aria-label="Cancel adding selected component">
-                        <span class="icon-cancel-circle"></span>
-                        <span>Cancel</span>
-                    </button>
+            <!-- begin list of components -->
+            <template v-if="componentProps">
+                <div class="list-of-components flex-container vertical">
+                    <component ref="settings" :is="settingsComponentName" v-bind="componentProps"/>
                 </div>
             </template>
-            <!-- end tab 'add component' (components only) -->
-        </CmdTabs>
+            <!-- end list of components -->
+        </div>
+        <div class="button-wrapper action-buttons-wrapper">
+            <button class="button confirm" @click="saveSettings" aria-label="Save settings">
+                <span class="icon-check-circle"></span>
+                <span>Save</span>
+            </button>
+            <button class="button cancel" @click="cancelSettings" aria-label="Cancel settings">
+                <span class="icon-cancel-circle"></span>
+                <span>Cancel</span>
+            </button>
+        </div>
+        </template>
+        <!-- end edit -->
+
+        <!-- begin add -->
+        <template v-if="editModeContext.settings.getAction() === 'add'">
+        <div class="flex-container vertical component-settings-wrapper add-component-tab">
+            <h3 class="has-icon">
+                           <span
+                               :class="[isSection && componentProps.addComponent !== true ? 'icon-square' : 'icon-hexagon', 'use-icon-as-background']">
+                                <span class="icon-plus"></span>
+                            </span>
+                <span>{{
+                        isSection && componentProps.addComponent !== true ? 'Add new section' : 'Add new component'
+                    }}</span>
+            </h3>
+
+            <!-- begin positioning -->
+            <template v-if="!isSection || componentProps.addComponent !== true">
+                <h4>Positioning</h4>
+                <!-- begin selection of available positions for added component -->
+                <CmdFakeSelect
+                    :labelText="isSection ? 'Select inserted section position' : 'Select inserted component position'"
+                    :required="true"
+                    :selectData="availablePositions"
+                    defaultOptionName="Select component:"
+                    v-model="addedPosition"
+                />
+                <!-- end selection of available positions for added component -->
+                <hr/>
+            </template>
+            <!-- end positioning -->
+
+            <!-- begin selection of allowed components to add additional component -->
+            <div class="flex-container current-component-wrapper">
+                <h4 class="no-flex">{{ isSection ? 'Component for section' : 'Component to add' }}</h4>
+
+                <ul class="components-view-selection no-list-items">
+                    <li>
+                        <a href="#"
+                           @click.prevent="showComponentsAsIcons = !showComponentsAsIcons"
+                           :title="showComponentsAsIcons ? 'Switch to dropdown-view for components' : 'Switch to icon-view for components'"
+                        >
+                            <CmdIcon :iconClass="showComponentsAsIcons ? 'icon-list' : 'icon-blocks-small'"/>
+                        </a>
+                    </li>
+                </ul>
+                <!-- end selection of allowed components to add additional component -->
+            </div>
+
+            <!-- begin select components from icons -->
+            <ul v-if="showComponentsAsIcons" class="components-icon-view">
+                <li v-for="(component, index) in listOfValidComponents" :key="index">
+                    <a href="#"
+                       @click.prevent="selectComponentToAdd(component.value)"
+                       :class="{ 'active': addedComponentName === component.value}"
+                       title="Select this component">
+                                    <span class="icon-hexagon">
+                                        <CmdIcon :iconClass="component.iconClass"/>
+                                    </span>
+                        <span>{{ component.text }}</span>
+                    </a>
+                </li>
+            </ul>
+            <!-- end select components from icons -->
+
+            <!-- begin select components from dropdown -->
+            <CmdFakeSelect
+                v-else
+                :labelText="isSection ? 'Select component to insert in section' : 'Select component to add'"
+                :required="true"
+                :selectData="listOfValidComponents"
+                defaultOptionName="Select component:"
+                v-model="addedComponentName"
+            />
+            <!-- end select components from dropdown -->
+        </div>
+        <!-- end selection of allowed components to add additional component -->
+
+        <div class="button-wrapper stretch-buttons action-buttons-wrapper">
+            <button class="button confirm" @click="addComponent" aria-label="Add selected component">
+                <span class="icon-check-circle"></span>
+                <span>Add</span>
+            </button>
+            <button class="button cancel" @click="cancelAddComponent"
+                    aria-label="Cancel adding selected component">
+                <span class="icon-cancel-circle"></span>
+                <span>Cancel</span>
+            </button>
+        </div>
+        </template>
     </aside>
 </template>
 
 <script>
 // import data
 import componentStructure from "../../../assets/data/component-structure.json"
+import {mapState} from "pinia";
+import {usePiniaStore} from "../../../stores/pinia.js"
+import {createHtmlId, createUuid} from "comand-component-library";
 
 export default {
     name: "EditModeSettingsSidebar",
@@ -203,19 +191,7 @@ export default {
             showComponentsAsIcons: false,
             currentComponentName: "",
             addedComponentName: "CmdContainer",
-            addedComponentPosition: "after",
-            availableComponentPositions: [
-                {
-                    text: "Before existing component",
-                    value: "before",
-                    iconClass: "icon-arrow-up"
-                },
-                {
-                    text: "After existing component",
-                    value: "after",
-                    iconClass: "icon-arrow-down"
-                }
-            ],
+            addedPosition: "after",
             listOfValidComponents: [
                 {
                     text: "Empty Container",
@@ -281,6 +257,50 @@ export default {
         }
     },
     computed: {
+        ...mapState(usePiniaStore, ["site", "sections"]),
+        readableComponentName() {
+            // remove prefix from current component-name
+            let currentComponentName = this.currentComponentName.replace("Cmd", "")
+
+            // use a regular expression to find the positions of capital letters
+            let capitalPositions = []
+            currentComponentName.replace(/[A-Z]/g, function (match, index) {
+                capitalPositions.push(index)
+                return match
+            })
+
+            // add a space before each capital letter based on the found positions
+            for (let i = capitalPositions.length - 1; i >= 0; i--) {
+                currentComponentName = currentComponentName.slice(0, capitalPositions[i]) + ' ' + currentComponentName.slice(capitalPositions[i]);
+            }
+
+            return currentComponentName
+        },
+        availablePositions() {
+            const positionOptions = [
+                {
+                    text: "Before selected " + this.readableComponentName,
+                    value: "before",
+                    iconClass: "icon-arrow-up"
+                },
+                {
+                    text: "After selected " + this.readableComponentName,
+                    value: "after",
+                    iconClass: "icon-arrow-down"
+                }
+            ]
+
+            // add additional option for containers
+            if (this.componentName === "CmdContainer") {
+                positionOptions.splice(1, 0, {
+                    text: "Inside container",
+                    value: "inside",
+                    iconClass: "icon-home"
+                })
+            }
+
+            return positionOptions
+        },
         tabs() {
             const tabs = [{name: 'Settings', iconClass: 'icon-cog'}]
 
@@ -298,11 +318,17 @@ export default {
             return this.editModeContext.settings.getComponentProps()
         },
         settingsComponentName() {
+            if (this.editModeContext.settings.getSettingsComponentName() === 'sectionSettings') {
+                return 'SectionSettings'
+            }
             return this.editModeContext.settings.getSettingsComponentName()
         },
         isComponent() {
             return !this.editModeContext.settings.getAllowedContentTypes() || this.editModeContext.settings.getAllowedContentTypes().length > 0;
 
+        },
+        isSection() {
+            return this.componentName === "section"
         }
     },
     methods: {
@@ -310,9 +336,13 @@ export default {
             this.addedComponentName = selectedComponent
         },
         switchComponent(selectedComponent) {
+            if (this.componentName === "section") {
+                return
+            }
+
             if (confirm("All content for this component will be deleted. Switch to new component anyway?")) {
                 // add new/selected component and delete existing one if switch is confirmed (and update settings)
-                this.editModeContext.content.addContent(this.editModeContext.settings.getComponentPath(), () => componentStructure[selectedComponent])
+                this.editModeContext.content.addContent(this.editModeContext.settings.getComponentPath(), () => JSON.parse(JSON.stringify(componentStructure[selectedComponent])))
                 this.editModeContext.content.deleteContent(this.editModeContext.settings.getComponentPath())
                 this.editModeContext.settings.updateEditing(selectedComponent, componentStructure[selectedComponent].props)
             } else {
@@ -330,7 +360,32 @@ export default {
             this.editModeContext.settings.stopEditing()
         },
         addComponent() {
-            this.editModeContext.content.addContent(this.editModeContext.settings.getComponentPath(), () => componentStructure[this.addedComponentName], this.addedComponentPosition)
+            // if empty container is added
+            if (this.addedPosition === "inside") {
+                const componentPathForContainer = [...this.editModeContext.settings.getComponentPath()]
+
+                // extend component path to add select component inside CmdContainer
+                componentPathForContainer.push("components", -1)
+
+                // add content and create deep copy of componentStructure
+                this.editModeContext.content.addContent(componentPathForContainer, () => JSON.parse(JSON.stringify(componentStructure[this.addedComponentName])), "after")
+            } else {
+                const addedElement = this.isSection && this.componentProps.addComponent !== true ? 'section' : this.addedComponentName
+                // make deep-copy to create new sections object nad new components array.
+                const sectionElement = JSON.parse(JSON.stringify(componentStructure[addedElement]))
+
+                if (this.isSection && this.componentProps.addComponent !== true) {
+                    // get structure of component to be added in new section
+                    const addedComponentStructure = componentStructure[this.addedComponentName]
+
+                    // add nex component structure to list of components for new sections
+                    sectionElement.components.push(addedComponentStructure)
+
+                    sectionElement.id = createHtmlId()
+                }
+                console.log("getComponentPath()", this.editModeContext.settings.getComponentPath())
+                this.editModeContext.content.addContent(this.editModeContext.settings.getComponentPath(), () => JSON.parse(JSON.stringify(sectionElement)), this.addedPosition)
+            }
             this.editModeContext.settings.stopEditing()
         },
         cancelAddComponent() {
@@ -345,9 +400,6 @@ export default {
                 this.currentComponentName = this.componentName
             },
             immediate: true
-        },
-        addedComponentPosition() {
-            this.switchComponent(this.addedComponentPosition)
         }
     }
 }
@@ -357,9 +409,9 @@ export default {
 .edit-mode-settings-sidebar {
     width: 30rem;
     justify-content: space-between;
-    padding: 0;
     background: var(--default-background);
     position: fixed;
+    padding: 0;
     top: 0;
     right: 0;
     z-index: 1001;
@@ -386,8 +438,19 @@ export default {
         }
     }
 
-    .action-buttons-wrapper > * {
-        flex: 1;
+    .current-component-wrapper {
+        align-items: center;
+
+        h4 {
+            margin: 0;
+        }
+
+    }
+
+    .action-buttons-wrapper {
+        > * {
+            flex: 1;
+        }
     }
 
     input:not(.toggle-switch), select, textarea, .input {
@@ -398,26 +461,6 @@ export default {
 
     .list-of-components {
         gap: 0;
-    }
-
-    .cmd-tabs, .cmd-tabs > div {
-        height: 100%;
-    }
-
-    .cmd-tabs, .cmd-tabs > div {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .cmd-tabs > div {
-        padding: 0;
-    }
-
-    .cmd-tabs {
-        .action-buttons-wrapper, .component-settings-wrapper {
-            padding: var(--default-padding);
-        }
     }
 
     .components-view-selection {

@@ -121,7 +121,6 @@
                    :class="editableDay.pmClosed ? 'icon-clock' : 'icon-blocked'"
                 ></a>
             </div>
-
             <!-- end PM -->
         </dd>
         <!-- end hours -->

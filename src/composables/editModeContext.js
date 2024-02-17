@@ -39,7 +39,7 @@ function contentActions(store, state) {
 
 function settingsActions(state) {
     return {
-        startEditing(componentIdentifier, componentName, componentProps, allowedContentTypes, componentPath, saveHandler, deleteInnerComponent, activeTab) {
+        startEditing(componentIdentifier, componentName, componentProps, allowedContentTypes, componentPath, saveHandler, deleteInnerComponent, action) {
             state.settingsEditing = componentIdentifier
             state.componentName = componentName
             state.componentProps = componentProps
@@ -47,7 +47,7 @@ function settingsActions(state) {
             state.componentPath = componentPath
             state.settingsSaveHandler = saveHandler
             state.deleteInnerComponent = deleteInnerComponent
-            state.activeTab = activeTab
+            state.action = action
         },
         isEditing(componentIdentifier) {
             if (componentIdentifier) {
@@ -90,8 +90,8 @@ function settingsActions(state) {
         getDeleteInnerComponent() {
             return state.deleteInnerComponent
         },
-        getActiveTab() {
-            return state.activeTab
+        getAction() {
+            return state.action
         }
     }
 }

@@ -30,6 +30,8 @@ import CmdImageGallerySettings from "./components/editmode/component-settings/Cm
 import CmdImageSettings from "./components/editmode/component-settings/CmdImageSettings.vue"
 import CmdHeadlineSettings from "./components/editmode/component-settings/CmdHeadlineSettings.vue"
 import CmdTextImageBlockSettings from "./components/editmode/component-settings/CmdTextImageBlockSettings.vue"
+import SectionSettings from "./components/editmode/component-settings/SectionSettings.vue"
+import CmdContainerSettings from "./components/editmode/component-settings/CmdContainerSettings.vue"
 import directiveTelephone from "comand-component-library/src/directives/telephone"
 import directiveFocus from "comand-component-library/src/directives/focus"
 
@@ -62,10 +64,12 @@ export function bootstrap(app) {
         CmdOpeningHoursSettings,
         CmdHeadlineSettings,
         CmdTextImageBlockSettings,
+        SectionSettings,
         CmdSocialNetworks,
         CmdSocialNetworksSettings,
         CmdSlideshowSettings,
-        ContactFormSettings
+        ContactFormSettings,
+        CmdContainerSettings
     }).forEach(([name, component]) => app.component(name, component))
 
     const componentLibraryComponentBlacklist = [

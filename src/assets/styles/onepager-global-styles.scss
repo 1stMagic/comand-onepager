@@ -143,10 +143,6 @@ main {
 			}
 		}
 
-		.cmd-slideshow {
-				padding-top: 2rem;
-		}
-
 		[data-component="CmdSlideshow"] {
 			top: 1.8rem;
 			right: 5.3rem;
@@ -163,26 +159,35 @@ main {
 		}
 	}
 
-	.edit-mode-active .cmd-width-limitation-wrapper {
+	.section-wrapper.active .cmd-width-limitation-wrapper, .edit-component-wrapper.active {
 		--odd-lines-color: hsl(var(--hyperlink-color-hue), var(--hyperlink-color-saturation), 30%);
 		background-image: repeating-linear-gradient(-45deg,var(--odd-lines-color),var(--odd-lines-color) .7rem, var(--hyperlink-color) .7rem,var(--hyperlink-color) 1.4rem) !important;
 		//background: var(--primary-color) !important;
 
-		*:not(a) {
+		* {
 			color: var(--pure-white);
 		}
 
-		.inner-thumbnail-wrapper figcaption {
-			color: var(--text-color);
+		.cmd-container {
+			border: var(--default-border);
+			border-color: var(--pure-white);
+		}
+
+		.inner-thumbnail-wrapper {
+			border-color: var(--pure-white);
+			background: none;
+
+			figcaption {
+				color: var(--pure-white);
+			}
 		}
 
 		fieldset  {
-			legend {
-				color: var(--legend-text-color);
-			}
+			background: none;
+			border-color: var(--pure-white);
 
-			span {
-				color: var(--text-color);
+			span, span[class*="icon"], legend, .label-text :is(span, sup), a {
+				color: var(--pure-white);
 			}
 
 			:is(button, .button) :is(span) {
@@ -201,6 +206,10 @@ main {
 		transition: var(--default-transition);
 	}
 
+	.edit-component-wrapper.active {
+		border-color: var(--pure-white);
+	}
+
 	footer .cmd-list-of-links {
 		padding: calc(var(--default-padding) * 2)
 	}
@@ -212,8 +221,14 @@ main {
 		}
 	}
 
-	.button-delete.use-icon-as-background::before {
-		color: black;
+	.button-delete.use-icon-as-background {
+		&::before {
+			color: var(--pure-black);
+		}
+
+		&:is(:hover, :active, :focus)::before {
+			color: hsl(0, 0%, 20%);
+		}
 	}
 
 	.edit-items .button-delete.use-icon-as-background  {

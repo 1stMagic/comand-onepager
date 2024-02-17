@@ -1,6 +1,7 @@
 <template>
-    <div :class="['edit-mode section-wrapper', {active}]" @click.stop="showActionButtons">
+    <div :class="['edit-mode section-wrapper', {active}]" @click.stop="showActionButtons" :ref="sectionId">
         <div v-show="active" class="action-buttons-wrapper">
+            <p class="section-id">Section: {{sectionId}}</p>
             <!-- begin action-buttons -->
             <ul class="flex-container no-flex action-buttons">
                 <li>
@@ -17,6 +18,14 @@
                        @click.prevent="deleteSection"
                        title="Delete this section (and its content)">
                         <CmdIcon iconClass="icon-trash"/>
+                    </a>
+                </li>
+                <li>
+                    <a class="icon-square button primary use-icon-as-background"
+                       href="#"
+                       @click.prevent="editSection"
+                       title="Edit settings for this section">
+                        <CmdIcon iconClass="icon-cog"/>
                     </a>
                 </li>
             </ul>
@@ -40,7 +49,8 @@ import {usePiniaStore} from "../../stores/pinia.js";
 export default {
     name: "EditModeSectionWrapper",
     inject: {
-        editModeContext: {}
+        editModeContext: {},
+        addSectionClicked: false
     },
     components: {
         CmdFormElement,
@@ -62,6 +72,10 @@ export default {
         sectionPath: {
             type: Array,
             required: true
+        },
+        sectionProps: {
+            type: Object,
+            required: false
         }
     },
     computed: {
@@ -70,27 +84,58 @@ export default {
         }
     },
     methods: {
-        ...mapActions(usePiniaStore, ["addContent", "deleteContent"]),
+        ...mapActions(usePiniaStore, ["addContent", "deleteContent", "updateSettings"]),
 
         addSection() {
-            this.addContent(this.sectionPath, {
-                item() {
-                    return {
-                        id: createUuid(),
-                        iconClass: "",
-                        navEntry: "New section",
-                        allowAddComponent: true,
-                        components: []
-                    }
-                }
-            }, "before")
+            if (!this.editing) {
+                this.addSectionClicked = true
+                const componentPath = ["main", "sections", {id: this.sectionId}]
+
+                this.editModeContext.settings.startEditing(
+                    JSON.stringify(componentPath),
+                    "section",
+                    {
+                        showLinkInMainNavigation: true,
+                        navEntry: ""
+                    },
+                    null,
+                    componentPath,
+                    (updateCallback) => {
+                        this.updateSettings(componentPath, updateCallback)
+                    },
+                    null,
+                    'add'
+                )
+            }
+
         },
         deleteSection() {
             if (confirm("Delete this section and all its content?")) {
                 this.deleteContent(this.sectionPath)
             }
         },
+        editSection() {
+            console.log("this.sectionProps", this.sectionProps)
+            if (!this.editing) {
+                this.addSectionClicked = true
+                const componentPath = ["main", "sections", {id: this.sectionId}]
+                this.editModeContext.settings.startEditing(
+                    JSON.stringify(componentPath),
+                    "section",
+                    this.sectionProps,
+                    null,
+                    componentPath,
+                    (updateCallback) => {
+                        this.updateSettings(componentPath, updateCallback)
+                    },
+                    null,
+                    'edit'
+                )
+            }
+        },
         showActionButtons() {
+            this.$refs[this.sectionId].classList.add("active")
+            console.log("this.$refs", this.$refs[this.sectionId])
             this.editModeContext.system.setActiveSection(this.sectionPath)
         }
     }
@@ -104,7 +149,7 @@ main {
         border-color: transparent;
 
         &.active {
-            border: var(--primary-border);
+            border: var(--primary-border) !important;
         }
 
         &:hover, &:active, &:focus {
@@ -132,15 +177,35 @@ main {
             display: none;
         }
 
-        &.section-wrapper .action-buttons-wrapper {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
+        &.section-wrapper {
+            &:has(.action-buttons-wrapper) {
+                // border: 1px solid red !important;
+            }
 
-            .action-buttons {
-                margin: 0;
-                gap: var(--default-gap-half);
+            .section-id {
+                display: none;
+                text-align: center;
+                width: 100%;
+                font-style: italic;
+            }
+
+            &.active {
+                .section-id {
+                    color: var(--pure-white);
+                    display: block;
+                }
+            }
+
+            .action-buttons-wrapper {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 20;
+
+                .action-buttons {
+                    margin: 0;
+                    gap: var(--default-gap-half);
+                }
             }
         }
     }
