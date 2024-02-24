@@ -67,7 +67,11 @@
 <script>
 export default {
     name: "CmdAddressDataSettings",
-    inject: ["editModeContext"],
+    inject: {
+        editModeContext: {
+            default: false
+        }
+    },
     inheritAttrs: false,
     data() {
         return {

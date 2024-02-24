@@ -36,7 +36,11 @@
 <script>
 export default {
     name: "CmdOpeningHoursSettings",
-    inject: ["editModeContext"],
+    inject: {
+        editModeContext: {
+            default: false
+        }
+    },
     inheritAttrs: false,
     data() {
         return {

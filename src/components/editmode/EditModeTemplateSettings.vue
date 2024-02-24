@@ -32,7 +32,11 @@ import {usePiniaStore} from "../../stores/pinia.js";
 
 export default {
     name: "EditModeTemplateSettings",
-    inject: ["editModeContext"],
+    inject: {
+        editModeContext: {
+            default: false
+        }
+    },
     data() {
         return {
             openBoxStatus: false,

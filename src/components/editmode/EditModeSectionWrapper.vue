@@ -49,8 +49,14 @@ import {usePiniaStore} from "../../stores/pinia.js";
 export default {
     name: "EditModeSectionWrapper",
     inject: {
-        editModeContext: {},
-        addSectionClicked: false
+        editModeContext: {
+            default: null
+        }
+    },
+    data() {
+        return {
+            addSectionClicked: false
+        }
     },
     components: {
         CmdFormElement,

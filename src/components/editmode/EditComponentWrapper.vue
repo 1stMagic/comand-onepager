@@ -161,7 +161,9 @@ import {getCurrentInstance} from "vue"
 export default {
     name: "EditComponentWrapper",
     inject: {
-        editModeContext: {}
+        editModeContext: {
+            default: false
+        }
     },
     props: {
         allowedComponentTypes: {

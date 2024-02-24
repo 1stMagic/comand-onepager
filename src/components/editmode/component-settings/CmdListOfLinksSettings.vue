@@ -59,7 +59,11 @@
 <script>
 export default {
     name: "CmdListOfLinksSettings",
-    inject: ["editModeContext"],
+    inject: {
+        editModeContext: {
+            default: false
+        }
+    },
     inheritAttrs: false,
     data() {
         return {

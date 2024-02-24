@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
-    "comand-component-library": "^3.3.83",
+    "comand-component-library": "^3.3.87",
     "comand-frontend-framework": "^3.4.33",
     "mitt": "^3.0.0",
     "pinia": "^2.0.17",

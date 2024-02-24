@@ -75,9 +75,11 @@ import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia.js"
 
 export default {
-    name: "CmdContent",
+    name: "Content",
     inject: {
-        editModeContext: {}
+        editModeContext: {
+            default: false
+        }
     },
     components: {EditComponentWrapper},
     data() {

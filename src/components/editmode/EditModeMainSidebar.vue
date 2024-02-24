@@ -46,7 +46,11 @@ import {usePiniaStore} from "../../stores/pinia.js"
 
 export default {
     name: "EditModeMainSidebar",
-    inject: ["editModeContext"],
+    inject: {
+        editModeContext: {
+            default: false
+        }
+    },
     data() {
         return {
             openSidebarStatus: true,

@@ -1,7 +1,7 @@
 <template>
     <CmdWidthLimitationWrapper :id="'section-wrapper-' + id">
         <a :id="'anchor-' + id"></a>
-        <CmdContent
+        <Content
             :allowAddComponent="allowAddComponent"
             :sectionId="id"
             :components="components"

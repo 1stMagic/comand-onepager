@@ -185,7 +185,11 @@ import {createHtmlId, createUuid} from "comand-component-library";
 
 export default {
     name: "EditModeSettingsSidebar",
-    inject: ["editModeContext"],
+    inject: {
+        editModeContext: {
+            default: false
+        }
+    },
     data() {
         return {
             showComponentsAsIcons: false,

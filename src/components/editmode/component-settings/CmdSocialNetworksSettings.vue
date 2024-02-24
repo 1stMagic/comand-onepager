@@ -68,7 +68,11 @@
 <script>
 export default {
     name: "CmdSocialNetworksSettings",
-    inject: ["editModeContext"],
+    inject: {
+        editModeContext: {
+            default: false
+        }
+    },
     inheritAttrs: false,
     data() {
         return {

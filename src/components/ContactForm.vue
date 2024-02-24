@@ -2,12 +2,13 @@
     <div class="contact-form">
         <!-- begin CmdHeadline -->
         <CmdHeadline
-                v-if="cmdHeadline?.headlineText || editModeContext?.editing"
-                v-bind="cmdHeadline || {}"
+            v-if="cmdHeadline?.headlineText || editModeContext?.editing"
+            v-bind="cmdHeadline || {}"
         />
         <!-- end CmdHeadline -->
 
-        <CmdForm :action="formAction" @submit="onSubmit" novalidate="novalidate" :textLegend="label('contact_form.legend')">
+        <CmdForm :action="formAction" @submit="onSubmit" novalidate="novalidate"
+                 :textLegend="label('contact_form.legend')">
             <div class="flex-container no-flex">
                 <!-- begin cmd-form-element -->
                 <CmdFormElement
@@ -46,8 +47,8 @@
                     :placeholder="label('contact_form.last_name')"
                     v-model="formData.surname.value"
                     :status="formData.surname.error ? 'error' : ''"
-                    @validate="onValidate
-                    "/>
+                    @validate="onValidate"
+                />
                 <!-- end cmd-form-element -->
 
                 <!-- begin cmd-form-element -->

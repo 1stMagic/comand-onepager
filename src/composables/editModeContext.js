@@ -10,7 +10,22 @@ export function useEditModeContext() {
         state,
         content: contentActions(store, state),
         settings: settingsActions(state),
-        system: systemActions(state)
+        system: systemActions(state),
+        store: storeActions(store)
+    }
+}
+
+function storeActions(store) {
+    return {
+        updateContent(componentPath, updateHandler) {
+            store.updateContent(componentPath, updateHandler)
+        },
+        updateSettings(componentPath, updateHandler) {
+            store.updateSettings(componentPath, updateHandler)
+        },
+        deleteContent(componentPath) {
+            store.deleteContent(componentPath)
+        }
     }
 }
 

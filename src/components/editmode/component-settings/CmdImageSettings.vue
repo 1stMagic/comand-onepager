@@ -114,7 +114,11 @@ import {getFileExtension} from "comand-component-library"
 
 export default {
     name: "CmdImageSettings",
-    inject: ["editModeContext"],
+    inject: {
+        editModeContext: {
+            default: false
+        }
+    },
     inheritAttrs: false,
     data() {
         return {

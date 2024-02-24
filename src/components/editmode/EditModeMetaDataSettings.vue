@@ -51,7 +51,11 @@
 <script>
 export default {
     name: "EditModeMetaDataSettings",
-    inject: ["editModeContext"],
+    inject: {
+        editModeContext: {
+            default: false
+        }
+    },
     data() {
         return {
             openBoxStatus: false,

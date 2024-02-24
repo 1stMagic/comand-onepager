@@ -33,7 +33,11 @@
 <script>
 export default {
     name: "CmdImageGallerySettings",
-    inject: ["editModeContext"],
+    inject: {
+        editModeContext: {
+            default: false
+        }
+    },
     inheritAttrs: false,
     data() {
         return {
