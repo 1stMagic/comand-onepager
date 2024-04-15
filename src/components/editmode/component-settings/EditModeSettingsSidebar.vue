@@ -1,177 +1,170 @@
 <template>
     <aside class="edit-mode-settings-sidebar flex-container vertical box">
         <template v-if="editModeContext.settings.getAction() === 'edit'">
-        <div>
-            <div class="component-settings-wrapper flex-container vertical no-list-item">
-                <template v-if="isComponent && !isSection">
-                    <h3 class="has-icon">
-                        <span class="icon-hexagon use-icon-as-background">
-                            <span class="icon-cogs"></span>
-                        </span>
-                        <span>Component Settings</span>
-                    </h3>
+            <div>
+                <div v-if="isComponent || !isSection" class="component-settings-top-wrapper flex-container vertical no-list-item">
+                    <template v-if="isComponent && !isSection">
+                        <h3 class="has-icon">
+                            <span class="icon-hexagon use-icon-as-background">
+                                <span class="icon-cogs"></span>
+                            </span>
+                            <span>Component Settings</span>
+                        </h3>
 
-                    <!-- begin selection of allowed components to switch component type -->
-                    <!-- begin components-view-selection -->
+                        <!-- begin selection of allowed components to switch component type -->
+                        <!-- begin components-view-selection -->
+                        <ul class="components-view-selection no-list-items">
+                            <li>
+                                <a href="#"
+                                   @click.prevent="showComponentsAsIcons = !showComponentsAsIcons"
+                                   :title="showComponentsAsIcons ? 'Switch to dropdown-view for components' : 'Switch to icon-view for components'"
+                                >
+                                    <CmdIcon :iconClass="showComponentsAsIcons ? 'icon-list' : 'icon-blocks-small'" />
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- end components-view-selection -->
+
+                        <!-- begin select components from icons -->
+                        <ul v-if="showComponentsAsIcons" class="components-icon-view">
+                            <li v-for="(component, index) in listOfValidComponents" :key="index">
+                                <a href="#"
+                                   @click.prevent="switchComponent"
+                                   :class="{ 'active': currentComponentName === component.value}"
+                                   title="Select this component">
+                                <span class="icon-hexagon">
+                                    <CmdIcon :iconClass="component.iconClass"/>
+                                </span>
+                                    <span>{{ component.text }}</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- end select components from icons -->
+
+                        <!-- begin select components from dropdown -->
+                        <CmdFakeSelect
+                            v-else
+                            labelText="Component"
+                            :required="true"
+                            :selectData="listOfValidComponents"
+                            defaultOptionName="Select component:"
+                            v-model="currentComponentName"
+                            @update:modelValue="switchComponent"
+                        />
+                        <!-- end select components from dropdown -->
+                        <!-- end selection of allowed components to switch component type -->
+                    </template>
+                    <h3 v-else-if="!isSection" class="has-icon">
+                        <span class="icon-circle use-icon-as-background">
+                            <span class="icon-cog"></span>
+                        </span>
+                        <span>Item Settings</span>
+                    </h3>
+                </div>
+
+                <!-- begin list of components -->
+                <template v-if="componentProps">
+                    <div class="list-of-components flex-container vertical">
+                        <component ref="settings" :is="settingsComponentName" v-bind="componentProps"/>
+                    </div>
+                </template>
+                <!-- end list of components -->
+            </div>
+            <div class="button-wrapper action-buttons-wrapper">
+                <button class="button confirm" @click="saveSettings" aria-label="Save settings">
+                    <span class="icon-check-circle"></span>
+                    <span>Save</span>
+                </button>
+                <button class="button cancel" @click="cancelSettings" aria-label="Cancel settings">
+                    <span class="icon-cancel-circle"></span>
+                    <span>Cancel</span>
+                </button>
+            </div>
+        </template>
+        <!-- end edit -->
+
+        <!-- begin add -->
+        <template v-if="editModeContext.settings.getAction() === 'add'">
+            <div class="flex-container vertical component-settings-wrapper add-component-tab">
+                <h3 class="has-icon">
+                   <span :class="[isSection && componentProps.addComponent !== true ? 'icon-square' : 'icon-hexagon', 'use-icon-as-background']">
+                        <span class="icon-plus"></span>
+                    </span>
+                    <span>{{isSection && componentProps.addComponent !== true ? 'Add new section' : 'Add new component'}}</span>
+                </h3>
+
+                <!-- begin positioning -->
+                <template v-if="!isSection || componentProps.addComponent !== true">
+                    <h4>Positioning</h4>
+                    <!-- begin selection of available positions for added component -->
+                    <CmdFakeSelect
+                        :labelText="isSection ? 'Select inserted section position' : 'Select inserted component position'"
+                        :required="true"
+                        :selectData="availablePositions"
+                        defaultOptionName="Select component:"
+                        v-model="addedPosition"
+                    />
+                    <!-- end selection of available positions for added component -->
+                    <hr/>
+                </template>
+                <!-- end positioning -->
+
+                <!-- begin selection of allowed components to add additional component -->
+                <div class="flex-container current-component-wrapper">
+                    <h4 class="no-flex">{{ isSection ? 'Component for section' : 'Component to add' }}</h4>
+
                     <ul class="components-view-selection no-list-items">
                         <li>
                             <a href="#"
                                @click.prevent="showComponentsAsIcons = !showComponentsAsIcons"
                                :title="showComponentsAsIcons ? 'Switch to dropdown-view for components' : 'Switch to icon-view for components'"
                             >
-                                <CmdIcon
-                                    :iconClass="showComponentsAsIcons ? 'icon-list' : 'icon-blocks-small'"
-                                />
+                                <CmdIcon :iconClass="showComponentsAsIcons ? 'icon-list' : 'icon-blocks-small'"/>
                             </a>
                         </li>
                     </ul>
-                    <!-- end components-view-selection -->
-
-                    <!-- begin select components from icons -->
-                    <ul v-if="showComponentsAsIcons" class="components-icon-view">
-                        <li v-for="(component, index) in listOfValidComponents" :key="index">
-                            <a href="#"
-                               @click.prevent="switchComponent"
-                               :class="{ 'active': currentComponentName === component.value}"
-                               title="Select this component">
-                                <span class="icon-hexagon">
-                                    <CmdIcon :iconClass="component.iconClass"/>
-                                </span>
-                                <span>{{ component.text }}</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- end select components from icons -->
-
-                    <!-- begin select components from dropdown -->
-                    <CmdFakeSelect
-                        v-else
-                        labelText="Component"
-                        :required="true"
-                        :selectData="listOfValidComponents"
-                        defaultOptionName="Select component:"
-                        v-model="currentComponentName"
-                        @update:modelValue="switchComponent"
-                    />
-                    <!-- end select components from dropdown -->
-                    <hr/>
-                    <!-- end selection of allowed components to switch component type -->
-                </template>
-                <h3 v-else-if="!isSection" class="has-icon">
-                    <span class="icon-circle use-icon-as-background">
-                        <span class="icon-cog"></span>
-                    </span>
-                    <span>Item Settings</span>
-                </h3>
-            </div>
-
-            <!-- begin list of components -->
-            <template v-if="componentProps">
-                <div class="list-of-components flex-container vertical">
-                    <component ref="settings" :is="settingsComponentName" v-bind="componentProps"/>
+                    <!-- end selection of allowed components to add additional component -->
                 </div>
-            </template>
-            <!-- end list of components -->
-        </div>
-        <div class="button-wrapper action-buttons-wrapper">
-            <button class="button confirm" @click="saveSettings" aria-label="Save settings">
-                <span class="icon-check-circle"></span>
-                <span>Save</span>
-            </button>
-            <button class="button cancel" @click="cancelSettings" aria-label="Cancel settings">
-                <span class="icon-cancel-circle"></span>
-                <span>Cancel</span>
-            </button>
-        </div>
-        </template>
-        <!-- end edit -->
 
-        <!-- begin add -->
-        <template v-if="editModeContext.settings.getAction() === 'add'">
-        <div class="flex-container vertical component-settings-wrapper add-component-tab">
-            <h3 class="has-icon">
-                           <span
-                               :class="[isSection && componentProps.addComponent !== true ? 'icon-square' : 'icon-hexagon', 'use-icon-as-background']">
-                                <span class="icon-plus"></span>
-                            </span>
-                <span>{{
-                        isSection && componentProps.addComponent !== true ? 'Add new section' : 'Add new component'
-                    }}</span>
-            </h3>
-
-            <!-- begin positioning -->
-            <template v-if="!isSection || componentProps.addComponent !== true">
-                <h4>Positioning</h4>
-                <!-- begin selection of available positions for added component -->
-                <CmdFakeSelect
-                    :labelText="isSection ? 'Select inserted section position' : 'Select inserted component position'"
-                    :required="true"
-                    :selectData="availablePositions"
-                    defaultOptionName="Select component:"
-                    v-model="addedPosition"
-                />
-                <!-- end selection of available positions for added component -->
-                <hr/>
-            </template>
-            <!-- end positioning -->
-
-            <!-- begin selection of allowed components to add additional component -->
-            <div class="flex-container current-component-wrapper">
-                <h4 class="no-flex">{{ isSection ? 'Component for section' : 'Component to add' }}</h4>
-
-                <ul class="components-view-selection no-list-items">
-                    <li>
+                <!-- begin select components from icons -->
+                <ul v-if="showComponentsAsIcons" class="components-icon-view">
+                    <li v-for="(component, index) in listOfValidComponents" :key="index">
                         <a href="#"
-                           @click.prevent="showComponentsAsIcons = !showComponentsAsIcons"
-                           :title="showComponentsAsIcons ? 'Switch to dropdown-view for components' : 'Switch to icon-view for components'"
-                        >
-                            <CmdIcon :iconClass="showComponentsAsIcons ? 'icon-list' : 'icon-blocks-small'"/>
+                           @click.prevent="selectComponentToAdd(component.value)"
+                           :class="{ 'active': addedComponentName === component.value}"
+                           title="Select this component">
+                            <span class="icon-hexagon">
+                                <CmdIcon :iconClass="component.iconClass"/>
+                            </span>
+                            <span>{{ component.text }}</span>
                         </a>
                     </li>
                 </ul>
-                <!-- end selection of allowed components to add additional component -->
+                <!-- end select components from icons -->
+
+                <!-- begin select components from dropdown -->
+                <CmdFakeSelect
+                    v-else
+                    :labelText="isSection ? 'Select component to insert in section' : 'Select component to add'"
+                    :required="true"
+                    :selectData="listOfValidComponents"
+                    defaultOptionName="Select component:"
+                    v-model="addedComponentName"
+                />
+                <!-- end select components from dropdown -->
             </div>
+            <!-- end selection of allowed components to add additional component -->
 
-            <!-- begin select components from icons -->
-            <ul v-if="showComponentsAsIcons" class="components-icon-view">
-                <li v-for="(component, index) in listOfValidComponents" :key="index">
-                    <a href="#"
-                       @click.prevent="selectComponentToAdd(component.value)"
-                       :class="{ 'active': addedComponentName === component.value}"
-                       title="Select this component">
-                                    <span class="icon-hexagon">
-                                        <CmdIcon :iconClass="component.iconClass"/>
-                                    </span>
-                        <span>{{ component.text }}</span>
-                    </a>
-                </li>
-            </ul>
-            <!-- end select components from icons -->
-
-            <!-- begin select components from dropdown -->
-            <CmdFakeSelect
-                v-else
-                :labelText="isSection ? 'Select component to insert in section' : 'Select component to add'"
-                :required="true"
-                :selectData="listOfValidComponents"
-                defaultOptionName="Select component:"
-                v-model="addedComponentName"
-            />
-            <!-- end select components from dropdown -->
-        </div>
-        <!-- end selection of allowed components to add additional component -->
-
-        <div class="button-wrapper stretch-buttons action-buttons-wrapper">
-            <button class="button confirm" @click="addComponent" aria-label="Add selected component">
-                <span class="icon-check-circle"></span>
-                <span>Add</span>
-            </button>
-            <button class="button cancel" @click="cancelAddComponent"
-                    aria-label="Cancel adding selected component">
-                <span class="icon-cancel-circle"></span>
-                <span>Cancel</span>
-            </button>
-        </div>
+            <div class="button-wrapper stretch-buttons action-buttons-wrapper">
+                <button class="button confirm" @click="addComponent" aria-label="Add selected component">
+                    <span class="icon-check-circle"></span>
+                    <span>Add</span>
+                </button>
+                <button class="button cancel" @click="cancelAddComponent" aria-label="Cancel adding selected component">
+                    <span class="icon-cancel-circle"></span>
+                    <span>Cancel</span>
+                </button>
+            </div>
         </template>
     </aside>
 </template>
@@ -421,6 +414,14 @@ export default {
     z-index: 1001;
     height: 100vh;
 
+    .component-settings-top-wrapper {
+        padding: var(--default-padding);
+
+        .cmd-fake-select {
+            width: 100%;
+        }
+    }
+
     h3 {
         justify-content: center;
 
@@ -464,7 +465,7 @@ export default {
     }
 
     .list-of-components {
-        gap: 0;
+        padding: var(--default-padding);
     }
 
     .components-view-selection {

@@ -1,5 +1,5 @@
 <template>
-    <CmdWidthLimitationWrapper :id="'section-wrapper-' + id">
+    <CmdWidthLimitationWrapper :innerClass="htmlClass" :id="'section-wrapper-' + id">
         <a :id="'anchor-' + id"></a>
         <Content
             :allowAddComponent="allowAddComponent"
@@ -28,6 +28,10 @@ export default {
     ],
     props: {
         id: {
+            type: String,
+            required: false
+        },
+        htmlClass: {
             type: String,
             required: false
         },

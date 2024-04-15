@@ -23,9 +23,8 @@ html {
 }
 
 body {
-	overflow: hidden; /* avoids-scrolling on body to enable scrolling (incl- scroll-padding on #page-wrapper) */
-
 	&.avoid-scrolling {
+		overflow: hidden;
 		height: 100%;
 	}
 }
@@ -162,7 +161,6 @@ main {
 	.section-wrapper.active .cmd-width-limitation-wrapper, .edit-component-wrapper.active {
 		--odd-lines-color: hsl(var(--hyperlink-color-hue), var(--hyperlink-color-saturation), 30%);
 		background-image: repeating-linear-gradient(-45deg,var(--odd-lines-color),var(--odd-lines-color) .7rem, var(--hyperlink-color) .7rem,var(--hyperlink-color) 1.4rem) !important;
-		//background: var(--primary-color) !important;
 
 		* {
 			color: var(--pure-white);

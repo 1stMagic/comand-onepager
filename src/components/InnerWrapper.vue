@@ -1,6 +1,6 @@
 <template>
     <!-- begin main-content -->
-    <main>
+    <main id="content">
         <!-- begin edit-mode for content-sections -->
         <template v-if="editMode">
             <EditModeSectionWrapper
@@ -15,6 +15,7 @@
                     <ContentSection
                         :components="section.components"
                         :id="section.id"
+                        :htmlClass="section.class"
                         :allowAddComponent="section.allowAddComponent"
                         :headlineText="section.headlineText"
                     />

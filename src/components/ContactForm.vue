@@ -7,8 +7,12 @@
         />
         <!-- end CmdHeadline -->
 
-        <CmdForm :action="formAction" @submit="onSubmit" novalidate="novalidate"
-                 :textLegend="label('contact_form.legend')">
+        <CmdForm :action="formAction"
+                 @submit="onSubmit"
+                 novalidate="novalidate"
+                 :textLegend="label('contact_form.legend')"
+                 :submitButton="submitButton"
+        >
             <div class="flex-container no-flex">
                 <!-- begin cmd-form-element -->
                 <CmdFormElement
@@ -93,16 +97,6 @@
                 </template>
             </CmdFormElement>
             <!-- end cmd-form-element -->
-
-            <div class="button-wrapper">
-                <!-- begin cmd-form-element -->
-                <CmdFormElement
-                    element="button"
-                    type="submit"
-                    :nativeButton="nativeButtonTranslated"
-                />
-                <!-- end cmd-form-element -->
-            </div>
         </CmdForm>
     </div>
 </template>
@@ -168,6 +162,15 @@ export default {
         cmdHeadline: {
             type: Object,
             required: false
+        },
+        submitButton: {
+            type: Object,
+            default() {
+                return {
+                    iconClass: "icon-home",
+                    text: "nase"
+                }
+            }
         }
     },
     mounted() {
@@ -179,14 +182,6 @@ export default {
                 })
             })
         })
-    },
-    computed: {
-        nativeButtonTranslated() {
-            return {
-                icon: this.nativeButton.icon,
-                text: this.label("contact_form.send_message")
-            }
-        }
     },
     methods: {
         onSubmit(event) {

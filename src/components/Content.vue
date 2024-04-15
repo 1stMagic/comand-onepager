@@ -12,11 +12,7 @@
                     :componentName="component.name"
                     :componentProps="component.props"
                     :componentPath="componentPath(componentIndex)">
-                    <component
-                        :is="component.name"
-                        v-bind="component.props"
-                        :componentPath="['props']"
-                    >
+                    <component :is="component.name" v-bind="component.props" :componentPath="['props']">
                         <!-- begin child/nested component -->
                         <EditComponentWrapper
                             v-for="(childComponent, childComponentIndex) in component.components || []"
@@ -26,10 +22,7 @@
                             :componentProps="childComponent.props"
                             :componentPath="childComponentPath(childComponentIndex)"
                         >
-                            <component
-                                :is="childComponent.name"
-                                v-bind="childComponent.props"
-                            />
+                            <component :is="childComponent.name" v-bind="childComponent.props"/>
                         </EditComponentWrapper>
                         <!-- end child/nested component -->
                     </component>

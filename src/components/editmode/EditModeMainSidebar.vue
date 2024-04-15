@@ -138,7 +138,7 @@ export default {
         border-right: var(--default-border);
 
         select {
-            color: var(--text-color);
+            color: var(--color-scheme-text-color);
         }
 
         &.open {
@@ -156,6 +156,10 @@ export default {
 
     .cmd-sidebar {
         display: flex;
+
+        .box-header h4 {
+            text-transform: none;
+        }
 
         .inner-sidebar-wrapper {
             display: flex;

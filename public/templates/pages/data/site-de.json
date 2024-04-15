@@ -27,6 +27,7 @@
     "sections": [
       {
         "id": "slideshow",
+        "class": "no-padding",
         "useFullDeviceWidth": true,
         "iconClass": "icon-image",
         "showLinkInMainNavigation": false,
@@ -440,7 +441,11 @@
                 "headlineLevel": "2"
               },
               "email": "#",
-              "formAction": "#"
+              "formAction": "#",
+              "submitButton": {
+                "iconClass": "icon-message-send",
+                "text": "Send mail"
+              }
             }
           }
         ]

@@ -2,7 +2,7 @@
     <CmdBox :use-slots="['body']"
             :collapsible="true"
             class="edit-mode-sections-settings"
-            :cmdHeadline="{headlineText: 'Content Settings', headlineLevel: 4, headlineIcon: {iconClass: 'icon-page'}}"
+            :cmdHeadline="{headlineText: 'Content Settings', headlineLevel: 4, headlineIcon: {iconClass: 'icon-file-settings'}}"
             :openCollapsedBox="openBoxStatus">
         <template v-slot:body>
             <ul class="list-of-sections">
