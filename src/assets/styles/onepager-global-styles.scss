@@ -34,7 +34,7 @@ body, #page-wrapper {
 }
 
 #page-wrapper main {
-	flex: 1;
+	flex-grow: 1;
 
 	.edit-mode.section-wrapper:only-of-type {
 		height: 100%;

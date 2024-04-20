@@ -23,6 +23,14 @@
                     <span>Cancel</span>
                 </button>
             </div>
+            <dl class="comand-versions">
+                <dt>Frontend-Framework Version:</dt>
+                <dd>{{ packageJson.dependencies['comand-frontend-framework'].replace("^", "") }}</dd>
+                <dt>Component-Library Version:</dt>
+                <dd>{{ packageJson.dependencies['comand-component-library'].replace("^", "") }}</dd>
+                <dt>OnePager Version:</dt>
+                <dd>{{ packageJson.version }}</dd>
+            </dl>
         </template>
         <template v-slot:closed>
             <div class="closed-sidebar">
@@ -43,6 +51,7 @@
 <script>
 import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "../../stores/pinia.js"
+import packageJson from '../../../package.json'
 
 export default {
     name: "EditModeMainSidebar",
@@ -53,6 +62,7 @@ export default {
     },
     data() {
         return {
+            packageJson,
             openSidebarStatus: true,
             showMainSidebar: true,
             showSystemMessage: false,
@@ -122,7 +132,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 .edit-mode {
     #edit-mode-main-sidebar {
         position: fixed;
@@ -157,6 +167,10 @@ export default {
     .cmd-sidebar {
         display: flex;
 
+        h3 {
+            text-transform: none;
+        }
+
         .box-header h4 {
             text-transform: none;
         }
@@ -169,16 +183,21 @@ export default {
         .open-slot-wrapper {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
 
             .box:not(:first-of-type) {
                 border-top: var(--default-border) !important;
                 border-color: var(--pure-white) !important;
             }
         }
+
+        .comand-versions {
+            padding: var(--default-padding);
+            margin: 0;
+        }
     }
 
     .action-buttons-wrapper {
+        margin-top: auto;
         padding: var(--default-padding);
     }
 

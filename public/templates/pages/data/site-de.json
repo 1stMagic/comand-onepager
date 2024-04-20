@@ -690,13 +690,13 @@
           },
           "addressData": [
             {
-              "type": "company",
+              "name": "company",
               "iconClass": "icon-company",
               "data": "Your company name",
               "labelText": "Company"
             },
             {
-              "type": "address",
+              "name": "address",
               "iconClass": "icon-home",
               "labelText": "Address",
               "streetNo": "Your Street/No",
@@ -705,12 +705,12 @@
               "miscInfo": "Misc. info",
               "country": "Your country",
               "longitude": "0.0",
-              "latitude": "0.0",
+              "latitude": "0.0,",
               "location": "",
               "linkGoogleMaps": false
             },
             {
-              "type": "phone",
+              "name": "phone",
               "iconClass": "icon-phone",
               "data": "Your phone number",
               "labelText": "Telephone",
@@ -718,7 +718,7 @@
               "href": "0123456789"
             },
             {
-              "type": "phone",
+              "name": "phone",
               "iconClass": "icon-device-smartphone",
               "data": "Your mobile phone number",
               "labelText": "Mobile phone",
@@ -726,13 +726,13 @@
               "href": "0123456789"
             },
             {
-              "type": "fax",
+              "name": "fax",
               "iconClass": "icon-fax",
               "data": "Your fax number",
               "labelText": "Fax"
             },
             {
-              "type": "email",
+              "name": "email",
               "iconClass": "icon-mail",
               "data": "Your email address",
               "labelText": "Email",
@@ -740,7 +740,7 @@
               "href": "mail@provider.de"
             },
             {
-              "type": "url",
+              "name": "url",
               "iconClass": "icon-globe",
               "data": "Your web site",
               "labelText": "Web site",
@@ -748,7 +748,7 @@
               "href": "https://www.domain.toplevel"
             },
             {
-              "type": "custom",
+              "name": "custom",
               "iconClass": "icon-questionmark-circle",
               "data": "Custom data",
               "labelText": "Custom"
