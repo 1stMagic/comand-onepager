@@ -8,9 +8,10 @@
 
             <!-- begin cmd-site-header -->
             <CmdSiteHeader
-                :cmd-main-navigation="{navigationEntries: mainNavigation}"
+                v-if="showSiteHeader"
+                :cmd-main-navigation="{navigationEntries: mainNavigationEntries}"
                 :closeOffcanvas="{ iconClass: 'icon-cancel', text: label('main_navigation.close_navigation'), showText: true}"
-                :navigationInline="site.siteHeader?.navigationInline"
+                :navigationInline="siteHeader.navigationInline"
                 @offcanvas="offcanvasToggled"
             >
                 <template v-slot:top-header>
@@ -43,68 +44,70 @@
             <EditModeSettingsSidebar v-if="editMode && context?.settings.show()"/>
 
             <!-- begin cmd-site-footer -->
-            <template v-if="editMode">
-                <!-- begin edit-section-wrapper -->
-                <EditModeSectionWrapper :sectionPath="[]">
-                    <CmdSiteFooter>
-                        <!-- begin parent-component -->
-                        <EditComponentWrapper
-                            v-for="(component, componentIndex) in site.siteFooter?.components || []"
-                            :key="componentIndex"
-                            :allow-add-component="component.allowAddComponent"
-                            :componentName="component.name"
-                            :componentProps="component.props"
-                            :componentPath="componentPath(componentIndex)">
-                            <component
-                                :is="component.name"
-                                v-bind="component.props"
-                                v-on="handlers(component)"
-                            >
-                                <!-- begin child-component -->
-                                <EditComponentWrapper
-                                    v-for="(childComponent, childComponentIndex) in component.components || []"
-                                    :key="childComponentIndex"
-                                    :is="childComponent.name"
-                                    :allow-add-component="childComponent.allowAddComponent"
-                                    :componentName="childComponent.name"
-                                    :componentProps="childComponent.props"
-                                    :componentPath="childComponentPath(childComponentIndex)"
+            <template v-if="showSiteFooter">
+                <template v-if="editMode">
+                    <!-- begin edit-section-wrapper -->
+                    <EditModeSectionWrapper :sectionPath="[]">
+                        <CmdSiteFooter>
+                            <!-- begin parent-component -->
+                            <EditComponentWrapper
+                                v-for="(component, componentIndex) in siteFooter.components || []"
+                                :key="componentIndex"
+                                :allow-add-component="component.allowAddComponent"
+                                :componentName="component.name"
+                                :componentProps="component.props"
+                                :componentPath="componentPath(componentIndex)">
+                                <component
+                                    :is="component.name"
+                                    v-bind="component.props"
+                                    v-on="handlers(component)"
                                 >
-                                    <component
+                                    <!-- begin child-component -->
+                                    <EditComponentWrapper
+                                        v-for="(childComponent, childComponentIndex) in component.components || []"
+                                        :key="childComponentIndex"
                                         :is="childComponent.name"
-                                        v-bind="childComponent.props"
-                                        v-on="handlers(childComponent)"
-                                    />
-                                </EditComponentWrapper>
-                                <!-- end child-component -->
-                            </component>
-                        </EditComponentWrapper>
-                        <!-- end parent-component -->
-                    </CmdSiteFooter>
-                </EditModeSectionWrapper>
-                <!-- end edit-section-wrapper -->
-            </template>
+                                        :allow-add-component="childComponent.allowAddComponent"
+                                        :componentName="childComponent.name"
+                                        :componentProps="childComponent.props"
+                                        :componentPath="childComponentPath(childComponentIndex)"
+                                    >
+                                        <component
+                                            :is="childComponent.name"
+                                            v-bind="childComponent.props"
+                                            v-on="handlers(childComponent)"
+                                        />
+                                    </EditComponentWrapper>
+                                    <!-- end child-component -->
+                                </component>
+                            </EditComponentWrapper>
+                            <!-- end parent-component -->
+                        </CmdSiteFooter>
+                    </EditModeSectionWrapper>
+                    <!-- end edit-section-wrapper -->
+                </template>
 
-            <CmdSiteFooter v-else>
-                <!-- begin parent-component -->
-                <component
-                    v-for="(component, index) in site.siteFooter?.components || []" :key="index"
-                    :is="component.name"
-                    v-bind="component.props"
-                    v-on="handlers(component)"
-                >
-                    <!-- begin child-component -->
+                <CmdSiteFooter v-else>
+                    <!-- begin parent-component -->
                     <component
-                        v-for="(childComponent, childComponentIndex) in component.components || []"
-                        :key="childComponentIndex" :is="childComponent.name"
-                        v-bind="childComponent.props"
-                        v-on="handlers(childComponent)"
-                        :editContent="childComponent.editContent"
-                    />
-                    <!-- end child-component -->
-                </component>
-                <!-- end parent-component -->
-            </CmdSiteFooter>
+                        v-for="(component, index) in siteFooter.components || []" :key="index"
+                        :is="component.name"
+                        v-bind="component.props"
+                        v-on="handlers(component)"
+                    >
+                        <!-- begin child-component -->
+                        <component
+                            v-for="(childComponent, childComponentIndex) in component.components || []"
+                            :key="childComponentIndex" :is="childComponent.name"
+                            v-bind="childComponent.props"
+                            v-on="handlers(childComponent)"
+                            :editContent="childComponent.editContent"
+                        />
+                        <!-- end child-component -->
+                    </component>
+                    <!-- end parent-component -->
+                </CmdSiteFooter>
+            </template>
             <!-- end cmd-site-footer -->
 
             <!-- begin cmd-copyright-information DO NOT REMOVE -->
@@ -159,6 +162,7 @@ import {createUuid, openFancyBox} from 'comand-component-library'
 // import functions
 import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia"
+import {useCmsStore} from "../stores/cms"
 
 // import mixins
 import BaseI18nComponent from "../components/mixins/BaseI18nComponent"
@@ -215,12 +219,13 @@ export default {
     mounted() {
         const siteHeader = document.getElementsByClassName("cmd-site-header")
 
-        const resizeObserver = new ResizeObserver(entries => {
-            // get height of seit header to set scroll-padding on #page-wrapper
-            this.heightSiteHeader = entries[0].target.offsetHeight
-        })
-
-        resizeObserver.observe(siteHeader[0])
+        if (siteHeader.length > 0) {
+            const resizeObserver = new ResizeObserver(entries => {
+                // get height of seit header to set scroll-padding on #page-wrapper
+                this.heightSiteHeader = entries[0].target.offsetHeight
+            })
+            resizeObserver.observe(siteHeader[0])
+        }
     },
     beforeUnmount() {
         removeEventListener("hashchange", this.onLocationHashChanged)
@@ -232,7 +237,8 @@ export default {
         templateId() {
             return "template-" + (this.selectedTemplate || "blank")
         },
-        ...mapState(usePiniaStore, ["currentLanguage", "site", "editMode", "componentEditMode", "showEditModeComponentSettings", "companyLogo", "metaData", "sections"]),
+        ...mapState(usePiniaStore, ["currentLanguage", "site", "editMode", "componentEditMode", "showEditModeComponentSettings", "sections"]),
+        ...mapState(useCmsStore, ["mainNavigationEntries", "showSiteHeader", "showSiteFooter", "siteHeader", "siteFooter", "companyLogo", "metaData"]),
 
         mainNavigation() {
             const navigationEntries = []
@@ -338,6 +344,9 @@ export default {
     watch: {
         metaData: {
             handler() {
+                const metaNames = ["description","rating","robots","author"]
+                document.head.querySelectorAll(metaNames.map(name => `meta[name="${name}"]`).join(","))
+                    .forEach(element => element.remove())
                 if (this.metaData) {
                     for (const name in this.metaData) {
                         if (name === "title") {

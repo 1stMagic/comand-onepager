@@ -1,0 +1,22 @@
+{
+  "languages": ["de"],
+  "defaultMetadata": {
+    "rating": "",
+    "robots": "index/follow",
+    "author": ""
+  },
+  "siteStructure": ["siteHeader", "siteFooter"],
+  "pages": [
+    {
+      "id": "homepage",
+      "iconClass": "icon-home",
+      "navEntry": "Home",
+      "navigation": ["main"]
+    },
+    {
+      "id": "about",
+      "navEntry": "About",
+      "navigation": ["main"]
+    }
+  ]
+}

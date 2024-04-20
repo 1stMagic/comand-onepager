@@ -48,6 +48,7 @@ import BaseI18nComponent from "./mixins/BaseI18nComponent"
 
 import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia"
+import {useCmsStore} from "../stores/cms"
 import {createUuid} from "comand-component-library";
 
 export default {
@@ -55,7 +56,8 @@ export default {
         BaseI18nComponent
     ],
     computed: {
-        ...mapState(usePiniaStore, ["site", "currentLanguage", "editMode", "mainHeadline", "slideshow", "sections"]),
+        ...mapState(usePiniaStore, ["site", "currentLanguage", "editMode", "mainHeadline", "slideshow"]),
+        ...mapState(useCmsStore, ["sections"]),
 
         cmdSlideButtons() {
             return {

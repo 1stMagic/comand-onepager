@@ -31,11 +31,8 @@ import 'comand-component-library/src/assets/styles/template.css'
 import './assets/styles/onepager-global-styles.scss'
 /* end imports from comand-onepager ---------------------------------------------------------------------------------------- */
 
-import {bootstrap} from "./index.js";
+import {bootstrapAndMount} from "./index.js";
 
 const app = createApp(App)
 
-// can be removed for vue 3.4+
-app.config.unwrapInjectedRef = true
-
-bootstrap(app).mount('#app')
+bootstrapAndMount(app)

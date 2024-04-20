@@ -1,4 +1,6 @@
 import {createPinia} from "pinia"
+import {usePiniaStore} from "./stores/pinia.js"
+import {useCmsStore} from "./stores/cms.js"
 import router from "./router"
 import * as components from "comand-component-library"
 
@@ -27,10 +29,43 @@ import CmdContainerSettings from "./components/editmode/component-settings/CmdCo
 // import directives from comand-component-library
 import directiveTelephone from "comand-component-library/src/directives/telephone"
 import directiveFocus from "comand-component-library/src/directives/focus"
+import axios from "axios";
 
 export {default as CmdOnePager} from './components/CmdOnePager.vue'
 
-export function bootstrap(app) {
+function processPage(page, store) {
+    router.addRoute({
+        name: page.id,
+        path: "/:lang([a-z]{2})/" + page.id,
+        component: {}
+    })
+    store.addPage(page)
+}
+
+function processSite(site, store) {
+    store.setLanguages(site.languages || ["de"])
+    const pages = site.pages || [{id: "homepage"}]
+    router.addRoute({
+        path: "/",
+        redirect: {
+            name: pages[0].id,
+            params: {
+                lang: site.languages?.[0] || "de"
+            }
+        }
+    })
+    pages.forEach(page => processPage(page, store))
+    router.addRoute({
+        path: "/:pathMatch(.*)*",
+        redirect: "/"
+    })
+    store.setDefaultMetaData(site.defaultMetadata)
+    if (site.siteStructure?.length > 0) {
+        store.loadSiteStructure(site.siteStructure)
+    }
+}
+
+function bootstrap(app) {
     Object.entries({
         ContactForm,
         LoginArea,
@@ -56,9 +91,16 @@ export function bootstrap(app) {
         app.component(name, component)
     })
 
-    return app
+    app
         .use(createPinia())
-        .use(router)
         .directive('telephone', directiveTelephone)
         .directive('focus', directiveFocus)
+
+    const store = useCmsStore()
+
+    return axios(new URL("/site.json", location.href).href).then(response => processSite(response.data, store))
+}
+
+export function bootstrapAndMount(app) {
+    bootstrap(app).then(() => app.use(router).mount("#app"))
 }

@@ -90,7 +90,7 @@ export const usePiniaStore = defineStore("pinia", {
         languages: [],
         languageLabels: {},
         currentLanguage: 'de',
-        editMode: true,
+        editMode: false,
         mainHeadline: true,
         authToken: "",
         componentEditMode: false

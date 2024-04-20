@@ -1,13 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router"
-import {usePiniaStore} from "../stores/pinia"
+import {useCmsStore} from "../stores/cms"
 
-const routes = [
-    {
-        path: '/:lang([a-z]{2})?',
-        name: 'home',
-        component: {}
-    }
-]
+const routes = []
 
 const router = createRouter({
     history: createWebHistory(),
@@ -15,15 +9,13 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
-    const store = usePiniaStore()
+    const store = useCmsStore()
+    store.setCurrentPageName(to.name)
     if (to.params.lang) {
-        store.currentLanguage = to.params.lang
-        return
+        store.setCurrentLanguage(to.params.lang)
     }
-    if (!store.currentLanguage) {
-        store.currentLanguage = "de"
-    }
-    return {name: 'home', params:{lang: store.currentLanguage}}
+    store.loadPageContent(to.name)
+    return true
 })
 
 export default router
