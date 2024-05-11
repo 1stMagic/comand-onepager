@@ -14,7 +14,7 @@ import 'comand-component-library/src/assets/styles/logos-iconfont.css'
 import 'comand-component-library/src/assets/styles/editmode-iconfont.css'
 
 /* import css for global-styles */
-import 'comand-component-library/src/assets/styles/global-styles.scss'
+import 'comand-component-library/src/assets/styles/component-library-global-styles.scss'
 
 /* import css for global transitions */
 //import 'comand-component-library/src/assets/styles/transitions.scss'
@@ -27,8 +27,11 @@ import 'comand-component-library/src/assets/styles/template.css'
 /* end imports from comand-component-library ---------------------------------------------------------------------------------------- */
 
 /* end imports from comand-onepager ---------------------------------------------------------------------------------------- */
-/* import css for onepager */
+/* import global css */
 import './assets/styles/onepager-global-styles.scss'
+
+/* import css for editmode */
+import './assets/styles/editmode.css'
 /* end imports from comand-onepager ---------------------------------------------------------------------------------------- */
 
 import {bootstrapAndMount} from "./index.js";

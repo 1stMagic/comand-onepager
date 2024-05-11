@@ -1,7 +1,9 @@
 <template>
     <CmdBox :use-slots="['body']" :collapsible="true"
             :cmdHeadline="{headlineText: 'Meta Data Settings', headlineLevel: 4, headlineIcon: {iconClass: 'icon-html'}}"
-            :openCollapsedBox="openBoxStatus">
+            :openCollapsedBox="openBoxStatus"
+            @toggleCollapse="$emit('toggle-collapse', $event)"
+    >
         <template v-slot:body>
             <div class="flex-container vertical">
                 <h4>Meta Data</h4>
@@ -18,21 +20,19 @@
                     element="textarea"
                     labelText="Meta Description"
                     placeholder="Meta Description"
-                    v-model="metaDescription"
+                    v-model="description"
                     :required="true"
                     maxlength="160"
                 />
                 <CmdFormElement
                     element="select"
                     labelText="Rating"
-                    v-model="metaRating"
                     :selectOptions="ratingOptions"
                 />
                 <CmdFormElement
                     element="select"
                     labelText="Robots"
                     :required="true"
-                    v-model="metaRobots"
                     :selectOptions="robotsOptions"
                 />
                 <CmdFormElement
@@ -40,7 +40,6 @@
                     type="text"
                     labelText="Author"
                     placeholder="Author of this page"
-                    v-model="metaAuthor"
                     max-length="255"
                 />
             </div>
@@ -59,9 +58,6 @@ export default {
     data() {
         return {
             openBoxStatus: false,
-            title: "",
-            metaDescription: "",
-            metaRobots: "index",
             robotsOptions: [
                 {
                     text: "index/follow",
@@ -80,7 +76,6 @@ export default {
                     value: "noindex/nofollow"
                 }
             ],
-            metaRating: "",
             ratingOptions: [
                 {
                     text: "Please select...",
@@ -110,14 +105,64 @@ export default {
                     text: "safe for kids",
                     value: "safe-for-kids"
                 }
-            ],
-            metaAuthor: ""
+            ]
         }
     },
     props: {
-      openBox: {
+        modelValue: {
+            type: Object,
+            required: true
+        },
+        openBox: {
           type: Boolean,
           required: false
+      }
+    },
+    computed: {
+        title: {
+            get() {
+               return this.modelValue.title
+            },
+            set(value) {
+               this.updateModelValue({title: value})
+            }
+        },
+        description: {
+            get() {
+                return this.modelValue.description
+            },
+            set(value) {
+                this.updateModelValue({description: value})
+            }
+        },
+        rating: {
+            get() {
+                return this.modelValue.rating
+            },
+            set(value) {
+                this.updateModelValue({rating: value})
+            }
+        },
+        robots: {
+            get() {
+                return this.modelValue.robots
+            },
+            set(value) {
+                this.updateModelValue({robots: value})
+            }
+        },
+        author: {
+            get() {
+                return this.modelValue.author
+            },
+            set(value) {
+                this.updateModelValue({author: value})
+            }
+        }
+    },
+    methods: {
+      updateModelValue(value) {
+          this.$emit("update:modelValue", {...this.modelValue, ...value})
       }
     },
     watch: {
@@ -126,19 +171,6 @@ export default {
                 this.openBoxStatus = this.openBox
             },
             immediate: true
-        },
-        metaData: {
-            handler() {
-                if (this.metaData) {
-                    this.title = this.metaData.title || ""
-                    this.metaDescription = this.metaData.description || ""
-                    this.metaRating = this.metaData.rating || "general"
-                    this.metaRobots = this.metaData.robots || "index/follow"
-                    this.metaAuthor = this.metaData.author || ""
-                }
-            },
-            immediate: true,
-            deep: true
         }
     }
 }

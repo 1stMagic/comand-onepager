@@ -1,6 +1,21 @@
 import {defineStore} from "pinia"
 import axios from "axios"
 
+function findPageById(pages, id) {
+    for (let i = 0; i < pages.length; i++) {
+        if (pages[i].id === id) {
+            return pages[i]
+        }
+        if (pages[i].subEntries?.length > 0) {
+            const page = findPageById(pages[i].subEntries, id)
+            if (page) {
+                return page
+            }
+        }
+    }
+    return null
+}
+
 export const useCmsStore = defineStore("cms", {
     state: () => ({
         languages: [],
@@ -20,13 +35,17 @@ export const useCmsStore = defineStore("cms", {
             }
             return this.pageEntries
         },
-        sections(state) {
-            if (this.currentPage?.sections?.length > 0) {
-                return this.currentPage.sections
-                    .filter(section => section.show !== false)
-                    .toSorted((section1, section2) => section1.order - section2.order)
-            }
-            return []
+        /**
+         * return active/visible sections (of current page) only
+         */
+        activeSections() {
+            return this.sections.filter(section => section.show !== false)
+        },
+        /**
+         * return all existing sections (of current page)
+         */
+        sections() {
+            return this.currentPageContent?.sections?.toSorted((section1, section2) => section1.order - section2.order) || []
         },
         showSiteHeader(state) {
             return state.siteStructure.includes("siteHeader")
@@ -39,16 +58,19 @@ export const useCmsStore = defineStore("cms", {
         },
         metaData(state) {
             return {
-                title: state.pages.find(page => page.id === state.currentPageName)?.navEntry,
+                title: findPageById(state.pages, state.currentPageName)?.navEntry,
                 ...state.defaultMetaData,
-                ...(this.currentPage?.metadata || {})
+                ...(this.currentPageContent?.metadata || {})
             }
         },
         currentPage(state) {
-            return state.pageContent[state.currentPageName]
+            return findPageById(state.pages, state.currentPageName)
+        },
+        currentPageContent(state) {
+            return state.pageContent[state.currentLanguage]?.[state.currentPageName]
         },
         sectionEntries(state) {
-            return this.currentPage?.sections
+            return this.currentPageContent?.sections
                 ?.filter(section => section.showLinkInMainNavigation)
                 ?.map(section => ({
                     iconClass: section.iconClass,
@@ -59,19 +81,36 @@ export const useCmsStore = defineStore("cms", {
                 }))
         },
         pageEntries(state) {
-            return state.pages
-                .filter(page => page.navigation?.includes("main"))
-                .map(page => ({
-                    iconClass: page.iconClass,
-                    text: page.navEntry,
-                    route: {
-                        name: page.id,
-                        params: {
-                            lang: state.currentLanguage
-                        }
-                    },
-                    type: "router"
+            function filterbyNavigation(pages) {
+                return (pages || [])
+                    .filter(page => page.navigation?.includes("main"))
+                    .map(page => ({
+                        iconClass: page.iconClass,
+                        text: page.navEntry,
+                        ...navEntryType(page),
+                        subentries: filterbyNavigation(page.subEntries)
                 }))
+            }
+            function navEntryType(page) {
+                if(!page.externalLink) {
+                    return {
+                        route: {
+                            name: page.id,
+                                params: {
+                                lang: state.currentLanguage
+                            }
+                        },
+                        type: "router",
+                    }
+                }
+                return {
+                    path: page.path,
+                    type: "href",
+                    target: "_blank"
+                }
+            }
+
+            return filterbyNavigation(state.pages)
         }
     },
     actions: {
@@ -94,13 +133,14 @@ export const useCmsStore = defineStore("cms", {
             this.currentPageName = name
         },
         loadPageContent(name) {
-            if (this.pageContent[name]) {
+            if (this.pageContent[this.currentLanguage]?.[name]) {
                 return
             }
+            this.pageContent[this.currentLanguage] = {}
             const url = new URL(`/templates/pages-${this.currentLanguage}/${name}.json`, location.href);
             axios(url.href)
                 .then(response => response.data)
-                .then(pageContent => this.pageContent[name] = pageContent)
+                .then(pageContent => this.pageContent[this.currentLanguage][name] = pageContent)
         },
         loadSiteStructure(siteStructure) {
             this.siteStructure = siteStructure || []
@@ -111,6 +151,10 @@ export const useCmsStore = defineStore("cms", {
                     this.siteHeader = structure.siteHeader || {}
                     this.siteFooter = structure.siteFooter || {}
                 })
+        },
+        updateMetaData(metaData) {
+            // update meta data for current page
+            this.currentPageContent.metadata = {...metaData}
         }
     }
 })

@@ -121,7 +121,6 @@ export default {
             }
         },
         editSection() {
-            console.log("this.sectionProps", this.sectionProps)
             if (!this.editing) {
                 this.addSectionClicked = true
                 const componentPath = ["main", "sections", {id: this.sectionId}]

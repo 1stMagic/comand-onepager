@@ -1,7 +1,9 @@
 <template>
     <CmdBox :use-slots="['body']" :collapsible="true"
             :cmdHeadline="{headlineText: 'Template Settings', headlineLevel: 4, headlineIcon: {iconClass: 'icon-settings-template'}}"
-            :openCollapsedBox="openBoxStatus">
+            :openCollapsedBox="openBoxStatus"
+            @toggleCollapse="$emit('toggle-collapse', $event)"
+    >
         <template v-slot:body>
             <div v-if="editModeMessage" class="flex-container vertical">
                 <div>

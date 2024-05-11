@@ -63,7 +63,6 @@
 </template>
 
 <script>
-import EditComponentWrapper from "./editmode/EditComponentWrapper.vue"
 import {mapActions, mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia.js"
 
@@ -74,7 +73,6 @@ export default {
             default: false
         }
     },
-    components: {EditComponentWrapper},
     data() {
         return {
             savedHtmlHeadline: null,

@@ -9,9 +9,32 @@
         <template v-slot:open>
             <div class="accordions-wrapper">
                 <CmdSystemMessage v-if="showSystemMessage" validation-status="success" system-message="You changes have been saved successfully!" />
-                <EditModeTemplateSettings :openBox="openTemplateSettingsStatus" :editModeMessage="editModeMessage" @input="changeTemplate" />
-                <EditModeMetaDataSettings :openBox="openMetaSettingsStatus" />
-                <EditModeSectionsSettings :openBox="openSectionsSettingsStatus" />
+                <CmdBoxWrapper
+                    :boxesPerRow="[1]"
+                    :allowMultipleExpandedBoxes="false"
+                    :allowUserToToggleOrientation="false"
+                    :useRowViewAsDefault="true"
+                    :openBoxesByDefault="openBoxes"
+                    :useGap="false"
+                >
+                    <template v-slot="slotProps">
+                        <EditModeTemplateSettings
+                            :editModeMessage="editModeMessage"
+                            :openBox="slotProps.boxIsOpen(0)"
+                            @toggleCollapse="slotProps.boxToggled(0, $event)"
+                            @input="changeTemplate"
+                        />
+                        <EditModeMetaDataSettings
+                            v-model="metaData"
+                            :openBox="slotProps.boxIsOpen(1)"
+                            @toggleCollapse="slotProps.boxToggled(1, $event)"
+                        />
+                        <EditModeSectionsSettings
+                            :openBox="slotProps.boxIsOpen(2)"
+                            @toggleCollapse="slotProps.boxToggled(2, $event)"
+                        />
+                    </template>
+                </CmdBoxWrapper>
             </div>
             <div class="button-wrapper stretch-buttons action-buttons-wrapper">
                 <button class="button confirm" @click="saveSettings">
@@ -50,7 +73,7 @@
 
 <script>
 import {mapActions, mapState} from "pinia"
-import {usePiniaStore} from "../../stores/pinia.js"
+import {useCmsStore} from "../../stores/cms.js"
 import packageJson from '../../../package.json'
 
 export default {
@@ -68,7 +91,9 @@ export default {
             showSystemMessage: false,
             openTemplateSettingsStatus: false,
             openMetaSettingsStatus: false,
-            openSectionsSettingsStatus: false
+            openSectionsSettingsStatus: false,
+            metaData: {},
+            openBoxes: [1]
         }
     },
     props: {
@@ -77,7 +102,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(usePiniaStore, ["updateMetaData"]),
+        ...mapActions(useCmsStore, ["updateMetaData"]),
 
         setOpenStatus(event) {
             this.openSidebarStatus = event
@@ -110,15 +135,7 @@ export default {
             }
         },
         saveSettings() {
-            const metaData = {
-                title: this.title,
-                description: this.metaDescription,
-                rating: this.metaRating,
-                robots: this.metaRobots,
-                author: this.metaAuthor
-            }
-
-            this.updateMetaData(metaData)
+            this.updateMetaData(this.metaData)
 
             this.showSystemMessage = true
         },
@@ -127,7 +144,17 @@ export default {
         }
     },
     computed: {
-        ...mapState(usePiniaStore, ["metaData"])
+        ...mapState(useCmsStore, {storeMetaData: "metaData"})
+    },
+    watch: {
+        storeMetaData: {
+            handler() {
+                // assign metadata from store to local data-property (and watch)
+                this.metaData = {...this.storeMetaData}
+            },
+            immediate: true
+        }
+
     }
 }
 </script>
@@ -152,8 +179,6 @@ export default {
         }
 
         &.open {
-            width: 30rem;
-
             .cmd-box {
                 border: 0;
 
@@ -161,38 +186,6 @@ export default {
                     border-bottom: var(--default-border);
                 }
             }
-        }
-    }
-
-    .cmd-sidebar {
-        display: flex;
-
-        h3 {
-            text-transform: none;
-        }
-
-        .box-header h4 {
-            text-transform: none;
-        }
-
-        .inner-sidebar-wrapper {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .open-slot-wrapper {
-            display: flex;
-            flex-direction: column;
-
-            .box:not(:first-of-type) {
-                border-top: var(--default-border) !important;
-                border-color: var(--pure-white) !important;
-            }
-        }
-
-        .comand-versions {
-            padding: var(--default-padding);
-            margin: 0;
         }
     }
 

@@ -1,8 +1,11 @@
 <template>
-    <!-- begin page-wrapper -->
     <div :class="{'edit-mode': editMode}" :id="templateId">
         <a id="anchor-back-to-top"></a>
+        <!-- begin edit-mode-main-sidebar -->
         <EditModeMainSidebar v-if="editMode" :editModeMessage="editModeMessage" @change-template="changeTemplate" />
+        <!-- end edit-mode-main-sidebar -->
+
+        <!-- begin page-wrapper -->
         <div :class="{'overflow-hidden': offCanvasOpen}" id="page-wrapper"
              :style="{'scroll-padding-top': heightSiteHeader + 'px'}">
 
@@ -40,8 +43,6 @@
             <!-- begin inner-wrapper -->
             <InnerWrapper/>
             <!-- end inner-wrapper -->
-
-            <EditModeSettingsSidebar v-if="editMode && context?.settings.show()"/>
 
             <!-- begin cmd-site-footer -->
             <template v-if="showSiteFooter">
@@ -152,6 +153,10 @@
             <!-- end fancy-box ------------------------------------------------------------------------------------------------------------------------------------------------------->
         </div>
         <!-- end page-wrapper -->
+
+        <!-- begin edit-mode-settings-sidebar -->
+        <EditModeSettingsSidebar v-if="editMode && context?.settings.show()"/>
+        <!-- end edit-mode-settings-sidebar -->
     </div><!-- end templateId -->
 </template>
 
@@ -221,7 +226,7 @@ export default {
 
         if (siteHeader.length > 0) {
             const resizeObserver = new ResizeObserver(entries => {
-                // get height of seit header to set scroll-padding on #page-wrapper
+                // get height of site-header to set scroll-padding on #page-wrapper
                 this.heightSiteHeader = entries[0].target.offsetHeight
             })
             resizeObserver.observe(siteHeader[0])
@@ -237,7 +242,7 @@ export default {
         templateId() {
             return "template-" + (this.selectedTemplate || "blank")
         },
-        ...mapState(usePiniaStore, ["currentLanguage", "site", "editMode", "componentEditMode", "showEditModeComponentSettings", "sections"]),
+        ...mapState(usePiniaStore, ["currentLanguage", "site", "editMode", "showEditModeComponentSettings", "sections"]),
         ...mapState(useCmsStore, ["mainNavigationEntries", "showSiteHeader", "showSiteFooter", "siteHeader", "siteFooter", "companyLogo", "metaData"]),
 
         mainNavigation() {
@@ -378,7 +383,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss">
-
-</style>

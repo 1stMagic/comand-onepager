@@ -1,45 +1,49 @@
 <template>
-    <div class="flex-container vertical component-settings-wrapper">
-        <CmdFormElement
-            element="input"
-            type="checkbox"
-            :colored="true"
-            :toggleSwitch="true"
-            labelText="Show pre-headline above headline"
-            v-model="usePreHeadlineModel"
-        />
-        <CmdFormElement
-            v-if="preHeadlineText || usePreHeadlineModel"
-            element="input"
-            type="text"
-            labelText="Pre-Headline Text"
-            placeholder="Pre-Headline Text"
-            v-model="preHeadlineTextModel"
-        />
-        <CmdFormElement
-            element="input"
-            type="text"
-            :required="true"
-            labelText="Headline Text"
-            placeholder="Headline Text"
-            v-model="headlineTextModel"
-        />
-        <div class="flex-container">
-            <CmdFormElement
-                element="select"
-                :required="true"
-                labelText="Level"
-                :selectOptions="headlineLevelOptions"
-                v-model="headlineLevelModel"
-            />
-            <CmdFormElement
-                element="select"
-                labelText="Alignment"
-                :selectOptions="textAlignOptions"
-                v-model="textAlignModel"
-            />
-        </div>
-    </div>
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Headline', headlineLevel: 4}">
+        <template v-slot:body>
+            <div class="flex-container vertical component-settings-wrapper">
+                <CmdFormElement
+                    element="input"
+                    type="checkbox"
+                    :colored="true"
+                    :toggleSwitch="true"
+                    labelText="Show pre-headline above headline"
+                    v-model="usePreHeadlineModel"
+                />
+                <CmdFormElement
+                    v-if="preHeadlineText || usePreHeadlineModel"
+                    element="input"
+                    type="text"
+                    labelText="Pre-Headline Text"
+                    placeholder="Pre-Headline Text"
+                    v-model="preHeadlineTextModel"
+                />
+                <CmdFormElement
+                    element="input"
+                    type="text"
+                    :required="true"
+                    labelText="Headline Text"
+                    placeholder="Headline Text"
+                    v-model="headlineTextModel"
+                />
+                <div class="flex-container">
+                    <CmdFormElement
+                        element="select"
+                        :required="true"
+                        labelText="Level"
+                        :selectOptions="headlineLevelOptions"
+                        v-model="headlineLevelModel"
+                    />
+                    <CmdFormElement
+                        element="select"
+                        labelText="Alignment"
+                        :selectOptions="textAlignOptions"
+                        v-model="textAlignModel"
+                    />
+                </div>
+            </div>
+        </template>
+    </CmdBox>
 </template>
 
 <script>

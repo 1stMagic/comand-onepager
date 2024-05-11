@@ -167,8 +167,10 @@ export default {
             type: Object,
             default() {
                 return {
-                    iconClass: "icon-home",
-                    text: "nase"
+                    iconClass: "icon-send-mail",
+                    text: "Send mail",
+                    type: "submit",
+                    primary: true
                 }
             }
         }

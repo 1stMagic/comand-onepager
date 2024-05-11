@@ -4,7 +4,7 @@
         <!-- begin edit-mode for content-sections -->
         <template v-if="editMode">
             <EditModeSectionWrapper
-                v-for="(section, index) in sections" :key="index"
+                v-for="(section, index) in activeSections" :key="index"
                 :id="'edit-mode-' + section.id"
                 :sectionId="section.id"
                 :sectionPath="['main', 'sections', index]"
@@ -29,7 +29,7 @@
         <template v-else>
             <!-- begin content sections -->
             <ContentSection
-                v-for="(section, index) in sections"
+                v-for="(section, index) in activeSections"
                 :key="index"
                 :id="section.id"
                 :headlineText="section.headlineText"
@@ -57,7 +57,7 @@ export default {
     ],
     computed: {
         ...mapState(usePiniaStore, ["site", "currentLanguage", "editMode", "mainHeadline", "slideshow"]),
-        ...mapState(useCmsStore, ["sections"]),
+        ...mapState(useCmsStore, ["activeSections"]),
 
         cmdSlideButtons() {
             return {

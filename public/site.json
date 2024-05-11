@@ -1,5 +1,5 @@
 {
-  "languages": ["de"],
+  "languages": ["de", "en"],
   "defaultMetadata": {
     "rating": "",
     "robots": "index/follow",
@@ -11,6 +11,28 @@
       "id": "homepage",
       "iconClass": "icon-home",
       "navEntry": "Home",
+      "subEntries": [
+        {
+          "id": "subpage1",
+          "iconClass": "icon-globe",
+          "navEntry": "subpage1",
+          "navigation": ["main"]
+        },
+        {
+          "id": "subpage2",
+          "iconClass": "icon-user-profile",
+          "navEntry": "subpage2",
+          "navigation": ["main"]
+        },
+        {
+          "id": "external",
+          "iconClass": "icon-export",
+          "navEntry": "External Link",
+          "externalLink": true,
+          "path": "https://www.comand-cms.com",
+          "navigation": ["main"]
+        }
+      ],
       "navigation": ["main"]
     },
     {

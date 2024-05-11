@@ -7,7 +7,7 @@
 - BASIC STRUCTURE ------------------------
 	- page-structure
 	- main-container
-	-hotfix for fancybox-behavior
+	- hotfix for fancybox-behavior
 
 - MEDIA QUERIES ------------------------
   - styles for small screens
@@ -18,81 +18,83 @@
 /* ---------------------------------------------- BEGIN BASIC STRUCTURE -------------------------------------------------- */
 /* begin page-structure --------------------------------------------------------------------------------------------------------------------------------------------------- */
 html {
-	--headline-font-size-h1: 5rem;
-	--headline-text-transform: uppercase;
+    --headline-font-size-h1: 5rem;
 }
 
 body {
-	&.avoid-scrolling {
-		overflow: hidden;
-		height: 100%;
-	}
+    &.avoid-scrolling {
+        overflow: hidden;
+        height: 100%;
+    }
 }
 
 body, #page-wrapper {
-	background: var(--color-scheme-background-color);
+    background: var(--color-scheme-background-color);
 }
 
 #page-wrapper main {
-	flex-grow: 1;
+    flex-grow: 1;
 
-	.edit-mode.section-wrapper:only-of-type {
-		height: 100%;
+    .edit-mode.section-wrapper:only-of-type {
+        height: 100%;
 
-		[id^="section-wrapper"] {
-			height: inherit;
+        [id^="section-wrapper"] {
+            height: inherit;
 
-			> section {
-				height: inherit;
-			}
-		}
-	}
+            > section {
+                height: inherit;
+            }
+        }
+    }
 }
 
 .cmd-tooltip {
-	box-shadow: .1rem .3rem .3rem var(--dark-gray);
+    box-shadow: .1rem .3rem .3rem var(--dark-gray);
 }
+
 /* end page-structure --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 /* begin main-container --------------------------------------------------------------------------------------------------------------------------------------------------- */
 main {
-	ul, ol {
-		list-style-position: inside; /* list-style-position for all list in main */
-	}
+    ul, ol {
+        list-style-position: inside; /* list-style-position for all list in main */
+    }
 
-	.cmd-width-limitation-wrapper {
-		&:not(#main-headline) {
-			section {
-				padding-top: calc(var(--default-padding) * 6);
-				padding-bottom: calc(var(--default-padding) * 6);
-			}
+    .cmd-width-limitation-wrapper {
+        &:not(#main-headline) {
+            section {
+                padding-top: calc(var(--default-padding) * 6);
+                padding-bottom: calc(var(--default-padding) * 6);
+            }
 
-			&:nth-child(even) {
-				background: var(--default-background-color);
-			}
-		}
-	}
+            &:nth-child(even) {
+                background: var(--default-background-color);
+            }
+        }
+    }
 
-	#section-wrapper-main-headline {
-		padding: calc(var(--default-padding) * 5) 0;
+    #section-wrapper-main-headline {
+        padding: calc(var(--default-padding) * 5) 0;
 
-		.cmd-headline {
-			margin: 0;
+        .cmd-headline {
+            margin: 0;
 
-			h1 {
-				font-size: var(--headline-font-size-h1);
-				text-transform: var(--headline-text-transform);
-				margin-bottom: 0;
-			}
-		}
-	}
+            h1 {
+                font-size: var(--headline-font-size-h1);
+                text-transform: uppercase;
+                margin-bottom: 0;
+            }
+        }
+    }
 }
+
 /* end main-container  --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 /* begin hotfix for fancybox-behavior */
 .cmd-fancybox {
-	position: fixed;
+    position: fixed;
 }
+
 /* end hotfix for fancybox-behavior */
 /* ---------------------------------------------- END BASIC STRUCTURE -------------------------------------------------- */
 
@@ -103,6 +105,7 @@ main {
         text-decoration: underline;
     }
 }
+
 /* end styles for small screens --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 /* begin styles for print only --------------------------------------------------------------------------------------------------------------------------------------------------- */
@@ -114,122 +117,11 @@ main {
     #content {
         width: 180mm;
     }
-	
-	body, .section-wrapper {
-		background: none !important;
-	}
+
+    body, .section-wrapper {
+        background: none !important;
+    }
 }
+
 /* end styles for print only --------------------------------------------------------------------------------------------------------------------------------------------------- */
 /* ---------------------------------------------- END MEDIA QUERIES -------------------------------------------------- */
-
-.edit-mode {
-	.edit-component-wrapper {
-		label {
-			&.text-center input {
-				text-align: center;
-			}
-
-			&.edit-mode input, select, .cmd-fake-select {
-				padding: 0;
-				height: auto;
-				min-height: calc(var(--input-height) / 2);
-			}
-		}
-
-		.cmd-image {
-			input {
-				width: 5rem;
-			}
-		}
-
-		[data-component="CmdSlideshow"] {
-			top: 1.8rem;
-			right: 5.3rem;
-		}
-
-		.cmd-thumbnail-scroller {
-			.inner-thumbnail-wrapper > ul > li {
-				align-self: flex-start;
-			}
-
-			.cmd-image .drop-area span[class*="icon"] {
-				font-size: 5rem;
-			}
-		}
-	}
-
-	.section-wrapper.active .cmd-width-limitation-wrapper, .edit-component-wrapper.active {
-		--odd-lines-color: hsl(var(--hyperlink-color-hue), var(--hyperlink-color-saturation), 30%);
-		background-image: repeating-linear-gradient(-45deg,var(--odd-lines-color),var(--odd-lines-color) .7rem, var(--hyperlink-color) .7rem,var(--hyperlink-color) 1.4rem) !important;
-
-		* {
-			color: var(--pure-white);
-		}
-
-		.cmd-container {
-			border: var(--default-border);
-			border-color: var(--pure-white);
-		}
-
-		.inner-thumbnail-wrapper {
-			border-color: var(--pure-white);
-			background: none;
-
-			figcaption {
-				color: var(--pure-white);
-			}
-		}
-
-		fieldset  {
-			background: none;
-			border-color: var(--pure-white);
-
-			span, span[class*="icon"], legend, .label-text :is(span, sup), a {
-				color: var(--pure-white);
-			}
-
-			:is(button, .button) :is(span) {
-				color: var(--button-text-color)
-			}
-
-			sup {
-				color: var(--asterisk-color) !important;
-			}
-
-			::placeholder {
-				color: var(--placeholder-text-color);
-			}
-		}
-
-		transition: var(--default-transition);
-	}
-
-	.edit-component-wrapper.active {
-		border-color: var(--pure-white);
-	}
-
-	footer .cmd-list-of-links {
-		padding: calc(var(--default-padding) * 2)
-	}
-
-	h1, h2, h3, h4, h5, h6 {
-		&.has-icon {
-			display: flex;
-			align-items: center;
-		}
-	}
-
-	.button-delete.use-icon-as-background {
-		&::before {
-			color: var(--pure-black);
-		}
-
-		&:is(:hover, :active, :focus)::before {
-			color: hsl(0, 0%, 20%);
-		}
-	}
-
-	.edit-items .button-delete.use-icon-as-background  {
-		background: black !important;
-	}
-}

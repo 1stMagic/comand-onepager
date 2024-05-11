@@ -1,22 +1,19 @@
 <template>
-    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Headline', headlineLevel: 4}">
-        <template v-slot:body>
-            <CmdHeadlineSettings
-                ref="headlineSettings"
-                v-bind="cmdHeadline || {}"
-            />
-        </template>
-    </CmdBox>
+    <!-- begin settings for CmdHeadline -->
+    <CmdHeadlineSettings
+        ref="headlineSettings"
+        v-bind="cmdHeadline || {}"
+    />
+    <!-- end settings for CmdHeadline -->
 
-    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Image', headlineLevel: 4}">
-        <template v-slot:body>
-            <CmdImageSettings
-                ref="imageSettings"
-                v-bind="cmdImage || {}"
-            />
-        </template>
-    </CmdBox>
+    <!-- begin settings for CmdImage -->
+    <CmdImageSettings
+        ref="imageSettings"
+        v-bind="cmdImage || {}"
+    />
+    <!-- end settings for CmdImage -->
 
+    <!-- begin settings for paragraph -->
     <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Paragraph', headlineLevel: 4}">
         <template v-slot:body>
             <div class="flex-container vertical component-settings-wrapper">
@@ -29,6 +26,7 @@
             </div>
         </template>
     </CmdBox>
+    <!-- end settings for paragraph -->
 </template>
 
 <script>

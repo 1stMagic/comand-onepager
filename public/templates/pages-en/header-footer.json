@@ -239,31 +239,6 @@
             }
           ]
         }
-      },
-      {
-        "name": "CmdSwitchLanguage",
-        "props": {
-          "languages": [
-            {
-              "iso2": "de",
-              "name": "Deutsch",
-              "tooltip": "Sprache zu deutsch wechseln",
-              "link": {
-                "type": "router"
-              },
-              "path": "/de"
-            },
-            {
-              "iso2": "en",
-              "name": "English",
-              "tooltip": "Switch language to English",
-              "link": {
-                "type": "router"
-              },
-              "path": "/en"
-            }
-          ]
-        }
       }
     ]
   }

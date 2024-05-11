@@ -1,111 +1,118 @@
 <template>
-    <div class="flex-container vertical component-settings-wrapper">
-        <!-- begin CmdTooltip -->
-        <CmdTooltip related-id="show-tooltip">
-            <dl>
-                <dt>Dimensions:</dt><dd>{{ imageWidth }} x {{ imageHeight }}</dd>
-                <dt>File type:</dt><dd>{{ getFileExtension(this.image?.src?.large) }}</dd>
-                <!--dt>File size:</dt><dd>{{ image?.src?.large }}</dd-->
-                <dt>Path to file:</dt><dd>{{ image?.src?.large }}</dd>
-            </dl>
-        </CmdTooltip>
-        <!-- end CmdTooltip -->
+    <CmdBox :use-slots="['body']" :collapsible="true" :cmdHeadline="{headlineText: 'Image', headlineLevel: 4}">
+        <template v-slot:body>
+            <div class="flex-container vertical component-settings-wrapper">
+                <!-- begin CmdTooltip -->
+                <CmdTooltip related-id="show-tooltip">
+                    <dl>
+                        <dt>Dimensions:</dt>
+                        <dd>{{ imageWidth }} x {{ imageHeight }}</dd>
+                        <dt>File type:</dt>
+                        <dd>{{ getFileExtension(this.image?.src?.large) }}</dd>
+                        <!--dt>File size:</dt><dd>{{ image?.src?.large }}</dd-->
+                        <dt>Path to file:</dt>
+                        <dd>{{ image?.src?.large }}</dd>
+                    </dl>
+                </CmdTooltip>
+                <!-- end CmdTooltip -->
 
-        <!-- begin image -->
-        <h5 class="has-icon">
-            <span class="icon-image"></span>
-            <span>Image</span>
-        </h5>
-        <a href="#" @click.prevent="selectFiles" class="image-wrapper">
-            <figure v-if="image?.src" class="cmd-image" id="show-tooltip">
-                <div :class="['box drop-area flex-container vertical', { 'allow-drop': allowDrop }]"
-                     v-on="dragAndDropHandler">
+                <!-- begin image -->
+                <h5>
                     <span class="icon-image"></span>
-                    <img v-show="image?.src" :src="imgSrc" :alt="image?.alt" ref="contentImage">
-                </div>
-                <figcaption :title="image?.src.medium">{{imageFileName}}</figcaption>
-            </figure>
-            <span v-else class="no-image">
+                    <span>Image</span>
+                </h5>
+                <a href="#" @click.prevent="selectFiles" class="image-wrapper">
+                    <figure v-if="image?.src" class="cmd-image" id="show-tooltip">
+                        <div :class="['box drop-area flex-container vertical', { 'allow-drop': allowDrop }]"
+                             v-on="dragAndDropHandler">
+                            <span class="icon-image"></span>
+                            <img v-show="image?.src" :src="imgSrc" :alt="image?.alt" ref="contentImage">
+                        </div>
+                        <figcaption :title="image?.src.medium">{{ imageFileName }}</figcaption>
+                    </figure>
+                    <span v-else class="no-image">
                 <span class="icon-image"></span>
                 <span>(no image uploaded)</span>
             </span>
-        </a>
-        <button type="button" class="button" @click="removeImage">
-            <span class="icon-trash"></span>
-            <span>Remove image</span>
-        </button>
-        <!-- end image -->
+                </a>
+                <button type="button" class="button" @click="removeImage">
+                    <span class="icon-trash"></span>
+                    <span>Remove image</span>
+                </button>
+                <!-- end image -->
 
-        <hr />
+                <hr/>
 
-        <!-- begin CmdFormElement -->
-        <CmdFormElement
-            class="hidden"
-            element="input"
-            type="file"
-            labelText="Select file"
-            :disabled="uploadInitiated"
-            @change="fileSelected"
-            ref="formElement"
-        />
-        <!-- end CmdFormElement -->
+                <!-- begin CmdFormElement -->
+                <CmdFormElement
+                    class="hidden"
+                    element="input"
+                    type="file"
+                    labelText="Select file"
+                    :disabled="uploadInitiated"
+                    @change="fileSelected"
+                    ref="formElement"
+                />
+                <!-- end CmdFormElement -->
 
-        <!-- begin figcaption -->
-        <h5>Figcaption</h5>
-        <CmdFormElement
-            element="input"
-            type="checkbox"
-            :toggleSwitch="true"
-            labelText="Show figcaption"
-            v-model="editableShowFigcaption"
-        />
-        <CmdFormElement
-            v-show="editableShowFigcaption"
-            element="input"
-            type="text"
-            :required="true"
-            labelText="Figcaption Text"
-            placeholder="Figcaption Text"
-            v-model="editableFigcaptionText"
-        />
-        <div v-show="editableShowFigcaption" class="flex-container">
-            <CmdFormElement
-                element="select"
-                labelText="Position"
-                :selectOptions="positionOptions"
-                v-model="editableFigcaptionPosition"
-            />
-            <CmdFormElement
-                element="select"
-                labelText="Alignment"
-                :selectOptions="textAlignOptions"
-                v-model="editableFigcaptionTextAlign"
-            />
-        </div>
-        <!-- end figcaption -->
+                <!-- begin figcaption -->
+                <h5>Figcaption</h5>
+                <CmdFormElement
+                    element="input"
+                    type="checkbox"
+                    :toggleSwitch="true"
+                    labelText="Show figcaption"
+                    v-model="editableShowFigcaption"
+                />
+                <CmdFormElement
+                    v-show="editableShowFigcaption"
+                    element="input"
+                    type="text"
+                    :required="true"
+                    labelText="Figcaption Text"
+                    placeholder="Figcaption Text"
+                    v-model="editableFigcaptionText"
+                />
+                <div v-show="editableShowFigcaption" class="flex-container">
+                    <CmdFormElement
+                        element="select"
+                        labelText="Position"
+                        :selectOptions="positionOptions"
+                        v-model="editableFigcaptionPosition"
+                    />
+                    <CmdFormElement
+                        element="select"
+                        labelText="Alignment"
+                        :selectOptions="textAlignOptions"
+                        v-model="editableFigcaptionTextAlign"
+                    />
+                </div>
+                <!-- end figcaption -->
 
-        <hr />
+                <hr/>
 
-        <!-- begin miscellaneous -->
-        <h5>Miscellaneous</h5>
-        <CmdFormElement
-            element="input"
-            type="text"
-            :required="true"
-            labelText="Alternative Text"
-            placeholder="Alternative Text"
-            v-model="editableAlternativeText"
-        />
-        <CmdFormElement
-            element="input"
-            type="text"
-            :required="false"
-            labelText="Tooltip"
-            placeholder="Tooltip"
-            v-model="editableTooltip"
-        />
-        <!-- end miscellaneous -->
-    </div>
+                <!-- begin miscellaneous -->
+                <h5>Miscellaneous</h5>
+                <CmdFormElement
+                    element="input"
+                    type="text"
+                    :required="true"
+                    labelText="Alternative Text"
+                    placeholder="Alternative Text"
+                    v-model="editableAlternativeText"
+                />
+                <CmdFormElement
+                    element="input"
+                    type="text"
+                    :required="false"
+                    labelText="Tooltip"
+                    placeholder="Tooltip"
+                    v-model="editableTooltip"
+                />
+                <!-- end miscellaneous -->
+            </div>
+        </template>
+    </CmdBox>
 </template>
 
 <script>
@@ -197,16 +204,16 @@ export default {
             }
         },
         imageFileName() {
-            if(typeof this.image?.src === "string") {
+            if (typeof this.image?.src === "string") {
                 return this.image?.src.replace("/media/images/slideshow-images/", "")
             }
             return this.image?.src?.medium.replace("/media/images/slideshow-images/medium/", "")
         },
         imgSrc() {
-          if(typeof this.image?.src === "string") {
-              return this.image?.src
-          }
-          return this.image?.src?.medium
+            if (typeof this.image?.src === "string") {
+                return this.image?.src
+            }
+            return this.image?.src?.medium
         },
         editableAlternativeText: {
             get() {
@@ -264,11 +271,11 @@ export default {
         },
         removeImage() {
             if (confirm("Remove this image (a copy of the file will remain on the server)?")) {
-              // call getter from composables
-              const deleteInnerComponent = this.editModeContext.settings.getDeleteInnerComponent()
+                // call getter from composables
+                const deleteInnerComponent = this.editModeContext.settings.getDeleteInnerComponent()
 
-              // call returned function from getter
-              deleteInnerComponent()
+                // call returned function from getter
+                deleteInnerComponent()
             }
         },
         fileSelected(event) {
@@ -312,10 +319,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .image-wrapper {
     display: flex;
-    background: var(--pure-white);
+    background: var(--color-scheme-background);
     align-self: center;
 
     .cmd-image {
@@ -349,3 +356,5 @@ export default {
     }
 }
 </style>
+<script setup>
+</script>

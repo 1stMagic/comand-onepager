@@ -3,7 +3,9 @@
             :collapsible="true"
             class="edit-mode-sections-settings"
             :cmdHeadline="{headlineText: 'Content Settings', headlineLevel: 4, headlineIcon: {iconClass: 'icon-file-settings'}}"
-            :openCollapsedBox="openBoxStatus">
+            :openCollapsedBox="openBoxStatus"
+            @toggleCollapse="$emit('toggle-collapse', $event)"
+    >
         <template v-slot:body>
             <ul class="list-of-sections">
                 <li>
@@ -20,7 +22,13 @@
                         </li>
                     </ul>
                 </li>
-                <li v-for="(section, index) in contentSections" :key="index" class="sections-name-wrapper" :draggable="true" :data-section-index="index" v-on="dragDropHandlers(index)">
+                <li v-for="(section, index) in contentSections"
+                    :key="index"
+                    class="sections-name-wrapper"
+                    :draggable="true"
+                    :data-section-index="index"
+                    v-on="dragDropHandlers(index)"
+                >
                     <!-- begin sectionName / navEntry -->
                     <CmdFormElement
                         v-if="editNavEntry === index"
@@ -101,7 +109,7 @@
 
 <script>
 import {mapState, mapActions} from "pinia"
-import {usePiniaStore} from "../../stores/pinia.js"
+import {useCmsStore} from "../../stores/cms.js"
 import {highlightSection} from "../../utils/editmode.js"
 import {createUuid} from "comand-component-library";
 
@@ -128,16 +136,10 @@ export default {
         });
     },
     computed: {
-        ...mapState(usePiniaStore, ["site", "sections"]),
+        ...mapState(useCmsStore, ["sections"]),
 
         contentSections() {
-            const sections = []
-
-            if (!this.site.main) {
-                return sections
-            }
-
-            const contentSections = this.site.main.sections.toSorted((section1, section2) => section1.order - section2.order).map((section, index) => {
+            return this.sections.map((section, index) => {
                 return {
                     id: section.id,
                     navEntry: section.navEntry || 'Section' + " " + (index + 1),
@@ -148,16 +150,13 @@ export default {
                 }
             })
 
-            sections.push(...contentSections)
-
-            return sections
         },
         numberOfSections() {
-            return this.site.main?.sections.length
+            return this.sections.length
         }
     },
     methods: {
-        ...mapActions(usePiniaStore, ["deleteContent", "updateContent", "updateSettings", "updateSectionsSettings"]),
+        ...mapActions(useCmsStore, ["deleteContent", "updateContent", "updateSettings", "updateSectionsSettings"]),
 
         toggleNavEntryTooltip(section) {
             let tooltip = ""
@@ -317,6 +316,14 @@ export default {
                     })
                 }
             }
+        }
+    },
+    watch: {
+        openBox: {
+            handler() {
+                this.openBoxStatus = this.openBox
+            },
+            immediate: true
         }
     }
 }

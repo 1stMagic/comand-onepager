@@ -33,13 +33,19 @@ import axios from "axios";
 
 export {default as CmdOnePager} from './components/CmdOnePager.vue'
 
-function processPage(page, store) {
+function processPage(page, store, path) {
     router.addRoute({
         name: page.id,
-        path: "/:lang([a-z]{2})/" + page.id,
+        path: "/:lang([a-z]{2})" + (path.length > 0 ? "/" : "") + path.join("/") + "/" + page.id,
         component: {}
     })
-    store.addPage(page)
+    if (page.subEntries?.length > 0) {
+        page.subEntries.forEach(subPage => processPage(subPage, store, [page.id]))
+    }
+
+    if (path.length === 0) {
+        store.addPage(page)
+    }
 }
 
 function processSite(site, store) {
@@ -54,7 +60,13 @@ function processSite(site, store) {
             }
         }
     })
-    pages.forEach(page => processPage(page, store))
+    router.addRoute({
+        path: "/:lang([a-z]{2})",
+        redirect: () => ({
+            name: store.currentPage?.id || pages[0].id
+        })
+    })
+    pages.forEach(page => processPage(page, store, []))
     router.addRoute({
         path: "/:pathMatch(.*)*",
         redirect: "/"
