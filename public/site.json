@@ -36,9 +36,56 @@
       "navigation": ["main"]
     },
     {
-      "id": "about",
-      "navEntry": "About",
+      "id": "content",
+      "navEntry": "Content",
+      "navigation": ["main"]
+    },
+    {
+      "id": "gallery",
+      "navEntry": "Gallery",
+      "navigation": ["main"]
+    },
+    {
+      "id": "faq",
+      "navEntry": "FAQ",
+      "navigation": ["main"]
+    },
+    {
+      "id": "team",
+      "navEntry": "Team",
       "navigation": ["main"]
     }
-  ]
+  ],
+  "pageFooter": {
+    "cmdSocialNetworks": [
+      {
+        "id": "social-network-facebook",
+        "path": "https://www.facebook.com/sharer/sharer.php?u=",
+        "tooltip": "Share this page on facebook",
+        "iconClass": "icon-facebook",
+        "linkText": "Share"
+      },
+      {
+        "id": "social-network-x",
+        "path": "https://twitter.com/home?status=",
+        "tooltip": "Share this page on X",
+        "iconClass": "icon-twitter",
+        "linkText": "Share"
+      },
+      {
+        "id": "social-network-xing",
+        "path": "https://www.xing.com/spi/shares/new?sc_p=b7910_cb&amp;url=",
+        "tooltip": "Share this page on xing",
+        "iconClass": "icon-xing",
+        "linkText": "Share"
+      },
+      {
+        "id": "social-network-linkedin",
+        "path": "https://www.linkedin.com/cws/share?url=",
+        "tooltip": "Share this page on linkedin",
+        "iconClass": "icon-linkedin",
+        "linkText": "Share"
+      }
+    ]
+  }
 }

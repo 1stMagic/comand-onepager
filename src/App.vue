@@ -1,5 +1,5 @@
 <template>
-    <CmdOnePager />
+    <CmdWebsite />
 </template>
 
 <script>

@@ -1,14 +1,17 @@
 import {defineStore} from "pinia"
 import axios from "axios"
 
-function findPageById(pages, id) {
+function findPageById(pages, id, parents) {
     for (let i = 0; i < pages.length; i++) {
         if (pages[i].id === id) {
             return pages[i]
         }
         if (pages[i].subEntries?.length > 0) {
-            const page = findPageById(pages[i].subEntries, id)
+            const page = findPageById(pages[i].subEntries, id, parents)
             if (page) {
+                if (parents) {
+                    parents.push(pages[i])
+                }
                 return page
             }
         }
@@ -26,9 +29,31 @@ export const useCmsStore = defineStore("cms", {
         currentPageName: "",
         siteHeader: {},
         siteFooter: {},
-        siteStructure: []
+        siteStructure: [],
+        pageFooter: {}
     }),
     getters: {
+        topContentActiveSections() {
+            return this.currentPageContent?.topContent?.sections?.filter(section => section.show !== false) || []
+        },
+        pageHeadlineText() {
+            return this.currentPageContent?.mainContent?.pageHeadlineText
+        },
+        mainContentUseFullWidth() {
+            return this.currentPageContent?.mainContent?.useFullWidth
+        },
+        asideLeftColumnShow() {
+            return this.currentPageContent?.mainContent?.aside?.leftColumn?.show
+        },
+        asideLeftColumnContent() {
+            return this.currentPageContent?.mainContent?.aside?.leftColumn?.components || []
+        },
+        asideRightColumnShow() {
+            return this.currentPageContent?.mainContent?.aside?.rightColumn?.show
+        },
+        asideRightColumnContent() {
+            return this.currentPageContent?.mainContent?.aside?.rightColumn?.components || []
+        },
         mainNavigationEntries(state) {
             if (state.pages.length === 1) {
                 return this.sectionEntries
@@ -45,7 +70,36 @@ export const useCmsStore = defineStore("cms", {
          * return all existing sections (of current page)
          */
         sections() {
-            return this.currentPageContent?.sections?.toSorted((section1, section2) => section1.order - section2.order) || []
+            return this.currentPageContent?.mainContent?.sections?.toSorted((section1, section2) => section1.order - section2.order) || []
+        },
+        breadcrumbs() {
+            const parents = []
+            const currentPage = findPageById(this.pages, this.currentPageName, parents)
+            return {
+                breadcrumbLabel: "Sie sind hier:",
+                breadcrumbLinks: [
+                    ...(parents.map(page => ({
+                        "type": "router",
+                        "text": page.navEntry,
+                        "route": {
+                            "name": page.id,
+                            params: {
+                                lang: this.currentLanguage
+                            }
+                        }
+                    }))),
+                    {
+                        "type": "router",
+                        "text": currentPage?.navEntry,
+                        "route": {
+                            "name": this.currentPageName,
+                            params: {
+                                lang: this.currentLanguage
+                            }
+                        }
+                    }
+                ]
+            }
         },
         showSiteHeader(state) {
             return state.siteStructure.includes("siteHeader")
@@ -70,7 +124,7 @@ export const useCmsStore = defineStore("cms", {
             return state.pageContent[state.currentLanguage]?.[state.currentPageName]
         },
         sectionEntries(state) {
-            return this.currentPageContent?.sections
+            return this.currentPageContent?.mainContent?.sections
                 ?.filter(section => section.showLinkInMainNavigation)
                 ?.map(section => ({
                     iconClass: section.iconClass,

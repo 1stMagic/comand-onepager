@@ -1,6 +1,4 @@
 <template>
-    <!-- begin main-content -->
-    <main id="content">
         <!-- begin edit-mode for content-sections -->
         <template v-if="editMode">
             <EditModeSectionWrapper
@@ -34,12 +32,12 @@
                 :id="section.id"
                 :headlineText="section.headlineText"
                 :components="section.components"
+                :useFullDeviceWidth="section.useFullDeviceWidth"
+                :contentOrientation="section.contentOrientation"
             />
             <!-- end content sections -->
         </template>
         <!-- end default-view for content-sections -->
-    </main>
-    <!-- end main-content -->
 </template>
 
 <script>

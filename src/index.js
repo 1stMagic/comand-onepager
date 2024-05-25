@@ -31,7 +31,7 @@ import directiveTelephone from "comand-component-library/src/directives/telephon
 import directiveFocus from "comand-component-library/src/directives/focus"
 import axios from "axios";
 
-export {default as CmdOnePager} from './components/CmdOnePager.vue'
+export {default as CmdOnePager} from './components/CmdWebsite.vue'
 
 function processPage(page, store, path) {
     router.addRoute({
@@ -75,6 +75,9 @@ function processSite(site, store) {
     if (site.siteStructure?.length > 0) {
         store.loadSiteStructure(site.siteStructure)
     }
+
+    // assign pageFooter to store
+    store.pageFooter = site.pageFooter
 }
 
 function bootstrap(app) {

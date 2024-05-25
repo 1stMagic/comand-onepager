@@ -1,28 +1,28 @@
 <template>
-    <CmdWidthLimitationWrapper :innerClass="htmlClass" :id="'section-wrapper-' + id">
-        <a :id="'anchor-' + id"></a>
-        <Content
-            :allowAddComponent="allowAddComponent"
-            :sectionId="id"
-            :components="components"
-        />
+    <CmdWidthLimitationWrapper :innerClass="htmlClasses" :id="'anchor-' + id">
+        <component
+            v-for="(component, componentIndex) in components"
+            :key="componentIndex"
+            :is="component.name"
+            v-bind="component.props"
+        >
+            <component
+                v-for="(childComponent, childComponentIndex) in component.components || []"
+                :is="childComponent.name"
+                :key="childComponentIndex"
+                v-bind="childComponent.props"
+            />
+        </component>
     </CmdWidthLimitationWrapper>
 </template>
 
 <script>
-/* import components from comand-component-library */
-import { CmdHeadline, CmdWidthLimitationWrapper } from 'comand-component-library'
-
 // import mixins
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
 import {mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia.js"
 
 export default {
-    components: {
-        CmdHeadline,
-        CmdWidthLimitationWrapper
-    },
     mixins: [
         BaseI18nComponent
     ],
@@ -31,7 +31,7 @@ export default {
             type: String,
             required: false
         },
-        htmlClass: {
+        innerClass: {
             type: String,
             required: false
         },
@@ -44,6 +44,14 @@ export default {
             default() {
                 return 2
             }
+        },
+        useFullDeviceWidth: {
+            type: Boolean,
+            default: false
+        },
+        contentOrientation: {
+            type: String,
+            default: "horizontal"
         },
         components: {
             type: Array,
@@ -62,6 +70,24 @@ export default {
         ...mapState(usePiniaStore, {
             editMode: "editMode"
         }),
+        htmlClasses() {
+            const classes = []
+            if(this.innerClass) {
+                classes.push(this.innerClass)
+            }
+
+            if(this.useFullDeviceWidth) {
+                classes.push("full-width")
+            }
+
+            if(this.contentOrientation === "horizontal") {
+                classes.push("flex-container")
+            } else if(this.contentOrientation === "vertical") {
+                classes.push("flex-container vertical")
+            }
+
+            return classes.join(" ")
+        },
         cmdSlideButtons() {
             return {
                 next: {
