@@ -1,28 +1,28 @@
 {
   "metadata": {
-    "title": "Bildergalerie",
-    "description": "Kurzbeschreibung für Bildergalerie",
+    "title": "Image Gallery",
+    "description": "Description for image gallery",
     "rating": "",
     "robots": "index/follow",
     "author": ""
   },
   "mainContent": {
-    "pageHeadlineText": "Bildergalerie",
+    "pageHeadlineText": "Image Gallery",
     "sections": [
       {
         "id": "section3",
         "iconClass": "icon-images",
         "showLinkInMainNavigation": true,
-        "navEntry": "Bildergalerie",
+        "navEntry": "Image Gallery",
         "allowAddComponent": true,
-        "headlineText": "Überschrift für Section 3",
+        "headlineText": "Headline for Section 3",
         "order": 5,
         "components": [
           {
             "name": "CmdImageGallery",
             "props": {
               "cmdHeadline": {
-                "headlineText": "Überschrift für Bildergalerie",
+                "headlineText": "Headline for Image Gallery",
                 "headlineLevel": "3"
               },
               "images": [

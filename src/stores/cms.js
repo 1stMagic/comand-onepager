@@ -22,6 +22,7 @@ function findPageById(pages, id, parents) {
 export const useCmsStore = defineStore("cms", {
     state: () => ({
         languages: [],
+        languageData: {},
         defaultMetaData: {},
         pages: [],
         currentLanguage: "de",
@@ -72,6 +73,15 @@ export const useCmsStore = defineStore("cms", {
         sections() {
             return this.currentPageContent?.mainContent?.sections?.toSorted((section1, section2) => section1.order - section2.order) || []
         },
+        pageHeader() {
+            return {
+                cmdBreadcrumbs: this.breadcrumbs,
+                cmdHeadline: {
+                    headlineText: this.pageHeadlineText,
+                    headlineLevel: 1
+                }
+            }
+        },
         breadcrumbs() {
             const parents = []
             const currentPage = findPageById(this.pages, this.currentPageName, parents)
@@ -80,7 +90,7 @@ export const useCmsStore = defineStore("cms", {
                 breadcrumbLinks: [
                     ...(parents.map(page => ({
                         "type": "router",
-                        "text": page.navEntry,
+                        "text": this.currentLanguageData[page.navEntry] ?? page.navEntry,
                         "route": {
                             "name": page.id,
                             params: {
@@ -90,7 +100,7 @@ export const useCmsStore = defineStore("cms", {
                     }))),
                     {
                         "type": "router",
-                        "text": currentPage?.navEntry,
+                        "text": this.currentLanguageData[currentPage?.navEntry] ?? currentPage?.navEntry,
                         "route": {
                             "name": this.currentPageName,
                             params: {
@@ -135,12 +145,12 @@ export const useCmsStore = defineStore("cms", {
                 }))
         },
         pageEntries(state) {
-            function filterbyNavigation(pages) {
+            const filterbyNavigation = (pages) => {
                 return (pages || [])
                     .filter(page => page.navigation?.includes("main"))
                     .map(page => ({
                         iconClass: page.iconClass,
-                        text: page.navEntry,
+                        text: this.currentLanguageData[page.navEntry] ?? page.navEntry,
                         ...navEntryType(page),
                         subentries: filterbyNavigation(page.subEntries)
                 }))
@@ -165,6 +175,9 @@ export const useCmsStore = defineStore("cms", {
             }
 
             return filterbyNavigation(state.pages)
+        },
+        currentLanguageData(state) {
+            return state.languageData[state.currentLanguage] || {}
         }
     },
     actions: {
@@ -173,6 +186,9 @@ export const useCmsStore = defineStore("cms", {
             if (!this.languages.includes(this.currentLanguage)) {
                 this.setCurrentLanguage(this.languages?.[0] || "de")
             }
+        },
+        setLanguageData(languageData) {
+            this.languageData = languageData
         },
         setDefaultMetaData(metaData) {
             this.defaultMetaData = metaData || {}

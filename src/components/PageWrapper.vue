@@ -55,13 +55,11 @@
 
                 <!-- begin center/main column -->
                 <div class="main-content-wrapper">
-                    <!-- begin CmdBreadcrumbs -->
-                    <CmdBreadcrumbs v-if="cmdBreadcrumbs" v-bind="cmdBreadcrumbs"/>
-                    <!-- end CmdBreadcrumbs -->
-
-                    <!-- begin CmdHeadline -->
-                    <CmdHeadline v-if="pageHeadlineText" :headlineText="pageHeadlineText" headlineLevel="1"/>
-                    <!-- end CmdHeadline -->
+                    <!-- begin CmdPageHeader -->
+                    <CmdWidthLimitationWrapper v-if="cmdPageHeader">
+                        <CmdPageHeader v-bind="cmdPageHeader"/>
+                    </CmdWidthLimitationWrapper>
+                    <!-- end CmdPageHeader -->
 
                     <!-- begin slot center/main column -->
                     <slot></slot>
@@ -86,17 +84,11 @@
 
             <!-- begin center/main column -->
             <template v-else>
-                <!-- begin CmdBreadcrumbs -->
-                <CmdWidthLimitationWrapper v-if="cmdBreadcrumbs">
-                    <CmdBreadcrumbs v-bind="cmdBreadcrumbs"/>
+                <!-- begin CmdPageHeader -->
+                <CmdWidthLimitationWrapper v-if="cmdPageHeader">
+                    <CmdPageHeader v-bind="cmdPageHeader"/>
                 </CmdWidthLimitationWrapper>
-                <!-- end CmdBreadcrumbs -->
-
-                <!-- begin CmdHeadline -->
-                <CmdWidthLimitationWrapper v-if="pageHeadlineText">
-                    <CmdHeadline :headlineText="pageHeadlineText" headlineLevel="1"/>
-                </CmdWidthLimitationWrapper>
-                <!-- end CmdHeadline -->
+                <!-- end CmdPageHeader -->
 
                 <!-- begin slot center/main column -->
                 <slot></slot>
@@ -211,9 +203,6 @@ export default {
         cmdCompanyLogo: {
             default: null
         },
-        cmdBreadcrumbs: {
-            default: null
-        },
         pageHeadlineText: {
             type: String,
             default: ""
@@ -222,6 +211,10 @@ export default {
             default: null
         },
         cmdSiteFooter: {
+            default: null
+        },
+        cmdPageHeader: {
+            type: Object,
             default: null
         },
         cmdPageFooter: {

@@ -10,18 +10,23 @@
     {
       "id": "homepage",
       "iconClass": "icon-home",
-      "navEntry": "Home",
+      "navEntry": "main_navigation.menuentry.homepage",
+      "navigation": ["main"]
+    },
+    {
+      "id": "content",
+      "navEntry": "main_navigation.menuentry.content",
       "subEntries": [
         {
           "id": "subpage1",
           "iconClass": "icon-globe",
-          "navEntry": "subpage1",
+          "navEntry": "subpage 1",
           "navigation": ["main"]
         },
         {
           "id": "subpage2",
           "iconClass": "icon-user-profile",
-          "navEntry": "subpage2",
+          "navEntry": "subpage 2",
           "navigation": ["main"]
         },
         {
@@ -36,23 +41,18 @@
       "navigation": ["main"]
     },
     {
-      "id": "content",
-      "navEntry": "Content",
-      "navigation": ["main"]
-    },
-    {
       "id": "gallery",
-      "navEntry": "Gallery",
+      "navEntry": "main_navigation.menuentry.gallery",
       "navigation": ["main"]
     },
     {
       "id": "faq",
-      "navEntry": "FAQ",
+      "navEntry": "main_navigation.menuentry.faq",
       "navigation": ["main"]
     },
     {
       "id": "team",
-      "navEntry": "Team",
+      "navEntry": "main_navigation.menuentry.team",
       "navigation": ["main"]
     }
   ],

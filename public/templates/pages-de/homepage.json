@@ -15,7 +15,6 @@
         "useFullDeviceWidth": true,
         "iconClass": "icon-image",
         "showLinkInMainNavigation": false,
-        "navEntry": "Slideshow",
         "allowAddComponent": false,
         "order": 1,
         "components": [
@@ -30,11 +29,11 @@
                       "medium": "/media/images/slideshow-images/medium/slide1.jpg",
                       "small": "/media/images/slideshow-images/small/slide1.jpg"
                     },
-                    "alt": "Alternative Text 1",
+                    "alt": "Alternativer Text 1",
                     "tooltip": "Tooltip 1"
                   },
-                  "figcaption": {
-                    "text": "Figcaption DE 1",
+                  "Bildunterschrift": {
+                    "text": "Bildunterschrift DE 1",
                     "position": "bottom",
                     "textAlign": "center",
                     "show": true
@@ -51,11 +50,11 @@
                       "medium": "/media/images/slideshow-images/medium/slide2.jpg",
                       "small": "/media/images/slideshow-images/small/slide2.jpg"
                     },
-                    "alt": "Alternative Text 2",
+                    "alt": "Alternativer Text 2",
                     "tooltip": "Tooltip 2"
                   },
-                  "figcaption": {
-                    "text": "Figcaption DE 2",
+                  "Bildunterschrift": {
+                    "text": "Bildunterschrift DE 2",
                     "position": "bottom",
                     "textAlign": "center",
                     "show": true
@@ -72,11 +71,11 @@
                       "medium": "/media/images/slideshow-images/medium/slide3.jpg",
                       "small": "/media/images/slideshow-images/small/slide3.jpg"
                     },
-                    "alt": "Alternative Text 3",
+                    "alt": "Alternativer Text 3",
                     "tooltip": "Tooltip 3"
                   },
-                  "figcaption": {
-                    "text": "Figcaption DE 3",
+                  "Bildunterschrift": {
+                    "text": "Bildunterschrift DE 3",
                     "position": "bottom",
                     "textAlign": "center",
                     "show": true
@@ -93,11 +92,11 @@
                       "medium": "/media/images/slideshow-images/medium/slide4.jpg",
                       "small": "/media/images/slideshow-images/small/slide4.jpg"
                     },
-                    "alt": "Alternative Text 4",
+                    "alt": "Alternativer Text 4",
                     "tooltip": "Tooltip 4"
                   },
-                  "figcaption": {
-                    "text": "Figcaption DE 4",
+                  "Bildunterschrift": {
+                    "text": "Bildunterschrift DE 4",
                     "position": "bottom",
                     "textAlign": "center",
                     "show": true
@@ -128,7 +127,7 @@
                 "headlineLevel": 4,
                 "headlineText": "Box with text"
               },
-              "textBody": "I am a box!"
+              "textBody": "Ich bin eine Box!"
             }
           },
           {
@@ -137,11 +136,11 @@
               "stretchVertically": false,
               "cmdHeadline": {
                 "headlineLevel": 4,
-                "headlineText": "Box with image"
+                "headlineText": "Box mit Bild"
               },
               "image": {
                 "src": "/media/images/gallery-images/landscape-05.jpg",
-                "altText": "Alternative text"
+                "altText": "Alternativer text"
               }
             }
           }
@@ -163,8 +162,8 @@
             "props": {
               "showLabel": true,
               "useStyledLayout": true,
-              "labelTextDarkMode": "Dark-mode enabled",
-              "labelTextLightMode": "Light-mode enabled"
+              "labelTextDarkMode": "Dark-mode aktiviert",
+              "labelTextLightMode": "Light-mode aktiviert"
             }
           }
         ]
@@ -177,7 +176,6 @@
         "useFullDeviceWidth": true,
         "iconClass": "icon-image",
         "showLinkInMainNavigation": false,
-        "navEntry": "Slideshow",
         "allowAddComponent": false,
         "order": 1,
         "components": [
@@ -192,11 +190,11 @@
                       "medium": "/media/images/slideshow-images/medium/slide1.jpg",
                       "small": "/media/images/slideshow-images/small/slide1.jpg"
                     },
-                    "alt": "Alternative Text 1",
+                    "alt": "Alternativer Text 1",
                     "tooltip": "Tooltip 1"
                   },
-                  "figcaption": {
-                    "text": "Figcaption DE 1",
+                  "Bildunterschrift": {
+                    "text": "Bildunterschrift DE 1",
                     "position": "bottom",
                     "textAlign": "center",
                     "show": true
@@ -213,11 +211,11 @@
                       "medium": "/media/images/slideshow-images/medium/slide2.jpg",
                       "small": "/media/images/slideshow-images/small/slide2.jpg"
                     },
-                    "alt": "Alternative Text 2",
+                    "alt": "Alternativer Text 2",
                     "tooltip": "Tooltip 2"
                   },
-                  "figcaption": {
-                    "text": "Figcaption DE 2",
+                  "Bildunterschrift": {
+                    "text": "Bildunterschrift DE 2",
                     "position": "bottom",
                     "textAlign": "center",
                     "show": true
@@ -234,11 +232,11 @@
                       "medium": "/media/images/slideshow-images/medium/slide3.jpg",
                       "small": "/media/images/slideshow-images/small/slide3.jpg"
                     },
-                    "alt": "Alternative Text 3",
+                    "alt": "Alternativer Text 3",
                     "tooltip": "Tooltip 3"
                   },
-                  "figcaption": {
-                    "text": "Figcaption DE 3",
+                  "Bildunterschrift": {
+                    "text": "Bildunterschrift DE 3",
                     "position": "bottom",
                     "textAlign": "center",
                     "show": true
@@ -255,11 +253,11 @@
                       "medium": "/media/images/slideshow-images/medium/slide4.jpg",
                       "small": "/media/images/slideshow-images/small/slide4.jpg"
                     },
-                    "alt": "Alternative Text 4",
+                    "alt": "Alternativer Text 4",
                     "tooltip": "Tooltip 4"
                   },
-                  "figcaption": {
-                    "text": "Figcaption DE 4",
+                  "Bildunterschrift": {
+                    "text": "Bildunterschrift DE 4",
                     "position": "bottom",
                     "textAlign": "center",
                     "show": true
@@ -278,7 +276,6 @@
         "id": "main-headline",
         "iconClass": "icon-file",
         "showLinkInMainNavigation": false,
-        "navEntry": "Title",
         "allowAddComponent": true,
         "order": 2,
         "components": [
@@ -296,7 +293,6 @@
         "iconClass": "icon-home",
         "allowAddComponent": true,
         "showLinkInMainNavigation": true,
-        "navEntry": "Text Block",
         "order": 3,
         "components": [
           {
@@ -315,7 +311,6 @@
         "id": "section2",
         "iconClass": "icon-info",
         "showLinkInMainNavigation": true,
-        "navEntry": "Text Image Block",
         "alignImage": "right",
         "allowAddComponent": true,
         "order": 4,
@@ -330,11 +325,11 @@
               "cmdImage": {
                 "image": {
                   "src": "/media/images/gallery-images/landscape-05.jpg",
-                  "alt": "alternative text",
+                  "alt": "Alternativer Text",
                   "tooltip": "tooltip"
                 },
-                "figcaption": {
-                  "text": "figcaption",
+                "Bildunterschrift": {
+                  "text": "Bildunterschrift",
                   "position": "bottom",
                   "textAlign": "center",
                   "show": true
@@ -348,11 +343,11 @@
             "props": {
               "image": {
                 "src": "/media/images/gallery-images/landscape-05.jpg",
-                "alt": "alternative text",
+                "alt": "Alternativer Text",
                 "tooltip": "tooltip"
               },
-              "figcaption": {
-                "text": "figcaption",
+              "Bildunterschrift": {
+                "text": "Bildunterschrift",
                 "position": "bottom",
                 "textAlign": "center",
                 "show": true
@@ -368,7 +363,6 @@
         "id": "section3",
         "iconClass": "icon-user-profile",
         "showLinkInMainNavigation": true,
-        "navEntry": "Image Gallery",
         "allowAddComponent": true,
         "headlineText": "Überschrift für Section 3",
         "order": 5,
@@ -377,7 +371,7 @@
             "name": "CmdImageGallery",
             "props": {
               "cmdHeadline": {
-                "headlineText": "Überschrift für Image Gallery",
+                "headlineText": "Überschrift für Bildergalerie",
                 "headlineLevel": "3"
               },
               "images": [
@@ -385,12 +379,12 @@
                   "image": {
                     "src": "/media/images/demo-images/medium/landscape-01.jpg",
                     "srcImageLarge": "/media/images/demo-images/large/landscape-01.jpg",
-                    "alt": "Alternative text 1"
+                    "alt": "Alternativer Text 1"
                   },
-                  "figcaption": {
+                  "Bildunterschrift": {
                     "show": true,
                     "position": "bottom",
-                    "text": "Figcaption 1",
+                    "text": "Bildunterschrift 1",
                     "textAlign": "center"
                   }
                 },
@@ -398,12 +392,12 @@
                   "image": {
                     "src": "/media/images/demo-images/medium/landscape-02.jpg",
                     "srcImageLarge": "/media/images/demo-images/large/landscape-02.jpg",
-                    "alt": "Alternative text 2"
+                    "alt": "Alternativer Text 2"
                   },
-                  "figcaption": {
+                  "Bildunterschrift": {
                     "show": true,
                     "position": "bottom",
-                    "text": "Figcaption 2",
+                    "text": "Bildunterschrift 2",
                     "textAlign": "center"
                   }
                 },
@@ -411,12 +405,12 @@
                   "image": {
                     "src": "/media/images/demo-images/medium/landscape-03.jpg",
                     "srcImageLarge": "/media/images/demo-images/large/landscape-03.jpg",
-                    "alt": "Alternative text 3"
+                    "alt": "Alternativer Text 3"
                   },
-                  "figcaption": {
+                  "Bildunterschrift": {
                     "show": true,
                     "position": "bottom",
-                    "text": "Figcaption 3",
+                    "text": "Bildunterschrift 3",
                     "textAlign": "center"
                   }
                 },
@@ -424,12 +418,12 @@
                   "image": {
                     "src": "/media/images/demo-images/medium/landscape-04.jpg",
                     "srcImageLarge": "/media/images/demo-images/large/landscape-04.jpg",
-                    "alt": "Alternative text 4"
+                    "alt": "Alternativer Text 4"
                   },
-                  "figcaption": {
+                  "Bildunterschrift": {
                     "show": true,
                     "position": "bottom",
-                    "text": "Figcaption 4",
+                    "text": "Bildunterschrift 4",
                     "textAlign": "center"
                   }
                 }
@@ -442,7 +436,6 @@
         "id": "section4",
         "showLinkInMainNavigation": false,
         "iconClass": "icon-user-profile",
-        "navEntry": "Thumbnail-Scroller",
         "allowAddComponent": true,
         "headlineText": "Überschrift Section 4",
         "order": 6,
@@ -460,12 +453,12 @@
                     "id": 1,
                     "src": "/media/images/demo-images/small/landscape-01.jpg",
                     "srcImageLarge": "/media/images/demo-images/large/landscape-01.jpg",
-                    "alt": "Alternative Text 1"
+                    "alt": "Alternativer Text 1"
                   },
-                  "figcaption": {
+                  "Bildunterschrift": {
                     "show": true,
                     "position": "bottom",
-                    "text": "Figcaption 1",
+                    "text": "Bildunterschrift 1",
                     "textAlign": "center"
                   }
                 },
@@ -474,12 +467,12 @@
                     "id": 2,
                     "src": "/media/images/demo-images/small/landscape-02.jpg",
                     "srcImageLarge": "/media/images/demo-images/large/landscape-02.jpg",
-                    "alt": "Alternative Text 2"
+                    "alt": "Alternativer Text 2"
                   },
-                  "figcaption": {
+                  "Bildunterschrift": {
                     "show": true,
                     "position": "bottom",
-                    "text": "Figcaption 2",
+                    "text": "Bildunterschrift 2",
                     "textAlign": "center"
                   }
                 },
@@ -488,12 +481,12 @@
                     "id": 3,
                     "src": "/media/images/demo-images/small/landscape-03.jpg",
                     "srcImageLarge": "/media/images/demo-images/large/landscape-03.jpg",
-                    "alt": "Alternative Text 3"
+                    "alt": "Alternativer Text 3"
                   },
-                  "figcaption": {
+                  "Bildunterschrift": {
                     "show": true,
                     "position": "bottom",
-                    "text": "Figcaption 3",
+                    "text": "Bildunterschrift 3",
                     "textAlign": "center"
                   }
                 },
@@ -502,12 +495,12 @@
                     "id": 4,
                     "src": "/media/images/demo-images/small/landscape-04.jpg",
                     "srcImageLarge": "/media/images/demo-images/large/landscape-04.jpg",
-                    "alt": "Alternative Text 4"
+                    "alt": "Alternativer Text 4"
                   },
-                  "figcaption": {
+                  "Bildunterschrift": {
                     "show": true,
                     "position": "bottom",
-                    "text": "Figcaption 4",
+                    "text": "Bildunterschrift 4",
                     "textAlign": "center"
                   }
                 },
@@ -516,12 +509,12 @@
                     "id": 5,
                     "src": "/media/images/demo-images/small/landscape-05.jpg",
                     "srcImageLarge": "/media/images/demo-images/large/landscape-05.jpg",
-                    "alt": "Alternative Text 5"
+                    "alt": "Alternativer Text 5"
                   },
-                  "figcaption": {
+                  "Bildunterschrift": {
                     "show": true,
                     "position": "bottom",
-                    "text": "Figcaption 5",
+                    "text": "Bildunterschrift 5",
                     "textAlign": "center"
                   }
                 },
@@ -530,12 +523,12 @@
                     "id": 6,
                     "src": "/media/images/demo-images/small/landscape-06.jpg",
                     "srcImageLarge": "/media/images/demo-images/large/landscape-06.jpg",
-                    "alt": "Alternative Text 6"
+                    "alt": "Alternativer Text 6"
                   },
-                  "figcaption": {
+                  "Bildunterschrift": {
                     "show": true,
                     "position": "bottom",
-                    "text": "Figcaption 6",
+                    "text": "Bildunterschrift 6",
                     "textAlign": "center"
                   }
                 },
@@ -544,12 +537,12 @@
                     "id": 7,
                     "src": "/media/images/demo-images/small/landscape-07.jpg",
                     "srcImageLarge": "/media/images/demo-images/large/landscape-07.jpg",
-                    "alt": "Alternative Text 7"
+                    "alt": "Alternativer Text 7"
                   },
-                  "figcaption": {
+                  "Bildunterschrift": {
                     "show": true,
                     "position": "bottom",
-                    "text": "Figcaption 7",
+                    "text": "Bildunterschrift 7",
                     "textAlign": "center"
                   }
                 },
@@ -558,12 +551,12 @@
                     "id": 8,
                     "src": "/media/images/demo-images/small/landscape-08.jpg",
                     "srcImageLarge": "/media/images/demo-images/large/landscape-08.jpg",
-                    "alt": "Alternative Text 8"
+                    "alt": "Alternativer Text 8"
                   },
-                  "figcaption": {
+                  "Bildunterschrift": {
                     "show": true,
                     "position": "bottom",
-                    "text": "Figcaption 8",
+                    "text": "Bildunterschrift 8",
                     "textAlign": "center"
                   }
                 }
@@ -576,21 +569,49 @@
         "id": "section5",
         "iconClass": "icon-mail",
         "showLinkInMainNavigation": true,
-        "navEntry": "Contact",
         "order": 7,
         "components": [
           {
-            "name": "ContactForm",
+            "name": "BasicForm",
             "props": {
-              "cmdHeadline": {
-                "headlineText": "Überschrift für Kontaktformular",
-                "headlineLevel": "2"
+              "configuration": {
+                "salutation": {
+                  "name": "salutation",
+                  "default": "m",
+                  "replaceInputType": true
+                },
+                "lastName": {
+                  "name": "surname",
+                  "required": true,
+                  "type": "text"
+                },
+                "firstName": {
+                  "required": false,
+                  "type": "text"
+                },
+                "email": {
+                  "required": true,
+                  "type": "email"
+                },
+                "phone": {
+                  "required": false,
+                  "type": "phone"
+                },
+                "additionalText": {
+                  "required": false,
+                  "type": "textarea"
+                },
+                "acceptPrivacy": {
+                  "required": true,
+                  "replaceInputType": true
+                }
               },
-              "email": "#",
-              "formAction": "#",
               "submitButton": {
+                "type": "submit",
+                "position": "belowFieldset",
+                "primary": true,
                 "iconClass": "icon-message-send",
-                "text": "Send mail"
+                "text": "Nachricht senden"
               }
             }
           }
@@ -599,7 +620,6 @@
       {
         "id": "section-login",
         "iconClass": "icon-logon",
-        "navEntry": "Login",
         "showLinkInMainNavigation": false,
         "show": false,
         "order": 8,
@@ -626,50 +646,6 @@
                   "text": "Test",
                   "name": "test.pdf",
                   "tooltip": "PDF in neuem Tab öffnen"
-                }
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "id": "section-social-networks",
-        "showLinkInMainNavigation": false,
-        "iconClass": "icon-share",
-        "navEntry": "Social Networks",
-        "order": 90,
-        "components": [
-          {
-            "name": "CmdSocialNetworks",
-            "props": {
-              "networks": [
-                {
-                  "id": "social-network-facebook",
-                  "path": "https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fdevelopment.comand-cms.com%2Fmodule%2Fteam.html",
-                  "tooltip": "Share this page on facebook",
-                  "iconClass": "icon-facebook",
-                  "linkText": "Share"
-                },
-                {
-                  "id": "social-network-twitter",
-                  "path": "https://twitter.com/home?status=http%3A%2F%2Fdevelopment.comand-cms.com%2Fmodule%2Fteam.html",
-                  "tooltip": "Share this page on twitter",
-                  "iconClass": "icon-twitter",
-                  "linkText": "Share"
-                },
-                {
-                  "id": "social-network-xing",
-                  "path": "https://www.xing.com/spi/shares/new?sc_p=b7910_cb&amp;url=http%3A%2F%2Fdevelopment.comand-cms.com%2Fmodule%2Fteam.html",
-                  "tooltip": "Share this page on xing",
-                  "iconClass": "icon-xing",
-                  "linkText": "Share"
-                },
-                {
-                  "id": "social-network-linkedin",
-                  "path": "https://www.linkedin.com/cws/share?url=http%3A%2F%2Fdevelopment.comand-cms.com%2Fmodule%2Fteam.html",
-                  "tooltip": "Share this page on linkedin",
-                  "iconClass": "icon-linkedin",
-                  "linkText": "Share"
                 }
               ]
             }

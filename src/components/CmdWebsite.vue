@@ -2,8 +2,8 @@
     <PageWrapper :aside="aside"
                  :cmdSiteHeader="cmdSiteHeader"
                  :cmdSiteFooter="siteFooter"
+                 :cmdPageHeader="pageHeader"
                  :cmdPageFooter="pageFooter"
-                 :cmdBreadcrumbs="breadcrumbs"
                  :pageHeadlineText="pageHeadlineText"
                  :useFullWidth="mainContentUseFullWidth"
     >
@@ -154,7 +154,7 @@ export default {
             "siteHeader",
             "siteFooter",
             "pageFooter",
-            "breadcrumbs",
+            "pageHeader",
             "companyLogo",
             "metaData",
             "asideLeftColumnShow",

@@ -1,13 +1,13 @@
 {
   "metadata": {
     "title": "FAQ",
-    "description": "Kurzbeschreibung für FAQ-Seite",
+    "description": "Description for FAQ",
     "rating": "",
     "robots": "index/follow",
     "author": ""
   },
   "mainContent": {
-    "pageHeadlineText": "FAQ: Häufig gestellte Fragen",
+    "pageHeadlineText": "FAQ: Frequently Asked Questions",
     "sections": [
       {
         "id": "section1",
@@ -21,7 +21,7 @@
             "name": "MultipleBoxWrapper",
             "props": {
               "cmdHeadline": {
-                "headlineText": "Überschrift FAQ",
+                "headlineText": "Headline FAQ",
                 "headlineLevel": "2"
               },
               "segments": [

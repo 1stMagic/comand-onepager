@@ -10,7 +10,7 @@
       "cmdMainNavigation": {
         "closeOffcanvas": {
           "iconClass": "icon-cancel",
-          "text": "Close navigation",
+          "text": "Navigation schließen",
           "showText": false
         }
       }
@@ -40,13 +40,13 @@
                   "type": "href",
                   "text": "",
                   "path": "#",
-                  "tooltip": "Link without text, but tooltip"
+                  "tooltip": "Link ohne text (nur Tooltip)"
                 },
                 {
                   "type": "href",
                   "text": "Data privacy",
                   "path": "/content/data-privacy-de.html",
-                  "tooltip": "Open local file in fancybox",
+                  "tooltip": "Lokae Datei FancyBox öffnen",
                   "fancybox": true
                 },
                 {
@@ -55,7 +55,7 @@
                   "text": "External link",
                   "path": "http://www.comand-cms.com",
                   "target": "_blank",
-                  "tooltip": "Open CoManD-Website in new tab"
+                  "tooltip": "CoManD-Website in neuem Tab öffnen"
                 },
                 {
                   "iconClass": "icon-security-settings",
@@ -86,20 +86,20 @@
           "textMiscInfo": "",
           "openingHours": [
             {
-              "day": "Mondays",
+              "day": "Mo",
               "am": {
                 "fromTime": "08:00",
                 "tillTime": "12:00",
-                "displayText": "open"
+                "displayText": "geöffnet"
               },
               "pm": {
                 "fromTime": "13:00",
                 "tillTime": "18:00",
-                "displayText": "closed"
+                "displayText": "geschlossen"
               }
             },
             {
-              "day": "Tu",
+              "day": "Di",
               "am": {
                 "fromTime": "08:00",
                 "tillTime": "12:01"
@@ -110,7 +110,7 @@
               }
             },
             {
-              "day": "We",
+              "day": "Mi",
               "am": {
                 "fromTime": "08:00",
                 "tillTime": "12:00"
@@ -121,7 +121,7 @@
               }
             },
             {
-              "day": "Th",
+              "day": "Do",
               "am": {
                 "fromTime": "08:00",
                 "tillTime": "12:00"
@@ -176,18 +176,18 @@
             {
               "name": "company",
               "iconClass": "icon-company",
-              "data": "Your company name",
-              "labelText": "Company"
+              "data": "Ihr Firmenname",
+              "labelText": "Firma"
             },
             {
               "name": "address",
               "iconClass": "icon-home",
-              "labelText": "Address",
-              "streetNo": "Your Street/No",
-              "zip": "Your zip",
-              "city": "Your city",
-              "miscInfo": "Misc. info",
-              "country": "Your country",
+              "labelText": "Adresse",
+              "streetNo": "Ihre Straße/Nr.",
+              "zip": "Ihre Postleitzahl",
+              "city": "Ihre Stadt",
+              "miscInfo": "Sonstige Informationen",
+              "country": "Ihr Land",
               "longitude": "0.0",
               "latitude": "0.0,",
               "location": "",
@@ -196,46 +196,46 @@
             {
               "name": "phone",
               "iconClass": "icon-phone",
-              "data": "Your phone number",
-              "labelText": "Telephone",
-              "tooltip": "Call number",
-              "href": "0123456789"
+              "data": "Ihre Telefonnnummer",
+              "labelText": "Telefon",
+              "tooltip": "Nummer anrufen",
+              "href": "#"
             },
             {
               "name": "phone",
               "iconClass": "icon-device-smartphone",
-              "data": "Your mobile phone number",
-              "labelText": "Mobile phone",
-              "tooltip": "Call number",
-              "href": "0123456789"
+              "data": "Ihre Mobilnummer",
+              "labelText": "Mobil",
+              "tooltip": "Nummer anrufen",
+              "href": "#"
             },
             {
               "name": "fax",
               "iconClass": "icon-fax",
-              "data": "Your fax number",
+              "data": "Ihre Fax-Nummer",
               "labelText": "Fax"
             },
             {
               "name": "email",
               "iconClass": "icon-mail",
-              "data": "Your email address",
-              "labelText": "Email",
-              "tooltip": "Send mail",
+              "data": "Ihre E-Mail-Adresse",
+              "labelText": "E-Mail",
+              "tooltip": "Mail versenden",
               "href": "mail@provider.de"
             },
             {
               "name": "url",
               "iconClass": "icon-globe",
-              "data": "Your web site",
-              "labelText": "Web site",
-              "tooltip": "Open web site in new tab",
+              "data": "Ihre Website",
+              "labelText": "Website",
+              "tooltip": "Website in neuem Tab öffnen",
               "href": "https://www.domain.toplevel"
             },
             {
               "name": "custom",
               "iconClass": "icon-questionmark-circle",
               "data": "Custom data",
-              "labelText": "Custom"
+              "labelText": "Sonstige"
             }
           ]
         }

@@ -52,6 +52,10 @@ body, #page-wrapper {
     box-shadow: .1rem .3rem .3rem var(--dark-gray);
 }
 
+.cmd-width-limitation-wrapper section:has(.cmd-breadcrumbs) {
+    padding-bottom: var(--default-padding) !important;
+}
+
 /* end page-structure --------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 /* begin main-container --------------------------------------------------------------------------------------------------------------------------------------------------- */

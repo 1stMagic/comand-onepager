@@ -5,7 +5,6 @@ import router from "./router"
 import * as components from "comand-component-library"
 
 // import local components
-import ContactForm from "./components/ContactForm.vue"
 import LoginArea from "./components/LoginArea.vue"
 
 // import settings-components
@@ -33,19 +32,16 @@ import axios from "axios";
 
 export {default as CmdOnePager} from './components/CmdWebsite.vue'
 
-function processPage(page, store, path) {
-    router.addRoute({
-        name: page.id,
-        path: "/:lang([a-z]{2})" + (path.length > 0 ? "/" : "") + path.join("/") + "/" + page.id,
-        component: {}
-    })
-    if (page.subEntries?.length > 0) {
-        page.subEntries.forEach(subPage => processPage(subPage, store, [page.id]))
-    }
+function loadLanguages() {
+    return axios(new URL("/templates/pages/data/languages.json", location.href).href)
+}
 
-    if (path.length === 0) {
-        store.addPage(page)
-    }
+function processLanguages(languageData, store) {
+    store.setLanguageData(languageData)
+}
+
+function loadSite() {
+    return axios(new URL("/site.json", location.href).href)
 }
 
 function processSite(site, store) {
@@ -80,9 +76,23 @@ function processSite(site, store) {
     store.pageFooter = site.pageFooter
 }
 
+function processPage(page, store, path) {
+    router.addRoute({
+        name: page.id,
+        path: "/:lang([a-z]{2})" + (path.length > 0 ? "/" : "") + path.join("/") + "/" + page.id,
+        component: {}
+    })
+    if (page.subEntries?.length > 0) {
+        page.subEntries.forEach(subPage => processPage(subPage, store, [page.id]))
+    }
+
+    if (path.length === 0) {
+        store.addPage(page)
+    }
+}
+
 function bootstrap(app) {
     Object.entries({
-        ContactForm,
         LoginArea,
         CmdToggleDarkModeSettings,
         CmdImageGallerySettings,
@@ -113,7 +123,11 @@ function bootstrap(app) {
 
     const store = useCmsStore()
 
-    return axios(new URL("/site.json", location.href).href).then(response => processSite(response.data, store))
+    // return axios(new URL("/site.json", location.href).href).then(response => processSite(response.data, store))
+    return loadLanguages()
+        .then(response => processLanguages(response.data, store))
+        .then(loadSite)
+        .then(response => processSite(response.data, store))
 }
 
 export function bootstrapAndMount(app) {

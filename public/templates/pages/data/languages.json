@@ -1,6 +1,11 @@
 {
   "en": {
     "main_navigation.close_navigation": "Close navigation",
+    "main_navigation.menuentry.homepage":"Home",
+    "main_navigation.menuentry.content": "Content",
+    "main_navigation.menuentry.gallery": "Gallery",
+    "main_navigation.menuentry.faq": "Faq",
+    "main_navigation.menuentry.team": "Team",
     "address_data.headline": "Contact",
     "cmdaddressdata.labeltext.company": "Company:",
     "cmdaddressdata.labeltext.address": "Address:",
@@ -54,6 +59,11 @@
   },
   "de": {
     "main_navigation.close_navigation": "Navigation schließen",
+    "main_navigation.menuentry.homepage":"Start",
+    "main_navigation.menuentry.content": "Content",
+    "main_navigation.menuentry.gallery": "Galerie",
+    "main_navigation.menuentry.faq": "Faq",
+    "main_navigation.menuentry.team": "Team",
     "address_data.headline": "Kontakt",
     "cmdaddressdata.labeltext.company": "Firma:",
     "cmdaddressdata.labeltext.address": "Anschrift:",
