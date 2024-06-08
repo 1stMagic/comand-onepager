@@ -31,7 +31,8 @@ export const useCmsStore = defineStore("cms", {
         siteHeader: {},
         siteFooter: {},
         siteStructure: [],
-        pageFooter: {}
+        pageFooter: {},
+        siteConfiguration: {}
     }),
     getters: {
         topContentActiveSections() {
@@ -74,8 +75,12 @@ export const useCmsStore = defineStore("cms", {
             return this.currentPageContent?.mainContent?.sections?.toSorted((section1, section2) => section1.order - section2.order) || []
         },
         pageHeader() {
+            if (this.currentPageName === 'homepage' && !this.pageHeadlineText) {
+                return null
+            }
+
             return {
-                cmdBreadcrumbs: this.breadcrumbs,
+                cmdBreadcrumbs: this.currentPageName === 'homepage' ? null : this.breadcrumbs,
                 cmdHeadline: {
                     headlineText: this.pageHeadlineText,
                     headlineLevel: 1
@@ -85,12 +90,18 @@ export const useCmsStore = defineStore("cms", {
         breadcrumbs() {
             const parents = []
             const currentPage = findPageById(this.pages, this.currentPageName, parents)
+            if (this.siteConfiguration.breadcrumbs?.showHomeLinkFirst) {
+                const homepage = this.pages[0]
+                parents.unshift(homepage)
+            }
+
             return {
-                breadcrumbLabel: "Sie sind hier:",
+                breadcrumbLabel: this.siteConfiguration.breadcrumbs?.showBreadcrumbLabel !== false ? this.currentLanguageData["cmdbreadcrumbs.labeltext.you_are_here"] : "",
+                breadcrumbSeparator: this.siteConfiguration.breadcrumbs?.breadcrumbSeparator || undefined,
                 breadcrumbLinks: [
                     ...(parents.map(page => ({
                         "type": "router",
-                        "text": this.currentLanguageData[page.navEntry] ?? page.navEntry,
+                        "text": this.currentLanguageData[page.navEntry] ?? page.navEntry, // check for language-string to translate else show given string
                         "route": {
                             "name": page.id,
                             params: {
@@ -110,6 +121,9 @@ export const useCmsStore = defineStore("cms", {
                     }
                 ]
             }
+        },
+        socialNetworkTooltips() {
+            return {}
         },
         showSiteHeader(state) {
             return state.siteStructure.includes("siteHeader")
@@ -153,14 +167,15 @@ export const useCmsStore = defineStore("cms", {
                         text: this.currentLanguageData[page.navEntry] ?? page.navEntry,
                         ...navEntryType(page),
                         subentries: filterbyNavigation(page.subEntries)
-                }))
+                    }))
             }
+
             function navEntryType(page) {
-                if(!page.externalLink) {
+                if (!page.externalLink) {
                     return {
                         route: {
                             name: page.id,
-                                params: {
+                            params: {
                                 lang: state.currentLanguage
                             }
                         },

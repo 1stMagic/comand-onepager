@@ -5,12 +5,14 @@
             :key="componentIndex"
             :is="component.name"
             v-bind="component.props"
+            :i18n="currentLanguageData"
         >
             <component
                 v-for="(childComponent, childComponentIndex) in component.components || []"
                 :is="childComponent.name"
                 :key="childComponentIndex"
                 v-bind="childComponent.props"
+                :i18n="currentLanguageData"
             />
         </component>
     </CmdWidthLimitationWrapper>
@@ -21,6 +23,7 @@
 import BaseI18nComponent from "./mixins/BaseI18nComponent"
 import {mapState} from "pinia"
 import {usePiniaStore} from "../stores/pinia.js"
+import {useCmsStore} from "../stores/cms.js"
 
 export default {
     mixins: [
@@ -66,6 +69,8 @@ export default {
         }
     },
     computed: {
+        ...mapState(useCmsStore, ["currentLanguageData"]),
+
         // provide states from store as computed-properties inside this component
         ...mapState(usePiniaStore, {
             editMode: "editMode"

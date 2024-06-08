@@ -136,6 +136,7 @@
             href="#anchor-back-to-top"
             :iconBackToTop="iconBackToTop"
             scroll-container="#page-wrapper"
+            :i18n="currentLanguageData"
         />
         <!-- end cmd-back-to-top-button -->
 
@@ -174,6 +175,13 @@
 // import functions
 //import {openFancyBox} from "@/components/CmdFancyBox.vue"
 
+// import store
+import {useCmsStore} from "../stores/cms"
+
+// import mixins
+import BaseI18nComponent from "../components/mixins/BaseI18nComponent"
+import {mapState} from "pinia";
+
 export default {
     name: "PageWrapper",
     data() {
@@ -184,6 +192,9 @@ export default {
             fancyBoxCookieDisclaimer: true
         }
     },
+    mixins: [
+        BaseI18nComponent
+    ],
     props: {
         topHeaderNavigationEntries: {
             default: []
@@ -242,7 +253,9 @@ export default {
                 iconClass: "icon-single-arrow-up",
                 tooltip: this.label("back_to_top_button.tooltip")
             }
-        }
+        },
+        ...mapState(useCmsStore, [
+        ]),
     },
     methods: {
         label(labelText) {

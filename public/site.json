@@ -6,6 +6,13 @@
     "author": ""
   },
   "siteStructure": ["siteHeader", "siteFooter"],
+  "siteConfiguration": {
+    "breadcrumbs": {
+      "showHomeLinkFirst": true,
+      "showBreadcrumbLabel": false,
+      "breadcrumbSeparator": "|"
+    }
+  },
   "pages": [
     {
       "id": "homepage",

@@ -74,6 +74,7 @@ function processSite(site, store) {
 
     // assign pageFooter to store
     store.pageFooter = site.pageFooter
+    store.siteConfiguration = site.siteConfiguration || {}
 }
 
 function processPage(page, store, path) {

@@ -22,12 +22,15 @@
                 v-for="(component, componentIndex) in topContent"
                 :key="componentIndex"
                 :is="component.name"
-                v-bind="component.props">
+                v-bind="component.props"
+                :i18n="currentLanguageData"
+            >
                 <component
                     v-for="(childComponent, childComponentIndex) in component.components || []"
                     :is="childComponent.name"
                     :key="childComponentIndex"
                     v-bind="childComponent.props"
+                    :i18n="currentLanguageData"
                 />
             </component>
             </ContentSection>
@@ -37,12 +40,15 @@
                 v-for="(component, componentIndex) in asideLeftColumnContent"
                 :key="componentIndex"
                 :is="component.name"
-                v-bind="component.props">
+                v-bind="component.props"
+                :i18n="currentLanguageData"
+            >
                 <component
                     v-for="(childComponent, childComponentIndex) in component.components || []"
                     :is="childComponent.name"
                     :key="childComponentIndex"
                     v-bind="childComponent.props"
+                    :i18n="currentLanguageData"
                 />
             </component>
         </template>
@@ -52,12 +58,15 @@
                 v-for="(component, componentIndex) in asideRightColumnContent"
                 :key="componentIndex"
                 :is="component.name"
-                v-bind="component.props">
+                v-bind="component.props"
+                :i18n="currentLanguageData"
+            >
                 <component
                     v-for="(childComponent, childComponentIndex) in component.components || []"
                     :is="childComponent.name"
                     :key="childComponentIndex"
                     v-bind="childComponent.props"
+                    :i18n="currentLanguageData"
                 />
             </component>
         </template>
